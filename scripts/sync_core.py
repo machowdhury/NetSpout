@@ -31,6 +31,7 @@ CORE_MODULES = [
     "graph_engine.py",
     "log_engine.py",
     "asa_generator.py",
+    "yaml_sample_replay.py",
     "universe_batch1_engine.py",
     "universe_batch2_engine.py",
     "universe_batch3_engine.py",

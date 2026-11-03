@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.log_engine import SplunkLogEngine
+from netspout_core.yaml_sample_replay import SampleError, SampleSet, load_sample_set
 from netspout_core.asa_generator import SOURCETYPE as ASA_SOURCETYPE, generate_asa_entries
 from netspout_core.vendor_catalog import get_vendor_by_id
 from netspout_core.models import (
@@ -34,7 +35,7 @@ from netspout_core.models import (
     ScenarioType,
     TelemetryTransportConfig,
 )
-from netspout_core.telemetry_dispatcher import dispatcher
+from netspout_core.telemetry_dispatcher import dispatcher, is_metric_sourcetype
 
 logger = logging.getLogger("netspout.generator_modes")
 
@@ -51,6 +52,12 @@ def _find_samples_dirs() -> List[str]:
         "/opt/splunk/etc/apps/netspout/appserver/static/samples"
     ]
     return [c for c in candidates if os.path.isdir(c)]
+
+
+def _has_measurements(raw: str, sourcetype: str) -> bool:
+    e = LogEntry(timestamp="", device_id="d", src_ip="0.0.0.0", dest_ip="0.0.0.0", protocol="n/a", duration="0ms", action="streamed", signature="x",
+                 status="normal", raw_log=raw, node_type="router", node_id="d", vendor="v", sourcetype=sourcetype)
+    return any(k.startswith("metric_name:") for k in dispatcher.extract_metric_fields(e))
 
 
 MDT_METRIC_SOURCETYPE = "cisco:ios:mdt:metric"
@@ -95,12 +102,24 @@ class TelemetryGeneratorService:
         If not grounded, returns:
             ([], 'UNSUPPORTED_TELEMETRY', reason)
         """
-        if sourcetype in self._parsed_samples_cache:
-            return self._parsed_samples_cache[sourcetype]
+        cached = self._parsed_samples_cache.get(sourcetype)
+        if cached is None:
+            cached = self._resolve_samples(sourcetype, vendor_id)
+            self._parsed_samples_cache[sourcetype] = cached
+        source, prov_class, source_ref = cached
+        if isinstance(source, SampleSet):
+            # templates are cached; tokens (timestamps, hosts, ids) are rendered fresh on every call
+            try:
+                return source.render_all(), prov_class, source_ref
+            except SampleError as exc:
+                return [], "SAMPLE_INVALID", "sample invalid: %s" % exc
+        return list(source), prov_class, source_ref
 
-        events: List[str] = []
+    def _resolve_samples(self, sourcetype: str, vendor_id: Optional[str]):
+        events: Any = []
         prov_class = "UNSUPPORTED_TELEMETRY"
         source_ref: Optional[str] = None
+        invalid: Optional[str] = None
 
         # 1. Check samples registered in catalog._samples
         for sm in self.catalog._samples:
@@ -109,7 +128,11 @@ class TelemetryGeneratorService:
                 roots = [self._repo_root, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))]
                 cand_path = next((c for c in (os.path.join(r, sm.get("sample_path", "")) for r in roots) if os.path.isfile(c)), "")
                 if cand_path and os.path.isfile(cand_path):
-                    parsed = self._parse_sample_file(cand_path)
+                    try:
+                        parsed = self._load_sample_events(cand_path, sourcetype)
+                    except SampleError as exc:
+                        invalid = "%s: %s" % (os.path.basename(cand_path), exc)
+                        continue
                     if parsed:
                         events = parsed
                         prov_class = "VERIFIED_PUBLIC_SAMPLE"
@@ -133,7 +156,11 @@ class TelemetryGeneratorService:
                     ]
                     for c in candidates:
                         if c and os.path.isfile(c):
-                            parsed = self._parse_sample_file(c)
+                            try:
+                                parsed = self._load_sample_events(c, sourcetype)
+                            except SampleError as exc:
+                                invalid = "%s: %s" % (os.path.basename(c), exc)
+                                continue
                             if parsed:
                                 events = parsed
                                 prov_class = "VERIFIED_PUBLIC_SAMPLE"
@@ -158,32 +185,32 @@ class TelemetryGeneratorService:
                                 prov_class = "VENDOR_DOCUMENTED"
                                 source_ref = f"vendor_catalog:{vid}"
 
-        if not events:
-            prov_class = "UNSUPPORTED_TELEMETRY"
-            source_ref = f"No verified public sample or documented vendor contract exists for sourcetype '{sourcetype}'"
+        if events and is_metric_sourcetype(sourcetype):
+            # a Splunk metric-index stream is never produced by replaying log text: every replayed event must carry numeric measurements
+            sample = events.render_all() if isinstance(events, SampleSet) else list(events)
+            if not sample or not all(_has_measurements(e, sourcetype) for e in sample):
+                events, prov_class = [], "METRIC_REPLAY_UNSUPPORTED"
+                source_ref = "%s is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics" % sourcetype
 
-        result = (events, prov_class, source_ref)
-        self._parsed_samples_cache[sourcetype] = result
-        return result
+        if not events:
+            if prov_class != "METRIC_REPLAY_UNSUPPORTED":
+                prov_class = "SAMPLE_INVALID" if invalid else "UNSUPPORTED_TELEMETRY"
+                source_ref = ("sample invalid: " + invalid) if invalid else f"No verified public sample or documented vendor contract exists for sourcetype '{sourcetype}'"
+        return events, prov_class, source_ref
+
+    @staticmethod
+    def _load_sample_events(file_path: str, sourcetype: str):
+        """YAML samples go through the structured parser (only lines/_raw, fromRaw, fromSample are telemetry). Other files are plain one-event-per-line text."""
+        if file_path.lower().endswith((".yml", ".yaml")):
+            ss = load_sample_set(file_path)
+            return ss.restrict_to(sourcetype) if sourcetype else ss
+        with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+            return [ln.rstrip("\r\n") for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
 
     def _parse_sample_file(self, file_path: str) -> List[str]:
-        events = []
-        try:
-            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-                for line in f:
-                    line_str = line.strip()
-                    if "_raw:" in line_str:
-                        parts = line_str.split("_raw:", 1)
-                        val = parts[1].strip()
-                        if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
-                            val = val[1:-1]
-                        if val:
-                            events.append(val)
-                    elif not line_str.startswith("#") and not line_str.startswith("-") and not line_str.endswith(":") and len(line_str) > 20:
-                        events.append(line_str)
-        except Exception as e:
-            logger.debug(f"Failed parsing sample file {file_path}: {e}")
-        return events
+        """Rendered events of one sample file (kept for callers that want text); YAML is parsed structurally and invalid files raise SampleError."""
+        events = self._load_sample_events(file_path, "")
+        return events.render_all() if isinstance(events, SampleSet) else events
 
     def _universe_source(self, sourcetype):
         from netspout_core.universe_batch7_engine import batch_registry as batch7_registry
@@ -327,7 +354,7 @@ class TelemetryGeneratorService:
                 "error": "UNSUPPORTED_TELEMETRY",
                 "vendor_id": vendor_id,
                 "sourcetype": sourcetype,
-                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "reason": source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
                 "provenance_status": prov_class,
                 "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
             }
@@ -425,7 +452,7 @@ class TelemetryGeneratorService:
                 "error": "UNSUPPORTED_TELEMETRY",
                 "vendor_id": vendor_id,
                 "sourcetype": sourcetype,
-                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "reason": source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
                 "provenance_status": prov_class,
                 "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
             }
@@ -536,7 +563,7 @@ class TelemetryGeneratorService:
             self._reject_non_ta_name(sourcetype)
             samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
             if not samples:
-                raise ValueError("TELEMETRY_NOT_GROUNDED: no authoritative vendor log schema or verified sample exists for " + sourcetype)
+                raise ValueError("TELEMETRY_NOT_GROUNDED: " + (source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else "no authoritative vendor log schema or verified sample exists for " + sourcetype))
             entries = []
             for i in range(count):
                 dev = f"device-{(i % 3) + 1:02d}"

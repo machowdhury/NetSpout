@@ -76,7 +76,7 @@ Open a browser (fresh profile or cleared site data so the Explorer shows no reme
 |---|---|---|---|---|
 | 1 | 0:00 | Open `http://localhost:18000/en-US/app/netspout/use_case_explorer` | "The Use Case Explorer." | Page renders; counters 372 and 365 |
 | 2 | 0:30 | In the search box type `volumetric DDoS` | "One dashboard, one scenario." | "2 results: 1 dashboard, 1 scenario"; scenario `NetFlow: volumetric DDoS indicators (SYN flood and UDP)`, ID `NF-SEC-06-DDOS`, label RUNNABLE; dashboard `pf_NF-SEC-06-DDOS` DASHBOARD_VISUALLY_VERIFIED |
-| 3 | 1:00 | Click **Open scenario workflow** on the scenario card | Read the preview: phases, volume, destination, limits | Phases `traffic (100) → syn-flood (560) → udp-flood (160)`; 820 events; destination `127.0.0.1:18088`, index `idx_network_ops`, sourcetype `netflow:collector`; relation label "NetFlow profile of SEC-P9-A-TRAFFIC-FLOOD" |
+| 3 | 1:00 | Click **Open scenario workflow** on the scenario card | Read the preview: phases, volume, destination, limits. Do **not** read the banners aloud (see "Known UI inconsistency" below) | Phases `traffic (100) → syn-flood (560) → udp-flood (160)`; 820 events; destination `127.0.0.1:18088`, index `idx_network_ops`, sourcetype `netflow:collector`; relation label "NetFlow profile of SEC-P9-A-TRAFFIC-FLOOD" |
 | 4 | 2:00 | Leave the defaults (scale 1, window 180 s, delivery EPS 50, Index `idx_network_ops`, IPFIX UDP export ticked) | "Defaults are fine. The IPFIX box also sends real flow packets to the collector; the monitor counts the HEC path." | |
 | 5 | 2:30 | Click **Run scenario with live delivery monitor** | "Watch generated, accepted, and the last number, Indexed (verified)." | State RUNNING, then COMPLETED about 20 s later; Generated 820, Attempts 820, HEC accepted 820, Rejected 0, Pending 0; Indexed (verified) 820 (it can trail by seconds) |
 | 6 | 3:30 | Point at the NetFlow stage rows | "UDP exported and collector decoded are reported separately; decoded can be a little under 100 percent from datagram loss, and the app says so." | Stage rows present; do not claim 100 percent decoded |
@@ -84,6 +84,14 @@ Open a browser (fresh profile or cleared site data so the Explorer shows no reme
 | 8 | 4:30 | Open a new tab: `http://localhost:18000/en-US/app/search/search` and run the SPL in "Searches" below | "Here are the events themselves." | Table with `netspout_phase` traffic and syn-flood |
 | 9 | 5:30 | Click **Open dashboard** (or open the URL below with your new run ID) | Walk the panels | See "Dashboard walk" below |
 | 10 | 7:30 | Return to slide 14 or 15 | | |
+
+### Known UI inconsistency (do not read the banners aloud)
+
+The scenario preview shows both "Live Splunk evidence recorded for this scenario (counts verified independently)" and "Contract only: this scenario has not been validated end to end". They contradict each other, and the cause has not been investigated. If asked: "That is a known inconsistency in the released UI. The evidence is the reconciled counts and the search by run ID." Do not describe either banner as the validation status.
+
+### Normal pre-run state
+
+On the Command Center, "Splunk observation: NOT AVAILABLE" and "Detection evaluation: NOT CONFIGURED" are the normal state before any run is observed. They are not errors.
 
 ### Scenario facts
 
@@ -127,8 +135,8 @@ If you open the view by hand, set the **Index** input to `idx_network_ops` (it d
 | Order | Panel | What to say | Expect (for `run-cfcfd30d23f8`) |
 |---|---|---|---|
 | 1 | Header and question | "The page states its question and its limits." | Limits: synthetic flood patterns; flow data cannot show whether availability was lost |
-| 2 | Packet rate (5 s buckets) | "Where does the rate peak?" | Several peaks, highest about 61 packets/s; the digits change run to run (88 on an earlier run), describe the shape |
-| 3 | KPI tiles | "Headline numbers." | Peak packets/s about 61; Flows 820; SYN-only flows 68.3%; Distinct sources 258; Destinations receiving SYN-only flows 1 |
+| 2 | Packet rate (5 s buckets) | "Where does the rate peak?" | Several peaks; the peak value differs between runs, so describe the shape and quote no fixed number |
+| 3 | KPI tiles | "Headline numbers." | Peak packets/s (varies, do not quote); Flows 820; SYN-only flows 68.3%; Distinct sources 258; Destinations receiving SYN-only flows 1 |
 | 4 | TCP flags over time | "SYN grows as the flood builds." | SYN and PSH|ACK stacked bars, SYN rising |
 | 5 | Packets by protocol | | Mostly tcp, a small udp slice |
 | 6 | Targeted assets (packets) | "One asset takes the brunt." | 192.0.2.80 leads |
@@ -209,4 +217,9 @@ Add `&form.index_tok=idx_network_ops` to each URL. Prepared run IDs were read fr
 3. Open `http://localhost:18000/en-US/app/netspout/pulseforge_command_center` and sign in; click **Got it!** on any one-time Splunk notice.
 4. Open the prepared dashboard URL with `run-cfcfd30d23f8` and confirm the panels are populated.
 5. Clear site data for `localhost:18000` so the Explorer does not show a remembered run.
-6. Close other heavy processes; a click that records no response under load should be retried before it is called a failure.
+6. Dismiss the one-time Splunk product-usage notice: open Search once as `admin` and click **Got it!**; it otherwise covers the first search on stage.
+7. Close other heavy processes; a click that records no response under load should be retried before it is called a failure.
+
+## Credential rotation (record only; no values here)
+
+Three credentials were pasted into working sessions during development and must be rotated before this material is shared more widely: the HEC token, the `socadmin` password, and the Splunk Cloud bearer token. The lab password and HEC token for the demo environment live only in the git-ignored `tests/lab/phase4e/.env.lab`. No secret appears in the deck, screenshots, diagrams, script or cheat sheet.

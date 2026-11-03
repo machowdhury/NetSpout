@@ -7,7 +7,9 @@ Nov 3, 2026, 9:00 AM ET · 23 min + Q&A · no credentials here (lab password and
 - **184 of 224 are modeled** (labeled `netspout:scenario:state`), not vendor logs. 47 catalog sourcetypes have no generator.
 - **Indexed = an independent search by run ID found it.** HEC accepted is not proof.
 - Single-package installer = **experimental, not released**. Splunk Cloud **not validated**. Metric (mstats) views = **lab only**; this Splunk has no metrics index.
-- Flow data shows indicators; it cannot prove an outage.
+- Flow data shows indicators; it cannot prove an outage. Never quote a packet-rate peak (varies per run).
+- Explorer preview shows two contradicting banners ("live evidence recorded" vs "contract only"): do not read them; cite the 820/820/820 counts. Command Center "Splunk observation: NOT AVAILABLE" is the normal pre-run state.
+- Before going on: open Search once and click **Got it!** on the one-time Splunk usage notice.
 
 ## Slides (talking point · minutes)
 | # | Slide | Point | Min |
@@ -41,7 +43,7 @@ Expect 820 per run; syn-flood 560 / traffic 100 / udp-flood 160; one target **19
 
 ## Dashboard
 `pf_NF-SEC-06-DDOS` · `http://localhost:18000/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=<RUN>&form.index_tok=idx_network_ops`
-Expect: Flows **820** · SYN-only **68.3%** · Distinct sources **258** · SYN-only destinations **1** · peak packets/s ~60-90 (varies) · 192.0.2.80 leads targeted assets · sources climb then drop · top source 198.51.100.52.
+Expect: Flows **820** · SYN-only **68.3%** · Distinct sources **258** · SYN-only destinations **1** · peak packets/s (varies, don't quote) · 192.0.2.80 leads targeted assets · sources climb then drop · top source 198.51.100.52.
 Panel empty / "No search results"? Set **Index** to `idx_network_ops`.
 
 ## Prepared runs and backup (already indexed, no live run needed)
@@ -60,6 +62,8 @@ Panel empty / "No search results"? Set **Index** to `idx_network_ops`.
 | Engine silent | `curl -s localhost:8091/api/health`; `scripts/start_lab_engine.sh` only if needed |
 | Splunk down | `docker ps`; `tests/lab/phase4e/lab.sh up`; wait `(healthy)` |
 | Everything down | Present slides 10-13 as dated evidence and say so |
+
+Credentials pasted during development (HEC token, `socadmin` password, Splunk Cloud bearer token) still need rotating.
 
 ## Never
 Demo the 37 telecom/industry packs (no metrics index) · show any of the 224 as installed · restart or reconfigure the demo environment · claim Splunk Cloud, production certification or a released single-package installer.

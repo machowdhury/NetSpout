@@ -188,7 +188,8 @@ tag(sl, "LIVE DEMO ENVIRONMENT · released app", 9.4, 1.1, 3.4)
 sl = new("Scenario Explorer: find a story to run", source=SRC + "Live demo environment.", notes="""
 Source environment: demo Splunk, Use Case Explorer, search term volumetric DDoS. Captured 2026-11-02.
 Say: this is the entry point for the live demo. Searching volumetric DDoS returns the dashboard and the scenario NF-SEC-06-DDOS. It is labeled RUNNABLE and independently indexed, and it notes that it is a NetFlow profile of SEC-P9-A-TRAFFIC-FLOOD. Click Open scenario workflow to configure it.
-The counters at the top (372 operational, 365 security stories) are catalog entries, not all runnable in this demo. The released app here runs 148 scenarios; the explorer's own labels (RUNNABLE or catalog only) tell you which.
+The counters at the top (372 operational, 365 security stories) are catalog entries, not all runnable in this demo.
+Known banner contradiction: once you open the scenario workflow, its preview shows both 'Live Splunk evidence recorded for this scenario' and 'Contract only: this scenario has not been validated end to end'. These two statements conflict, and I have not root-caused it. Do not read either banner aloud. If asked, say it is a known inconsistency in the released UI and point to the reconciled counts (820 generated, 820 accepted, 820 indexed) and the search by run ID as the evidence. The released app here runs 148 scenarios; the explorer's own labels (RUNNABLE or catalog only) tell you which.
 Validation status: NF-SEC-06-DDOS: 820 generated, 820 accepted, 820 indexed on five runs between 2026-11-01 and 2026-11-02; dashboard DASHBOARD_VISUALLY_VERIFIED.""")
 numbered(sl, 0.6, 1.5, 4.6, [("Search and filter", "Type a title, vendor, sourcetype or MITRE ID; narrow by type and dashboard status."), ("Dashboard with evidence", "pf_NF-SEC-06-DDOS is marked DASHBOARD_VISUALLY_VERIFIED."),
                              ("Runnable scenario", "NF-SEC-06-DDOS, independently indexed. Open scenario workflow starts the demo."), ("Catalog counters", "Entries in the catalog, not a runnable count; each card is labeled.")], 15)
@@ -216,7 +217,7 @@ tb(sl, 0.6, 3.95, 4.7, 0.5, "Callouts: 1 phase story, 2 metric-index panels, 3 i
 
 # ---------------------------------------------------------------- 10 running
 sl = new("Running a scenario with a live monitor", source="Source: demo Splunk, run run-563343473f86 captured 2026-11-01 (the same scenario was re-run 2026-11-02).", notes="""
-Source environment: demo Splunk (localhost:18000), NF-SEC-06-DDOS, run run-563343473f86, captured 2026-11-01 from the live monitor. The same scenario was re-run on 2026-11-02 (run-41ff3797e6ad and run-cfcfd30d23f8), each 820 generated, 820 accepted, 820 indexed.
+Source environment: demo Splunk (localhost:18000), NF-SEC-06-DDOS, run run-563343473f86, captured 2026-11-01 from the live monitor. The picture is a crop of that verified capture; the source image ends mid-panel, so the lowest counter rows (Pending, Indexed, EPS, Elapsed, ETA) are partly clipped. On the live screen the full panel is visible. The slide says so in its caption. The same scenario was re-run on 2026-11-02 (run-41ff3797e6ad and run-cfcfd30d23f8), each 820 generated, 820 accepted, 820 indexed.
 Say: the configure panel shows the run plan: phases traffic 100, syn-flood 560, udp-flood 160, 820 events, destination index idx_network_ops. Run scenario with live delivery monitor starts it. The monitor counts generated, HEC accepted, rejected and Indexed (verified); that last number comes from a search, not from HEC.
 Live: you will start a fresh run; expect about 20 seconds end to end. The IPFIX over UDP checkbox is optional; the HEC path is what the monitor counts.
 Validation status: 820/820/820 reconciled; collector evidence 820 exported = 820 decoded, 0 collector errors in the 2026-11-02 rehearsal.""")
@@ -225,12 +226,14 @@ numbered(sl, 0.6, 1.5, 4.6, [("Start the run", "One button: Run scenario with li
 r = pic(sl, "04_run_monitor.png", 5.45, 1.7, 7.4, 3.45, "Live delivery monitor showing 820 generated, 820 accepted and 820 indexed")
 callouts(sl, r, [(0.36, 0.446, 0.209, 0.05), (0.882, 0.56, 0.077, 0.035, 1), (0.36, 0.69, 0.615, 0.195), (0.498, 0.816, 0.105, 0.068, 2)])
 tag(sl, "LIVE DEMO ENVIRONMENT · released app", 9.4, 1.3, 3.4)
-box(sl, 5.45, 5.4, 7.4, 1.4, LIGHT); tb(sl, 5.7, 5.55, 6.9, 1.1, "Phases: traffic (100)  →  syn-flood (560)  →  udp-flood (160)\nDestination: idx_network_ops · sourcetype netflow:collector", 16, False, NAVY, anchor=MSO_ANCHOR.MIDDLE)
+box(sl, 5.45, 5.75, 7.4, 1.0, LIGHT); tb(sl, 5.7, 5.85, 6.9, 0.8, "Phases: traffic (100)  →  syn-flood (560)  →  udp-flood (160)\nDestination: idx_network_ops · sourcetype netflow:collector", 16, False, NAVY, anchor=MSO_ANCHOR.MIDDLE)
+tb(sl, 5.45, 5.18, 7.4, 0.55, "Cropped from the verified 2026-11-01 capture; the lowest counter rows are partly clipped in that source image.", 11, color=MUTE, italic=True)
 
 # ---------------------------------------------------------------- 11 search
 sl = new("The events, as Splunk indexed them", source=SRC + "Run run-cfcfd30d23f8, read-only search.", notes="""
 Source environment: demo Splunk, Search & Reporting. Run run-cfcfd30d23f8 (2026-11-02 12:24 UTC). The search is read-only; a one-time Splunk product-usage notice appears for a first-time admin session and was hidden in this capture only.
 SPL shown: index=idx_network_ops sourcetype="netflow:collector" netspout_scenario_id="NF-SEC-06-DDOS" netspout_run_id="run-cfcfd30d23f8" | head 8 | table _time src dest dest_port transport tcp_flags_text packets bytes netspout_phase netspout_run_id
+Before the session click 'Got it!' on the one-time Splunk product-usage notice that a first-time admin sees on Search; it was hidden in this capture only.
 Say: these are the actual indexed events. The netspout_phase column shows the story: traffic first, then syn-flood from many sources to a single destination, 192.0.2.80 on port 443. Source addresses are RFC 5737 documentation ranges; this is synthetic traffic and the dashboard says so.
 Validation status: 820 events for this run in idx_network_ops, same count as generated and accepted.""")
 numbered(sl, 0.6, 1.5, 4.6, [("Real SPL, real index", "Scoped by scenario ID and run ID in idx_network_ops."), ("Event count", "The count matches what the monitor reported."),
@@ -247,8 +250,8 @@ para(tf, "Seven runs of 820 flows each are indexed in this demo (2026-11-01 and 
 # ---------------------------------------------------------------- 12 dashboard
 sl = new("Dashboard Studio: a populated investigation", source=SRC + "Run run-cfcfd30d23f8, dashboard pf_NF-SEC-06-DDOS.", notes="""
 Source environment: demo Splunk, dashboard pf_NF-SEC-06-DDOS (NetFlow / IPFIX menu), bound to run run-cfcfd30d23f8 via form.run_tok. URL: http://localhost:18000/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-cfcfd30d23f8&form.index_tok=idx_network_ops
-Say: the question is on the page: where is the packet rate peaking, which protocols and TCP flags dominate, and which assets are targeted. Panels: packet rate with a peak of 61 packets/s for this run; 820 flows; 68.3% SYN-only flows; 258 distinct sources; one destination receiving SYN-only flows. SYN counts grow across the run; 192.0.2.80 is the main target; sources escalate over time. The Limits line is honest: synthetic flood patterns; flow data cannot prove loss of availability.
-Numbers vary run to run (peak was 88 on the 2026-11-01 run); describe the shape, not the digits, if they differ.
+Say: the question is on the page: where is the packet rate peaking, which protocols and TCP flags dominate, and which assets are targeted. Panels: packet rate (the peak varies from run to run, so describe the shape and not the digits); 820 flows; 68.3% SYN-only flows; 258 distinct sources; one destination receiving SYN-only flows. SYN counts grow across the run; 192.0.2.80 is the main target; sources escalate over time. The Limits line is honest: synthetic flood patterns; flow data cannot prove loss of availability.
+Packet-rate peaks differ between runs (the capture shown happens to be one run); never quote a fixed peak.
 Validation status: DASHBOARD_VISUALLY_VERIFIED in the app's maturity scale; panels searched and returned data on every one of the seven indexed runs checked during acceptance.""")
 numbered(sl, 0.6, 1.5, 4.6, [("Run-bound", "Scenario run picker and index; every panel filters by run ID."), ("The headline numbers", "820 flows, 68.3% SYN-only, 258 distinct sources, one targeted destination."),
                              ("Who and how", "TCP flags over time, protocol mix, and targeted assets (192.0.2.80 leads)."), ("Escalation and evidence", "Distinct sources climb through the attack; click a source for flow evidence.")], 15)
@@ -276,7 +279,7 @@ Distinguish: 372 runnable on main; 148 previously validated in the released app;
 Limits to say out loud: 184 of the 224 new scenarios are modeled (not vendor logs); 47 catalog sourcetypes have no generator; the demo environment does not have the new scenarios; metric dashboards need a metric index.
 Validation status: as stated per column.""")
 cols = [("Deployment", TEAL, ["Released: Splunk app (netspout.spl) + engine tarball; verified on Splunk Enterprise 10.2.7 in an isolated lab", "Released: Docker evaluation stack; Compose file validates, clean-checkout run not repeated", "Released: netspout_cloud.spl, dashboards only; Splunk Cloud itself was not validated", "Experimental, not released: single-package installer (validated once on Splunk 10.6.1.1)"]),
-        ("Evidence", NAVY, ["148 scenarios validated in the released app", "224 new scenarios: 224/224 independently indexed in the lab (4,994 events, 0 rejected)", "224/224 dashboards pass the Splunk parser and return data", "24 rendered in a browser, 11 visually inspected"]),
+        ("Evidence", NAVY, ["148 scenarios validated in the released app", "224 new scenarios: 224/224 independently indexed in the lab (4,994 events, 0 rejected)", "224/224 dashboards pass the Splunk parser and return meaningful results", "24 rendered in a browser, 11 visually inspected"]),
         ("Limits", ORANGE, ["184 of the 224 new scenarios are modeled, not vendor logs", "47 catalog sourcetypes have no generator yet", "This demo runs the released app; the new scenarios are on main, not installed here", "Metric dashboards need a metric index; the demo has none"])]
 for i, (h, c, items) in enumerate(cols):
     x = 0.6 + i * 4.1; box(sl, x, 1.4, 3.9, 4.35, LIGHT); b = box(sl, x, 1.4, 3.9, 0.65, c, None); tf = b.text_frame; tf.vertical_anchor = MSO_ANCHOR.MIDDLE

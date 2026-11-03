@@ -1,0 +1,17 @@
+flowchart TB
+  %% Step 8 is where PulseForge reports indexed: an independent search, never the HEC acknowledgement
+  subgraph R1[" "]
+    direction LR
+    A["Step 1<br/><b>Choose</b><br/>Use Case Explorer:<br/>scenario or sourcetype"] --> B["Step 2<br/><b>Configure</b><br/>index, scale, window,<br/>delivery EPS"] --> C["Step 3<br/><b>Start run</b><br/>Splunk app calls<br/>netspout_gateway"] --> D["Step 4<br/><b>Engine</b><br/>/api/runs creates<br/>a run ID"] --> E["Step 5<br/><b>Generate</b><br/>ordered phases, every<br/>event tagged with run ID"]
+  end
+  subgraph R2[" "]
+    direction LR
+    F["Step 6<br/><b>Deliver</b><br/>HEC to Splunk;<br/>optional IPFIX UDP<br/>to the collector"] --> G["Step 7<br/><b>Monitor</b><br/>generated, accepted,<br/>rejected"] --> H["Step 8<br/><b>Verify</b><br/>independent Splunk search<br/>by run ID = indexed"] --> I["Step 9<br/><b>Investigate</b><br/>Search and run-bound<br/>pf_* dashboards"]
+  end
+  R1 -->|continues| R2
+  classDef s fill:#0b3b4f,stroke:#0b3b4f,color:#fff,font-size:20px
+  classDef v fill:#d9480f,stroke:#d9480f,color:#fff,font-size:20px
+  class A,B,C,D,E,F,G s
+  class H,I v
+  style R1 fill:none,stroke:none
+  style R2 fill:none,stroke:none

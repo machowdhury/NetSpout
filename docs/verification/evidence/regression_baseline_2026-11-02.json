@@ -1,0 +1,30 @@
+{
+ "generated": "2026-11-02",
+ "method": "Each failing test identity was compared between a pristine origin/main checkout and the final branch code, run with the same command in the same environment.",
+ "known_baseline_failures": {
+  "files": [
+   "test_gate13e_customer_acceptance.py (5)",
+   "test_gate13d_gnmi_splunk_e2e.py (25)",
+   "test_gate12d_snmp_splunk_e2e.py (9)",
+   "test_gate12f_snmp_productization.py (4)",
+   "test_gate4_contract.py (2)",
+   "test_gate9_5_telemetry_semantics.py (7 subtests)"
+  ],
+  "main": "52 failed, 51 passed",
+  "branch_final_code": "52 failed, 51 passed",
+  "identical_identities": true,
+  "new_on_branch": 0,
+  "fixed_on_branch": 0,
+  "note": "All 25 gNMI failures were reproduced individually on pristine main, not inferred from one."
+ },
+ "clean_regression_final_state": {
+  "set": "46 relevant test files excluding the six baseline files above",
+  "passed": 4005,
+  "failed": 1,
+  "skipped": 11,
+  "subtests_passed": 1663,
+  "the_one_failure": "tests/test_gate11f_governance_closure.py::test_03_p2_manage_collector_preflight_without_pythonpath",
+  "classification": "environment-dependent, not a regression: the collector preflight passes only if a Splunk answers HEC health on 127.0.0.1:8088 or :8888. Earlier in the same session an unrelated local Splunk answered there (4,006 passed); at the final run nothing listened on either port, and the identical preflight fails on a pristine main checkout in the same environment.",
+  "demo_check": "The NetSpout demo Splunk (HEC on its own port 18088) was healthy throughout; the ports probed by this test belong to no NetSpout component."
+ }
+}

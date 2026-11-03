@@ -1717,7 +1717,7 @@
    "scenario_id": "arch_nas_storage_cluster",
    "searches": 19,
    "panels": 20,
-   "distinct_statuses": 4,
+   "distinct_statuses": 3,
    "phases_where_status_set_changes": 3,
    "problems": []
   },

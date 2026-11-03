@@ -12,10 +12,11 @@ Generated from `catalog/sourcetypes.json` and the coverage evidence by `scripts/
 | Independently indexed | Found by a separate Splunk search in an isolated lab | 137 |
 | Add-on parsing checked | Parsed by the installed add-on in a lab | 6 |
 | CIM validated | No CIM data model was installed in any lab | 0 |
-| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | 152 |
-| Dashboard implemented only | Referenced by a scenario whose dashboard exists but is not validated against data | 1 |
-| Visually verified | Referenced by a scenario whose dashboard was rendered and inspected | 40 |
-| Executed by a scenario contract | Emitted by a declarative scenario contract in automated tests (HEC stubbed), not indexed in Splunk | 25 |
+| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | 153 |
+| Dashboard implemented only | Referenced by a scenario whose dashboard exists but is not validated against data | 0 |
+| Visually verified | Referenced by a scenario whose dashboard was rendered and inspected | 47 |
+| Executed by a scenario contract | Emitted by a declarative scenario contract in automated tests (HEC stubbed) | 24 |
+| Live-indexed via a scenario contract | Emitted by a scenario contract into the lab Splunk and independently found there by run id | 22 |
 | Not yet implemented | No generator: cataloged only | 47 |
 
 **Modeled sourcetype.** `netspout:scenario:state` is a NetSpout-defined schema (JSON with entity, component, state, previous state, severity, message and an optional measurement), used by 214 scenario contracts where a definition specifies a state progression or a monitoring use case and no vendor log format exists. It is **not** vendor-native and is not in the catalog above.
@@ -135,7 +136,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Arista Networks | Arista EOS Core Switching | `arista:eos` | event | — | HEC (syslog format) | R | - | - | 1 | 1 | 0 | 0 |
 | Arista Networks | Arista Eos Syslog | `arista:eos:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Arista Networks | Arista Flow Ipfix | `arista:flow:ipfix` | event | — | HEC (syslog format) | G | - | - | 1 | 1 | 0 | 0 |
-| Arista Networks | Arista Metrics Telemetry | `arista:telemetry:json` | event | — | HEC (syslog format) | R | - | - | 2 | 1 | 1 | 0 |
+| Arista Networks | Arista Metrics Telemetry | `arista:telemetry:json` | event | — | HEC (syslog format) | R | - | - | 1 | 1 | 0 | 0 |
 | Aruba / HPE | Aruba Instant AP & Switch Event | `aruba` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Aruba / HPE | Aruba Controller Authentication Manager | `aruba:authmgr` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Aruba / HPE | Aruba Cx Security | `aruba:cx:security` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
@@ -157,15 +158,15 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Duo | Cisco Duo Authentication V2 | `cisco:duo:authentication_v2` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Duo | Cisco Duo Endpoint | `cisco:duo:endpoint` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Duo | Cisco Duo Push Prompt | `cisco:duo:push:prompt` | event | — | HEC (syslog format) | - | - | - | 1 | 1 | 0 | 0 |
-| Cisco Duo | Cisco Duo Remote Vpn | `cisco:duo:remote:vpn` | event | — | HEC (syslog format) | G | - | - | 2 | 1 | 1 | 0 |
+| Cisco Duo | Cisco Duo Remote Vpn | `cisco:duo:remote:vpn` | event | — | HEC (syslog format) | G | - | - | 2 | 2 | 0 | 0 |
 | Cisco Duo | Cisco Duo User | `cisco:duo:user` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Cisco Meraki Syslog | `cisco:meraki:syslog` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
-| Cisco Meraki | Meraki Accesspoints | `meraki:accesspoints` | event | — | HEC (syslog format) | R | - | - | 2 | 1 | 1 | 0 |
+| Cisco Meraki | Meraki Accesspoints | `meraki:accesspoints` | event | — | HEC (syslog format) | R | - | - | 2 | 2 | 0 | 0 |
 | Cisco Meraki | Meraki Airmarshal | `meraki:airmarshal` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Meraki Appliance | `meraki:appliance` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Meraki Appliancesdwanstatistics | `meraki:appliancesdwanstatistics` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Meraki Appliancesdwanstatuses | `meraki:appliancesdwanstatuses` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Meraki | Meraki Assurancealerts | `meraki:assurancealerts` | event | — | HEC (syslog format) | G | - | - | 2 | 1 | 1 | 0 |
+| Cisco Meraki | Meraki Assurancealerts | `meraki:assurancealerts` | event | — | HEC (syslog format) | G | - | - | 2 | 2 | 0 | 0 |
 | Cisco Meraki | Meraki Devices | `meraki:devices` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Meraki Devices Availabilities | `meraki:devicesavailabilitieschangehistory` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Meraki | Meraki Organizationsecurity | `meraki:organizationsecurity` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -178,17 +179,17 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Meraki | Meraki Switchportsoverview | `meraki:switchportsoverview` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Aci Fault | `cisco:aci:fault` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Aci Syslog | `cisco:aci:syslog` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco ASA Firewall Connection & Policy | `cisco:asa` | event | — | HEC (syslog format) | G | - | - | 5 | 3 | 2 | 0 |
+| Cisco Systems | Cisco ASA Firewall Connection & Policy | `cisco:asa` | event | — | HEC (syslog format) | G | - | - | 5 | 5 | 0 | 0 |
 | Cisco Systems | Cisco ASA Syslog Message Stream | `cisco:asa:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Client | `cisco:catalyst:client` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Catalyst Clienthealth | `cisco:catalyst:clienthealth` | event | — | HEC (syslog format) | G | - | - | 4 | 1 | 3 | 0 |
+| Cisco Systems | Cisco Catalyst Clienthealth | `cisco:catalyst:clienthealth` | event | — | HEC (syslog format) | G | - | - | 4 | 4 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Compliance | `cisco:catalyst:compliance` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Devicehealth | `cisco:catalyst:devicehealth` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Issue | `cisco:catalyst:issue` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Catalyst Networkhealth | `cisco:catalyst:networkhealth` | event | — | HEC (syslog format) | R | - | - | 2 | 0 | 2 | 0 |
+| Cisco Systems | Cisco Catalyst Networkhealth | `cisco:catalyst:networkhealth` | event | — | HEC (syslog format) | R | - | - | 2 | 2 | 0 | 1 |
 | Cisco Systems | Cisco Catalyst Rogue Allowed | `cisco:catalyst:rogue:allowed` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Rogue Counts | `cisco:catalyst:rogue:counts` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Catalyst Rogue Threat Details | `cisco:catalyst:rogue:threat_details` | event | — | HEC (syslog format) | G | - | - | 4 | 2 | 2 | 0 |
+| Cisco Systems | Cisco Catalyst Rogue Threat Details | `cisco:catalyst:rogue:threat_details` | event | — | HEC (syslog format) | G | - | - | 4 | 4 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Rogue Verbose | `cisco:catalyst:rogue:verbose` | event | captured_1, captured_2 | HEC (syslog format) | G | yes | yes | 3 | 3 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Rogue Verbose Legacy | `cisco:catalyst:rogue:verbose:legacy` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Catalyst Rogue Wired | `cisco:catalyst:rogue:wired` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -209,9 +210,9 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Systems | Cisco Cloud Security Web Proxy | `cisco:cloud_security:proxy` | event | — | HEC (syslog format) | G | yes | yes | 3 | 3 | 0 | 0 |
 | Cisco Systems | Cisco Dc Aci Class | `cisco:dc:aci:class` | event | captured_1 | HEC (syslog format) | G | yes | yes | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco ACI Fabric State Events | `cisco:dc:aci:events` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Dc Aci Bridge Domain | `cisco:dc:aci:health` | event | — | HEC (syslog format) | G | - | yes | 3 | 1 | 2 | 1 |
+| Cisco Systems | Cisco Dc Aci Bridge Domain | `cisco:dc:aci:health` | event | — | HEC (syslog format) | G | - | yes | 3 | 3 | 0 | 1 |
 | Cisco Systems | Cisco Dc Nexus9K | `cisco:dc:nexus9k` | event | captured_1, captured_2 | HEC (syslog format) | G | yes | yes | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Dc Nexus9K Syslog | `cisco:dc:nexus9k:syslog` | event | — | HEC (syslog format) | G | - | yes | 5 | 2 | 3 | 1 |
+| Cisco Systems | Cisco Dc Nexus9K Syslog | `cisco:dc:nexus9k:syslog` | event | — | HEC (syslog format) | G | - | yes | 5 | 5 | 0 | 2 |
 | Cisco Systems | Cisco Dnac Audit Logs | `cisco:dnac:audit:logs` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Dnac Client | `cisco:dnac:client` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Dnac Clienthealth | `cisco:dnac:clienthealth` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -235,12 +236,12 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Systems | Cisco Intersight Targets | `cisco:intersight:targets` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Ios | `cisco:ios` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
 | Cisco Systems | Cisco Ios Mdt | `cisco:ios:mdt` | event | — | HEC (syslog format) | G | - | yes | 2 | 2 | 0 | 1 |
-| Cisco Systems | Cisco IOS-XE / IOS-XR Model-Driven Tele… | `cisco:ios:mdt:metric` | metric | — | HEC (hec format) | G | - | - | 4 | 1 | 3 | 0 |
-| Cisco Systems | Cisco IOS System Syslog Facility | `cisco:ios:syslog` | event | — | HEC (syslog format) | G | - | - | 18 | 4 | 14 | 0 |
+| Cisco Systems | Cisco IOS-XE / IOS-XR Model-Driven Tele… | `cisco:ios:mdt:metric` | metric | — | HEC (hec format) | G | - | - | 4 | 4 | 0 | 3 |
+| Cisco Systems | Cisco IOS System Syslog Facility | `cisco:ios:syslog` | event | — | HEC (syslog format) | G | - | - | 18 | 18 | 0 | 3 |
 | Cisco Systems | Cisco Ise Nac 8021X | `cisco:ise:nac:8021x` | event | — | HEC (syslog format) | - | - | - | 1 | 1 | 0 | 0 |
 | Cisco Systems | Cisco Ise Radius Authz Policy | `cisco:ise:radius:authz:policy` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Ise Radius Policyset | `cisco:ise:radius:policyset` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Ise Syslog | `cisco:ise:syslog` | event | — | HEC (syslog format) | G | - | - | 7 | 1 | 6 | 0 |
+| Cisco Systems | Cisco Ise Syslog | `cisco:ise:syslog` | event | — | HEC (syslog format) | G | - | - | 7 | 7 | 0 | 0 |
 | Cisco Systems | Cisco Ise Tacacs Authz Policy | `cisco:ise:tacacs:authz:policy` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Ise Tacacs Policyset | `cisco:ise:tacacs:policyset` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Ise Trustsec Sgt | `cisco:ise:trustsec:sgt` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
@@ -258,7 +259,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Systems | Cisco Sdwan Aaa 6 Notify Mlist State To… | `cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT` | event | dead, alive | HEC (syslog format) | G | yes | yes | 2 | 2 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Aaa Audit Message 6 Method … | `cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE` | event | captured_1 | HEC (syslog format) | G | yes | yes | 2 | 2 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Aaa Audit Message 6 Notify … | `cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT` | event | captured_1 | HEC (syslog format) | G | yes | yes | 2 | 2 | 0 | 0 |
-| Cisco Systems | Cisco Sdwan Bgp 5 Adjchange | `cisco:sdwan:BGP-5-ADJCHANGE` | event | vrf_down, up | HEC (syslog format) | G | yes | yes | 8 | 5 | 3 | 1 |
+| Cisco Systems | Cisco Sdwan Bgp 5 Adjchange | `cisco:sdwan:BGP-5-ADJCHANGE` | event | vrf_down, up | HEC (syslog format) | G | yes | yes | 8 | 8 | 0 | 1 |
 | Cisco Systems | Cisco Sdwan Bgp 5 Nbr Reset | `cisco:sdwan:BGP-5-NBR_RESET` | event | peer_closed | HEC (syslog format) | G | yes | yes | 4 | 4 | 0 | 1 |
 | Cisco Systems | Cisco Sdwan Bgp 6 Nexthop | `cisco:sdwan:BGP-6-NEXTHOP` | event | captured_1 | HEC (syslog format) | G | yes | yes | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Bgp Session 5 Adjchange | `cisco:sdwan:BGP_SESSION-5-ADJCHANGE` | event | captured_1, captured_2 | HEC (syslog format) | G | yes | yes | 0 | 0 | 0 | 0 |
@@ -286,7 +287,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Systems | Cisco Sdwan Platform 4 Element Warning | `cisco:sdwan:PLATFORM-4-ELEMENT_WARNING` | event | load_average | HEC (syslog format) | G | yes | yes | 4 | 4 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Sys 5 Config P | `cisco:sdwan:SYS-5-CONFIG_P` | event | captured_1 | HEC (syslog format) | G | yes | yes | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco SD-WAN Management Access | `cisco:sdwan:access` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
-| Cisco Systems | Cisco Sdwan Linkhealth | `cisco:sdwan:linkhealth` | event | — | HEC (syslog format) | G | - | - | 7 | 1 | 6 | 0 |
+| Cisco Systems | Cisco Sdwan Linkhealth | `cisco:sdwan:linkhealth` | event | — | HEC (syslog format) | G | - | - | 7 | 7 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Sitehealth | `cisco:sdwan:sitehealth` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Sdwan Ssetunnels | `cisco:sdwan:ssetunnels` | event | captured_1, captured_2 | HEC (syslog format) | G | yes | yes | 2 | 2 | 0 | 1 |
 | Cisco Systems | Cisco Sdwan Syslog | `cisco:sdwan:syslog` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
@@ -300,7 +301,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Cisco Systems | Cisco Sfw Estreamer | `cisco:sfw:estreamer` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
 | Cisco Systems | Cisco Sfw Policy | `cisco:sfw:policy` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | Cisco Thousandeyes Event | `cisco:thousandeyes:event` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Cisco Systems | Cisco Thousandeyes Metric | `cisco:thousandeyes:metric` | metric | — | HEC (hec format) | G | - | - | 6 | 2 | 4 | 0 |
+| Cisco Systems | Cisco Thousandeyes Metric | `cisco:thousandeyes:metric` | metric | — | HEC (hec format) | G | - | - | 6 | 6 | 0 | 4 |
 | Cisco Systems | Cisco Thousandeyes Path Vis | `cisco:thousandeyes:path-vis` | event | — | HEC (syslog format) | R | - | - | 1 | 1 | 0 | 0 |
 | Cisco Systems | Cisco Syslog | `cisco_syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Cisco Systems | NetSpout Ingestion Preflight Probe | `datablaster:preflight` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -326,7 +327,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | ExtraHop Networks | Extrahop Metrics Performance | `extrahop:eda:metrics` | metric | — | HEC (hec format) | R | - | - | 0 | 0 | 0 | 0 |
 | Extreme Networks | Extreme Exos Syslog | `extreme:exos:syslog` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Extreme Networks | Extreme Voss Syslog | `extreme:voss:syslog` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
-| F5 Networks | F5 BIG-IP Local Traffic Manager (LTM) | `f5:bigip:ltm` | event | — | HEC (syslog format) | G | - | - | 3 | 2 | 1 | 0 |
+| F5 Networks | F5 BIG-IP Local Traffic Manager (LTM) | `f5:bigip:ltm` | event | — | HEC (syslog format) | G | - | - | 3 | 3 | 0 | 0 |
 | F5 Networks | F5 Bigip Syslog | `f5:bigip:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Forcepoint | Forcepoint Ngfw Alert | `forcepoint:ngfw:alert` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Forcepoint | Forcepoint Ngfw Traffic | `forcepoint:ngfw:traffic` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
@@ -337,7 +338,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Fortinet | Fortinet FortiGate Unified Security Eve… | `fortinet:fortigate` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Fortinet | Fortinet Fortigate Event | `fortinet:fortigate:event` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Fortinet | Fortinet Fortigate Traffic | `fortinet:fortigate:traffic` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
-| Fortinet | Fortinet Fortigate Utm | `fortinet:fortigate:utm` | event | — | HEC (syslog format) | G | - | - | 2 | 1 | 1 | 0 |
+| Fortinet | Fortinet Fortigate Utm | `fortinet:fortigate:utm` | event | — | HEC (syslog format) | G | - | - | 2 | 2 | 0 | 0 |
 | GitHub | Enterprise audit logs | `github:enterprise:audit` | event | enterprise_user_login, repository_merge | HEC (hec format) | G | yes | yes | 5 | 5 | 0 | 0 |
 | GitLab | Self-Managed audit events | `gitlab:audit:json` | event | session_login, git_operation | HEC (hec format) | G | yes | yes | 5 | 5 | 0 | 0 |
 | Google Cloud | Google Cloud Audit Logs | `gcp:audit` | event | — | HEC (hec_event format) | G | yes | yes | 3 | 3 | 0 | 0 |
@@ -349,7 +350,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | IBM | QRadar offense events | `ibm:qradar:offense` | event | generic_log_offense, message_offense, authentication_offense | HEC (hec format) | G | yes | yes | 5 | 5 | 0 | 0 |
 | IBM MQ | IBM MQ native error log | `ibm:mq:errorlog` | event | queue_manager_created, control_command_issued | HEC (hec format) | G | yes | yes | 2 | 2 | 0 | 0 |
 | Imperva | SecureSphere CEF | `imperva:securesphere:cef` | event | administrator_login, database_audit | HEC (hec format) | G | yes | yes | 4 | 4 | 0 | 0 |
-| Juniper Networks | Juniper Junos Routing & System Log | `juniper:junos` | event | — | HEC (syslog format) | G | - | - | 4 | 2 | 2 | 0 |
+| Juniper Networks | Juniper Junos Routing & System Log | `juniper:junos` | event | — | HEC (syslog format) | G | - | - | 4 | 4 | 0 | 2 |
 | Juniper Networks | Juniper Junos Syslog Transport | `juniper:junos:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Juniper Networks | Juniper Syslog | `juniper:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Kubernetes & Falco (CNCF) | Kubernetes Audit Log | `kube:audit` | event | — | HEC (hec_event format) | G | yes | yes | 2 | 2 | 0 | 0 |
@@ -384,7 +385,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | NGINX (F5) | NGINX Plus access (key=value) | `nginx:plus:access` | event | captured_1, captured_2, captured_3, captured_4, captured_5 | HEC (hec format) | G | yes | yes | 0 | 0 | 0 | 0 |
 | Nokia | Nokia Sr Syslog | `nokia:sr:syslog` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Nokia | Nokia 7750 SR OS Service Router Event | `nokia:sros` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Nokia | Nokia 7750 SR OS Syslog Facility | `nokia:sros:syslog` | event | — | HEC (syslog format) | G | - | - | 3 | 2 | 1 | 0 |
+| Nokia | Nokia 7750 SR OS Syslog Facility | `nokia:sros:syslog` | event | — | HEC (syslog format) | G | - | - | 3 | 3 | 0 | 1 |
 | Nozomi Networks | Nozomi Networks Universal Alert | `nozomi:universal_alert` | event | ot_ids_program_change | HEC (syslog format) | G | yes | yes | 3 | 3 | 0 | 0 |
 | Nutanix | Nutanixpc Disks | `nutanixPC_disks` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Nutanix | Nutanix Prism Central Syslog (Colon For… | `nutanixpc:syslog` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -410,8 +411,8 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Palo Alto Networks | Pan Ble Iot Sensor | `pan:ble:iot:sensor` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Palo Alto Networks | Pan Config | `pan:config` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Palo Alto Networks | Pan System | `pan:system` | event | — | HEC (syslog format) | G | - | yes | 3 | 3 | 0 | 1 |
-| Palo Alto Networks | Pan Threat | `pan:threat` | event | — | HEC (syslog format) | G | - | yes | 6 | 5 | 1 | 1 |
-| Palo Alto Networks | Pan Traffic | `pan:traffic` | event | — | HEC (syslog format) | G | - | yes | 7 | 4 | 3 | 1 |
+| Palo Alto Networks | Pan Threat | `pan:threat` | event | — | HEC (syslog format) | G | - | yes | 6 | 6 | 0 | 1 |
+| Palo Alto Networks | Pan Traffic | `pan:traffic` | event | — | HEC (syslog format) | G | - | yes | 7 | 7 | 0 | 1 |
 | pfSense (Netgate) | pfSense filterlog | `pfsense:filterlog` | event | ipv4_tcp_block, ipv4_udp_pass, ipv6_udp_block | HEC (hec format) | G | yes | yes | 4 | 4 | 0 | 0 |
 | Proofpoint | Targeted Attack Protection SIEM | `proofpoint_tap_siem` | event | malware_message_blocked, phishing_message_blocked | HEC (hec format) | G | yes | yes | 3 | 3 | 0 | 0 |
 | Qualys | Platform user activity log | `qualys:activityLog` | event | console_login, configuration_change | HEC (hec format) | G | yes | yes | 5 | 5 | 0 | 0 |
@@ -444,8 +445,8 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Splunk / Native | Kube Events | `kube:events` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Splunk / Native | Kube Object Pods | `kube:object:pods` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Splunk / Native | Netapp Ontap Nas | `netapp:ontap:nas` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
-| Splunk / Native | Nginx Plus Kv | `nginx:plus:kv` | event | — | HEC (syslog format) | G | - | - | 5 | 3 | 2 | 0 |
-| Splunk / Native | Postgresql Audit | `postgresql:audit` | event | — | HEC (syslog format) | G | - | - | 3 | 1 | 2 | 0 |
+| Splunk / Native | Nginx Plus Kv | `nginx:plus:kv` | event | — | HEC (syslog format) | G | - | - | 5 | 5 | 0 | 0 |
+| Splunk / Native | Postgresql Audit | `postgresql:audit` | event | — | HEC (syslog format) | G | - | - | 3 | 3 | 0 | 0 |
 | Splunk / Native | Stream Netflow | `stream:netflow` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Splunk Community / SC4SNMP | Kube Container Splunk Connect For Snmp … | `kube:container:splunk-connect-for-snmp-traps` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Splunk Community / SC4SNMP | Kube Container Splunk Connect For Snmp … | `kube:container:splunk-connect-for-snmp-worker-sender` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
@@ -471,7 +472,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | Zeek (Bro) | Zeek (Bro) conn JSON | `bro:conn:json` | event | — | HEC (hec_event format) | G | yes | yes | 3 | 3 | 0 | 0 |
 | Zscaler | Zscaler Sse Tunnel | `zscaler:tunnel` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
 | Zscaler | Zscaler Sse Web | `zscaler:web` | event | — | HEC (syslog format) | R | - | - | 0 | 0 | 0 | 0 |
-| Zscaler | Zscaler Internet Access (ZIA) NSS Log | `zscaler:zia` | event | — | HEC (syslog format) | G | - | - | 2 | 1 | 1 | 0 |
+| Zscaler | Zscaler Internet Access (ZIA) NSS Log | `zscaler:zia` | event | — | HEC (syslog format) | G | - | - | 2 | 2 | 0 | 1 |
 | Zscaler | Zscaler Zia Tunnel | `zscaler:zia:tunnel` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Zscaler | Zscaler Zia Web | `zscaler:zia:web` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Zscaler | Zscaler NSS Web Proxy Logs | `zscalernss-web` | event | — | HEC (hec_event format) | G | yes | yes | 6 | 6 | 0 | 1 |

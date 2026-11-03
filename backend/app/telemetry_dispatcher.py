@@ -832,6 +832,8 @@ class TelemetryDispatcher:
                     metric_fields["netspout_device_id"] = log.netspout_device_id
                 if log.netspout_event_id:
                     metric_fields["netspout_event_id"] = log.netspout_event_id
+                if log.netspout_parent_event_id:
+                    metric_fields["netspout_parent_event_id"] = log.netspout_parent_event_id
                 if log.netspout_ground_truth:
                     metric_fields["netspout_ground_truth"] = str(log.netspout_ground_truth)
 
@@ -876,6 +878,7 @@ class TelemetryDispatcher:
                         "netspout_phase": log.netspout_phase,
                         "netspout_device_id": log.netspout_device_id,
                         "netspout_event_id": log.netspout_event_id,
+                        "netspout_parent_event_id": log.netspout_parent_event_id,
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }

@@ -6,8 +6,8 @@
  "newly_activated": 224,
  "activation": {
   "by_fidelity": {
-   "MIXED": 31,
-   "MODELED": 183,
+   "MIXED": 30,
+   "MODELED": 184,
    "VENDOR_NATIVE": 10
   },
   "by_generator_family": {
@@ -35,9 +35,9 @@
   "dashboard_views": 372,
   "structural_spl_ok": 372,
   "structural_spl_failed": [],
-  "data_validated_or_better": 148,
-  "visually_verified": 20,
-  "implemented_not_data_validated": 224
+  "data_validated_or_better": 372,
+  "visually_verified": 31,
+  "implemented_not_data_validated": 0
  },
  "rows": []
 }

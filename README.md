@@ -5,10 +5,10 @@ PulseForge is a Splunk app that generates realistic, **bounded** network, securi
 You sign in with your normal **Splunk** login. PulseForge has no accounts of its own.
 
 ## What you get
-- **372 runnable scenarios** (372 defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. The other 0 are documented but not runnable yet, each with the reason. See [SCENARIOS](docs/SCENARIOS.md).
+- **372 runnable scenarios** (372 defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. Every defined scenario runs; the table says which telemetry is vendor-native, mixed or modeled, and what has been independently indexed. See [SCENARIOS](docs/SCENARIOS.md).
 - **349 sourcetypes from 88 vendors** in the catalog, with the evidence for each kept separate. Catalog presence is not proof it works. See [TELEMETRY_COVERAGE](docs/TELEMETRY_COVERAGE.md).
-- **372 Dashboard Studio dashboards**, one per runnable scenario: 148 data-validated against indexed data (20 of those also visually verified) and 224 implemented but not yet validated against data.
-- Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement.
+- **372 Dashboard Studio dashboards**, one per runnable scenario: 372 validated against indexed data (31 of those also visually verified) and 0 implemented but not yet validated against data.
+- Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement. Of the 224 scenarios added most recently, 224 were independently indexed in a lab Splunk and 224 have Splunk-parser-validated dashboards; their telemetry is vendor-native, mixed or **modeled** as labeled in [SCENARIOS](docs/SCENARIOS.md).
 
 ## Install (two choices)
 

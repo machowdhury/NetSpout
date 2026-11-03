@@ -43,6 +43,34 @@ def contract_info():
 FIDELITY = {"VENDOR_NATIVE": "Vendor-native formatters", "MODELED": "Modeled (labeled, not vendor-native)", "MIXED": "Mixed: native plus modeled stand-in"}
 
 
+def evidence():
+    """Live-indexing and dashboard evidence for the declarative contracts, read from the evidence files (empty if a file is absent)."""
+    import glob
+    ev = ROOT / "docs" / "verification" / "evidence"
+    live = {}
+    for f in sorted(glob.glob(str(ev / "scenario_contracts" / "live_validation_all.json"))):
+        for r in json.loads(Path(f).read_text())["rows"]:
+            live[r["scenario_id"]] = r
+    mf = ev / "dashboards" / "contract_dashboard_maturity.json"
+    return live, (json.loads(mf.read_text())["dashboards"] if mf.exists() else {})
+
+
+def contract_validation(cid, live, dash):
+    """What has actually been verified for one contract scenario, stated level by level."""
+    r, d = live.get(cid), dash.get(cid, {})
+    if r and r["status"] == "PASS":
+        m = (r.get("metric_index") or {})
+        extra = ", %s metric events carrying %s measurements" % (m.get("metric_events"), m.get("datapoints")) if m else ""
+        live_txt = "live-indexed in the lab Splunk (independent search: %d events%s)" % (r["indexed_events_total"], extra)
+    elif r:
+        live_txt = "live run FAILED verification"
+    else:
+        live_txt = "executed offline in tests only; not indexed in Splunk"
+    levels = [n for flag, n in (("splunk_spl_parser_validated", "parser-validated"), ("search_results_validated", "search-validated against indexed data"),
+                                ("browser_render_checks_pass", "browser-rendered"), ("screenshot_inspected", "visually inspected")) if d.get(flag)]
+    return "%s; dashboard %s" % (live_txt, ", ".join(levels) if levels else "structurally checked only")
+
+
 def describe(r):
     """What the scenario simulates, taken from its own definition (summary, else objective); never the placeholder stub text."""
     d = (r.get("summary") or r.get("objective") or "").strip()
@@ -55,6 +83,7 @@ def describe(r):
 def scenarios_doc(srows, trows):
     kind_of = {t["sourcetype"]: t["data_kind"] for t in trows}
     cinfo = contract_info()
+    live_ev, dash_ev = evidence()
     run = [r for r in srows if r["runnable"]]
     cat = [r for r in srows if not r["runnable"]]
     by_engine = collections.Counter(r["engine"] for r in run)
@@ -76,7 +105,7 @@ def scenarios_doc(srows, trows):
             ci = cinfo.get(r["scenario_id"])
             dm = {"DASHBOARD_VISUALLY_VERIFIED": "visually verified", "DASHBOARD_DATA_VALIDATED": "data-validated", "DASHBOARD_IMPLEMENTED": "implemented, not data-validated"}.get(r.get("dashboard_maturity"), "not validated")
             if ci:
-                val = "executed offline in tests (HEC stubbed); not indexed in Splunk; dashboard " + dm
+                val = contract_validation(r["scenario_id"], live_ev, dash_ev)
                 gen = "%s (%s)" % (ci["generator_family"], FIDELITY[ci["fidelity"]])
                 phases = " → ".join(ci["phases"])
             else:
@@ -98,11 +127,16 @@ def scenarios_doc(srows, trows):
         L.append("")
     else:
         fid = collections.Counter(c["fidelity"] for c in cinfo.values())
+        live_pass = sum(1 for r in live_ev.values() if r["status"] == "PASS")
+        dv = list(dash_ev.values())
         L += ["## Not runnable (0)", "", "Every defined scenario is runnable. %d of them run through **declarative scenario contracts** (shared topology, ordered phases, existing generators): "
-              "%d with vendor-native formatters only, %d mixed (native plus a labeled modeled stand-in for a sourcetype that has no generator), and %d modeled in the labeled NetSpout schema `netspout:scenario:state`. "
-              "Modeled telemetry is **not** vendor-authentic; it is the honest representation of a scenario whose definition specifies a state progression or a monitoring use case, not a log format. "
-              "Contract scenarios were executed in automated tests with the delivery destination stubbed; they have **not** been indexed in Splunk, and their dashboards are implemented but not yet validated against data." % (
-                  len(cinfo), fid["VENDOR_NATIVE"], fid["MIXED"], fid["MODELED"]), ""]
+              "%d with vendor-native formatters only, %d mixed (native or recorded vendor events plus a labeled modeled stand-in or modeled context), and %d modeled in the labeled NetSpout schema `netspout:scenario:state`. "
+              "Modeled telemetry is **not** vendor-authentic; it is the honest representation of a scenario whose definition specifies a state progression or a monitoring use case, not a log format." % (
+                  len(cinfo), fid["VENDOR_NATIVE"], fid["MIXED"], fid["MODELED"]), "",
+              "**Evidence for these %d scenarios** (separate levels, from the evidence files): executed offline in tests: %d; **live-indexed** in an isolated lab Splunk and independently verified by run id: %d; "
+              "dashboards accepted by Splunk's SPL parser: %d; dashboards whose every search returned data from the indexed run: %d; dashboards opened in a browser without error: %d; dashboards whose screenshot was visually inspected: %d." % (
+                  len(cinfo), len(cinfo), live_pass, sum(1 for d in dv if d.get("splunk_spl_parser_validated")), sum(1 for d in dv if d.get("search_results_validated")),
+                  sum(1 for d in dv if d.get("browser_render_checks_pass")), sum(1 for d in dv if d.get("screenshot_inspected"))), ""]
     return "\n".join(L)
 
 
@@ -139,7 +173,8 @@ def telemetry_doc(srows, trows):
          "| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | %d |" % sum(1 for t in trows if dash_of[t["sourcetype"]]),
          "| Dashboard implemented only | Referenced by a scenario whose dashboard exists but is not validated against data | %d |" % sum(1 for t in trows if impl_of[t["sourcetype"]] and not dash_of[t["sourcetype"]]),
          "| Visually verified | Referenced by a scenario whose dashboard was rendered and inspected | %d |" % sum(1 for t in trows if vis_of[t["sourcetype"]]),
-         "| Executed by a scenario contract | Emitted by a declarative scenario contract in automated tests (HEC stubbed), not indexed in Splunk | %d |" % len({st for c in contract_info().values() for st in c["sourcetypes"]} & {t["sourcetype"] for t in trows}),
+         "| Executed by a scenario contract | Emitted by a declarative scenario contract in automated tests (HEC stubbed) | %d |" % len({st for c in contract_info().values() for st in c["sourcetypes"]} & {t["sourcetype"] for t in trows}),
+         "| Live-indexed via a scenario contract | Emitted by a scenario contract into the lab Splunk and independently found there by run id | %d |" % len({st for r in evidence()[0].values() if r["status"] == "PASS" for st in (r.get("indexed_events_by_sourcetype") or {})} & {t["sourcetype"] for t in trows}),
          "| Not yet implemented | No generator: cataloged only | %d |" % gen["NONE"], "",
          "**Modeled sourcetype.** `netspout:scenario:state` is a NetSpout-defined schema (JSON with entity, component, state, previous state, severity, message and an optional measurement), used by %d scenario contracts where a definition specifies a state progression or a monitoring use case and no vendor log format exists. It is **not** vendor-native and is not in the catalog above." % sum(1 for c in contract_info().values() if "netspout:scenario:state" in c["sourcetypes"]), "",
          "Everything else is **not tested**. Detection content (Enterprise Security, correlation searches) is not claimed.", "",
@@ -180,8 +215,12 @@ def update_readme(srows, trows):
     vis = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_VISUALLY_VERIFIED")
     dv = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_DATA_VALIDATED")
     impl = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_IMPLEMENTED")
-    t = re.sub(r"- \*\*\d+ runnable scenarios\*\* \(\d+ defined\):.*", "- **%d runnable scenarios** (%d defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. The other %d are documented but not runnable yet, each with the reason. See [SCENARIOS](docs/SCENARIOS.md)." % (run, len(srows), len(srows) - run), t)
-    t = re.sub(r"- \*\*\d+ Dashboard Studio dashboards\*\*.*", "- **%d Dashboard Studio dashboards**, one per runnable scenario: %d data-validated against indexed data (%d of those also visually verified) and %d implemented but not yet validated against data." % (len(dash), dv + vis, vis, impl), t)
+    live, dmat = evidence()
+    n_contract = len(dmat)
+    live_pass = sum(1 for r in live.values() if r["status"] == "PASS")
+    t = re.sub(r"- \*\*\d+ runnable scenarios\*\* \(\d+ defined\):.*", "- **%d runnable scenarios** (%d defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios.%s See [SCENARIOS](docs/SCENARIOS.md)." % (run, len(srows), " The other %d are documented but not runnable yet, each with the reason." % (len(srows) - run) if run < len(srows) else " Every defined scenario runs; the table says which telemetry is vendor-native, mixed or modeled, and what has been independently indexed."), t)
+    t = re.sub(r"- \*\*\d+ Dashboard Studio dashboards\*\*.*", "- **%d Dashboard Studio dashboards**, one per runnable scenario: %d validated against indexed data (%d of those also visually verified) and %d implemented but not yet validated against data." % (len(dash), dv + vis, vis, impl), t)
+    t = re.sub(r"- Delivery through \*\*HEC\*\*.*", "- Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement. Of the %d scenarios added most recently, %d were independently indexed in a lab Splunk and %d have Splunk-parser-validated dashboards; their telemetry is vendor-native, mixed or **modeled** as labeled in [SCENARIOS](docs/SCENARIOS.md)." % (n_contract, live_pass, sum(1 for d in dmat.values() if d.get("splunk_spl_parser_validated"))), t)
     f.write_text(t)
 
 

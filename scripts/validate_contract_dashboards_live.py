@@ -91,6 +91,26 @@ def run_search(sp, q, run_id):
     return st, body.get("results", []), [m.get("text") for m in body.get("messages", []) if m.get("type") in ("FATAL", "ERROR")]
 
 
+def scenario_contracts_get(cid):
+    sys.path[:0] = [str(ROOT / "src")]
+    from netspout_core import scenario_contracts
+    return scenario_contracts.get(cid)
+
+
+def _only_metric_phase(c):
+    """A phase whose every active stream is a metric stream has no events in the event index (so the event-index phase report cannot cover it)."""
+    from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+    ph = []
+    for p in c["phases"]:
+        active = [x for x in c["streams"] if not x.get("phases") or p["id"] in x["phases"]]
+        ph.append(bool(active) and all(is_metric_sourcetype(x["sourcetype"]) for x in active))
+    return any(ph)
+
+
+def _rows(sp, query, run_id):
+    return run_search(sp, query, run_id)[1]
+
+
 def results(sp, run_map):
     rows = []
     for cid, run_id in run_map.items():
@@ -110,10 +130,29 @@ def results(sp, run_map):
             if title.startswith("What each phase reported"):
                 _, res, _ = run_search(sp, query, run_id)
                 story["phase_report"] = {"rows": len(res), "phases_covered": len({r.get("pf_phase") for r in res})}
-        rows.append({"scenario_id": cid, "run_id": run_id, "searches": len(per), "searches_with_rows": meaningful, "searches_empty": [k for k, v in per.items() if v["rows"] == 0 and not v["errors"]],
+        # "meaningful" is a defined test, not "returned a row": every search returns rows; the phase story shows every event phase (and, unless the scenario is steady-state,
+        # at least two statuses); metric panels return data from the metric index; a modeled measure is charted with data
+        problems = []
+        if meaningful != len(per) or any(v["errors"] or v["http"] != 200 for v in per.values()):
+            problems.append("some searches returned no rows or failed")
+        c = scenario_contracts_get(cid)
+        event_phases = len({p for p in story.get("phase_report", {}).get("phases_covered_set", [])}) if False else None
+        if "phase_report" in story and story["phase_report"]["phases_covered"] < len(c["phases"]) - (1 if _only_metric_phase(c) else 0):
+            problems.append("phase report covers %d of %d phases" % (story["phase_report"]["phases_covered"], len(c["phases"])))
+        if "status_by_phase" in story and len(story["status_by_phase"]["status_columns"]) < 2:
+            problems.append("status by phase shows fewer than two statuses")
+        for title, query in q.items():
+            if "mstats" in query and not _rows(sp, query, run_id):
+                problems.append("metric panel %r returned no metric data" % title)
+            if title.startswith("Measured indicator") and not _rows(sp, query, run_id):
+                problems.append("measured indicator panel returned no data")
+        rows.append({"scenario_id": cid, "run_id": run_id, "searches": len(per), "searches_with_rows": meaningful, "meaningful": not problems, "meaningful_problems": problems, "searches_empty": [k for k, v in per.items() if v["rows"] == 0 and not v["errors"]],
                      "searches_failed": [k for k, v in per.items() if v["errors"] or v["http"] != 200], "phase_story": story, "detail": per})
-    out = {"validator": "searches executed in Splunk over the run's indexed events", "dashboards": len(rows), "rows": rows}
-    (EVID / "contract_dashboard_results_validation.json").write_text(json.dumps(out, indent=1) + "\n")
+    f = EVID / "contract_dashboard_results_validation.json"
+    merged = {r["scenario_id"]: r for r in (json.loads(f.read_text())["rows"] if f.exists() else [])}
+    merged.update({r["scenario_id"]: r for r in rows})   # a partial rerun updates its own rows and keeps the rest
+    out = {"validator": "searches executed in Splunk over the run's indexed events", "dashboards": len(merged), "rows": [merged[k] for k in sorted(merged)]}
+    f.write_text(json.dumps(out, indent=1) + "\n")
     for r in rows:
         print("%-28s searches=%2d with_rows=%2d empty=%s failed=%s" % (r["scenario_id"], r["searches"], r["searches_with_rows"], r["searches_empty"][:4], r["searches_failed"][:2]))
 

@@ -1,0 +1,38 @@
+{
+ "environment": "isolated lab Splunk Web (docker splunk/splunk:10.2), headless Chromium via Playwright",
+ "rendered": 2,
+ "rows": [
+  {
+   "scenario_id": "arch_wan_global_backbone",
+   "run_id": "run-12040a978c9f",
+   "title": "PulseForge \u00b7 WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_wan_global_backbone_rerun2__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12254
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "run_id": "run-14ddcd4cab2c",
+   "title": "PulseForge \u00b7 NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_nas_storage_cluster_rerun2__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12379
+  }
+ ]
+}

@@ -401,11 +401,10 @@
     "cisco",
     "juniper"
    ],
-   "description": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.",
+   "description": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency degrades: a BGP session to the core flaps and IOS-XR engages TI-LFA fast reroute, the Juniper core moves its MPLS RSVP-TE LSP to the bypass path, and the backbone then returns to its primary path.",
    "assumptions": [
-    "Prefixes use documentation ranges (198.51.100.0/24, 203.0.113.0/24) and private AS numbers in the signature text.",
-    "The hijack indicator is carried as BGP event text through the IOS-XR BGP formatter; no BGP UPDATE wire format is claimed.",
-    "The Cisco PE in New York peers with the Juniper core router in London (route-reflector style); the Juniper LSP next hops are the New York and Frankfurt PEs, so both vendors' events name the same routers."
+    "The Cisco PE in New York peers with the Juniper core router in London (route-reflector style); the Juniper LSP next hops are the New York and Frankfurt PEs, so both vendors' events name the same routers.",
+    "Only the IOS-XR BGP event types the formatter really supports are used (ROUTE_STABLE, BGP_DOWN, BGP_UP, TI_LFA_REROUTE). The catalog's BGP prefix-hijack indicator is NOT emitted: the formatter has no prefix-origin event and none is invented."
    ],
    "nodes": [
     {
@@ -482,31 +481,28 @@
      "per_round": 1,
      "phase_params": {
       "ONSET": {
-       "event_type": "PREFIX_CHANGE",
-       "action": "alerted",
-       "status": "degraded",
-       "prefix": "203.0.113.0/25",
-       "signature": "More-specific prefix 203.0.113.0/25 announced by AS64500 (origin change from AS64496)"
-      },
-      "ESCALATION": {
        "event_type": "BGP_DOWN",
        "action": "alerted",
        "status": "degraded",
-       "prefix": "203.0.113.0/25",
-       "signature": "BGP peer AS64500 flapping while hijack candidate prefix is active"
+       "signature": "BGP adjacency to the core lost"
+      },
+      "ESCALATION": {
+       "event_type": "TI_LFA_REROUTE",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "TI-LFA fast reroute engaged"
       },
       "MITIGATION": {
-       "event_type": "ROUTE_FILTERED",
-       "action": "blocked",
+       "event_type": "BGP_UP",
+       "action": "allowed",
        "status": "mitigated",
-       "prefix": "203.0.113.0/25",
-       "signature": "Prefix 203.0.113.0/25 rejected by origin-validation policy"
+       "signature": "BGP adjacency to the core re-established"
       },
       "RECOVERY": {
        "event_type": "ROUTE_STABLE",
+       "action": "allowed",
        "status": "restored",
-       "prefix": "203.0.113.0/24",
-       "signature": "BGP peer AS64500 established, prefixes nominal"
+       "signature": "BGP peer established, prefixes nominal"
       }
      }
     },
@@ -1800,8 +1796,8 @@
    ],
    "description": "A Meraki access point serves corporate and guest clients behind a Palo Alto firewall. A guest client attempts to pivot toward data-center assets: the AP reports a rogue-probe alert, the firewall records the guest-to-datacenter attempts and applies its zero-trust deny, and guest traffic returns to normal internet-only flows.",
    "assumptions": [
-    "Only Meraki and Palo Alto streams are generated; the Aruba APs and Arista 7280 core named by the definition have no generator for their sourcetypes here, except that Arista telemetry is not produced.",
-    "Client MAC and addresses are fictional."
+    "Client MAC and addresses are fictional.",
+    "arista:telemetry:json (named by the definition for the Arista 7280 core) is not emitted: its only recorded sample is an HEC metric envelope, not an Arista log event. Aruba access points have no generator in this release. Only Meraki and Palo Alto events are produced."
    ],
    "nodes": [
     {
@@ -2155,8 +2151,7 @@
    "title": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
    "category": "DATACENTER",
    "vendors": [
-    "netapp",
-    "arista"
+    "netapp"
    ],
    "description": "High-throughput NAS cluster serving petabyte NFSv4.1 and SMB3 workloads with IOPS burst tracking and volume latency metrics. An Arista switch pair carries NAS traffic for a NetApp ONTAP / PowerScale cluster; latency on the NAS export rises and clients are affected until the storage path recovers.",
    "source": "authored-mixed",
@@ -2190,7 +2185,7 @@
    "generator_family": "storage_mixed",
    "assumptions": [
     "netapp:ontap:nas has no formatter or verified sample in this release: the NAS behavior is a MODELED stand-in (netspout:scenario:state) with a modeled latency measure.",
-    "arista:telemetry:json is a verbatim vendor sample replayed unmodified, so it is correlated by phase and time only."
+    "arista:telemetry:json is not emitted: its only recorded sample is an HEC metric envelope (a delivery wrapper), which is not an Arista log event and is not replayed as event text. The NAS behavior is a MODELED stand-in (netspout:scenario:state)."
    ],
    "nodes": [
     {
@@ -2209,22 +2204,6 @@
     }
    ],
    "streams": [
-    {
-     "id": "arista",
-     "sourcetype": "arista:telemetry:json",
-     "formatter": "grounded_sample",
-     "node": "leaf",
-     "params": {
-      "sourcetype": "arista:telemetry:json",
-      "vendor_id": "arista_eos",
-      "sample_index": [
-       0,
-       1,
-       2
-      ]
-     },
-     "per_round": 1
-    },
     {
      "id": "nas",
      "sourcetype": "netspout:scenario:state",
@@ -2308,7 +2287,8 @@
     }
    ],
    "correlation": [],
-   "correlation_limit": "The Arista stream is a verbatim recording with no contract entities and the NAS stream is modeled, so they are correlated by phase and time only."
+   "correlation_limit": "Only one modeled stream remains, so there is nothing to correlate across streams.",
+   "story_note": "The Arista switch pair named by the definition has no usable event sample, so only the NAS behavior is modeled."
   },
   {
    "id": "arch_pan_iot_mesh",

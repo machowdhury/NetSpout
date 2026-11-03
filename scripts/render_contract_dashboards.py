@@ -46,9 +46,10 @@ def main():
                 page.locator("[role=tab]:has-text('%s')" % t).first.click()
                 page.wait_for_timeout(10000)
                 text = page.inner_text("body")
-                shot = SHOTS / ("%s%s__%s.jpg" % (cid, suffix, t))
-                page.screenshot(path=str(shot), full_page=True, type="jpeg", quality=55)
-                shots.append(str(shot.relative_to(ROOT)))
+                if t in ("Engineer", "Investigation"):   # the tab with the phase-story and metric panels; every tab's text is still scanned below
+                    shot = SHOTS / ("%s%s__%s.jpg" % (cid, suffix, t))
+                    page.screenshot(path=str(shot), full_page=True, type="jpeg", quality=55)
+                    shots.append(str(shot.relative_to(ROOT)))
                 nores += len(re.findall(r"No results", text))
                 errs += len(re.findall(r"(?i)search (error|failed)|error in |unknown search command|could not", text))
                 chars += len(text)

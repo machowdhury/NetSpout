@@ -1,10 +1,10 @@
 <dashboard version="2" theme="dark">
   <label>PulseForge · WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone &amp; Optical DWDM</label>
-  <description>Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.</description>
+  <description>Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency degrades: a BGP session to the core flaps and IOS-XR engages TI-LFA fast reroute, the Juniper core moves its MPLS RSVP-TE LSP to the bypass path, and the backbone then returns to its primary path.</description>
   <definition><![CDATA[
 {
   "title": "PulseForge · WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
-  "description": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.",
+  "description": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency degrades: a BGP session to the core flaps and IOS-XR engages TI-LFA fast reroute, the Juniper core moves its MPLS RSVP-TE LSP to the bypass path, and the backbone then returns to its primary path.",
   "inputs": {
     "input_global_time": {
       "type": "input.timerange",
@@ -87,7 +87,7 @@
     "viz_1": {
       "type": "splunk.markdown",
       "options": {
-        "markdown": "### **PulseForge** · Operational scenario\n**Industry not mapped · scenario telemetry**  ·  `arch_wan_global_backbone`\n\nInter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.\n\n_Live searches over the run; authentic recorded/native telemetry; industry framing is editorial._",
+        "markdown": "### **PulseForge** · Operational scenario\n**Industry not mapped · scenario telemetry**  ·  `arch_wan_global_backbone`\n\nInter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency degrades: a BGP session to the core flaps and IOS-XR engages TI-LFA fast reroute, the Juniper core moves its MPLS RSVP-TE LSP to the bypass path, and the backbone then returns to its primary path.\n\n_Live searches over the run; authentic recorded/native telemetry; industry framing is editorial._",
         "fontColor": "#ececea",
         "backgroundColor": "#17191b",
         "fontSize": "default"

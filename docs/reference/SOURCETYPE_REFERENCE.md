@@ -324,7 +324,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `arista:eos` | Arista EOS Core Switching | event | syslog | R | - | - | - | Arista Networks App for Splunk | - | 1 | vendored replay sample arista-eos.yml |
 | `arista:eos:syslog` | Arista Eos Syslog | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | - | vendored replay sample arista-eos-syslog.yml |
 | `arista:flow:ipfix` | Arista Flow Ipfix | event | syslog | G | - | - | - | - | - | 1 | none recorded |
-| `arista:telemetry:json` | Arista Metrics Telemetry | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | 2 | vendored replay sample arista-metrics-telemetry.yml |
+| `arista:telemetry:json` | Arista Metrics Telemetry | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | 1 | vendored replay sample arista-metrics-telemetry.yml |
 
 ## Linux Infrastructure (4)
 

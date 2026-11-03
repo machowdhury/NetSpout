@@ -17,8 +17,8 @@ Each is a declarative contract (`catalog/scenario_contracts.json`): shared topol
 | Fidelity | Meaning | Scenarios |
 |---|---|---|
 | VENDOR_NATIVE | Only vendor formatters from the engine | 10 |
-| MIXED | Native formatters or verbatim samples plus a labeled modeled stand-in for a sourcetype with no generator | 31 |
-| MODELED | Only the labeled NetSpout schema `netspout:scenario:state` (a state progression or monitoring use case, not a vendor log format) | 183 |
+| MIXED | Native formatters or verbatim samples plus a labeled modeled stand-in for a sourcetype with no generator | 30 |
+| MODELED | Only the labeled NetSpout schema `netspout:scenario:state` (a state progression or monitoring use case, not a vendor log format) | 184 |
 
 | Generator family | Scenarios |
 |---|---|
@@ -46,9 +46,9 @@ Each is a declarative contract (`catalog/scenario_contracts.json`): shared topol
 |---|---|
 | Dashboard views shipped | 372 |
 | Structural SPL check passed (delimiters balanced; **not** a Splunk parse) | 372 |
-| Data-validated or better (registry maturity) | 148 |
-| Visually verified (registry maturity) | 20 |
-| Implemented, **not** validated against data or rendered (JSON and structural SPL checks only) | 224 |
+| Data-validated or better (registry maturity) | 372 |
+| Visually verified (registry maturity) | 31 |
+| Implemented, **not** validated against data or rendered (JSON and structural SPL checks only) | 0 |
 
 Not verified for any dashboard in this audit: Splunk's SPL parser, results against indexed data, browser rendering.
 

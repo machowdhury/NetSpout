@@ -73,6 +73,22 @@ def get(contract_id: str) -> Dict[str, Any]:
         raise ContractError("unknown scenario contract: " + contract_id) from None
 
 
+_CONFIG_LINE = __import__("re").compile(r"^[A-Za-z_][\w.\-]*:\s")
+
+
+def _is_recorded_event(text: str) -> bool:
+    """The sample loader also returns eventgen YAML configuration lines (`randomizeEvents: true`, `replacement: ...`). Those are not telemetry. JSON samples must parse, and an
+    HEC envelope (a dict with `event` and `sourcetype` keys) is a delivery wrapper, not a vendor event, so it is not replayed as event text."""
+    text = text.strip()
+    if text.startswith("{"):
+        try:
+            doc = json.loads(text)
+        except ValueError:
+            return False
+        return not (isinstance(doc, dict) and {"event", "sourcetype"} <= set(doc))
+    return not _CONFIG_LINE.match(text)
+
+
 def grounded_sample(device: Node, sourcetype: str, vendor_id: str, sample_index: int = 0) -> LogEntry:
     """A verbatim vendor sample for a sourcetype that has recorded samples but no formatter. The raw event is NOT rewritten (so it cannot carry the contract's
     entities); it is tagged with the node it is attributed to, and the contract must not claim entity correlation through it."""
@@ -81,6 +97,7 @@ def grounded_sample(device: Node, sourcetype: str, vendor_id: str, sample_index:
     except ImportError:  # pragma: no cover
         from app.generator_modes import generator_service
     samples, _, _ = generator_service.get_grounded_samples(sourcetype, vendor_id=vendor_id)
+    samples = [x for x in samples if _is_recorded_event(x)]
     if not samples:
         raise ContractError("no verified sample exists for %s" % sourcetype)
     return LogEntry(timestamp=datetime.now(timezone.utc).isoformat(), device_id=device.name, src_ip=device.ip_address, dest_ip=device.ip_address, protocol="n/a", duration="0ms",

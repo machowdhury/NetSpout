@@ -112,7 +112,15 @@ def test_maturity_is_assembled_from_evidence_and_visual_claims_need_an_inspected
     inst = json.loads((EV / 'install.json').read_text())['views']
     cm = json.loads((EV / 'contract_dashboard_maturity.json').read_text())['dashboards']   # offline-only evidence: contract views are IMPLEMENTED at most
     assert set(m) | set(cm) == {x['id'] for x in SOURCES} and not set(m) & set(cm)
-    assert all(v['maturity'] in LEVELS for v in {**m, **cm}.values()) and all(v['maturity'] == 'DASHBOARD_IMPLEMENTED' and not v['data_validated'] for v in cm.values())
+    assert all(v['maturity'] in LEVELS for v in {**m, **cm}.values())
+    for cid, v in cm.items():                     # no level without the evidence for it
+        assert v['implemented'] and v['structural_spl_ok'], cid
+        if v['maturity'] in ('DASHBOARD_DATA_VALIDATED', 'DASHBOARD_VISUALLY_VERIFIED'):
+            assert v['splunk_spl_parser_validated'] and v['search_results_validated'] and v['data_validated'], cid
+        else:
+            assert not v['data_validated'], cid
+        if v['maturity'] == 'DASHBOARD_VISUALLY_VERIFIED':
+            assert v['screenshot_inspected'] and v['browser_render_checks_pass'] and list((EV / 'screens_contract').glob(cid + '*__*.jpg')), cid
     for pid, v in m.items():
         if v['maturity'] == 'DASHBOARD_VISUALLY_VERIFIED':
             assert pid in insp and list((EV / 'screens').glob(f'{pid}__*.jpg')) and v['data_validated'] and v['browser_render_checks_pass']

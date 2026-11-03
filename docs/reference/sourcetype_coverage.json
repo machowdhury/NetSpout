@@ -141,7 +141,6 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "arch_nas_storage_cluster",
     "openconfig_mdt_streaming"
    ],
    "status": "active"

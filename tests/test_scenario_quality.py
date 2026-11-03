@@ -79,3 +79,44 @@ def test_emitted_sourcetypes_match_the_declared_streams_and_description_names_th
     assert {e.sourcetype for e in ev} == {s["sourcetype"] for s in c["streams"]}
     if sc.fidelity(c) != "VENDOR_NATIVE":
         assert any("MODELED" in a or "modeled" in a or "verbatim" in a or "native" in a.lower() for a in c["assumptions"]), "%s does not say what is modeled" % cid
+
+
+AUTHENTIC_BGP_EVENT_TYPES = {"ROUTE_STABLE", "BGP_DOWN", "BGP_UP", "TI_LFA_REROUTE"}   # the only types format_cisco_ios_xr_bgp_log renders as real IOS-XR syslog; any other prints generic text
+
+
+def test_bgp_streams_use_only_event_types_the_formatter_really_renders():
+    for cid in IDS:
+        for s in sc.get(cid)["streams"]:
+            if s["formatter"] != "format_cisco_ios_xr_bgp_log":
+                continue
+            types = set()
+            for d in [s["params"], *s.get("phase_params", {}).values()]:
+                v = d.get("event_type")
+                types |= set(v if isinstance(v, list) else [v] if v else [])
+            assert types <= AUTHENTIC_BGP_EVENT_TYPES, "%s uses BGP event types that produce generic text: %s" % (cid, sorted(types - AUTHENTIC_BGP_EVENT_TYPES))
+
+
+def test_replayed_samples_are_recorded_events_not_configuration_or_envelopes():
+    import re
+    config = re.compile(r"^[A-Za-z_][\w.\-]*:\s")
+    for cid in IDS:
+        c = sc.get(cid)
+        sample_types = {s["sourcetype"] for s in c["streams"] if s["formatter"] == "grounded_sample"}
+        for e in sc.generate(cid, "q"):
+            if e.sourcetype in sample_types:
+                t = e.raw_log.strip()
+                assert not config.match(t), "%s replays a configuration line: %r" % (cid, t[:60])
+                if t.startswith("{"):
+                    doc = json.loads(t)
+                    assert not ({"event", "sourcetype"} <= set(doc)), "%s replays an HEC envelope" % cid
+
+
+def test_no_stream_pretends_to_be_a_product_it_cannot_emit():
+    """A scenario that names a vendor sourcetype it does not emit must say so in its assumptions (no silent relabeling)."""
+    catalog = {r["id"]: r for r in json.loads((ROOT / "catalog" / "scenarios.json").read_text())}
+    for cid in IDS:
+        declared = set(catalog.get(cid, {}).get("sourcetypes", []))
+        missing = declared - set(sc.sourcetypes(sc.get(cid)))
+        if missing and cid in catalog:
+            text = " ".join(sc.get(cid)["assumptions"])
+            assert all(m in text for m in missing), "%s does not emit %s and does not say so" % (cid, sorted(missing))

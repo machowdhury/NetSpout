@@ -1,10 +1,10 @@
 {
  "environment": "isolated lab Splunk Web (docker splunk/splunk:10.2), headless Chromium via Playwright",
- "rendered": 12,
+ "rendered": 20,
  "rows": [
   {
    "scenario_id": "lateral_movement",
-   "run_id": "run-b4a0d30146b5",
+   "run_id": "run-4f34fbec70d9",
    "title": "PulseForge \u00b7 Ransomware / Lateral Spread (Port 445) | Splunk 10.2.7",
    "tabs": [
     "Overview",
@@ -12,17 +12,63 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Overview.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Investigation.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Investigation.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
    "page_text_chars": 14015
   },
   {
+   "scenario_id": "mixed_vendor_enterprise",
+   "run_id": "run-3dc3b75626c6",
+   "title": "PulseForge \u00b7 Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/mixed_vendor_enterprise__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12844
+  },
+  {
+   "scenario_id": "sdwan_connected_core",
+   "run_id": "run-57061d05a854",
+   "title": "PulseForge \u00b7 Separate SD-WAN Environment Connected to Core Backbone (All Cisco) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/sdwan_connected_core__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12171
+  },
+  {
+   "scenario_id": "service_provider_mixed",
+   "run_id": "run-f8889be11f7b",
+   "title": "PulseForge \u00b7 Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/service_provider_mixed__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13139
+  },
+  {
    "scenario_id": "arch_gan_subsea_cloud",
-   "run_id": "run-38dafe68f8bf",
+   "run_id": "run-1269a93e512d",
    "title": "PulseForge \u00b7 GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit | Splunk 10.2.7",
    "tabs": [
     "NOC",
@@ -30,125 +76,15 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__Engineer.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
    "page_text_chars": 13228
   },
   {
-   "scenario_id": "arch_can_multi_building",
-   "run_id": "run-f4ceb0b30c72",
-   "title": "PulseForge \u00b7 CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 11857
-  },
-  {
-   "scenario_id": "normal_traffic",
-   "run_id": "run-fa38f5604172",
-   "title": "PulseForge \u00b7 Normal Operations (HTTP Round-Robin) | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 11609
-  },
-  {
-   "scenario_id": "pure_cisco_enterprise",
-   "run_id": "run-8c31dc8192d7",
-   "title": "PulseForge \u00b7 Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C) | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 12135
-  },
-  {
-   "scenario_id": "C100-ENT-002",
-   "run_id": "run-7899dc4dfcb9",
-   "title": "PulseForge \u00b7 Distribution Uplink Failure | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 13099
-  },
-  {
-   "scenario_id": "C100-SEC-005",
-   "run_id": "run-bd7a6d93b592",
-   "title": "PulseForge \u00b7 ISE Authentication Failure Spike | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 13292
-  },
-  {
-   "scenario_id": "C100-SP-003",
-   "run_id": "run-33c3bde72892",
-   "title": "PulseForge \u00b7 BGP Peer Session Instability | Splunk 10.2.7",
-   "tabs": [
-    "NOC",
-    "Engineer",
-    "Evidence"
-   ],
-   "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__Evidence.jpg"
-   ],
-   "no_results_text": 0,
-   "error_text": 0,
-   "page_text_chars": 12868
-  },
-  {
    "scenario_id": "C100-CRI-001",
-   "run_id": "run-436dab3be3f7",
+   "run_id": "run-61d04949ce1c",
    "title": "PulseForge \u00b7 Financial Trading Campus-to-Data-Center Latency | Splunk 10.2.7",
    "tabs": [
     "NOC",
@@ -156,17 +92,143 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__Engineer.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
    "page_text_chars": 14103
   },
   {
+   "scenario_id": "C100-CRI-011",
+   "run_id": "run-c52034021f5f",
+   "title": "PulseForge \u00b7 Sovereign Cloud Interconnect Degradation | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-011__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13965
+  },
+  {
+   "scenario_id": "C100-CRI-014",
+   "run_id": "run-e8b03d090fd8",
+   "title": "PulseForge \u00b7 Mixed-Vendor Application Delivery Degradation | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-014__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 14043
+  },
+  {
+   "scenario_id": "arch_san_fibre_channel",
+   "run_id": "run-79d159f41776",
+   "title": "PulseForge \u00b7 SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_san_fibre_channel__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12649
+  },
+  {
+   "scenario_id": "wireless_connected_core_cisco",
+   "run_id": "run-f15154700f14",
+   "title": "PulseForge \u00b7 Enterprise Wireless Connected to Campus Core (All Cisco) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/wireless_connected_core_cisco__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11781
+  },
+  {
+   "scenario_id": "C100-ENT-002",
+   "run_id": "run-26d73ba1cd57",
+   "title": "PulseForge \u00b7 Distribution Uplink Failure | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13099
+  },
+  {
+   "scenario_id": "C100-SEC-005",
+   "run_id": "run-ffcae465142c",
+   "title": "PulseForge \u00b7 ISE Authentication Failure Spike | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13292
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "run_id": "run-c7dad4e13f5a",
+   "title": "PulseForge \u00b7 BGP Peer Session Instability | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12868
+  },
+  {
+   "scenario_id": "C100-DC-008",
+   "run_id": "run-543e266b5483",
+   "title": "PulseForge \u00b7 Data Center East-West Congestion | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-DC-008__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13247
+  },
+  {
    "scenario_id": "UCR-14.3.9",
-   "run_id": "run-0a5666010c13",
+   "run_id": "run-a363f3936147",
    "title": "PulseForge \u00b7 Cold Storage Room Temperature Excursion Alert | Splunk 10.2.7",
    "tabs": [
     "NOC",
@@ -174,17 +236,15 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__Engineer.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
-   "page_text_chars": 13518
+   "page_text_chars": 13803
   },
   {
    "scenario_id": "UCR-22.1.5",
-   "run_id": "run-ed70bed254ad",
+   "run_id": "run-84838d9a2e36",
    "title": "PulseForge \u00b7 GDPR Consent Management Audit Trail | Splunk 10.2.7",
    "tabs": [
     "NOC",
@@ -192,17 +252,15 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__Engineer.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
-   "page_text_chars": 13869
+   "page_text_chars": 14152
   },
   {
    "scenario_id": "UCR-8.1.1",
-   "run_id": "run-f48a727b969d",
+   "run_id": "run-0b4f3d70f9ad",
    "title": "PulseForge \u00b7 HTTP Error Rate Monitoring | Splunk 10.2.7",
    "tabs": [
     "NOC",
@@ -210,13 +268,59 @@
     "Evidence"
    ],
    "screenshots": [
-    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__NOC.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__Engineer.jpg",
-    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__Evidence.jpg"
+    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__Engineer.jpg"
    ],
    "no_results_text": 0,
    "error_text": 0,
-   "page_text_chars": 13119
+   "page_text_chars": 13397
+  },
+  {
+   "scenario_id": "UCR-21.11.1",
+   "run_id": "run-82fb71e990fb",
+   "title": "PulseForge \u00b7 Consumer credit card transaction monitoring | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-21.11.1__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13092
+  },
+  {
+   "scenario_id": "UCR-13.4.5",
+   "run_id": "run-6d43bea8a94b",
+   "title": "PulseForge \u00b7 AI/LLM Gateway Rate-Limit Breaches, Quota Burn, Tenant-Fairness Starvation, and 429 Class Attribution (Azure OpenAI, AWS Bedrock, OpenAI, Anthropic, vLLM/Ollama, Kong/Tyk/Apigee proxies) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-13.4.5__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 15793
+  },
+  {
+   "scenario_id": "normal_traffic",
+   "run_id": "run-a86934681e41",
+   "title": "PulseForge \u00b7 Normal Operations (HTTP Round-Robin) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__Engineer.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11584
   }
  ]
 }

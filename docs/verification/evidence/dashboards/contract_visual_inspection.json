@@ -1,65 +1,120 @@
 {
- "method": "A person-equivalent review: the screenshot images were opened and read. Only the entries below count as visually verified, and only for the tab named.",
+ "method": "The screenshots named here were opened and read by the model; only these dashboards, and only the tab named, count as visually verified. Screenshots for dashboards that were changed after an inspection were replaced and read again.",
  "visually_verified_dashboards": [
   "C100-CRI-001",
-  "C100-SEC-005",
-  "UCR-14.3.9",
+  "C100-CRI-011",
+  "C100-CRI-014",
+  "C100-SP-003",
+  "UCR-13.4.5",
+  "arch_can_multi_building",
   "arch_gan_subsea_cloud",
-  "lateral_movement",
-  "normal_traffic"
+  "arch_nas_storage_cluster",
+  "arch_san_fibre_channel",
+  "arch_wan_global_backbone",
+  "service_provider_mixed"
  ],
  "inspected": [
   {
-   "scenario_id": "lateral_movement",
-   "tab": "Investigation",
-   "screenshot": "lateral_movement__Investigation.jpg",
-   "observed": "three hosts with their sourcetypes; phase table BASELINE 12, ONSET 9, SPREAD 16, CONTAINMENT 8, RECOVERY 12; Status by phase shows normal, then blocked and degraded, then blocked with restored, then normal and restored; phase report table populated",
+   "scenario_id": "service_provider_mixed",
+   "tab": "Engineer",
+   "screenshot": "service_provider_mixed__Engineer.jpg",
+   "metric_producing": true,
+   "observed": "Status by phase normal, degraded, mitigated, restored; mstats panels render metric-index data (in_octets, out_octets, cpu_utilization and others); event panels show only the event-index sourcetypes (nokia:sros:syslog, juniper:junos); impact events are real Nokia SR-OS optical LOS messages",
    "verdict": "meaningful"
   },
   {
    "scenario_id": "arch_gan_subsea_cloud",
    "tab": "Engineer",
    "screenshot": "arch_gan_subsea_cloud__Engineer.jpg",
-   "observed": "Status by phase normal, degraded, restored; mstats panels render real metric data (in_octets, out_octets, avgLatencyMs, packetLossPct and others) from the metric index. Limits: byte counters dominate the scale so small gauges look flat; event panels show only zscaler:zia because the other sourcetypes are metrics in the metric index; the time-trend chart is a single point on a fast bounded run",
-   "verdict": "meaningful, with the limits noted"
-  },
-  {
-   "scenario_id": "normal_traffic",
-   "tab": "Engineer",
-   "screenshot": "normal_traffic_fixes__Engineer.jpg",
-   "observed": "after the fix: Events by source (steady-state scenario: no incident); Events by phase and source shows load rising in PEAK across five sources and falling in COOLDOWN. Before the fix the generic chart labelled every source During incident (defect, fixed). Leftover: the table title Impact events (everything after the baseline) reads oddly for a no-incident scenario",
-   "verdict": "meaningful after the fix"
-  },
-  {
-   "scenario_id": "C100-SEC-005",
-   "tab": "Engineer",
-   "screenshot": "C100-SEC-005__Engineer.jpg",
-   "observed": "cisco:ise:syslog and netspout:scenario:state both present; Status by phase healthy and normal, then a large degraded and impaired block (the ISE failure spike), then restored; phase report populated",
+   "metric_producing": true,
+   "observed": "Status by phase normal, degraded, restored; mstats shows both MDT counters and ThousandEyes gauges (avgLatencyMs, packetLossPct, httpCode, dnsTime, tcpConnectTime) from the metric index; event panels show only zscaler:zia; byte counters dominate the metric chart scale",
    "verdict": "meaningful"
   },
   {
    "scenario_id": "C100-CRI-001",
    "tab": "Engineer",
    "screenshot": "C100-CRI-001__Engineer.jpg",
-   "observed": "ThousandEyes metrics from the metric index: avgLatencyMs rises in the incident phase, httpCode average rises with 504, packetLossPct and tcpConnectTime present; Status by phase healthy, impaired, healthy",
-   "verdict": "meaningful; confirms the ThousandEyes metric extraction fix"
+   "metric_producing": true,
+   "observed": "ThousandEyes gauges from the metric index with avgLatencyMs and httpCode rising in the incident; status healthy, impaired, healthy; modeled state events in the table",
+   "verdict": "meaningful"
   },
   {
-   "scenario_id": "UCR-14.3.9",
+   "scenario_id": "C100-CRI-011",
    "tab": "Engineer",
-   "screenshot": "UCR-14.3.9_fixes__Engineer.jpg",
-   "observed": "after the fix: Measured indicator by phase charts temperature_c rising from about 4 to about 11 and back to about 4; Status by phase runs normal, excursion and alert_firing, mitigating and alert_acknowledged, recovered and alert_cleared",
-   "verdict": "meaningful after the fix"
+   "screenshot": "C100-CRI-011__Engineer.jpg",
+   "metric_producing": true,
+   "observed": "ThousandEyes gauges from the metric index; status healthy, impaired, healthy; modeled state events",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "C100-CRI-014",
+   "tab": "Engineer",
+   "screenshot": "C100-CRI-014__Engineer.jpg",
+   "metric_producing": true,
+   "observed": "ThousandEyes gauges from the metric index; status healthy, impaired, healthy; modeled state events",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "arch_wan_global_backbone",
+   "tab": "Engineer",
+   "screenshot": "arch_wan_global_backbone_rerun2__Engineer.jpg",
+   "metric_producing": true,
+   "observed": "After the fix: authentic %ROUTING-BGP-5-ADJCHANGE neighbor Down events; header no longer mentions a prefix hijack; mstats shows in_octets falling in the incident and recovering; status normal, degraded, mitigated, restored",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "arch_san_fibre_channel",
+   "tab": "Engineer",
+   "screenshot": "arch_san_fibre_channel__Engineer.jpg",
+   "metric_producing": false,
+   "observed": "Real Nexus BUFFER_MGR-3-QUEUE_DROP events; modeled buffer_credits_available falls from about 32 to 0 and recovers; status story across five phases",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "tab": "Engineer",
+   "screenshot": "C100-SP-003__Engineer.jpg",
+   "metric_producing": false,
+   "observed": "Native cisco:ios:syslog BGP events beside modeled state; status healthy, impaired and degraded, restored",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "tab": "Engineer",
+   "screenshot": "arch_can_multi_building_rerun1__Engineer.jpg",
+   "metric_producing": false,
+   "observed": "After the fix: the Catalyst Center events are real health records (healthScore 29, totalCount 24) instead of the YAML line randomizeEvents: true; native IOS syslog, modeled SGT stream; status story across five phases",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "tab": "Engineer",
+   "screenshot": "arch_nas_storage_cluster_rerun2__Engineer.jpg",
+   "metric_producing": false,
+   "observed": "After the fix: modeled-only (no Arista stream); read_latency_ms rises to its peak in ESCALATION and recovers; status healthy, degraded, recovering. Cosmetic leftover: the header still names the Arista switch pair as the scenario setting although no Arista telemetry is emitted",
+   "verdict": "meaningful"
+  },
+  {
+   "scenario_id": "UCR-13.4.5",
+   "tab": "Engineer",
+   "screenshot": "UCR-13.4.5__Engineer.jpg",
+   "metric_producing": false,
+   "observed": "Default-archetype use case: modeled error_rate_pct rises and recovers; status normal, elevated_errors with alert firing, mitigating and acknowledged, recovered and cleared; the header shows the source hint, whose named products are not emitted",
+   "verdict": "meaningful"
   }
  ],
- "rendered_but_screenshots_not_inspected": [
-  "C100-ENT-002",
-  "C100-SP-003",
-  "UCR-22.1.5",
-  "UCR-8.1.1",
-  "arch_can_multi_building",
-  "arch_nas_storage_cluster",
-  "pure_cisco_enterprise"
+ "findings_from_inspection_and_validation": [
+  "Impact-events table for steady-state scenarios mislabelled everything 'During incident' (normal_traffic): fixed, steady-state scenarios use an events-by-source chart",
+  "No chart for modeled measures (117 scenarios): fixed, 'Measured indicator by phase (modeled values)'",
+  "Metric sourcetypes were not charted: fixed, contracts that emit metric sourcetypes get the mstats panels",
+  "ThousandEyes metric records were refused by the dispatcher (no numeric values): fixed in telemetry_dispatcher.extract_metric_fields",
+  "arch_wan_global_backbone used BGP event types the formatter renders as generic text: contract now uses only ROUTE_STABLE, BGP_DOWN, BGP_UP, TI_LFA_REROUTE; the prefix-hijack indicator is not emitted",
+  "grounded_sample replayed eventgen configuration lines (randomizeEvents: true) and an HEC metric envelope as events: filtered; arch_nas_storage_cluster no longer replays the Arista envelope",
+  "netspout_parent_event_id was never indexed, so the causal-chain check passed vacuously: the field is now delivered and the check is strict (224 of 224 chains verified in Splunk)"
  ],
- "caveat": "UCR-22.1.5 and UCR-8.1.1 were rendered before the measured-indicator panel was added, so their current views were not rendered; arch_nas_storage_cluster was re-rendered after the change but its screenshot was not inspected."
+ "limits": [
+  "Fast bounded runs finish within about a second, so time-trend charts collapse to a single point; phase charts are unaffected",
+  "Byte counters dominate the metric chart scale so small gauges look flat",
+  "Event-index panels exclude sourcetypes that live in the metric index; those appear only in the mstats panels"
+ ]
 }

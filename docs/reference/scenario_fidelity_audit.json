@@ -2,11 +2,11 @@
  "summary": {
   "scenarios_audited": 214,
   "by_fidelity": {
-   "MIXED": 31,
-   "MODELED": 183
+   "MIXED": 30,
+   "MODELED": 184
   },
-  "mixed_with_native_or_sample_streams": 31,
-  "modeled_only": 183,
+  "mixed_with_native_or_sample_streams": 30,
+  "modeled_only": 184,
   "modeled_only_with_stronger_generator_available": 54,
   "missing_generators_by_sourcetype": {
    "cisco:ise:trustsec:sgt": 2,
@@ -4176,19 +4176,16 @@
    "scenario_id": "arch_nas_storage_cluster",
    "title": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
    "intended_vendor_or_technology": [
-    "netapp",
-    "arista"
+    "netapp"
    ],
    "emitted_sourcetypes": [
-    "arista:telemetry:json",
     "netspout:scenario:state"
    ],
-   "fidelity": "MIXED",
+   "fidelity": "MODELED",
    "streams": {
-    "grounded_sample": 1,
     "modeled": 1
    },
-   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "recognizable_to_product_admins": "no: modeled state events only",
    "stronger_existing_generator_available": [],
    "missing_generator_sourcetypes": [
     "netapp:ontap:nas"

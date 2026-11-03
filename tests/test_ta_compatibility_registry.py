@@ -21,10 +21,13 @@ def test_registry_entries_are_backed():
             assert chk.get("evidence"), (e["canonical_sourcetype"], name)
 
 
-def test_no_ta_parsing_claim_without_a_package():
+def test_ta_parsing_claim_needs_existing_evidence_files():
     for e in REG["entries"]:
         v = e["verification"].get("ta_parsing_in_splunk")
-        assert v is None or v["status"] != "VERIFIED"   # no add-on package was available
+        if v and v["status"] == "VERIFIED":
+            files = [w for w in v["evidence"].replace(" and ", " ").split() if w.startswith("docs/verification/evidence/")]
+            assert files and all((ROOT / f).is_file() for f in files), v["evidence"]
+            assert v.get("scope")          # a verified claim states what it covers
 
 
 def test_registry_sourcetypes_exist_in_catalog_and_non_canonical_is_refused():

@@ -177,6 +177,13 @@ def metric_sourcetypes() -> frozenset:
     return _METRIC_SOURCETYPES_CACHE
 
 
+# Sourcetypes whose Splunk add-on parsing was verified against the installed add-on (scripts/ta_compat.py, docs/contracts/ta_compatibility_registry.json).
+# For these, NetSpout's own HEC fields that share a name with a CIM field the add-on extracts are sent as netspout_<name>. Proven for cisco:asa:
+# indexed action/src_ip/dest_ip hid the add-on's values (action, src_ip, dest_ip, vendor_action) on connection events.
+TA_PARSED_SOURCETYPES = frozenset({"cisco:asa"})
+TA_SHADOWED_FIELDS = ("action", "signature", "src_ip", "dest_ip", "protocol")
+
+
 def is_metric_sourcetype(sourcetype: Optional[str]) -> bool:
     """True when this sourcetype's telemetry belongs in the metrics index."""
     if not sourcetype:
@@ -877,6 +884,11 @@ class TelemetryDispatcher:
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }
+            if not is_metric and log.sourcetype in TA_PARSED_SOURCETYPES:
+                # the add-on extracts these CIM fields from the raw text; an indexed field of the same name shadows its result
+                for k in TA_SHADOWED_FIELDS:
+                    if k in hec_payload["fields"]:
+                        hec_payload["fields"]["netspout_" + k] = hec_payload["fields"].pop(k)
             if is_metric:
                 # `_value` is only unambiguous for a single-measurement record; multi-metric records carry per-metric `metric_name:*` only.
                 mkeys = [k for k in hec_payload["fields"] if k.startswith("metric_name:")]

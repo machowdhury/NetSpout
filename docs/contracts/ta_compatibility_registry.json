@@ -12,24 +12,35 @@
     "latest_version": "6.1.2",
     "published": "2026-07-29",
     "cim": "5.x",
-    "evidence": "Splunkbase public API https://splunkbase.splunk.com/api/v1/app/1620/release/ (metadata only; package not downloaded)"
+    "evidence": "Splunkbase public API https://splunkbase.splunk.com/api/v1/app/1620/release/ (metadata only; package not downloaded)",
+    "installed_in_lab": "Splunk Add-on for Cisco ASA 6.1.2 in the isolated TA-validation lab (Splunk 10.2.7); package sha256 prefix dbe93977b84b05c6, 71,033 bytes (matches Splunkbase metadata)"
    },
    "sample_file": "netspout/appserver/static/samples/cisco-asa/cisco-asa.yml",
    "generator": "netspout_core.asa_generator.generate_asa_entries (native; replay sample as secondary)",
    "expected_event_format": "BSD syslog: '<Mon dd HH:MM:SS> <host> %ASA-<sev>-<id>: <message>'; 302013/302015 Built, 302014/302016 Teardown, 106023 Deny (Cisco ASA syslog guide)",
    "expected_extracted_fields": {
-    "status": "UNVERIFIED",
+    "status": "VERIFIED",
+    "scope": "message ids 302013, 302014, 302015, 302016, 106023 (all fields below) and 111008 (user, action); message_id and log_level only for 305011, 500003, 605005, 710003",
     "fields": [
-     "action",
-     "src",
-     "dest",
+     "message_id",
+     "log_level",
+     "session_id",
+     "src_interface",
+     "dest_interface",
+     "src_ip",
      "src_port",
+     "dest_ip",
      "dest_port",
      "transport",
+     "direction",
      "bytes",
-     "duration"
+     "duration",
+     "vendor_action",
+     "action",
+     "rule",
+     "user"
     ],
-    "note": "targets taken from the add-on's CIM purpose; props.conf/transforms.conf not read"
+    "source": "Splunk_TA_cisco-asa 6.1.2 props.conf [cisco:asa] REPORT-cisco_asa_field_extractions and transforms.conf; expected values come from the Cisco message text and the add-on lookup cisco_asa_action_lookup_600.csv"
    },
    "verification": {
     "sourcetype_name": {
@@ -45,12 +56,32 @@
      "evidence": "tests/test_cisco_asa_ta_contract.py and tests/test_yaml_sample_replay.py against tests/fixtures/cisco_asa/message_formats.json (shape fixtures from Cisco ASA syslog guide, not captures)"
     },
     "ta_parsing_in_splunk": {
-     "status": "BLOCKED",
-     "evidence": "package download needs an authenticated Splunkbase session; manual step: download splunk-add-on-for-cisco-asa_612.spl from https://splunkbase.splunk.com/app/1620 and save it to ~/.netspout/private-packs/"
+     "status": "VERIFIED",
+     "scope": "the message ids listed in expected_extracted_fields; other ASA message ids (about 180 REPORT transforms) are NOT verified",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_ta_compat_after_fix.json (85 of 85 checks) and docs/verification/evidence/ta_compat/cisco_asa_generated_run.json (54 events, 461 field comparisons, 0 mismatches)"
     },
     "field_extractions": {
+     "status": "VERIFIED",
+     "scope": "as above",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_generated_run.json"
+    },
+    "timestamp": {
+     "status": "VERIFIED",
+     "scope": "HEC raw endpoint only (applies props.conf TIME_FORMAT). The product's HEC event endpoint sets _time from the send time, so the add-on's timestamp parsing is not exercised on the product path",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_ta_compat_after_fix.json timestamp.parsed_from_event_text"
+    },
+    "event_types_and_tags": {
+     "status": "VERIFIED",
+     "scope": "cisco_connection (network, communicate) and cisco_authentication observed",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_generated_run.json"
+    },
+    "cim_data_model": {
      "status": "UNVERIFIED",
-     "evidence": "requires ta_parsing_in_splunk"
+     "evidence": "Splunk Common Information Model add-on is not installed in the lab; only CIM field names and tags were observed, no data model search was run"
+    },
+    "ingestion_metadata": {
+     "status": "VERIFIED",
+     "evidence": "Before the fix NetSpout's indexed action/src_ip/dest_ip/signature/protocol shadowed the add-on's fields (16 of 85 checks failed: docs/verification/evidence/ta_compat/cisco_asa_ta_compat_before_fix.json). They are now sent as netspout_<name> for sourcetypes in TA_PARSED_SOURCETYPES"
     }
    }
   },

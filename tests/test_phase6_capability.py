@@ -182,3 +182,68 @@ def test_scenarios_whose_sources_only_their_own_engine_builds_stay_runnable():
         assert any(r["sourcetype"] == "postgresql:audit" and "own engine" in r.get("note", "") for r in sc[sid]["required"])
     for sid in ("C100-CRI-001", "arch_gan_subsea_cloud"):                    # these really emit cisco:thousandeyes:metric
         assert not sc[sid]["runnable"] and "cisco:thousandeyes:metric" in " ".join(sc[sid]["reasons"])
+
+
+def test_a_metric_sourcetype_run_without_an_index_uses_the_saved_event_index_and_sends_metrics(env):
+    """Found by the Phase 9 browser acceptance: a metric run from Generate Data sent no index, and the backend fell back to an unconfigured default, so it answered 403."""
+    saved = dict(CFG, indexes=["ta_validation", "cisco_metrics"])                     # a real destination: no dev_test_replay anywhere
+    gt = GT.model_copy(update={"hec_metric_index": "cisco_metrics"})
+    with patch.object(main.release_candidate_configuration, "load", return_value=saved), patch.object(main.current_topology, "global_transport", gt, create=True):
+        r = client.post("/api/runs", json={"kind": "sourcetype", "target": "cisco:ios:mdt:metric", "vendor_id": "cisco_ios", "count": 3, "eps": 500})
+        assert r.status_code == 200, r.text
+        assert r.json()["destination"]["index"] == "ta_validation" and r.json()["destination"]["metric_index"] == "cisco_metrics"
+        snap = wait_done(r.json()["run_id"])
+        rid = r.json()["run_id"]
+        dp = sum(1 for p in env for k in p["fields"] if k.startswith("metric_name:"))
+        assert len(env) == 3 and all(p["event"] == "metric" and p["index"] == "cisco_metrics" for p in env)
+        assert any(k.startswith("metric_name:interface_generic_counters.") for p in env for k in p["fields"])
+        assert snap["metric_accepted"] == {"events": 3, "datapoints": dp}             # metric events are counted as datapoints, not as log events
+        # verification: the metric index is searched with mstats, the event index is not what proves metrics
+        queries = []
+
+        def search(q, **kw):
+            queries.append(q)
+            return ([{"n": str(dp)}], None) if "mstats" in q else ([{"indexed": "0"}], None)
+        with patch.object(main.release_candidate_configuration, "execute_read_only_search", side_effect=search):
+            v = client.post("/api/runs/%s/verify" % rid).json()
+        assert v["status"] == "VERIFIED" and v["metric_datapoints_indexed"] == dp and v["metric_datapoints_expected"] == dp and v["expected_log_events"] == 0
+        assert any('mstats' in q and 'index="cisco_metrics"' in q and rid in q for q in queries)
+        with patch.object(main.release_candidate_configuration, "execute_read_only_search", side_effect=lambda q, **kw: ([{"n": "0"}], None) if "mstats" in q else ([{"indexed": "0"}], None)):
+            assert client.post("/api/runs/%s/verify" % rid).json()["status"] == "INCOMPLETE"          # nothing in the metric index: never Verified
+
+
+def test_a_scenario_run_without_an_index_uses_the_saved_event_index(env):
+    """Found by the Phase 9 browser acceptance: a scenario started from the UI named no index and every real destination answered 403."""
+    saved = dict(CFG, indexes=["ta_validation", "cisco_metrics"])
+    gt = GT.model_copy(update={"hec_metric_index": "cisco_metrics"})
+    with patch.object(main.release_candidate_configuration, "load", return_value=saved), patch.object(main.current_topology, "global_transport", gt, create=True):
+        r = client.post("/api/runs", json={"kind": "scenario", "target": "wireless_connected_core_mixed", "eps": 2000})
+        assert r.status_code == 200, r.text
+        assert r.json()["destination"]["index"] == "ta_validation"
+        wait_done(r.json()["run_id"])
+        # an explicit index outside the destination is still refused
+        assert client.post("/api/runs", json={"kind": "scenario", "target": "wireless_connected_core_mixed", "index": "somewhere_else"}).status_code == 403
+    assert env and all(p["index"] in ("ta_validation", "cisco_metrics") for p in env) and any(p["index"] == "ta_validation" for p in env)
+
+
+def test_a_scenario_runner_scenario_started_from_the_ui_really_delivers_with_the_saved_token(env):
+    """Found by the Phase 9 browser acceptance: the scenario runner got a copy of the transport built with model_dump(), which drops the HEC token, so it generated
+    events, attempted no delivery and still finished COMPLETED. The token here is NOT in the environment, as in a normal Connections-only setup."""
+    import os
+    saved = dict(CFG, indexes=["ta_validation", "cisco_metrics"])
+    gt = main.TelemetryTransportConfig(hec_url=GT.hec_url, hec_token="tok-only-in-the-saved-destination", hec_metric_index="cisco_metrics")   # main validates against its own copy of the model class
+    seen = []
+    orig = main.scenario_runner.run_scenario
+
+    def spy(request, *a, **k):
+        seen.append(request.transport_config.hec_token)
+        return orig(request, *a, **k)
+    with patch.dict(os.environ, {"NETSPOUT_HEC_TOKEN": ""}), patch.object(main.release_candidate_configuration, "load", return_value=saved), \
+            patch.object(main.current_topology, "global_transport", gt, create=True), patch.object(main.scenario_runner, "run_scenario", side_effect=spy):
+        r = client.post("/api/runs", json={"kind": "scenario", "target": "paloalto_threat_investigation", "eps": 2000})
+        assert r.status_code == 200, r.text
+        for _ in range(100):
+            if seen:
+                break
+            time.sleep(0.1)
+    assert seen == ["tok-only-in-the-saved-destination"]

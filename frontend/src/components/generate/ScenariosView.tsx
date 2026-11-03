@@ -3,29 +3,31 @@ import { compatApi, type ScenarioCompat } from '../../lib/compatApi';
 import { explorerApi } from '../../lib/explorerApi';
 import { startRun } from '../../lib/runsApi';
 import { LiveDeliveryMonitor } from '../monitor/LiveDeliveryMonitor';
+import { Outcome } from './Outcome';
 import './simple.css';
 
 const STATE_TEXT: Record<ScenarioCompat['run_state'], { label: string; cls: string; explain: string }> = {
   VERIFIED_IN_SPLUNK: { label: 'Verified in Splunk', cls: 'VERIFIED', explain: 'Every source this scenario needs has been tested against its add-on in a live Splunk.' },
-  RUNNABLE_UNVERIFIED: { label: 'Runnable, not verified in Splunk', cls: 'GENERATOR_UNVERIFIED', explain: 'NetSpout can generate every source this scenario needs. That is not the same as verified: at least one source has not been tested against its add-on in Splunk.' },
-  NOT_RUNNABLE: { label: 'Cannot run', cls: 'UNSUPPORTED', explain: 'This scenario will not run until the problems below are fixed.' },
+  RUNNABLE_UNVERIFIED: { label: 'Can run, not fully tested in Splunk', cls: 'GENERATOR_UNVERIFIED', explain: 'NetSpout can generate every source this scenario needs. That is not the same as verified: at least one source has not been tested against its add-on in Splunk.' },
+  NOT_RUNNABLE: { label: 'Cannot run', cls: 'UNSUPPORTED', explain: 'This scenario will not run until the problems listed under “Why it cannot run” are fixed.' },
 };
 
 export function ScenariosView() {
   const [list, setList] = useState<ScenarioCompat[]>([]);
-  const [studio, setStudio] = useState<Set<string>>(new Set());
+  const [studio, setStudio] = useState<Map<string, string>>(new Map());   // scenario id -> Dashboard Studio dashboard id
   const [err, setErr] = useState('');
   const [category, setCategory] = useState('ALL');
   const [canRunOnly, setCanRunOnly] = useState(true);
   const [id, setId] = useState('');
   const [configured, setConfigured] = useState<boolean | null>(null);
+  const [index, setIndex] = useState('');
   const [runId, setRunId] = useState<string | null>(null);
   const [startErr, setStartErr] = useState('');
 
   useEffect(() => {
     compatApi.scenarios().then((r) => setList(r.scenarios), (e) => setErr(e instanceof Error ? e.message : String(e)));
-    compatApi.dashboards().then((r) => setStudio(new Set(r.recipes.map((x) => x.scenario_id))), () => undefined);
-    explorerApi.setup().then((s) => setConfigured(!!s.configured), () => setConfigured(false));
+    compatApi.dashboards().then((r) => setStudio(new Map(r.dashboards.flatMap((x) => [[x.runtime_scenario_id, x.dashboard_id], [x.scenario_id, x.dashboard_id]] as Array<[string, string]>))), () => undefined);
+    explorerApi.setup().then((s) => { setConfigured(!!s.configured); setIndex((s.indexes ?? []).find((i) => !/metric/i.test(i)) ?? ''); }, () => setConfigured(false));
   }, []);
 
   const categories = useMemo(() => ['ALL', ...Array.from(new Set(list.map((s) => s.category ?? 'OTHER'))).sort()], [list]);
@@ -37,10 +39,11 @@ export function ScenariosView() {
   const run = async () => {
     if (!sc) return;
     setStartErr('');
-    try { setRunId((await startRun({ kind: 'scenario', target: sc.id })).run_id); } catch (e) { setStartErr(e instanceof Error ? e.message : String(e)); }
+    try { setRunId((await startRun({ kind: 'scenario', target: sc.id, index: index || undefined })).run_id); } catch (e) { setStartErr(e instanceof Error ? e.message : String(e)); }
   };
   const st = sc ? STATE_TEXT[sc.run_state] : null;
-  const hasDashboard = !!sc && studio.has(sc.id);
+  const dashboardId = sc ? studio.get(sc.id) : undefined;
+  const hasDashboard = !!dashboardId;
 
   return (
     <div className="sx" data-testid="scenarios-view">
@@ -57,7 +60,7 @@ export function ScenariosView() {
             {visible.map((s) => <option key={s.id} value={s.id}>{s.title}{s.run_state === 'NOT_RUNNABLE' ? ' — cannot run' : ''}</option>)}
           </select></label>
         </div>
-        <label className="sx-check"><input type="checkbox" data-testid="runnable-only" checked={canRunOnly} onChange={(e) => setCanRunOnly(e.target.checked)} /> Only show scenarios that can run ({list.filter((s) => s.runnable).length} of {list.length})</label>
+        <label className="sx-check"><input type="checkbox" data-testid="runnable-only" checked={canRunOnly} onChange={(e) => setCanRunOnly(e.target.checked)} /> Only show scenarios that can run now ({list.filter((s) => s.runnable).length} of {list.length})</label>
       </section>
 
       {sc && st && (
@@ -65,7 +68,7 @@ export function ScenariosView() {
           <span className={`sx-status sx-status--${st.cls}`} data-testid="scenario-state" data-state={sc.run_state}>{st.label}</span>
           <p>{sc.summary}</p>
           <p className="sx-muted">{st.explain}</p>
-          {sc.reasons.map((r) => <p className="sx-bad" key={r} data-testid="scenario-reason">{r}</p>)}
+          {sc.reasons.length > 0 && <div data-testid="why-cannot-run"><b>Why it cannot run</b>{sc.reasons.map((r) => <p className="sx-bad" key={r} data-testid="scenario-reason">{r}</p>)}</div>}
           {sc.warnings.map((w) => <p className="sx-muted" key={w}>{w}</p>)}
           <b>Sources it needs</b>
           <ul className="sx-list" data-testid="required">
@@ -76,7 +79,7 @@ export function ScenariosView() {
 
       <section className="sx-box">
         <span className="sx-step">2 · Run</span>
-        <div className="sx-row"><button type="button" className="sx-primary" data-testid="run-scenario" disabled={!sc || !!reason} onClick={() => void run()}>Run scenario</button>{configured === false && <a href="#/system/connections">Set up Connections</a>}</div>
+        <div className="sx-row">{index && <span className="sx-muted" data-testid="scenario-index">Sends to index <code>{index}</code></span>}<button type="button" className="sx-primary" data-testid="run-scenario" disabled={!sc || !!reason} onClick={() => void run()}>Run scenario</button>{configured === false && <a href="#/system/connections">Set up Connections</a>}</div>
         {reason && <p className="sx-bad" data-testid="cannot-run">{reason}</p>}
         {startErr && <p className="sx-bad" role="alert" data-testid="start-error">{startErr}</p>}
       </section>
@@ -84,9 +87,10 @@ export function ScenariosView() {
       {runId && sc && (
         <section className="sx-box">
           <span className="sx-step">3 · Watch and investigate</span>
-          <LiveDeliveryMonitor runId={runId} />
+          <Outcome runId={runId} />
+          <details><summary>Delivery details</summary><LiveDeliveryMonitor runId={runId} /></details>
           {hasDashboard
-            ? <a href={`?dashboard=scenario-${encodeURIComponent(sc.id)}&run=${encodeURIComponent(runId)}#/observe/dashboards`}>Investigate in Dashboard Studio</a>
+            ? <a href={`?dashboard=${encodeURIComponent(dashboardId!)}&run=${encodeURIComponent(runId)}#/observe/dashboards`}>Investigate in Dashboard Studio</a>
             : <p className="sx-muted">This scenario has no Dashboard Studio dashboard yet.</p>}
         </section>
       )}

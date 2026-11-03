@@ -19,7 +19,7 @@ export interface RunSnapshot {
   throughput?: Array<{ t: number; eps: number }>;
   recent_errors?: Array<{ at: string; sourcetype?: string; outcome?: string; message: string }>;
   controls: { pause: boolean; resume: boolean; stop: boolean };
-  verification?: { status: string; indexed?: number | null; accepted?: number; error?: string | null; note?: string } | null;
+  verification?: { status: string; indexed?: number | null; accepted?: number; error?: string | null; note?: string; expected_log_events?: number; metric_datapoints_indexed?: number | null; metric_datapoints_expected?: number; metric_events_accepted?: number } | null;
   links?: Record<string, string>;
   interrupted_note?: string | null;
   accounting_note?: string;

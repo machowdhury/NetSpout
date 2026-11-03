@@ -8,9 +8,9 @@ Flow: **Vendor → Product → Sourcetype → Preview → Generate → Verify**.
 | UI status | Rule | Count |
 |---|---|---|
 | Verified in Splunk | passed live check against the add-on (Phase 4) | 4 |
-| Format checked, not live verified | generator produces events and they satisfy the add-on's extraction rules offline | 13 |
-| Generator available, unverified | generator produces events; not (fully) checked against an add-on | 216 |
-| Unsupported or incompatible | no generator (102), metric/event routing conflict (3), events do not match the add-on's extractions (11) | 116 |
+| Checked offline only, not tested in Splunk | generator produces events and they satisfy the add-on's extraction rules offline | 13 |
+| Can send data, not tested in Splunk | generator produces events; not (fully) checked against an add-on | 216 |
+| Cannot send data | no generator (102), metric/event routing conflict (3), events do not match the add-on's extractions (11) | 116 |
 
 Generation is **blocked** (UI control removed, `409` from `/api/runs` and `/api/generate/preview`, and the dispatcher itself refuses to send routing conflicts) for the three *Unsupported* causes. The routing conflicts are `cisco:thousandeyes:metric` and `cisco:intersight:metrics` (`vmware:perf:cpu` was a third until Phase 8, when real data and the add-on showed it is a TSV event and a generator for that format was added): they are neither sent as metric-index payloads nor converted into logs. A scenario is blocked when it needs one of them (6 of 372 scenarios, including 4 contract scenarios that emit `cisco:thousandeyes:metric`). Sources that only a scenario's own engine builds do not block a scenario.
 
@@ -21,13 +21,18 @@ Generation is **blocked** (UI control removed, `409` from `/api/runs` and `/api/
 Accepted by HEC is reported separately from found-by-search. The result panel auto-runs the independent search after delivery and says one of: verified (n of n found), accepted but only n searchable yet, accepted but this app could not confirm (with the reason), partly rejected, or not received (with the destination's error).
 
 ## Scenarios
-The list shows *Runnable, not verified in Splunk* (every source can be generated; at least one is untested in Splunk), *Verified in Splunk* (every source verified; currently no scenario) or *Cannot run* (with reasons). Investigation links to Dashboard Studio (`?dashboard=scenario-<id>&run=<run id>`).
+The list shows *Can run, not fully tested in Splunk* (every source can be generated; at least one is untested in Splunk), *Verified in Splunk* (every source verified; currently no scenario) or *Cannot run* (with reasons). Investigation links to Dashboard Studio (`?dashboard=scenario-<id>&run=<run id>`).
+
+## Phase 9 changes to this contract
+- **Connections**: one **Test connection** control replaces the overlapping Validate and HEC connection test. It checks HEC and search, sends one marked test event and looks for it, and answers in one sentence: *Working*, *Partly working* (events can probably be sent but cannot be confirmed searchable) or *Not working*. The individual checks are behind "Show the individual checks". The form stays locked until the saved destination has loaded.
+- **Status wording** (build_capability_status.py, UI): *Verified in Splunk*, *Checked offline only, not tested in Splunk*, *Can send data, not tested in Splunk*, *Cannot send data*; scenarios: *Verified in Splunk*, *Can run, not fully tested in Splunk*, *Cannot run*.
+- **Result messages** (one component for Generate Data and Scenarios): *Verified* only when an independent search found the run's data: events in the event index, metric datapoints by an `mstats` search of the metric index (never an event-index search). After the retries a run that is accepted but not found says *Not confirmed* and why it may have happened; a search that cannot run says it could not check; neither is ever Verified.
+- **Runs without an index** use the saved destination's first event index (the old fixed default is kept only where it is configured). A metric sourcetype run records its metric index and datapoints, so verification searches the right place.
+- **Picker**: the Cisco families have readable names (Cisco ASA and Cloud Security, Cisco IOS, IOS-XE and IOS-XR, Cisco SD-WAN, ...); vendors with more than eight products get a search box; mode and rate are under "More options"; a failed preview disables Generate.
+- **Scenarios**: "Why it cannot run" lists the exact reason per source; the Dashboard Studio link uses the real dashboard id (it was never shown before because the lookup read the wrong field).
 
 ## Remaining UX problems
-- The Connections page is the legacy Connection Center form with restyled colours; its two test sections (Validate, Test connection) overlap and the section headings are plain.
-- Vendor names repeat for Cisco families, so the picker shows the catalog vendor id next to the name.
-- The product list is long for vendors where every sourcetype is its own product (for example SD-WAN: 41).
-- Dashboard Studio exists for only 29 scenarios; the others show no investigation link.
-- Scenario names, categories and the "verified" bar are catalog terms a new user may not know.
-- The packaged Splunk app bundle (`netspout/appserver/static/dist`) was not rebuilt in this phase.
-- Older Playwright specs that need a live Splunk or the previous navigation (`phase4*`) were not rerun; `unified-shell.spec.ts` was updated for the new navigation.
+- The Connections page is still the Connection Center form, now with one test control; the field layout was not redesigned.
+- Dashboard Studio exists for only 29 scenarios; the other 343 show "no Dashboard Studio dashboard yet" (some have a native Splunk dashboard, which is not linked from the page).
+- Scenario names and categories are catalog terms a new user may not know.
+- Metric runs in "keep streaming" mode record the metric index but were not browser-tested.

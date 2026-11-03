@@ -38,3 +38,5 @@
 .sx.setup-wizard .setup-checkbox { display: flex; grid-column: 1 / -1; align-items: center; flex-direction: row; }
 .sx .setup-advanced { border: 1px dashed var(--ns-border-strong); border-radius: var(--ns-radius-md); padding: 10px; display: grid; gap: 10px; }
 .sx .setup-advanced fieldset { margin-top: 8px; }
+
+.setup-gate { border: 0; padding: 0; margin: 0; min-width: 0; display: contents; }

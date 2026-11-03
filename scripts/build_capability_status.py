@@ -12,14 +12,20 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LABEL = {"VERIFIED": "Verified in Splunk", "FORMAT_CHECKED": "Format checked, not live verified", "GENERATOR_UNVERIFIED": "Generator available, unverified", "UNSUPPORTED": "Unsupported or incompatible"}
+LABEL = {"VERIFIED": "Verified in Splunk", "FORMAT_CHECKED": "Checked offline only, not tested in Splunk", "GENERATOR_UNVERIFIED": "Can send data, not tested in Splunk", "UNSUPPORTED": "Cannot send data"}
 ROUTING_MSG = ("NetSpout would send this as a metric-index payload, but the matching add-on (%s) defines it as an event sourcetype. Sending it as a metric would break the add-on's searches and turning it into a log "
                "would change what the data means, so generation is disabled until a verified implementation exists.")
 
 
-PHASE8_NOTE = ("Phase 8 live check in the isolated lab (%s): %s. Not promoted: VERIFIED stays reserved for the spec-based add-on checks in ta_live_results.json.")
+PHASE8_NOTE = "Checked in an isolated test Splunk (%s): %s. It is still shown as not tested in Splunk because the complete add-on test has not been run for it."
 PHASE8_SCOPE = {"metrics": ["cisco:ios:mdt:metric"], "profiles": ["cisco:ios", "cisco:ise:syslog"], "meraki": ["meraki:securityappliances"], "vmware": ["vmware:perf:cpu"],
                 "duo": ["cisco:duo:authentication_v2", "cisco:duo:administrator", "cisco:duo:activity", "cisco:duo:account", "cisco:duo:user"]}
+# plain-English statement of what each live check proved (shown to users; the evidence files keep the technical wording)
+PHASE8_PLAIN = {"metrics": "the 14 metric series it generates were sent and found in the metric index with the right names, values and dimensions; the other metric names seen on real systems are not generated",
+                "profiles": "the raw text, source, host and time were correct in both the direct and the SC4S-style shape",
+                "meraki": "network events were sent, found and parsed by the Meraki add-on, with no events from other Meraki sources mixed in",
+                "vmware": "the raw tab-separated rows arrive intact in an event index; the add-on that names the columns was not available, so the field names are not checked",
+                "duo": "the date inside each event matches the time Splunk stores, for all five Duo sourcetypes tested"}
 
 
 def phase8_evidence():
@@ -32,7 +38,7 @@ def phase8_evidence():
         d = json.loads(f.read_text())
         if d.get("passed"):
             for st in sts:
-                out[st] = PHASE8_NOTE % ((d.get("addon") or "metric index, no add-on involved"), d["status"])
+                out[st] = PHASE8_NOTE % ((d.get("addon") or "no add-on involved"), PHASE8_PLAIN[sec])
     return out
 
 

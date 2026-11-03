@@ -49,5 +49,5 @@ export const compatApi = {
   catalog: () => call<CompatCatalog>('GET', '/api/compat/catalog'),
   scenarios: () => call<{ labels: Record<string, string>; scenarios: ScenarioCompat[] }>('GET', '/api/compat/scenarios'),
   preview: (vendor_id: string, sourcetype: string, count = 3, index?: string) => call<Preview>('POST', '/api/generate/preview', { vendor_id, sourcetype, count, index }),
-  dashboards: () => call<{ recipes: Array<{ dashboard_id: string; scenario_id: string }> }>('GET', '/api/dashboards'),
+  dashboards: () => call<{ dashboards: Array<{ dashboard_id: string; scenario_id: string; runtime_scenario_id: string }> }>('GET', '/api/dashboards'),
 };

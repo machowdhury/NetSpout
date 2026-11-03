@@ -84,7 +84,7 @@ test('unsupported and routing-conflict selections explain themselves and cannot 
     await page.getByTestId('vendor').selectOption(f.v);
     await page.getByTestId('product').selectOption(f.p);
     await page.getByTestId('sourcetype').selectOption(st);
-    await expect(page.getByTestId('status-badge')).toHaveText('Unsupported or incompatible');
+    await expect(page.getByTestId('status-badge')).toHaveText('Cannot send data');
     await expect(page.getByTestId('blocked')).toContainText('metric-index payload');
     await expect(page.getByTestId('blocked')).toContainText('generation is disabled');
     await expect(page.getByTestId('generate')).toHaveCount(0);               // no generate control at all for a blocked selection
@@ -109,7 +109,7 @@ test('a destination that refuses events is reported as such', async ({ page, req
     await open(page, '/generate/quick');
     await page.getByTestId('count').fill('4');
     await page.getByTestId('generate').click();
-    await expect(page.getByTestId('outcome-text')).toContainText('Splunk did not receive these events', { timeout: 30_000 });
+    await expect(page.getByTestId('outcome-text')).toContainText('Splunk did not receive this data', { timeout: 30_000 });
     await expect(page.getByTestId('outcome-text')).toContainText(/403|rejected|token/i);
     await page.screenshot({ path: `${SHOTS}/04_destination_failure.png`, fullPage: true });
   } finally { await request.post(`${HEC}/_mode?m=ok`); }
@@ -128,7 +128,7 @@ test('scenarios: eligibility, run state and the difference between runnable and 
   const all = (await (await request.get(`${API}/api/compat/scenarios`)).json()).scenarios as Array<{ id: string; title: string; run_state: string; runnable: boolean }>;
   expect(all.filter((s) => s.run_state === 'VERIFIED_IN_SPLUNK')).toHaveLength(0);   // no scenario has every source verified; the UI must not imply otherwise
   await open(page, '/generate/scenarios');
-  await expect(page.getByTestId('scenario-state')).toHaveText('Runnable, not verified in Splunk');
+  await expect(page.getByTestId('scenario-state')).toHaveText('Can run, not fully tested in Splunk');
   await expect(page.getByTestId('scenario-detail')).toContainText('That is not the same as verified');
   await expect(page.getByTestId('required').locator('li').first()).toBeVisible();
   await page.screenshot({ path: `${SHOTS}/05_scenarios_runnable_unverified.png`, fullPage: true });
@@ -147,8 +147,11 @@ test('connections: event and metric index are separate fields, secrets are not s
   await expect(page.getByTestId('metric-index')).toHaveValue('cisco_mdt_metrics');
   await expect(page.getByTestId('connection-status')).toContainText('never shown again');
   expect(await page.content()).not.toContain('fake-token-phase6');
+  await expect(page.getByRole('button', { name: /Validate/ })).toHaveCount(0);       // Phase 9: Validate and Test connection were one overlapping pair, now a single control
+  await expect(page.getByRole('button', { name: 'Test connection' })).toHaveCount(1);
   await page.getByRole('button', { name: 'Test connection' }).click();
-  await expect(page.getByText(/Overall:/)).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByTestId('connection-summary')).toBeVisible({ timeout: 30_000 });   // the fake receiver cannot search, so this is never "Working"
+  await expect(page.getByTestId('connection-summary')).not.toContainText('Working:');
   await page.waitForTimeout(800);                                          // let the page's entrance animation finish before the screenshot
   await page.screenshot({ path: `${SHOTS}/07_connections.png`, fullPage: true });
 });

@@ -2361,6 +2361,25 @@ def _hec_item(dispatch_fn, sourcetype, phase, datapoints=0):
     return Item(sourcetype, phase, send, datapoints)
 
 
+def _metric_datapoints(entry) -> int:
+    """Datapoints one metric entry will carry (an mstats search counts these, not HEC events); 0 for a log event."""
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher, is_metric_sourcetype
+    if not is_metric_sourcetype(entry.sourcetype):
+        return 0
+    return sum(1 for k in TelemetryDispatcher.extract_metric_fields(entry) if k.startswith("metric_name:"))
+
+
+def _sourcetype_metric_index(target: str, cfg):
+    """A metric sourcetype run delivers to the saved metric index, which must be authorized by the Connection Center; None for log sourcetypes."""
+    from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+    if not is_metric_sourcetype(target):
+        return None
+    m = cfg.hec_metric_index
+    if m not in release_candidate_configuration.load().get("indexes", []):
+        raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+    return m
+
+
 def _monitor_links(target: str):
     views = _replay_dashboards()
     return {"dashboard_view": ("pf_" + target) if target in views else None}
@@ -2378,6 +2397,13 @@ def runs_start(payload: Dict[str, Any]):
         sc = next((x for x in capability.scenarios() if x["id"] == target), None)
         if sc and not sc["runnable"]:
             raise HTTPException(status_code=409, detail="Scenario is not runnable: " + " ".join(sc["reasons"]))
+    if not payload.get("index"):
+        # no index named: use the saved destination's first event index. The old fixed default (dev_test_replay) is kept only where that index is actually configured, so a real
+        # destination no longer answers 403 to a run that simply did not say where to write (found by the Phase 9 browser acceptance: metric runs and scenarios from the UI)
+        configured_indexes = release_candidate_configuration.load().get("indexes", [])
+        first = next((i for i in configured_indexes if "metric" not in i.lower()), None)
+        if first and REPLAY_INDEX not in configured_indexes:
+            payload = dict(payload, index=first)
     gt, index, host = _replay_destination(payload)
     name = _destination_name(gt)
     from netspout_core import replay_packs, incident_packs, netflow_solution, netflow_wire
@@ -2442,7 +2468,7 @@ def runs_start(payload: Dict[str, Any]):
             # ScenarioRunner and unified-generation families: the runner owns the loop, so it runs on a worker and the monitor reads the delivery boundary
             from netspout_core.delivery_monitor import ObservedRun
             if target in SUPPORTED_SCENARIO_IDS:
-                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**cfg.model_dump())))
+                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**{**cfg.model_dump(), "hec_token": cfg.hec_token})))   # model_dump() alone drops the HEC token (excluded from dumps), and the run would then send nothing
                 run_id = scenario_runner.generate_run_id()
             else:
                 run_id = str(__import__("uuid").uuid4())
@@ -2462,8 +2488,9 @@ def runs_start(payload: Dict[str, Any]):
             vendor = payload.get("vendor_id") or ""
             if mode == "finite":
                 entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id, payload.get("ingestion_profile"))
-                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
-                title, metric_index = target, None
+                metric_index = _sourcetype_metric_index(target, cfg)
+                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None, _metric_datapoints(e)) for e in entries]
+                title = target
             else:
                 # continuous / timed streaming of ONE sourcetype; grounding is checked once up front, then events are produced just before each send
                 duration = float(payload["duration_s"]) if mode == "duration" else None
@@ -2474,9 +2501,9 @@ def runs_start(payload: Dict[str, Any]):
 
                 def produce(n, vendor=vendor, run_id=run_id):
                     es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
-                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in es]
+                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None, _metric_datapoints(e)) for e in es]
                 from netspout_core.delivery_monitor import ContinuousRun
-                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration,
+                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration, metric_index=_sourcetype_metric_index(target, cfg),
                                      max_events=int(payload["count"]) if payload.get("count") and mode == "continuous" else None)
                 crun.source_mode = prov.get("mode")
                 return run_monitor.start(crun).snapshot()

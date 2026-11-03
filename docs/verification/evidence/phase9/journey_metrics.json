@@ -1,0 +1,206 @@
+{
+ "sourcetype": "cisco:ios:mdt:metric",
+ "product": "Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON)",
+ "run_id": "run-73e70096b5d7",
+ "ui": {
+  "status_badge": "Can send data, not tested in Splunk",
+  "preview_info": "Sourcetype that will be sent: cisco:ios:mdt:metric · metric index cisco_metrics · generator: native",
+  "preview_metrics": [
+   "interface_generic_counters.packets_received = 19236086",
+   "interface_generic_counters.packets_sent = 7321521",
+   "interface_generic_counters.bytes_received = 96441270007",
+   "interface_generic_counters.bytes_sent = 99646884969",
+   "interface_generic_counters.input_drops = 0",
+   "interface_generic_counters.output_drops = 0"
+  ],
+  "outcome": "Verified: found 144 of 144 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
+ },
+ "outgoing_by_tap": {
+  "hec_events": 28,
+  "datapoints": 144,
+  "index": [
+   "cisco_metrics"
+  ],
+  "metric_names": [
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute",
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute",
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
+   "interface_generic_counters.bandwidth",
+   "interface_generic_counters.bytes_received",
+   "interface_generic_counters.bytes_sent",
+   "interface_generic_counters.input_drops",
+   "interface_generic_counters.input_errors",
+   "interface_generic_counters.input_load",
+   "interface_generic_counters.output_drops",
+   "interface_generic_counters.output_errors",
+   "interface_generic_counters.output_load",
+   "interface_generic_counters.packets_received",
+   "interface_generic_counters.packets_sent"
+  ],
+  "dimension_sets": [
+   "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "netspout_event_id,netspout_ground_truth,netspout_run_id,node_name,path,subscription"
+  ]
+ },
+ "mstats": [
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute",
+   "datapoints": 4,
+   "sum": 9,
+   "sent_sum": 9
+  },
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute",
+   "datapoints": 4,
+   "sum": 12,
+   "sent_sum": 12
+  },
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
+   "datapoints": 4,
+   "sum": 18,
+   "sent_sum": 18
+  },
+  {
+   "metric_name": "interface_generic_counters.bandwidth",
+   "datapoints": 12,
+   "sum": 246000000,
+   "sent_sum": 246000000
+  },
+  {
+   "metric_name": "interface_generic_counters.bytes_received",
+   "datapoints": 12,
+   "sum": 484553380648,
+   "sent_sum": 484553380648
+  },
+  {
+   "metric_name": "interface_generic_counters.bytes_sent",
+   "datapoints": 12,
+   "sum": 546707214224,
+   "sent_sum": 546707214224
+  },
+  {
+   "metric_name": "interface_generic_counters.input_drops",
+   "datapoints": 12,
+   "sum": 0,
+   "sent_sum": 0
+  },
+  {
+   "metric_name": "interface_generic_counters.input_errors",
+   "datapoints": 12,
+   "sum": 0,
+   "sent_sum": 0
+  },
+  {
+   "metric_name": "interface_generic_counters.input_load",
+   "datapoints": 12,
+   "sum": 71,
+   "sent_sum": 71
+  },
+  {
+   "metric_name": "interface_generic_counters.output_drops",
+   "datapoints": 12,
+   "sum": 0,
+   "sent_sum": 0
+  },
+  {
+   "metric_name": "interface_generic_counters.output_errors",
+   "datapoints": 12,
+   "sum": 0,
+   "sent_sum": 0
+  },
+  {
+   "metric_name": "interface_generic_counters.output_load",
+   "datapoints": 12,
+   "sum": 216,
+   "sent_sum": 216
+  },
+  {
+   "metric_name": "interface_generic_counters.packets_received",
+   "datapoints": 12,
+   "sum": 818155837,
+   "sent_sum": 818155837
+  },
+  {
+   "metric_name": "interface_generic_counters.packets_sent",
+   "datapoints": 12,
+   "sum": 565102154,
+   "sent_sum": 565102154
+  }
+ ],
+ "mcatalog_dims": [
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute",
+   "dims": "netspout_event_id,netspout_ground_truth,netspout_run_id,node_name,path,subscription",
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization"
+  },
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute",
+   "dims": "netspout_event_id,netspout_ground_truth,netspout_run_id,node_name,path,subscription",
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization"
+  },
+  {
+   "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
+   "dims": "netspout_event_id,netspout_ground_truth,netspout_run_id,node_name,path,subscription",
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization"
+  },
+  {
+   "metric_name": "interface_generic_counters.bandwidth",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate"
+  },
+  {
+   "metric_name": "interface_generic_counters.bytes_received",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.bytes_sent",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.input_drops",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.input_errors",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.input_load",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate"
+  },
+  {
+   "metric_name": "interface_generic_counters.output_drops",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.output_errors",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.output_load",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate"
+  },
+  {
+   "metric_name": "interface_generic_counters.packets_received",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  },
+  {
+   "metric_name": "interface_generic_counters.packets_sent",
+   "dims": "interface_name,netspout_event_id,netspout_ground_truth,netspout_run_id,path",
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"
+  }
+ ],
+ "event_index_rows_for_this_run": 0,
+ "metric_index_datatype": "metric",
+ "not_promoted": "only the 14 documented series are generated; the other cisco_metrics names stay unsupported and the capability status stays \"Can send data, not tested in Splunk\""
+}

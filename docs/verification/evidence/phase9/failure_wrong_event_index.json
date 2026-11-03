@@ -1,0 +1,5 @@
+{
+ "ui_run": "Not confirmed: Splunk accepted 10, but a search found none of the 10 events in index ta_validation, after 6 checks. It may have gone to a different index, been dropped, or still be indexing. Accepted by Splunk is not the same as searchable.",
+ "events_in_expected_index": 0,
+ "events_actually_in_main": 10
+}

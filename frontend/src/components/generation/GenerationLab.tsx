@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import type { ExperienceMode } from '../../app/navigation';
 import { generationApi } from '../../lib/generationApi';
+import { splunkSearchHref } from '../../lib/splunkLinks';
 import type {
   GenerationCapabilities,
   GenerationMode,
@@ -235,6 +236,28 @@ export function GenerationLab({
       setBusy(false);
     }
   };
+
+  // Entering Observe starts the authenticated Splunk search by itself and repeats it while indexing catches up, so the stage
+  // is never left at "pending" only because nobody pressed Refresh. The Refresh button stays for a manual retry.
+  const observedProven = !!run?.evidence.some((e) => e.stage === 'SPLUNK_OBSERVED' && e.state === 'PROVEN');
+  const runIdForObserve = run?.run_id;
+  useEffect(() => {
+    if (step !== 'OBSERVE' || !runIdForObserve || observedProven) return undefined;
+    let cancelled = false; let timer = 0; let tries = 0;
+    const tick = async () => {
+      if (cancelled) return;
+      try {
+        const next = await generationApi.observe(runIdForObserve);
+        if (cancelled) return;
+        setRun(next);
+        if (next.evidence.some((e) => e.stage === 'SPLUNK_OBSERVED' && e.state === 'PROVEN')) return;
+      } catch { /* the manual Refresh button reports the error */ }
+      tries += 1;
+      if (tries < 6) timer = window.setTimeout(tick, 5000);
+    };
+    tick();
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [step, runIdForObserve, observedProven]);
 
   const investigate = async (recipeId: string) => {
     if (!run) return;
@@ -1022,15 +1045,16 @@ function InvestigateStep({ run, result, busy, onRun, onBack }: { run: Generation
                 <p>{recipe.portability === 'PRODUCTION_PORTABLE' ? 'Uses verified production fields or CIM relationships.' : 'Depends on NetSpout lab metadata and must be adapted for production.'}</p>
                 <pre>{recipe.spl.replace('$run_id$', run.run_id)}</pre>
                 <button type="button" className="generation-primary" disabled={busy} onClick={() => onRun(recipe.recipe_id)}><BookOpen /> {busy ? 'Running in Splunk…' : 'Run in Splunk'}</button>
+                {(() => { const href = splunkSearchHref(recipe.spl.replace('$run_id$', run.run_id), run.started_at); return href ? <a className="generation-secondary" style={{ marginLeft: 8 }} href={href} target="_top">Open in Splunk Search</a> : null; })()}
               </div>
             </article>
           ))}
         </div>
       )}
       {result && (
-        <div className={`generation-alert ${result.status === 'SUCCEEDED' ? 'generation-alert--success' : 'generation-alert--error'}`}>
+        <div className={`generation-alert ${result.status === 'SUCCEEDED' ? 'generation-alert--success' : 'generation-alert--error'}`} data-status={result.status}>
           {result.status === 'SUCCEEDED' ? <CheckCircle2 /> : <CircleAlert />}
-          <div><strong>{result.status} · {result.result_count} result{result.result_count === 1 ? '' : 's'}</strong><span>{result.detail}</span></div>
+          <div><strong>{result.status === 'NO_RESULTS' ? 'NO RESULTS' : result.status} · {result.result_count} result{result.result_count === 1 ? '' : 's'}</strong><span>{result.detail}</span></div>
         </div>
       )}
       <div className="generation-actions">

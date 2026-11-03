@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { apiUrl } from '../lib/api';
 
 type Choice = { id: string; title?: string; name?: string };
 type Manifest = { run_id: string; total_events_generated: number; dispatch_succeeded: number; dispatch_failed: number; observed_count: number; observation_status: string; errors: string[] };
@@ -23,8 +24,8 @@ type ProgressEvent = {
 };
 
 async function request(url: string, body?: unknown) {
-  const response = await fetch(url, body === undefined ? undefined : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const data = await response.json();
+  const response = await fetch(apiUrl(url), body === undefined ? undefined : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const data = await response.json().catch(() => ({ detail: `HTTP ${response.status}: the engine did not answer with JSON` }));
   if (!response.ok) throw new Error(typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail));
   return data;
 }

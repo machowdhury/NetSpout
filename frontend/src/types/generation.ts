@@ -438,7 +438,9 @@ export interface InvestigationResult {
   recipe_id: string;
   portability: string;
   query: string;
-  status: 'SUCCEEDED' | 'FAILED';
+  status: 'SUCCEEDED' | 'NO_RESULTS' | 'FAILED';
   result_count: number;
   detail: string;
+  index?: string;
+  search_path?: string;
 }

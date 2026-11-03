@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { isAppRoute, type AppRoute } from './navigation';
+import { isAppRoute, LEGACY_REDIRECTS, type AppRoute } from './navigation';
 
 function routeFromHash(): AppRoute {
   if (typeof window === 'undefined') return '/';
   const rawRoute = window.location.hash.replace(/^#/, '') || '/';
-  return isAppRoute(rawRoute) ? rawRoute : '/';
+  return isAppRoute(rawRoute) ? rawRoute : LEGACY_REDIRECTS[rawRoute] ?? '/';
 }
 
 export function useHashRoute() {

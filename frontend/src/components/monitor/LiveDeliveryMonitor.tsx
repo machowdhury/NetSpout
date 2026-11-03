@@ -36,7 +36,7 @@ function dashboardHref(r: Readiness): string | null {
 const POLL_MS = 5000;
 const POLL_MAX = 60;   // about five minutes after delivery ends, then the last state stands (DEGRADED/INDEXING) instead of spinning forever
 
-function ReadinessPanel({ run }: { run: RunSnapshot }) {
+function ReadinessPanel({ run, onReadiness }: { run: RunSnapshot; onReadiness?: (r: Readiness) => void }) {
   const [r, setR] = useState<Readiness | null>(null);
   const [shown, setShown] = useState(true);
   const final = FINAL.includes(run.state);
@@ -44,7 +44,7 @@ function ReadinessPanel({ run }: { run: RunSnapshot }) {
     if (!final || run.counters.accepted === 0 && run.state !== 'FAILED') return undefined;
     let cancelled = false; let n = 0; let timer = 0;
     const tick = async () => {
-      try { const x = await checkReadiness(run.run_id); if (cancelled) return; setR(x); n += 1; if (!['READY', 'FAILED', 'DEGRADED'].includes(x.state) && n < POLL_MAX) timer = window.setTimeout(tick, POLL_MS); }
+      try { const x = await checkReadiness(run.run_id); if (cancelled) return; setR(x); onReadiness?.(x); n += 1; if (!['READY', 'FAILED', 'DEGRADED'].includes(x.state) && n < POLL_MAX) timer = window.setTimeout(tick, POLL_MS); }
       catch { if (!cancelled && n < POLL_MAX) { n += 1; timer = window.setTimeout(tick, POLL_MS); } }
     };
     tick();
@@ -88,11 +88,20 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
     try { setRun(await getRun(runId)); lastOk.current = Date.now(); setError(null); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { inflight.current = false; }
   }, [runId]);
 
+  const finished = !!run && FINAL.includes(run.state);
   useEffect(() => {
     refresh();
-    const t = window.setInterval(() => { if (!run || !FINAL.includes(run.state)) refresh(); }, 1000);
+    const t = window.setInterval(() => { if (!finished) refresh(); }, 1000);
     return () => window.clearInterval(t);
-  }, [refresh, run]);
+  }, [refresh, finished]);
+  // The gateway serves one request at a time, so a long readiness search can make a status poll time out. That is not an engine outage
+  // for a run that has already finished: keep its last snapshot and retry quietly until a poll answers.
+  const [ready, setReady] = useState<Readiness | null>(null);
+  useEffect(() => {
+    if (!finished || !error) return undefined;
+    const t = window.setTimeout(refresh, 3000);
+    return () => window.clearTimeout(t);
+  }, [finished, error, refresh]);
 
   // Seconds since the last answer from the engine through the gateway: a stalled gateway shows as lag, not as a state the run does not have.
   useEffect(() => {
@@ -116,11 +125,13 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
 
   if (!run) return <div className="pf-mon">{error ? `Monitor unavailable: ${error}` : 'Loading run…'}</div>;
   const c = run.counters;
+  const indexedValue = run.verification?.indexed ?? (c.indexed !== null && c.indexed > 0 ? c.indexed : null) ?? ready?.present?.events_indexed ?? null;
+  const indexedShown = indexedValue === null ? (c.indexed === null ? 'Not verified' : fmt(c.indexed)) : fmt(indexedValue);
   const finite = run.progress?.pct !== null && run.progress?.pct !== undefined;
   const tiles: Array<[string, string, string?]> = [
     ['Generated', fmt(c.generated)], ['Attempts', fmt(c.attempts)], ['HEC accepted', fmt(c.accepted), 'Transport acknowledgement, not indexing'],
     ['Rejected', fmt(c.rejected)], ['Unknown', fmt(c.unknown), 'Outcome not confirmed; never resent'], ['Pending', fmt(c.pending)],
-    ['Indexed (verified)', c.indexed === null ? 'Not verified' : fmt(c.indexed), 'Only from an independent Splunk search'],
+    ['Indexed (verified)', indexedShown, 'Only from an independent Splunk search (verification or the run-bound readiness search)'],
     ['EPS now / avg', `${run.rate?.current_eps ?? 0} / ${run.rate?.average_eps ?? 0}`], ['Elapsed', dur(run.elapsed_s)], ['ETA', finite ? dur(run.eta_s) : 'n/a'],
   ];
   const sts = Object.entries(run.by_sourcetype ?? {});
@@ -138,7 +149,7 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
       {lagS >= 4 && !FINAL.includes(run.state) && <p className="pf-mon-warn" data-testid="gateway-lag">No answer from the engine through the gateway for {lagS}s. The state shown is the last one received; the run itself is not affected by this delay.</p>}
       {run.interrupted_note && <p className="pf-mon-warn">{run.interrupted_note}</p>}
       {run.error && <p className="pf-mon-warn">{run.error}</p>}
-      {error && <p className="pf-mon-warn">Engine unreachable: {error}. Showing the last known counters.</p>}
+      {error && !FINAL.includes(run.state) && <p className="pf-mon-warn">Engine unreachable: {error}. Showing the last known counters.</p>}
       <div className="pf-mon-bar" role="progressbar" aria-valuenow={finite ? run.progress!.pct! : undefined} aria-valuemin={0} aria-valuemax={100}>
         <div className={finite ? 'pf-mon-fill' : 'pf-mon-fill indeterminate'} style={finite ? { width: `${run.progress!.pct}%` } : undefined} />
       </div>
@@ -159,7 +170,7 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
           {run.flow_wire.note && <p className="pf-mon-note">{run.flow_wire.note}</p>}
         </section>
       )}
-      <ReadinessPanel run={run} />
+      <ReadinessPanel run={run} onReadiness={setReady} />
       <Chart points={run.throughput ?? []} />
       {sts.length > 0 && (
         <table className="pf-mon-table"><thead><tr><th>Sourcetype</th><th>Generated</th><th>Accepted</th><th>Rejected</th><th>Unknown</th></tr></thead>

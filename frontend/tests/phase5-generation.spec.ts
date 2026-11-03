@@ -110,7 +110,7 @@ async function mockGeneration(page: Page) {
 
 test('shows simple readiness while advanced mode exposes native transport detail', async ({ page }) => {
   await mockGeneration(page);
-  await page.goto('/#/observe/live-runs');
+  await page.goto('/#/generate/unified');
   await page.getByRole('button', { name: /^Preview/ }).click();
   await expect(page.getByRole('heading', { name: 'Selected telemetry channels' })).toBeVisible();
   await expect(page.getByText('Splunk destination integration')).toBeVisible();
@@ -124,7 +124,7 @@ test('shows simple readiness while advanced mode exposes native transport detail
 
 test('renders actual preflight components and independent multi-channel counts', async ({ page }) => {
   await mockGeneration(page);
-  await page.goto('/#/observe/live-runs');
+  await page.goto('/#/generate/unified');
   await page.getByRole('button', { name: /^Preview/ }).click();
   await page.getByRole('button', { name: /^Configure/ }).click();
   await page.getByRole('button', { name: 'Run Preflight' }).click();

@@ -20,16 +20,14 @@ export type AppRoute =
   | '/explore'
   | '/generate/quick'
   | '/generate/scenarios'
+  | '/generate/unified'
   | '/build/studio'
   | '/build/industry-studio'
   | '/build/scenario-builder'
   | '/observe/live-runs'
+  | '/investigate'
   | '/observe/dashboards'
-  | '/observe/telemetry'
   | '/observe/pipeline-health'
-  | '/investigate/timeline'
-  | '/investigate/incident'
-  | '/investigate/security-intelligence'
   | '/security-content'
   | '/catalog/provenance'
   | '/catalog/security-sources'
@@ -106,114 +104,65 @@ export const DOMAINS: DomainDefinition[] = [
   },
 ];
 
+// Five primary destinations (Overview, Scenarios, Live Runs, Investigate, Dashboards) plus Reference. Every previous page is still
+// reachable; routes that were placeholders without a runtime path are no longer offered and redirect to the page that now does the job.
 export const NAVIGATION: NavigationGroup[] = [
   {
-    label: 'Home',
+    label: 'Overview',
     items: [{ label: 'Overview', route: '/', icon: 'home' }],
   },
   {
-    label: 'Explore',
-    items: [{ label: 'Use Case Explorer', route: '/explore', icon: 'search', availability: 'BETA' }],
-  },
-  {
-    label: 'Generate',
+    label: 'Scenarios',
     items: [
+      { label: 'Use Case Explorer', route: '/explore', icon: 'search', availability: 'BETA' },
       { label: 'Quick Generate', route: '/generate/quick', icon: 'zap' },
-      { label: 'Scenarios', route: '/generate/scenarios', icon: 'layers' },
+      { label: 'Guided Scenarios', route: '/generate/scenarios', icon: 'layers' },
+      { label: 'Run in 6 Steps', route: '/generate/unified', icon: 'workflow' },
+      { label: 'Scenario Studio', route: '/build/studio', icon: 'studio' },
+      { label: 'Industry Studio', route: '/build/industry-studio', icon: 'industry' },
+      { label: 'Scenario Builder', route: '/build/scenario-builder', icon: 'workflow', advancedOnly: true },
     ],
   },
   {
-    label: 'Build',
-    items: [
-      {
-        label: 'Scenario Studio',
-        route: '/build/studio',
-        icon: 'studio',
-      },
-      {
-        label: 'Industry Studio',
-        route: '/build/industry-studio',
-        icon: 'industry',
-      },
-      {
-        label: 'Scenario Builder',
-        route: '/build/scenario-builder',
-        icon: 'workflow',
-        advancedOnly: true,
-      },
-    ],
-  },
-  {
-    label: 'Observe',
+    label: 'Live Runs',
     items: [
       { label: 'Live Runs', route: '/observe/live-runs', icon: 'activity' },
-      { label: 'Dashboard Studio', route: '/observe/dashboards', icon: 'dashboard' },
-      {
-        label: 'Telemetry Explorer',
-        route: '/observe/telemetry',
-        icon: 'search',
-        availability: 'PLANNED',
-      },
       { label: 'Pipeline Health', route: '/observe/pipeline-health', icon: 'pulse' },
     ],
   },
   {
     label: 'Investigate',
     items: [
-      {
-        label: 'Incident Timeline',
-        route: '/investigate/timeline',
-        icon: 'clock',
-        availability: 'PLANNED',
-      },
-      {
-        label: 'Incident Investigation',
-        route: '/investigate/incident',
-        icon: 'inspect',
-        availability: 'PLANNED',
-      },
-      {
-        label: 'Security Intelligence',
-        route: '/investigate/security-intelligence',
-        icon: 'shield',
-        availability: 'RESEARCH REQUIRED',
-      },
+      { label: 'Investigate a Run', route: '/investigate', icon: 'inspect' },
+      { label: 'Detection Explorer', route: '/security-content', icon: 'shield', availability: 'BETA' },
     ],
   },
   {
-    label: 'Security Content Lab',
-    items: [
-      {
-        label: 'Detection Explorer',
-        route: '/security-content',
-        icon: 'shield',
-        availability: 'BETA',
-      },
-    ],
+    label: 'Dashboards',
+    items: [{ label: 'Dashboard Studio', route: '/observe/dashboards', icon: 'dashboard' }],
   },
   {
-    label: 'Catalog',
+    label: 'Reference',
     items: [
       { label: 'Cisco 100', route: '/catalog/cisco-100', icon: 'catalog' },
       { label: 'Cisco Coverage', route: '/catalog/cisco-coverage', icon: 'network' },
       { label: 'Security Sources', route: '/catalog/security-sources', icon: 'shield' },
       { label: 'Provenance', route: '/catalog/provenance', icon: 'badge' },
-      {
-        label: 'Splunk Integrations',
-        route: '/catalog/splunk-integrations',
-        icon: 'database',
-      },
-    ],
-  },
-  {
-    label: 'System',
-    items: [
+      { label: 'Splunk Integrations', route: '/catalog/splunk-integrations', icon: 'database' },
       { label: 'Connections', route: '/system/connections', icon: 'settings' },
       { label: 'Destination Manager', route: '/destinations', icon: 'server' },
       { label: 'Guided Workflow', route: '/guided-workflow', icon: 'workflow' },
     ],
   },
 ];
+
+// Bookmarked hashes of the retired placeholder pages land on the page that replaced them.
+export const LEGACY_REDIRECTS: Record<string, AppRoute> = {
+  '/observe/telemetry': '/observe/live-runs',
+  '/investigate/timeline': '/investigate',
+  '/investigate/incident': '/investigate',
+  '/investigate/security-intelligence': '/investigate',
+};
 
 export const ROUTE_TITLES = Object.fromEntries(
   NAVIGATION.flatMap((group) => group.items.map((item) => [item.route, item.label])),

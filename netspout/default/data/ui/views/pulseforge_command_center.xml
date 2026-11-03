@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark" hideTitle="true" hideEdit="true" hideAppBar="false" script="netspout_canvas.js">
-  <label>PulseForge Command Center</label>
+  <label>Overview</label>
   <description>Home of PulseForge: guided entry points, run status and navigation across generation, investigation and catalog.</description>
   <row>
     <panel>

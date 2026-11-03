@@ -17,9 +17,9 @@ VIEWS = APP / "default" / "data" / "ui" / "views"
 def test_nav_has_command_center_default_and_explorer_and_views_exist():
     nav = ET.parse(APP / "default/data/ui/nav/default.xml").getroot()
     views = {v.get("name"): v for v in nav.iter("view")}
-    assert views["pulseforge_command_center"].get("label") == "PulseForge Command Center"
+    assert views["pulseforge_command_center"].get("label") == "Overview"
     assert views["pulseforge_command_center"].get("default") == "true"
-    assert views["use_case_explorer"].get("label") == "Use Case Explorer"
+    assert views["use_case_explorer"].get("label") == "Scenarios"
     for name in ("pulseforge_command_center", "use_case_explorer", "pulseforge_dns_anomaly_studio", "netspout_canvas"):
         assert name in views and (VIEWS / f"{name}.xml").exists()
 

@@ -26,6 +26,9 @@ export interface RunSnapshot {
   flow_wire?: { state: string; protocol?: string; collector?: string; generated: number; udp_exported?: number; datagrams?: number; collector_decoded?: number | null; note?: string };
   flow_summary?: { flows: number; phases: Record<string, number>; exporters: string[]; malicious_labeled: number; bytes: number; packets: number };
   sourcetype?: string;
+  key_field?: string;
+  started_at?: string;
+  ended_at?: string | null;
 }
 
 async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, timeoutMs = 25_000): Promise<T> {
@@ -46,6 +49,7 @@ async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, tim
   return response.json() as Promise<T>;
 }
 
+export const listRuns = () => call<{ runs: RunSnapshot[] }>('GET', '/api/runs', undefined, 15_000).then((r) => r.runs);
 export const startRun = (body: Record<string, unknown>) => call<RunSnapshot>('POST', '/api/runs', body);
 // Status polls answer in milliseconds (measured p50 4 ms, max 28 ms). A poll lost at the gateway connection never answers, so it is abandoned after 5 s and the next one goes out instead of the monitor waiting out the 25 s default.
 export const getRun = (id: string) => call<RunSnapshot>('GET', `/api/runs/${encodeURIComponent(id)}`, undefined, 5_000);

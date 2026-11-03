@@ -72,94 +72,94 @@ Routing conflicts (catalog promises a metric index, add-on defines an event sour
 
 | vendor | products | ST | add-ons | exact | naming conf. | payload/route conf. | valid gen. | sample | live | specialized ingest | main blockers |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| A10 Networks | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Amazon Web Services | 4 | 4 | 2 | 4 | 0 | 0 | 0 | 4 | 0 | 2 | no exact match live-verified; 4 sourcetypes have no working generator |
-| Arista Networks | 4 | 4 | 1 | 0 | 0 | 0 | 3 | 3 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
-| Aruba / HPE | 6 | 6 | 1 | 3 | 1 | 0 | 4 | 4 | 0 | 0 | 1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
-| Atlassian | 1 | 1 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
-| Barracuda Networks | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
-| BeyondTrust | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Bitdefender | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Check Point Software | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Cisco Duo | 10 | 10 | 1 | 7 | 1 | 1 | 8 | 9 | 0 | 10 | 1 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
-| Cisco Meraki | 17 | 17 | 1 | 14 | 0 | 0 | 14 | 14 | 0 | 17 | no exact match live-verified; 3 sourcetypes have no working generator |
-| Cisco Systems | 8 | 8 | 0 | 0 | 0 | 0 | 6 | 6 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Cisco Systems | 6 | 6 | 2 | 5 | 1 | 0 | 2 | 3 | 1 | 1 | 1 naming conflicts; 4 sourcetypes have no working generator |
-| Cisco Systems | 34 | 34 | 1 | 17 | 2 | 0 | 32 | 32 | 0 | 33 | 2 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
-| Cisco Systems | 11 | 11 | 1 | 11 | 0 | 2 | 10 | 11 | 0 | 11 | 2 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
-| Cisco Systems | 26 | 26 | 1 | 13 | 5 | 2 | 14 | 18 | 1 | 23 | 5 naming conflicts; 2 exact matches with payload/routing conflicts; 12 sourcetypes have no working generator |
-| Cisco Systems | 7 | 7 | 2 | 5 | 0 | 0 | 6 | 7 | 0 | 4 | no exact match live-verified; 1 sourcetypes have no working generator |
-| Cisco Systems | 41 | 41 | 1 | 8 | 2 | 1 | 40 | 40 | 0 | 37 | 2 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
-| Citrix / Cloud Software Group | 2 | 2 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
-| Claroty | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Cloudflare | 3 | 3 | 2 | 1 | 1 | 0 | 2 | 2 | 0 | 3 | 1 naming conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
-| CrowdStrike | 1 | 1 | 4 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| CrushFTP | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Cybereason | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Darktrace | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Dell Technologies | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Docker | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
-| Elastic | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
-| ExtraHop Networks | 2 | 2 | 1 | 0 | 0 | 0 | 2 | 2 | 0 | 2 | covering add-on defines none of the catalog's sourcetype names |
-| Extreme Networks | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| F5 Networks | 2 | 2 | 1 | 1 | 0 | 1 | 2 | 2 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Forcepoint | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Fortinet | 7 | 8 | 1 | 2 | 2 | 0 | 5 | 5 | 1 | 0 | 2 naming conflicts; 3 sourcetypes have no working generator |
-| GitHub | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| GitLab | 1 | 1 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
-| Google Cloud | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
-| Google Workspace | 2 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | no exact match live-verified; 2 sourcetypes have no working generator |
-| HashiCorp | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Huawei Technologies | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| IBM | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| IBM MQ | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Imperva | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
-| Juniper Networks | 3 | 3 | 1 | 0 | 1 | 0 | 3 | 3 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names; 1 naming conflicts |
-| Kubernetes & Falco (CNCF) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Linux Infrastructure | 4 | 4 | 1 | 3 | 0 | 0 | 0 | 3 | 0 | 2 | no exact match live-verified; 4 sourcetypes have no working generator |
-| Microsoft 365 | 4 | 4 | 3 | 3 | 0 | 0 | 0 | 2 | 0 | 4 | no exact match live-verified; 4 sourcetypes have no working generator |
-| Microsoft Azure Monitor | 2 | 2 | 2 | 2 | 0 | 0 | 0 | 1 | 0 | 2 | no exact match live-verified; 2 sourcetypes have no working generator |
-| Microsoft Windows | 8 | 8 | 3 | 0 | 5 | 0 | 0 | 2 | 0 | 3 | covering add-on defines none of the catalog's sourcetype names; 5 naming conflicts; 8 sourcetypes have no working generator |
-| MikroTik | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Model Context Protocol (agentic AI) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| MongoDB | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| NetScout Systems | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
-| Netskope | 4 | 4 | 1 | 0 | 2 | 0 | 2 | 2 | 0 | 4 | covering add-on defines none of the catalog's sourcetype names; 2 naming conflicts; 2 sourcetypes have no working generator |
-| NGINX (F5) | 2 | 2 | 1 | 1 | 1 | 0 | 2 | 1 | 0 | 1 | 1 naming conflicts; no exact match live-verified |
-| Nokia | 3 | 3 | 0 | 0 | 0 | 0 | 2 | 2 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
-| Nozomi Networks | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Nutanix | 16 | 16 | 0 | 0 | 0 | 0 | 10 | 14 | 0 | 0 | no downloaded add-on covers this vendor; 6 sourcetypes have no working generator |
-| Okta | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 1 | no exact match live-verified |
-| Ollama (local LLM runtime) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| OpenTelemetry | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
-| Oracle | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | no downloaded add-on covers this vendor |
-| osquery | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Palo Alto Networks | 5 | 5 | 1 | 4 | 0 | 0 | 3 | 3 | 1 | 1 | 2 sourcetypes have no working generator |
-| pfSense (Netgate) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Proofpoint | 1 | 1 | 4 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
-| Qualys | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
-| Radware | 3 | 4 | 0 | 0 | 0 | 0 | 2 | 2 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Rapid7 | 1 | 1 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
-| SailPoint | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
-| SentinelOne | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Slack | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 1 | no exact match live-verified |
-| SonicWall | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
-| Sophos | 2 | 2 | 3 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | no exact match live-verified; 1 sourcetypes have no working generator |
-| Splunk / Native | 21 | 21 | 3 | 2 | 0 | 0 | 16 | 18 | 0 | 1 | no exact match live-verified; 5 sourcetypes have no working generator |
-| Splunk Community / SC4SNMP | 6 | 6 | 0 | 0 | 0 | 0 | 5 | 5 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
-| Suricata (OISF) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Symantec (Broadcom), Web & Network Security | 1 | 1 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
-| Sysdig | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Tanium | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Tenable | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
-| Traefik Labs | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Trellix (formerly McAfee) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
-| Veeam | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| VMware by Broadcom | 4 | 4 | 5 | 2 | 0 | 1 | 0 | 1 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified; 4 sourcetypes have no working generator |
-| WatchGuard | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
-| Wazuh | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
-| Zeek (Bro) | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
-| Zscaler | 6 | 6 | 1 | 1 | 2 | 0 | 3 | 4 | 0 | 5 | 2 naming conflicts; no exact match live-verified; 3 sourcetypes have no working generator |
+| A10 Networks (a10_networks) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Amazon Web Services (amazon_aws) | 4 | 4 | 2 | 4 | 0 | 0 | 0 | 4 | 0 | 2 | no exact match live-verified; 4 sourcetypes have no working generator |
+| Arista Networks (arista_eos) | 4 | 4 | 1 | 0 | 0 | 0 | 3 | 3 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
+| Aruba / HPE (aruba_cx) | 6 | 6 | 1 | 3 | 1 | 0 | 4 | 4 | 0 | 0 | 1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
+| Atlassian (atlassian) | 1 | 1 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
+| Barracuda Networks (barracuda) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
+| BeyondTrust (beyondtrust) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Bitdefender (bitdefender) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Check Point Software (checkpoint) | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Cisco Duo (cisco_duo) | 10 | 10 | 1 | 7 | 1 | 1 | 8 | 9 | 0 | 10 | 1 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
+| Cisco Meraki (cisco_meraki) | 17 | 17 | 1 | 14 | 0 | 0 | 14 | 14 | 0 | 17 | no exact match live-verified; 3 sourcetypes have no working generator |
+| Cisco Systems (cisco_aci) | 8 | 8 | 0 | 0 | 0 | 0 | 6 | 6 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Cisco Systems (cisco_asa) | 6 | 6 | 2 | 5 | 1 | 0 | 2 | 3 | 1 | 1 | 1 naming conflicts; 4 sourcetypes have no working generator |
+| Cisco Systems (cisco_catalyst) | 34 | 34 | 1 | 17 | 2 | 0 | 32 | 32 | 0 | 33 | 2 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
+| Cisco Systems (cisco_intersight) | 11 | 11 | 1 | 11 | 0 | 2 | 10 | 11 | 0 | 11 | 2 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
+| Cisco Systems (cisco_ios) | 26 | 26 | 1 | 13 | 5 | 2 | 14 | 18 | 1 | 23 | 5 naming conflicts; 2 exact matches with payload/routing conflicts; 12 sourcetypes have no working generator |
+| Cisco Systems (cisco_ise) | 7 | 7 | 2 | 5 | 0 | 0 | 6 | 7 | 0 | 4 | no exact match live-verified; 1 sourcetypes have no working generator |
+| Cisco Systems (cisco_sdwan) | 41 | 41 | 1 | 8 | 2 | 1 | 40 | 40 | 0 | 37 | 2 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
+| Citrix / Cloud Software Group (citrix_netscaler) | 2 | 2 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator |
+| Claroty (claroty) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Cloudflare (cloudflare) | 3 | 3 | 2 | 1 | 1 | 0 | 2 | 2 | 0 | 3 | 1 naming conflicts; no exact match live-verified; 1 sourcetypes have no working generator |
+| CrowdStrike (crowdstrike) | 1 | 1 | 4 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| CrushFTP (crushftp) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Cybereason (cybereason) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Darktrace (darktrace) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Dell Technologies (dell_os10) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Docker (docker) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
+| Elastic (elastic) | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
+| ExtraHop Networks (extrahop) | 2 | 2 | 1 | 0 | 0 | 0 | 2 | 2 | 0 | 2 | covering add-on defines none of the catalog's sourcetype names |
+| Extreme Networks (extreme_networks) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| F5 Networks (f5_bigip) | 2 | 2 | 1 | 1 | 0 | 1 | 2 | 2 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Forcepoint (forcepoint) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Fortinet (fortinet) | 7 | 8 | 1 | 2 | 2 | 0 | 5 | 5 | 1 | 0 | 2 naming conflicts; 3 sourcetypes have no working generator |
+| GitHub (github) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| GitLab (gitlab) | 1 | 1 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
+| Google Cloud (google_cloud) | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
+| Google Workspace (google_workspace) | 2 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | no exact match live-verified; 2 sourcetypes have no working generator |
+| HashiCorp (hashicorp) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Huawei Technologies (huawei_vrp) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| IBM (ibm_qradar) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| IBM MQ (ibm_mq) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Imperva (imperva) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
+| Juniper Networks (juniper_junos) | 3 | 3 | 1 | 0 | 1 | 0 | 3 | 3 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names; 1 naming conflicts |
+| Kubernetes & Falco (CNCF) (kubernetes) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Linux Infrastructure (linux_infrastructure) | 4 | 4 | 1 | 3 | 0 | 0 | 0 | 3 | 0 | 2 | no exact match live-verified; 4 sourcetypes have no working generator |
+| Microsoft 365 (microsoft_365) | 4 | 4 | 3 | 3 | 0 | 0 | 0 | 2 | 0 | 4 | no exact match live-verified; 4 sourcetypes have no working generator |
+| Microsoft Azure Monitor (microsoft_azure) | 2 | 2 | 2 | 2 | 0 | 0 | 0 | 1 | 0 | 2 | no exact match live-verified; 2 sourcetypes have no working generator |
+| Microsoft Windows (microsoft_windows) | 8 | 8 | 3 | 0 | 5 | 0 | 0 | 2 | 0 | 3 | covering add-on defines none of the catalog's sourcetype names; 5 naming conflicts; 8 sourcetypes have no working generator |
+| MikroTik (mikrotik) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Model Context Protocol (agentic AI) (model_context_protocol) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| MongoDB (mongodb) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| NetScout Systems (netscout) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | covering add-on defines none of the catalog's sourcetype names |
+| Netskope (netskope) | 4 | 4 | 1 | 0 | 2 | 0 | 2 | 2 | 0 | 4 | covering add-on defines none of the catalog's sourcetype names; 2 naming conflicts; 2 sourcetypes have no working generator |
+| NGINX (F5) (nginx_f5) | 2 | 2 | 1 | 1 | 1 | 0 | 2 | 1 | 0 | 1 | 1 naming conflicts; no exact match live-verified |
+| Nokia (nokia_sr) | 3 | 3 | 0 | 0 | 0 | 0 | 2 | 2 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
+| Nozomi Networks (nozomi_networks) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Nutanix (nutanix) | 16 | 16 | 0 | 0 | 0 | 0 | 10 | 14 | 0 | 0 | no downloaded add-on covers this vendor; 6 sourcetypes have no working generator |
+| Okta (okta) | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 1 | no exact match live-verified |
+| Ollama (local LLM runtime) (ollama) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| OpenTelemetry (opentelemetry) | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator |
+| Oracle (oracle) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | no downloaded add-on covers this vendor |
+| osquery (osquery) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Palo Alto Networks (palo_alto) | 5 | 5 | 1 | 4 | 0 | 0 | 3 | 3 | 1 | 1 | 2 sourcetypes have no working generator |
+| pfSense (Netgate) (pfsense_netgate) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Proofpoint (proofpoint) | 1 | 1 | 4 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
+| Qualys (qualys) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
+| Radware (radware) | 3 | 4 | 0 | 0 | 0 | 0 | 2 | 2 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Rapid7 (rapid7) | 1 | 1 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
+| SailPoint (sailpoint) | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | no exact match live-verified |
+| SentinelOne (sentinelone) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Slack (slack) | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 1 | no exact match live-verified |
+| SonicWall (sonicwall) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
+| Sophos (sophos) | 2 | 2 | 3 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | no exact match live-verified; 1 sourcetypes have no working generator |
+| Splunk / Native (splunk) | 21 | 21 | 3 | 2 | 0 | 0 | 16 | 18 | 0 | 1 | no exact match live-verified; 5 sourcetypes have no working generator |
+| Splunk Community / SC4SNMP (sc4snmp) | 6 | 6 | 0 | 0 | 0 | 0 | 5 | 5 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
+| Suricata (OISF) (suricata_oisf) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Symantec (Broadcom), Web & Network Security (broadcom_symantec) | 1 | 1 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | no exact match live-verified |
+| Sysdig (sysdig) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Tanium (tanium) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Tenable (tenable) | 1 | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 1 exact matches with payload/routing conflicts; no exact match live-verified |
+| Traefik Labs (traefik) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Trellix (formerly McAfee) (trellix_mcafee) | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | covering add-on defines none of the catalog's sourcetype names |
+| Veeam (veeam) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| VMware by Broadcom (vmware_nsx) | 4 | 4 | 5 | 2 | 0 | 1 | 0 | 1 | 0 | 0 | 1 exact matches with payload/routing conflicts; no exact match live-verified; 4 sourcetypes have no working generator |
+| WatchGuard (watchguard) | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | no downloaded add-on covers this vendor; 2 sourcetypes have no working generator |
+| Wazuh (wazuh) | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | no downloaded add-on covers this vendor |
+| Zeek (Bro) (zeek) | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | no downloaded add-on covers this vendor; 1 sourcetypes have no working generator |
+| Zscaler (zscaler_zia) | 6 | 6 | 1 | 1 | 2 | 0 | 3 | 4 | 0 | 5 | 2 naming conflicts; no exact match live-verified; 3 sourcetypes have no working generator |
 
 Vendors with no downloaded add-on: 35 of 88.
 

@@ -34,7 +34,7 @@ def _spec():
 
 
 GOOD_PROPS = "[v:p]\nTIME_PREFIX = ^\nTIME_FORMAT = %b %d %H:%M:%S\nMAX_TIMESTAMP_LOOKAHEAD = 30\nREPORT-x = t_report\n"
-GOOD_TRANS = "[force_v]\nDEST_KEY = MetaData:Sourcetype\nREGEX = %V-\\d-\\d{6}\nFORMAT = sourcetype::v:p\n[t_report]\nREGEX = %V-(?<lvl>\\d)\n"
+GOOD_TRANS = "[force_v]\nDEST_KEY = MetaData:Sourcetype\nREGEX = %V-\\d-\\d{6}\nFORMAT = sourcetype::v:p\n[t_report]\nREGEX = %V-(?<lvl>\\d)-(?<message_id>\\d{6})\n"
 GOOD_ET = '[et]\nsearch = (sourcetype="v:p") message_id IN ("100001")\n'
 GOOD_TAGS = "[eventtype=et]\nnetwork = enabled\n"
 
@@ -67,7 +67,7 @@ def test_force_regex_claiming_a_negative_payload_fails(tmp_path):
 
 def test_event_not_matching_the_force_regex_fails(tmp_path):
     res = _run(_ta(tmp_path, GOOD_PROPS, GOOD_TRANS.replace("%V-", "%NOPE-"), GOOD_ET, GOOD_TAGS), _spec())
-    assert res["force_sourcetype.matches[e1]"] == "FAIL"
+    assert res["force_sourcetype.assigns_expected[e1]"] == "FAIL"
 
 
 def test_unparseable_timestamp_format_fails(tmp_path):
@@ -77,12 +77,24 @@ def test_unparseable_timestamp_format_fails(tmp_path):
 
 def test_eventtype_that_does_not_cover_the_message_id_fails(tmp_path):
     res = _run(_ta(tmp_path, GOOD_PROPS, GOOD_TRANS, GOOD_ET.replace("100001", "999999"), GOOD_TAGS), _spec())
-    assert res["eventtype.covers_message_id[e1]"] == "FAIL"
+    assert res["eventtype.defined_and_covers[e1]"] == "FAIL"
 
 
 def test_missing_report_transform_fails(tmp_path):
     res = _run(_ta(tmp_path, GOOD_PROPS, GOOD_TRANS.replace("[t_report]", "[renamed]"), GOOD_ET, GOOD_TAGS), _spec())
     assert res["props.report_transforms_exist"] == "FAIL"
+
+
+def test_expected_field_the_add_on_does_not_define_fails(tmp_path):
+    spec = _spec()
+    spec["events"][0]["expect"]["made_up_field"] = "x"
+    res = _run(_ta(tmp_path, GOOD_PROPS, GOOD_TRANS, GOOD_ET, GOOD_TAGS), spec)
+    assert res["ta_defines_field[e1.made_up_field]"] == "FAIL" and res["ta_defines_field[e1.message_id]"] == "PASS"
+
+
+def test_missing_time_format_is_not_run_not_pass(tmp_path):
+    res = _run(_ta(tmp_path, "[v:p]\nREPORT-x = t_report\n", GOOD_TRANS, GOOD_ET, GOOD_TAGS), _spec())
+    assert res["timestamp.format_parses[e1]"] == "NOT_RUN"
 
 
 def test_version_mismatch_fails(tmp_path):
@@ -102,31 +114,3 @@ def test_real_cisco_asa_package_offline_checks_pass():
     ta = ta_compat.TA(str(sorted(PACKS.glob(SPEC["ta"]["package_glob"]))[-1]))
     res = _run(ta, SPEC)
     assert ta.version == "6.1.2" and set(res.values()) == {"PASS"}, {k: v for k, v in res.items() if v != "PASS"}
-
-
-# ------------------------------------------------------------ TA-safe payload
-def _payload(sourcetype, monkeypatch):
-    sent = []
-    monkeypatch.setattr(td.dispatcher, "emit_hec", lambda ev, *a, **k: (sent.append(ev), td.HecOutcome(True, "ok", td.HEC_ACCEPTED, 200, None))[1])
-    le = LogEntry(timestamp="", device_id="fw", src_ip="192.0.2.1", dest_ip="192.0.2.2", protocol="TCP", duration="0ms", action="streamed", signature="SIG", status="normal",
-                  raw_log="Nov  3 10:00:00 fw %ASA-6-302013: x", node_type="firewall", node_id="fw", vendor="v", sourcetype=sourcetype, netspout_run_id="r1")
-    td.dispatcher.dispatch_log(le, TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_token="t", hec_index="i"))
-    return sent[0]["fields"]
-
-
-def test_ta_parsed_sourcetype_does_not_shadow_add_on_fields(monkeypatch):
-    f = _payload("cisco:asa", monkeypatch)
-    for k in td.TA_SHADOWED_FIELDS:
-        assert k not in f and f["netspout_" + k] is not None, k
-    assert f["status"] == "normal" and f["netspout_run_id"] == "r1"     # dashboards keep `status`; run id untouched
-
-
-def test_other_sourcetypes_keep_their_fields(monkeypatch):
-    f = _payload("cisco:ios", monkeypatch)
-    assert f["action"] == "streamed" and f["src_ip"] == "192.0.2.1" and "netspout_action" not in f
-
-
-def test_ta_parsed_sourcetypes_match_the_registry():
-    reg = json.loads((ROOT / "docs/contracts/ta_compatibility_registry.json").read_text())
-    verified = {e["canonical_sourcetype"] for e in reg["entries"] if e["verification"].get("ta_parsing_in_splunk", {}).get("status") == "VERIFIED"}
-    assert td.TA_PARSED_SOURCETYPES == verified

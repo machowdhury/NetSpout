@@ -1,0 +1,68 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Raw events are NetSpout's native cisco:ios output (NX-OS style OSPF-4-DUPRID and ICMPV6-3-ND_RA_LOG). Expected facility/severity/mnemonic are the %FACILITY-SEVERITY-MNEMONIC text of the event; the field names come from the add-on's extract_cisco_ios-general transforms. The add-on has no routing transform for cisco:ios (the input sets it). The embedded device timestamp is rendered ({TS_DEV}) as NetSpout's cisco-ios sample now does; with the former hard-coded stale device time Splunk set _time from the wrong date (evidence/ta_compat/cisco_ios_before_fix.json).",
+ "ta": {
+  "id": "TA_cisco_catalyst",
+  "package_glob": "cisco-enterprise-networking-add-on-for-splunk_*",
+  "expected_version": "4.0.60"
+ },
+ "routing": "explicit_input",
+ "sourcetype": "cisco:ios",
+ "index": "ta_validation",
+ "kind": "event",
+ "vendor": "cisco_ios",
+ "events": [
+  {
+   "id": "ios-icmpv6-nd_ra_log",
+   "raw": "{TS} 10.0.0.252 OTT-CORE01: {TS_DEV}: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19462]  fe80::232:17ff:fe3c:ac58 on Vlan503 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 ",
+   "expect": {
+    "facility": "ICMPV6",
+    "severity_id": "3",
+    "mnemonic": "ND_RA_LOG"
+   },
+   "eventtype": "cisco_ios",
+   "tags": [
+    "cisco",
+    "network",
+    "ios"
+   ]
+  },
+  {
+   "id": "ios-ospf-duprid",
+   "raw": "{TS} 10.0.0.253 : {TS_DEV}: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped",
+   "expect": {
+    "facility": "OSPF",
+    "severity_id": "4",
+    "mnemonic": "DUPRID"
+   },
+   "eventtype": "cisco_ios",
+   "tags": [
+    "cisco",
+    "network",
+    "ios"
+   ]
+  }
+ ],
+ "negative": [
+  {
+   "id": "no-cisco-mnemonic",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin from 10.20.10.45 port 52140 ssh2",
+   "expect_absent": [
+    "facility",
+    "severity_id",
+    "mnemonic"
+   ]
+  },
+  {
+   "id": "asa-message-is-not-ios",
+   "raw": "{TS} {HOST} %ASA-6-302013: Built outbound TCP connection 1 for outside:1.1.1.1/80 (1.1.1.1/80) to inside:2.2.2.2/90 (2.2.2.2/90)",
+   "expect_absent": [
+    "facility",
+    "mnemonic"
+   ]
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

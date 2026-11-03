@@ -326,7 +326,7 @@ def contract_panels(d, tab, y):
     order = "case(" + ",".join('pf_phase="%s",%d' % (p["id"], i + 1) for i, p in enumerate(s["phases"])) + ",true(),99)"
     if _status_varies(s["id"]):
         d.add(tab, "splunk.column", "Status by phase (how the story progresses)", 20, y, 700, 300,
-              query=b + PHASE + " | eval pf_ord=" + order + " | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by status",
+              query=b + PHASE + " | eval pf_ord=" + order + " | eval step=printf(\"%d %s\", pf_ord, pf_phase) | eval pf_status=coalesce(netspout_status, status) | chart count over step by pf_status",
               options={"stackMode": "stacked", "seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
               description="Each phase of the scenario contract with the status values its events carry (for example normal, degraded, blocked, mitigated, restored).")
     else:   # a steady-state scenario: every event is normal by design, so a status chart would show one colour; show the load per phase and source instead
@@ -335,7 +335,7 @@ def contract_panels(d, tab, y):
               options={"stackMode": "stacked", "seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
               description="This scenario has no fault: every event is normal. The chart shows how much each source reports in each load phase.")
     d.add(tab, "splunk.table", "What each phase reported (action and signature by device)", 740, y, 700, 300,
-          query=b + PHASE + " | eval pf_ord=" + order + " | stats count as events by pf_ord, pf_phase, pf_host, action, signature | sort pf_ord, - events | fields - pf_ord | head 40",
+          query=b + PHASE + " | eval pf_ord=" + order + " | eval pf_action=coalesce(netspout_action, action), pf_signature=coalesce(netspout_signature, signature) | stats count as events by pf_ord, pf_phase, pf_host, pf_action, pf_signature | rename pf_action as action, pf_signature as signature | sort pf_ord, - events | fields - pf_ord | head 40",
           options={"count": 8, "backgroundColor": C["card"]}, handlers=[search_drill(b + ' netspout_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)],
           description="The signature text each device reported in each phase; click a row to open the events of that phase.")
     if _has_modeled_measure(s["id"]):

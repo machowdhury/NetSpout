@@ -74,13 +74,42 @@ class TA:
         return self.app.get("launcher", {}).get("version") or self.app.get("id", {}).get("version")
 
 
+def ta_defined_fields(ta, st):
+    """Field names the add-on defines for a sourcetype (EVAL, FIELDALIAS, LOOKUP outputs, REPORT/EXTRACT groups and FIELDS). kv: DELIMS without FIELDS (keys come from the event)."""
+    names, kv = set(), False
+    p = ta.props.get(st, {})
+    for k, v in p.items():
+        if k.startswith("EVAL-"):
+            names.add(k[5:])
+        elif k.startswith("FIELDALIAS-"):
+            names |= set(re.findall(r"\bas\s+([A-Za-z_]\w*)", v, re.I))
+        elif k.startswith("LOOKUP-"):
+            tail = re.split(r"\bOUTPUT(?:NEW)?\b", v, maxsplit=1)
+            if len(tail) == 2:
+                names |= set(re.findall(r"([A-Za-z_]\w*)", re.sub(r"\w+\s+as\s+", "", tail[1], flags=re.I)))
+        elif k.startswith("EXTRACT-"):
+            names |= set(re.findall(r"\(\?P?<([A-Za-z_]\w*)>", v))
+        elif k.startswith("REPORT-"):
+            for n in (x.strip() for x in v.split(",") if x.strip()):
+                t = ta.transforms.get(n, {})
+                names |= set(re.findall(r"\(\?P?<([A-Za-z_]\w*)>", t.get("REGEX", "")))
+                names |= set(re.findall(r"([A-Za-z_]\w*)::", t.get("FORMAT", "")))
+                names |= {f.strip().strip('"') for f in t.get("FIELDS", "").split(",") if f.strip()}
+                kv = kv or (bool(t.get("DELIMS")) and not t.get("FIELDS"))
+    return names, kv
+
+
 def _rx(pattern):
     return re.compile(re.sub(r"\(\?<([A-Za-z_]\w*)>", r"(?P<\1>", pattern))   # Splunk (?<name>) -> Python (?P<name>)
 
 
-def _go(spec, **kw):
-    ts = datetime.now(timezone.utc).strftime("%b %d %H:%M:%S")
-    return spec.replace("{TS}", kw.get("ts", ts)).replace("{HOST}", kw.get("host", "fw-ta-compat"))
+def _go(spec, when=None, host="fw-ta-compat", **kw):
+    """Render placeholders: {TS} BSD syslog time, {DATE} {TIME} ISO parts, {TS_SLASH} 'YYYY/MM/DD HH:MM:SS', {TS_DEV} 'YYYY Mon DD HH:MM:SS UTC' (device time), {HOST}."""
+    t = when or datetime.now(timezone.utc)
+    if "ts" in kw:                                         # legacy callers pass a pre-rendered syslog time
+        return spec.replace("{TS}", kw["ts"]).replace("{HOST}", host)
+    return (spec.replace("{TS}", t.strftime("%b %d %H:%M:%S")).replace("{DATE}", t.strftime("%Y-%m-%d")).replace("{TIME}", t.strftime("%H:%M:%S"))
+            .replace("{TS_SLASH}", t.strftime("%Y/%m/%d %H:%M:%S")).replace("{TS_DEV}", t.strftime("%Y %b %d %H:%M:%S UTC")).replace("{HOST}", host))
 
 
 def _strptime_prefix(raw, props):
@@ -110,6 +139,32 @@ class Report:
         return all(r["status"] == "PASS" for r in self.rows)
 
 
+def _lookup(ta, file_contains, key, value, inp):
+    """Value of column `value` for the first row whose column `key` equals `inp`, in the add-on's own lookup CSV."""
+    import csv
+    for name, text in ta.lookups.items():
+        if file_contains in name:
+            for row in csv.DictReader(io.StringIO(text), skipinitialspace=True):
+                row = {(k or "").strip(): (v or "").strip() for k, v in row.items()}
+                if row.get(key) == inp and row.get(value, "") != "":
+                    return row[value]
+    return None
+
+
+def _force_matches_name(fmt, st):
+    pat = re.escape(fmt[len("sourcetype::"):]).replace(r"\$1", "(.+)").replace("$1", "(.+)")
+    return re.fullmatch(pat, st) is not None
+
+
+def _forced(frx, raw):
+    """The sourcetype the add-on's routing transforms would assign to raw, or None (the first matching transform wins, $1 is the first capture group)."""
+    for rx, fmt in frx:
+        m = rx.search(raw)
+        if m:
+            return fmt.replace("$1", m.group(1) if m.groups() else "")
+    return None
+
+
 def offline(spec, ta, rep):
     st = spec["sourcetype"]
     rep.add("ta.version", ta.version == spec["ta"]["expected_version"], "installed package %s, expected %s" % (ta.version, spec["ta"]["expected_version"]))
@@ -121,28 +176,40 @@ def offline(spec, ta, rep):
             [n.strip() for k, v in props.items() if k.startswith("REPORT-") for n in v.split(",") if n.strip()]
     missing = [n for n in names if n not in ta.transforms]
     rep.add("props.report_transforms_exist", bool(names) and not missing, "%d REPORT transforms, missing: %s" % (len(names), missing[:5]))
-    force = [t for t in ta.transforms.values() if t.get("DEST_KEY") == "MetaData:Sourcetype" and t.get("FORMAT") == "sourcetype::" + st]
-    rep.add("transforms.force_sourcetype_defined", len(force) == 1, "%d transform(s) set sourcetype::%s" % (len(force), st))
-    frx = _rx(force[0]["REGEX"]) if force else None
+    force = [t for t in ta.transforms.values() if t.get("DEST_KEY") == "MetaData:Sourcetype" and str(t.get("FORMAT", "")).startswith("sourcetype::") and _force_matches_name(t["FORMAT"], st)]
+    explicit = spec.get("routing") == "explicit_input"           # the add-on has no routing transform for this sourcetype: the input (or HEC token) must set it
+    if explicit:
+        rep.add("transforms.force_sourcetype_defined", False, "the add-on has no transform that assigns [%s]; the sourcetype must be set by the input (HEC sourcetype). Routing is not verified." % st, status="NOT_RUN")
+        force = []
+    else:
+        rep.add("transforms.force_sourcetype_defined", len(force) >= 1, "%d transform(s) can set sourcetype::%s" % (len(force), st))
+    frx = [(_rx(t["REGEX"]), t["FORMAT"][len("sourcetype::"):]) for t in force]
     for ev in spec["events"]:
         raw = _go(ev["raw"])
-        rep.add("force_sourcetype.matches[%s]" % ev["id"], bool(frx and frx.search(raw)), "regex %s" % (force[0]["REGEX"] if force else "-"))
-        t = _strptime_prefix(raw, props)
-        rep.add("timestamp.format_parses[%s]" % ev["id"], t is not None, "TIME_PREFIX=%r TIME_FORMAT=%r" % (props.get("TIME_PREFIX"), props.get("TIME_FORMAT")))
+        if not explicit:
+            rep.add("force_sourcetype.assigns_expected[%s]" % ev["id"], _forced(frx, raw) == st, "add-on routing assigns %r, expected %r" % (_forced(frx, raw), st))
+        if props.get("TIME_FORMAT"):
+            t = _strptime_prefix(raw, props)
+            rep.add("timestamp.format_parses[%s]" % ev["id"], t is not None, "TIME_PREFIX=%r TIME_FORMAT=%r" % (props.get("TIME_PREFIX"), props.get("TIME_FORMAT")))
+        else:
+            rep.add("timestamp.format_parses[%s]" % ev["id"], False, "the add-on sets no TIME_FORMAT for [%s] (Splunk auto-detects); verified live only" % st, status="NOT_RUN")
+        known, kvmode = ta_defined_fields(ta, st)
+        for f in ev.get("expect", {}):
+            ok = f in known or (kvmode and re.search(r"\b%s=" % re.escape(f), raw) is not None)
+            rep.add("ta_defines_field[%s.%s]" % (ev["id"], f), ok, "field %s is defined by the add-on for [%s]" % (f, st))
         mid = ev["expect"].get("message_id")
         et = ta.eventtypes.get(ev.get("eventtype", ""), {}).get("search", "") if ev.get("eventtype") else None
         if ev.get("eventtype"):
-            rep.add("eventtype.covers_message_id[%s]" % ev["id"], et is not None and ('"%s"' % mid) in et, ev["eventtype"])
+            rep.add("eventtype.defined_and_covers[%s]" % ev["id"], et is not None and (mid is None or ('"%s"' % mid) in et), "%s%s" % (ev["eventtype"], " covers message id %s" % mid if mid else " (defined; no message id to cover)"))
             for tag in ev.get("tags", []):
                 rep.add("tags.defined[%s:%s]" % (ev["id"], tag), ta.tags.get("eventtype=" + ev["eventtype"], {}).get(tag) == "enabled")
-        if "vendor_action" in ev["expect"] and "action" in ev["expect"]:
-            rows = [r.split(",") for r in next(iter(ta.lookups.values()), "").splitlines()] if not any("action_lookup" in k for k in ta.lookups) else \
-                   [r.split(",") for k, v in ta.lookups.items() if "action_lookup" in k for r in v.splitlines()]
-            act = {r[0]: r[2] for r in rows if len(r) >= 3 and r[1] == ""}
-            rep.add("lookup.action[%s]" % ev["id"], act.get(ev["expect"]["vendor_action"]) == ev["expect"]["action"], "TA lookup: %s -> %s" % (ev["expect"]["vendor_action"], act.get(ev["expect"]["vendor_action"])))
+        lk = ev.get("lookup")
+        if lk:
+            got = _lookup(ta, lk["file_contains"], lk["key"], lk["value"], lk["input"])
+            rep.add("lookup[%s]" % ev["id"], got == lk["expect"], "add-on lookup %s: %s=%s -> %s=%r (expected %r)" % (lk["file_contains"], lk["key"], lk["input"], lk["value"], got, lk["expect"]))
     for ng in spec.get("negative", []):
-        if ng.get("expect_no_force_match") and frx:
-            rep.add("force_sourcetype.rejects[%s]" % ng["id"], not frx.search(_go(ng["raw"])), "negative payload must not be claimed by the add-on")
+        if ng.get("expect_no_force_match") and force:
+            rep.add("force_sourcetype.rejects[%s]" % ng["id"], _forced(frx, _go(ng["raw"])) != st, "negative payload must not be routed to %s (add-on assigns %r)" % (st, _forced(frx, _go(ng["raw"]))))
 
 
 # ------------------------------------------------------------------------ live
@@ -208,6 +275,9 @@ def live(spec, ta, lab, rep):
         for f, want in case.get("expect", {}).items():
             got = r.get(f)
             rep.add("field[%s.%s]" % (case["id"], f), got == want, "expected %r, Splunk returned %r" % (want, got))
+        sentinels = {"action": "streamed", "signature": "TA_COMPAT", "src_ip": "192.0.2.1", "dest_ip": "192.0.2.2", "protocol": "TCP"}
+        shadowed = {k: r.get(k) for k, v in sentinels.items() if r.get(k) == v or (isinstance(r.get(k), list) and v in r.get(k))}
+        rep.add("ownership.no_netspout_values_in_vendor_fields[%s]" % case["id"], not shadowed, "NetSpout test values found in vendor/CIM fields: %s" % (shadowed or "none"))
         for f in case.get("expect_absent", []):
             rep.add("absent[%s.%s]" % (case["id"], f), r.get(f) in (None, ""), "Splunk returned %r" % r.get(f))
         if case.get("eventtype"):
@@ -217,15 +287,18 @@ def live(spec, ta, lab, rep):
             rep.add("tags[%s]" % case["id"], set(case.get("tags", [])) <= set(tg), "Splunk returned %s" % tg)
     # searchability by an independent search
     n = lab.search("index=%s sourcetype=%s netspout_run_id=%s message_id=* | stats count" % (index, st, run))
-    marker = _rx(ta.transforms[spec["id_transform"]]["REGEX"])          # the add-on's own definition of which payloads carry a message id
-    want = sum(1 for c, _ in sent if marker.search(_go(c["raw"])))
-    rep.add("search.by_run_and_message_id", bool(n) and int(n[0]["count"]) == want, "Splunk: %s events with message_id; add-on regex %s matches %d" % (n[0]["count"] if n else None, spec["id_transform"], want))
+    if spec.get("id_transform"):
+        marker = _rx(ta.transforms[spec["id_transform"]]["REGEX"])          # the add-on's own definition of which payloads carry a message id
+        want = sum(1 for c, _ in sent if marker.search(_go(c["raw"])))
+        rep.add("search.by_run_and_message_id", bool(n) and int(n[0]["count"]) == want, "Splunk: %s events with message_id; add-on regex %s matches %d" % (n[0]["count"] if n else None, spec["id_transform"], want))
+    else:
+        rep.add("search.by_run", len(lab.search("index=%s sourcetype=%s netspout_run_id=%s | stats count by host" % (index, st, run))) >= 1, "events searchable by run id and sourcetype")
     # timestamp parsing by the add-on (HEC raw endpoint applies props.conf)
     if spec.get("timestamp", {}).get("raw_endpoint_check"):
         tsrun = "ts-" + uuid.uuid4().hex[:8]
         probe = spec["events"][0]
         past = datetime.fromtimestamp(time.time() - 3 * 3600, tz=timezone.utc)      # three hours ago: parsed time must follow the text, not the arrival time
-        raw = _go(probe["raw"], ts=past.strftime("%b %d %H:%M:%S"), host=tsrun)
+        raw = _go(probe["raw"], when=past, host=tsrun)
         ok = lab.hec_raw(raw, st, index, tsrun, {})
         got = lab.wait_count("index=%s host=%s | fields _time" % (index, tsrun), 1, earliest="-6h")
         if ok and got:

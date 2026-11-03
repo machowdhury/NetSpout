@@ -1,5 +1,5 @@
 {
- "_about": "Compatibility registry. status values: VERIFIED (checked against an authoritative source named in evidence), UNVERIFIED (not checked), BLOCKED (needs a manual step), NON_CANONICAL. Nothing here claims TA field extraction unless status is VERIFIED.",
+ "_about": "Compatibility registry. status values: VERIFIED (checked against an authoritative source named in evidence), UNVERIFIED (not checked), BLOCKED (needs a manual step), NON_CANONICAL. Nothing here claims TA field extraction unless status is VERIFIED. SUPERSEDED for coverage by docs/contracts/ta_backed_registry.json (all 14 add-on packages, derived from the packages); this file keeps the Cisco ASA narrative entry.",
  "generated": "2026-11-03",
  "entries": [
   {

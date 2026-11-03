@@ -1,0 +1,141 @@
+{
+ "replay": {
+  "label": "replay",
+  "run_id": "p3-replay-e01627c2",
+  "generated": 24,
+  "hec_accepted": 24,
+  "indexed": 24,
+  "events_fully_matching": 24,
+  "fields_compared": 126,
+  "message_ids": {
+   "106023": 3,
+   "111008": 3,
+   "302013": 3,
+   "302014": 3,
+   "305011": 3,
+   "500003": 3,
+   "605005": 3,
+   "710003": 3
+  },
+  "eventtypes": {
+   "null": 3,
+   "cisco_authentication": 3,
+   "cisco_connection": 18
+  },
+  "mismatches": [],
+  "examples": [
+   {
+    "raw": "Nov 03 16:56:54 fw-cisco-asa-01 %ASA-6-605005: Login permitted from 192.0.2.20/52140 to management:192.0.2.10/ssh for user 'lab_admin'",
+    "_time": "2026-11-03T16:56:54.343+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "fw-cisco-asa-01",
+    "message_id": "605005",
+    "action": "success",
+    "vendor_action": null,
+    "src_ip": null,
+    "dest_ip": null,
+    "src_port": null,
+    "dest_port": null,
+    "transport": null,
+    "eventtype": "cisco_authentication"
+   },
+   {
+    "raw": "Nov 03 16:56:54 fw-cisco-asa-01 %ASA-5-500003: Bad TCP checksum from 203.0.113.99/443 to outside:198.51.100.200/51200",
+    "_time": "2026-11-03T16:56:54.336+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "fw-cisco-asa-01",
+    "message_id": "500003",
+    "action": "flow",
+    "vendor_action": "flow",
+    "src_ip": null,
+    "dest_ip": null,
+    "src_port": null,
+    "dest_port": null,
+    "transport": null,
+    "eventtype": "cisco_connection"
+   },
+   {
+    "raw": "Nov 03 16:56:54 fw-cisco-asa-01 %ASA-3-710003: TCP access denied by ACL from 203.0.113.14/51420 to outside:198.51.100.200/23",
+    "_time": "2026-11-03T16:56:54.329+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "fw-cisco-asa-01",
+    "message_id": "710003",
+    "action": "blocked",
+    "vendor_action": "denied",
+    "src_ip": "203.0.113.14",
+    "dest_ip": "198.51.100.200",
+    "src_port": "51420",
+    "dest_port": "23",
+    "transport": "tcp",
+    "eventtype": "cisco_connection"
+   }
+  ]
+ },
+ "native": {
+  "label": "native",
+  "run_id": "p3-native-0926a5dd",
+  "generated": 30,
+  "hec_accepted": 30,
+  "indexed": 30,
+  "events_fully_matching": 30,
+  "fields_compared": 335,
+  "message_ids": {
+   "106023": 4,
+   "302013": 9,
+   "302014": 9,
+   "302015": 4,
+   "302016": 4
+  },
+  "eventtypes": {
+   "cisco_connection": 30
+  },
+  "mismatches": [],
+  "examples": [
+   {
+    "raw": "Nov  3 16:56:54 asa-fw-01 %ASA-6-302014: Teardown TCP connection 347745 for outside:203.0.113.88/22 to inside:10.20.10.46/26035 duration 0:05:40 bytes 1202056 TCP FINs",
+    "_time": "2026-11-03T16:56:58.240+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "asa-fw-01",
+    "message_id": "302014",
+    "action": "teardown",
+    "vendor_action": "teardown",
+    "src_ip": "203.0.113.88",
+    "dest_ip": "10.20.10.46",
+    "src_port": "22",
+    "dest_port": "26035",
+    "transport": "tcp",
+    "eventtype": "cisco_connection"
+   },
+   {
+    "raw": "Nov  3 16:56:54 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 347745 for outside:203.0.113.88/22 (203.0.113.88/22) to inside:10.20.10.46/26035 (10.20.10.46/26035)",
+    "_time": "2026-11-03T16:56:58.232+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "asa-fw-01",
+    "message_id": "302013",
+    "action": "allowed",
+    "vendor_action": "built",
+    "src_ip": "203.0.113.88",
+    "dest_ip": "10.20.10.46",
+    "src_port": "22",
+    "dest_port": "26035",
+    "transport": "tcp",
+    "eventtype": "cisco_connection"
+   },
+   {
+    "raw": "Nov  3 16:56:54 asa-fw-01 %ASA-4-106023: Deny udp src outside:192.0.2.14/41508 dst inside:10.20.10.45/123 by access-group \"OUTSIDE_IN\" [0x0, 0x0]",
+    "_time": "2026-11-03T16:56:58.222+00:00",
+    "sourcetype": "cisco:asa",
+    "host": "asa-fw-01",
+    "message_id": "106023",
+    "action": "blocked",
+    "vendor_action": "deny",
+    "src_ip": "192.0.2.14",
+    "dest_ip": "10.20.10.45",
+    "src_port": "41508",
+    "dest_port": "123",
+    "transport": "udp",
+    "eventtype": "cisco_connection"
+   }
+  ]
+ }
+}

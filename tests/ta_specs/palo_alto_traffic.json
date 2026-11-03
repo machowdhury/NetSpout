@@ -1,0 +1,101 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Raw events are NetSpout's native pan:traffic output (54 CSV columns; the add-on lists 117). Expected values are the CSV columns named by the add-on's own FIELDS list for extract_traffic; action comes from the add-on lookup pan_vendor_actions_300.csv.",
+ "ta": {
+  "id": "Splunk_TA_paloalto_networks",
+  "package_glob": "splunk-add-on-for-palo-alto-networks_*",
+  "expected_version": "4.0.0"
+ },
+ "sourcetype": "pan:traffic",
+ "index": "ta_validation",
+ "kind": "event",
+ "vendor": "palo_alto",
+ "events": [
+  {
+   "id": "pan-traffic-allow",
+   "raw": "1,{TS_SLASH},001801000001,TRAFFIC,allow,2304,{TS_SLASH},10.0.10.55,198.51.100.80,0.0.0.0,0.0.0.0,Outbound-Web-Rule,jdoe,,ssl,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,{TS_SLASH},98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,{TS_SLASH},12,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,aged-out,0,0,0,0,,PA-5250,from-policy",
+   "expect": {
+    "src_ip": "10.0.10.55",
+    "dest_ip": "198.51.100.80",
+    "src_port": "49182",
+    "dest_port": "443",
+    "transport": "tcp",
+    "rule": "Outbound-Web-Rule",
+    "src_zone": "trust",
+    "dest_zone": "untrust",
+    "app": "ssl",
+    "session_id": "98422",
+    "bytes": "2480",
+    "bytes_in": "4300",
+    "bytes_out": "1820",
+    "vendor_action": "allow",
+    "action": "allowed"
+   },
+   "lookup": {
+    "file_contains": "pan_vendor_actions",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "allow",
+    "expect": "allowed"
+   },
+   "eventtype": "pan_traffic",
+   "tags": [
+    "network",
+    "communicate"
+   ]
+  },
+  {
+   "id": "pan-traffic-deny",
+   "raw": "1,{TS_SLASH},001801000001,TRAFFIC,drop,2304,{TS_SLASH},198.51.100.150,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,jdoe,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,{TS_SLASH},98421,1,58210,80,0,0,0x0,tcp,deny,1420,0,1420,1,{TS_SLASH},0,any,0,12345678,0x0,10.0.0.0-10.255.255.255,US,0,1,0,policy-deny,0,0,0,0,,PA-5250,from-policy",
+   "expect": {
+    "src_ip": "198.51.100.150",
+    "dest_ip": "10.0.10.80",
+    "src_port": "58210",
+    "dest_port": "80",
+    "transport": "tcp",
+    "rule": "Perimeter-Drop-Rule",
+    "src_zone": "untrust",
+    "dest_zone": "trust",
+    "app": "web-browsing",
+    "session_id": "98421",
+    "bytes": "1420",
+    "bytes_in": "1420",
+    "bytes_out": "0",
+    "vendor_action": "deny",
+    "action": "blocked"
+   },
+   "lookup": {
+    "file_contains": "pan_vendor_actions",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "deny",
+    "expect": "blocked"
+   },
+   "eventtype": "pan_traffic",
+   "tags": [
+    "network",
+    "communicate"
+   ]
+  }
+ ],
+ "negative": [
+  {
+   "id": "threat-log-is-not-traffic",
+   "raw": "1,{TS_SLASH},001801000001,THREAT,allow,2304,{TS_SLASH},10.0.10.55,198.51.100.80,0.0.0.0,0.0.0.0,Outbound-Web-Rule,jdoe,,ssl,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,{TS_SLASH},98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,{TS_SLASH},12,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,aged-out,0,0,0,0,,PA-5250,from-policy",
+   "expect_no_force_match": true
+  },
+  {
+   "id": "plain-text-no-csv",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin",
+   "expect_absent": [
+    "src_ip",
+    "dest_ip",
+    "session_id",
+    "rule"
+   ]
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

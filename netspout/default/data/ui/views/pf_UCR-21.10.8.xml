@@ -561,14 +561,14 @@
       "type": "ds.search",
       "name": "Status by phase (how the story progresses)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"UCR-21.10.8\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"BASELINE\",1,pf_phase=\"DEVIATION\",2,pf_phase=\"ESCALATION\",3,pf_phase=\"RESPONSE\",4,pf_phase=\"RECOVERY\",5,true(),99) | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by status"
+        "query": "index=$index_tok$ netspout_scenario_id=\"UCR-21.10.8\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"BASELINE\",1,pf_phase=\"DEVIATION\",2,pf_phase=\"ESCALATION\",3,pf_phase=\"RESPONSE\",4,pf_phase=\"RECOVERY\",5,true(),99) | eval step=printf(\"%d %s\", pf_ord, pf_phase) | eval pf_status=coalesce(netspout_status, status) | chart count over step by pf_status"
       }
     },
     "ds_14": {
       "type": "ds.search",
       "name": "What each phase reported (action and signature by device)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"UCR-21.10.8\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"BASELINE\",1,pf_phase=\"DEVIATION\",2,pf_phase=\"ESCALATION\",3,pf_phase=\"RESPONSE\",4,pf_phase=\"RECOVERY\",5,true(),99) | stats count as events by pf_ord, pf_phase, pf_host, action, signature | sort pf_ord, - events | fields - pf_ord | head 40"
+        "query": "index=$index_tok$ netspout_scenario_id=\"UCR-21.10.8\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"BASELINE\",1,pf_phase=\"DEVIATION\",2,pf_phase=\"ESCALATION\",3,pf_phase=\"RESPONSE\",4,pf_phase=\"RECOVERY\",5,true(),99) | eval pf_action=coalesce(netspout_action, action), pf_signature=coalesce(netspout_signature, signature) | stats count as events by pf_ord, pf_phase, pf_host, pf_action, pf_signature | rename pf_action as action, pf_signature as signature | sort pf_ord, - events | fields - pf_ord | head 40"
       }
     },
     "ds_15": {

@@ -182,11 +182,12 @@ def metric_sourcetypes() -> frozenset:
     return _METRIC_SOURCETYPES_CACHE
 
 
-# Sourcetypes whose Splunk add-on parsing was verified against the installed add-on (scripts/ta_compat.py, docs/contracts/ta_compatibility_registry.json).
-# For these, NetSpout's own HEC fields that share a name with a CIM field the add-on extracts are sent as netspout_<name>. Proven for cisco:asa:
-# indexed action/src_ip/dest_ip hid the add-on's values (action, src_ip, dest_ip, vendor_action) on connection events.
-TA_PARSED_SOURCETYPES = frozenset({"cisco:asa"})
-TA_SHADOWED_FIELDS = ("action", "signature", "src_ip", "dest_ip", "protocol")
+# FIELD OWNERSHIP. Vendor and CIM fields (action, src_ip, dest_ip, status, signature, protocol, vendor, ...) belong to the vendor payload and the Splunk add-on
+# that parses it. NetSpout's own metadata is sent as netspout_<name>. Every event carries the netspout_ copies (additive, a migration path for searches). For
+# sourcetypes whose add-on parsing was verified live (scripts/ta_compat.py, docs/contracts/ta_live_results.json) the bare names are NOT sent at all:
+# an indexed field with the same name hides what the add-on extracts (proven for cisco:asa and fortigate_traffic: action/vendor_action, src_ip, dest_ip, signature, status).
+TA_PARSED_SOURCETYPES = frozenset({"cisco:asa", "cisco:ios", "fortigate_traffic", "pan:traffic"})
+NETSPOUT_NAMESPACED_FIELDS = ("action", "signature", "status", "src_ip", "dest_ip", "protocol", "vendor", "node_type")
 
 
 def is_metric_sourcetype(sourcetype: Optional[str]) -> bool:
@@ -889,11 +890,13 @@ class TelemetryDispatcher:
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }
-            if not is_metric and log.sourcetype in TA_PARSED_SOURCETYPES:
-                # the add-on extracts these CIM fields from the raw text; an indexed field of the same name shadows its result
-                for k in TA_SHADOWED_FIELDS:
-                    if k in hec_payload["fields"]:
-                        hec_payload["fields"]["netspout_" + k] = hec_payload["fields"].pop(k)
+            if not is_metric:
+                f = hec_payload["fields"]
+                for k in NETSPOUT_NAMESPACED_FIELDS:
+                    if f.get(k) is not None:
+                        f["netspout_" + k] = f[k]
+                    if log.sourcetype in TA_PARSED_SOURCETYPES:
+                        f.pop(k, None)          # the add-on owns the bare names for this sourcetype
             if is_metric:
                 # `_value` is only unambiguous for a single-measurement record; multi-metric records carry per-metric `metric_name:*` only.
                 mkeys = [k for k in hec_payload["fields"] if k.startswith("metric_name:")]

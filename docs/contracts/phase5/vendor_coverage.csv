@@ -82,7 +82,7 @@ tenable,Tenable,1,1,1,1,0,1,1,0,0,1,1 exact matches with payload/routing conflic
 traefik,Traefik Labs,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
 trellix_mcafee,Trellix (formerly McAfee),1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
 veeam,Veeam,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
-vmware_nsx,VMware by Broadcom,4,4,5,2,0,1,0,1,0,0,1 exact matches with payload/routing conflicts; no exact match live-verified; 4 sourcetypes have no working generator
+vmware_nsx,VMware by Broadcom,4,4,5,2,0,0,1,1,0,0,no exact match live-verified; 3 sourcetypes have no working generator
 watchguard,WatchGuard,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
 wazuh,Wazuh,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
 zeek,Zeek (Bro),1,1,0,0,0,0,0,1,0,0,no downloaded add-on covers this vendor; 1 sourcetypes have no working generator

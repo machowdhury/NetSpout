@@ -428,13 +428,6 @@
    "detail": [
     "routing: catalog sends metric-index payloads; the add-on defines this as an event sourcetype"
    ]
-  },
-  {
-   "catalog": "vmware:perf:cpu",
-   "package": "Splunk_TA_vmware",
-   "detail": [
-    "routing: catalog sends metric-index payloads; the add-on defines this as an event sourcetype"
-   ]
   }
  ],
  "unsupported_ingestion": [

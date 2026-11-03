@@ -2112,7 +2112,7 @@ def generate_preview(payload: Dict[str, Any]):
     if b:
         raise HTTPException(status_code=409, detail=b["message"])
     try:
-        entries, prov = generator_service.prepare_sourcetype_entries(vendor, st, count, None, "preview")
+        entries, prov = generator_service.prepare_sourcetype_entries(vendor, st, count, None, "preview", payload.get("ingestion_profile"))
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     gt = getattr(current_topology, "global_transport", None) if current_topology else None
@@ -2461,7 +2461,7 @@ def runs_start(payload: Dict[str, Any]):
                 raise ValueError("mode must be finite, continuous or duration")
             vendor = payload.get("vendor_id") or ""
             if mode == "finite":
-                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
+                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id, payload.get("ingestion_profile"))
                 items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
                 title, metric_index = target, None
             else:
@@ -2469,11 +2469,11 @@ def runs_start(payload: Dict[str, Any]):
                 duration = float(payload["duration_s"]) if mode == "duration" else None
                 if mode == "duration" and not duration or (duration is not None and not 1 <= duration <= 86400):
                     raise ValueError("duration_s must be between 1 and 86400")
-                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id)
+                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
                 eps = eps if eps is not None else 5
 
                 def produce(n, vendor=vendor, run_id=run_id):
-                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id)
+                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
                     return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in es]
                 from netspout_core.delivery_monitor import ContinuousRun
                 crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration,

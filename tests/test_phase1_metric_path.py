@@ -15,11 +15,15 @@ SVC = generator_modes.TelemetryGeneratorService
 def test_generate_data_metric_entries_carry_numeric_measurements():
     entries, prov = SVC().prepare_sourcetype_entries("cisco_ios", "cisco:ios:mdt:metric", 6)
     assert prov["mode"] == "native"
+    seen = set()
     for e in entries:
         fields = telemetry_dispatcher.TelemetryDispatcher.extract_metric_fields(e)
         names = [k for k in fields if k.startswith("metric_name:")]
-        assert {"metric_name:in_octets", "metric_name:cpu_utilization"} <= set(names), names
-        assert all(isinstance(fields[k], float) for k in names)
+        assert names and all(isinstance(fields[k], float) for k in names)
+        assert all(k.startswith(("metric_name:interface_generic_counters.", "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:")) for k in names), names
+        seen.update(names)
+    # Phase 8: the schema observed on a real cisco_metrics index, not the earlier OpenConfig leaf names
+    assert {"metric_name:interface_generic_counters.bytes_received", "metric_name:interface_generic_counters.bandwidth"} <= seen
 
 
 def test_hec_payload_is_metric_encoded_and_routed_to_metric_index(monkeypatch):

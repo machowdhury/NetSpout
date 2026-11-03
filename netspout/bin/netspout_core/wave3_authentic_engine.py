@@ -59,6 +59,7 @@ from typing import Any, Dict, List, Optional
 
 try:
     from netspout_core.models import LogEntry, Node
+    from netspout_core.real_format_generators import asctime_utc
     from netspout_core.wave1_authentic_engine import (
         _reg,
         _hex8,
@@ -69,6 +70,10 @@ except ImportError:  # pragma: no cover - packaging fallback
         from app.models import LogEntry, Node
     except ImportError:
         from models import LogEntry, Node
+    try:
+        from app.real_format_generators import asctime_utc
+    except ImportError:
+        from real_format_generators import asctime_utc
     import zlib
 
     def _reg(seed: str) -> str:
@@ -1575,7 +1580,7 @@ class Wave3AuthenticEngine:
             raise ValueError(f"Unsupported duo admin family: {family}")
         now = datetime.now(timezone.utc)
         # Duo ctime dialect: 'Thu Jul 10 07:24:12 2025'
-        ctime = now.strftime("%a %b %d %H:%M:%S %Y")
+        ctime = asctime_utc(now)
         isotimestamp = now.strftime("%Y-%m-%dT%H:%M:%S+00:00")[:-1]
         isotimestamp = now.strftime("%Y-%m-%dT%H:%M:%S") + "+00:00"
         if family == "admin_action":

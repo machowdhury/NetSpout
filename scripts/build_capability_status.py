@@ -17,6 +17,25 @@ ROUTING_MSG = ("NetSpout would send this as a metric-index payload, but the matc
                "would change what the data means, so generation is disabled until a verified implementation exists.")
 
 
+PHASE8_NOTE = ("Phase 8 live check in the isolated lab (%s): %s. Not promoted: VERIFIED stays reserved for the spec-based add-on checks in ta_live_results.json.")
+PHASE8_SCOPE = {"metrics": ["cisco:ios:mdt:metric"], "profiles": ["cisco:ios", "cisco:ise:syslog"], "meraki": ["meraki:securityappliances"], "vmware": ["vmware:perf:cpu"],
+                "duo": ["cisco:duo:authentication_v2", "cisco:duo:administrator", "cisco:duo:activity", "cisco:duo:account", "cisco:duo:user"]}
+
+
+def phase8_evidence():
+    """sourcetype -> note, from docs/verification/evidence/phase8/live_*.json (only sections whose every check passed)."""
+    out = {}
+    for sec, sts in PHASE8_SCOPE.items():
+        f = ROOT / ("docs/verification/evidence/phase8/live_%s.json" % sec)
+        if not f.exists():
+            continue
+        d = json.loads(f.read_text())
+        if d.get("passed"):
+            for st in sts:
+                out[st] = PHASE8_NOTE % ((d.get("addon") or "metric index, no add-on involved"), d["status"])
+    return out
+
+
 def record(r, live):
     st = r["catalog_sourcetype"]
     rec = {"vendor_id": r["catalog_vendor"], "vendor": r["catalog_vendor_name"], "product": r["catalog_product"], "sourcetype": st, "kind": r["catalog_data_kind"],
@@ -63,6 +82,9 @@ def main():
     m = json.loads((ROOT / "docs/contracts/phase5/master_matrix.json").read_text())["rows"]
     live = json.loads((ROOT / "docs/contracts/ta_live_results.json").read_text())
     sts = {r["catalog_sourcetype"]: record(r, live) for r in m}
+    for st, note in phase8_evidence().items():
+        if st in sts:
+            sts[st]["notes"].append(note)
     scen = []
     for s in json.loads((ROOT / "docs/reference/scenario_coverage.json").read_text())["rows"]:
         scen.append({"id": s["scenario_id"], "title": s["title"], "category": s.get("category"), "summary": s.get("summary"), "sourcetypes": s["sourcetypes"], "engine": s.get("engine"),

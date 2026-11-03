@@ -1,0 +1,51 @@
+{
+ "_about": "Ingestion profiles for the Generate Data path (request field ingestion_profile on /api/generate/preview and /api/runs). Generated from src/netspout_core/ingestion_profiles.py; the default is direct for every sourcetype and only the sourcetypes below accept another profile.",
+ "default": "direct",
+ "profiles": {
+  "cisco:ios": {
+   "supported": [
+    "direct",
+    "sc4s"
+   ],
+   "direct": "the vendor syslog text exactly as generated; HEC source network-topology-simulator; host = generated device",
+   "sc4s": "raw = '%FAC-SEV-MNEM: text' (the original syslog header removed); HEC source 'sc4s'; HEC host = the device address taken from the original header; _time = explicit HEC time because the raw carries no timestamp"
+  },
+  "cisco:ise:syslog": {
+   "supported": [
+    "direct",
+    "sc4s"
+   ],
+   "direct": "the vendor syslog text exactly as generated; HEC source network-topology-simulator; host = generated device",
+   "sc4s": "raw = '<stamp> <device address> <original stamp> <node> CISE_...' (no <PRI>); HEC source 'sc4s'; HEC host = the device address; _time = explicit HEC time (the add-on's own TIME_PREFIX also parses the in-event time, checked through the raw endpoint)"
+  }
+ },
+ "evidence": {
+  "real_shape": "tests/fixtures/phase7_real_samples/sanitized_real_samples.json (cisco:ios, cisco:ise:syslog)",
+  "live": "docs/verification/evidence/phase8/live_profiles.json"
+ },
+ "not_evidenced_and_not_produced": [
+  "sc4s_* indexed fields (only their names were observed)",
+  "SC4S host timezone: the real ISE line carries a local and a UTC stamp that differ by the SC4S host offset; NetSpout renders both in UTC",
+  "any sourcetype not listed above",
+  "UDP/TCP syslog framing for the sc4s profile (HEC only was tested)"
+ ],
+ "field_ownership": {
+  "ta_parsed_sourcetypes_phase4": [
+   "cisco:asa",
+   "cisco:ios",
+   "fortigate_traffic",
+   "pan:traffic"
+  ],
+  "namespaced_only_sourcetypes_phase8": [
+   "cisco:duo:account",
+   "cisco:duo:activity",
+   "cisco:duo:administrator",
+   "cisco:duo:authentication_v2",
+   "cisco:duo:user",
+   "cisco:ise:syslog",
+   "meraki:securityappliances",
+   "vmware:perf:cpu"
+  ],
+  "rule": "bare vendor/CIM field names (action, signature, status, src_ip, dest_ip, protocol, vendor, node_type) are not sent for these sourcetypes; the netspout_ copies are"
+ }
+}

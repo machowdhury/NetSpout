@@ -1,0 +1,69 @@
+{
+ "addon": "Splunk_TA_vmware 4.2.1",
+ "fields_present_besides_indexed_metadata": [
+  "host",
+  "index",
+  "source",
+  "sourcetype"
+ ],
+ "status": "FORMAT_VERIFIED: the field-extraction add-on that names the 15 counter columns was not available, so column semantics are NOT verified",
+ "section": "vmware",
+ "generated": "2026-11-03T20:27:00.769806+00:00",
+ "checks": [
+  {
+   "check": "lab.addon_installed[Splunk_TA_vmware]",
+   "status": "PASS",
+   "detail": "Add-on for VMware 4.2.1"
+  },
+  {
+   "check": "lab.index_datatype[ta_validation]",
+   "status": "PASS",
+   "detail": "datatype=event"
+  },
+  {
+   "check": "hec.accepted[vmware:perf:cpu]",
+   "status": "PASS",
+   "detail": "8 of 8 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count",
+   "status": "PASS",
+   "detail": "8 of 8"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[vmware:perf:cpu]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.raw_is_the_exact_tsv_row",
+   "status": "PASS",
+   "detail": "tabs preserved"
+  },
+  {
+   "check": "splunk.row_has_19_tab_separated_columns_and_no_header",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.routing_sourcetype_source_host",
+   "status": "PASS",
+   "detail": "[('VMPerf:HostSystem', 'vcenter.example.invalid')]"
+  },
+  {
+   "check": "splunk.stored_in_an_event_index_not_a_metric_index",
+   "status": "PASS",
+   "detail": "event"
+  },
+  {
+   "check": "splunk.time_equals_explicit_hec_time",
+   "status": "PASS",
+   "detail": "the add-on sets MAX_TIMESTAMP_LOOKAHEAD=1 so time is never read from the row"
+  }
+ ],
+ "passed": true,
+ "summary": {
+  "PASS": 10,
+  "FAIL": 0
+ }
+}

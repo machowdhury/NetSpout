@@ -28,6 +28,8 @@ CORE_MODULES = [
     "transport_credential_updates.py",
     "telemetry_config_api.py",
     "models.py",
+    "ingestion_profiles.py",
+    "real_format_generators.py",
     "graph_engine.py",
     "log_engine.py",
     "asa_generator.py",

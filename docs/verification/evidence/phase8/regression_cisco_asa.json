@@ -1,0 +1,672 @@
+{
+ "spec": "cisco_asa.json",
+ "ta": {
+  "id": "Splunk_TA_cisco-asa",
+  "package": "splunk-add-on-for-cisco-asa_612.spl",
+  "version": "6.1.2"
+ },
+ "run_id": "tacompat-b41cd779fe",
+ "generated": "2026-11-03T20:28:35+00:00",
+ "checks": [
+  {
+   "check": "ta.version",
+   "status": "PASS",
+   "detail": "installed package 6.1.2, expected 6.1.2"
+  },
+  {
+   "check": "props.sourcetype_stanza",
+   "status": "PASS",
+   "detail": "[cisco:asa] in props.conf"
+  },
+  {
+   "check": "props.report_transforms_exist",
+   "status": "PASS",
+   "detail": "182 REPORT transforms, missing: []"
+  },
+  {
+   "check": "transforms.force_sourcetype_defined",
+   "status": "PASS",
+   "detail": "1 transform(s) can set sourcetype::cisco:asa"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[asa-302013-built]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'cisco:asa', expected 'cisco:asa'"
+  },
+  {
+   "check": "timestamp.format_parses[asa-302013-built]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^' TIME_FORMAT='%b %d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.message_id]",
+   "status": "PASS",
+   "detail": "field message_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.log_level]",
+   "status": "PASS",
+   "detail": "field log_level is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.src_interface]",
+   "status": "PASS",
+   "detail": "field src_interface is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.dest_interface]",
+   "status": "PASS",
+   "detail": "field dest_interface is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.direction]",
+   "status": "PASS",
+   "detail": "field direction is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302013-built.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[asa-302013-built]",
+   "status": "PASS",
+   "detail": "cisco_connection covers message id 302013"
+  },
+  {
+   "check": "tags.defined[asa-302013-built:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[asa-302013-built:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[asa-302013-built]",
+   "status": "PASS",
+   "detail": "add-on lookup cisco_asa_action_lookup: vendor_action=built -> action='allowed' (expected 'allowed')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'cisco:asa', expected 'cisco:asa'"
+  },
+  {
+   "check": "timestamp.format_parses[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^' TIME_FORMAT='%b %d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.message_id]",
+   "status": "PASS",
+   "detail": "field message_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.bytes]",
+   "status": "PASS",
+   "detail": "field bytes is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.duration]",
+   "status": "PASS",
+   "detail": "field duration is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-302014-teardown.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "cisco_connection covers message id 302014"
+  },
+  {
+   "check": "tags.defined[asa-302014-teardown:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[asa-302014-teardown:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "add-on lookup cisco_asa_action_lookup: vendor_action=teardown -> action='teardown' (expected 'teardown')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'cisco:asa', expected 'cisco:asa'"
+  },
+  {
+   "check": "timestamp.format_parses[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^' TIME_FORMAT='%b %d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.message_id]",
+   "status": "PASS",
+   "detail": "field message_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.log_level]",
+   "status": "PASS",
+   "detail": "field log_level is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-106023-deny.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "cisco_connection covers message id 106023"
+  },
+  {
+   "check": "tags.defined[asa-106023-deny:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[asa-106023-deny:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "add-on lookup cisco_asa_action_lookup: vendor_action=deny -> action='blocked' (expected 'blocked')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[asa-111008-command]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'cisco:asa', expected 'cisco:asa'"
+  },
+  {
+   "check": "timestamp.format_parses[asa-111008-command]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^' TIME_FORMAT='%b %d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[asa-111008-command.message_id]",
+   "status": "PASS",
+   "detail": "field message_id is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-111008-command.log_level]",
+   "status": "PASS",
+   "detail": "field log_level is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-111008-command.user]",
+   "status": "PASS",
+   "detail": "field user is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-111008-command.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "ta_defines_field[asa-111008-command.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [cisco:asa]"
+  },
+  {
+   "check": "lookup[asa-111008-command]",
+   "status": "PASS",
+   "detail": "add-on lookup cisco_asa_action_lookup: vendor_action=executed -> action='executed' (expected 'executed')"
+  },
+  {
+   "check": "force_sourcetype.rejects[no-asa-marker]",
+   "status": "PASS",
+   "detail": "negative payload must not be routed to cisco:asa (add-on assigns None)"
+  },
+  {
+   "check": "force_sourcetype.rejects[ftd-marker-is-not-asa]",
+   "status": "PASS",
+   "detail": "negative payload must not be routed to cisco:asa (add-on assigns None)"
+  },
+  {
+   "check": "lab.installed_version",
+   "status": "PASS",
+   "detail": "lab has Splunk Add-on for Cisco ASA 6.1.2, package 6.1.2"
+  },
+  {
+   "check": "routing.index_datatype",
+   "status": "PASS",
+   "detail": "index ta_validation datatype=event, expected event"
+  },
+  {
+   "check": "hec.accepted",
+   "status": "PASS",
+   "detail": "7/7 accepted"
+  },
+  {
+   "check": "index.event_count",
+   "status": "PASS",
+   "detail": "indexed 7 of 7"
+  },
+  {
+   "check": "index.sourcetype",
+   "status": "PASS",
+   "detail": "sourcetypes seen: ['cisco:asa']"
+  },
+  {
+   "check": "field[asa-302013-built.message_id]",
+   "status": "PASS",
+   "detail": "expected '302013', Splunk returned '302013'"
+  },
+  {
+   "check": "field[asa-302013-built.log_level]",
+   "status": "PASS",
+   "detail": "expected '6', Splunk returned '6'"
+  },
+  {
+   "check": "field[asa-302013-built.session_id]",
+   "status": "PASS",
+   "detail": "expected '984210', Splunk returned '984210'"
+  },
+  {
+   "check": "field[asa-302013-built.src_interface]",
+   "status": "PASS",
+   "detail": "expected 'outside', Splunk returned 'outside'"
+  },
+  {
+   "check": "field[asa-302013-built.dest_interface]",
+   "status": "PASS",
+   "detail": "expected 'inside', Splunk returned 'inside'"
+  },
+  {
+   "check": "field[asa-302013-built.src_ip]",
+   "status": "PASS",
+   "detail": "expected '198.51.100.80', Splunk returned '198.51.100.80'"
+  },
+  {
+   "check": "field[asa-302013-built.src_port]",
+   "status": "PASS",
+   "detail": "expected '443', Splunk returned '443'"
+  },
+  {
+   "check": "field[asa-302013-built.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '10.20.10.45', Splunk returned '10.20.10.45'"
+  },
+  {
+   "check": "field[asa-302013-built.dest_port]",
+   "status": "PASS",
+   "detail": "expected '52140', Splunk returned '52140'"
+  },
+  {
+   "check": "field[asa-302013-built.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[asa-302013-built.direction]",
+   "status": "PASS",
+   "detail": "expected 'outbound', Splunk returned 'outbound'"
+  },
+  {
+   "check": "field[asa-302013-built.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'built', Splunk returned 'built'"
+  },
+  {
+   "check": "field[asa-302013-built.action]",
+   "status": "PASS",
+   "detail": "expected 'allowed', Splunk returned 'allowed'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[asa-302013-built]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[asa-302013-built]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco_connection']"
+  },
+  {
+   "check": "tags[asa-302013-built]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "field[asa-302014-teardown.message_id]",
+   "status": "PASS",
+   "detail": "expected '302014', Splunk returned '302014'"
+  },
+  {
+   "check": "field[asa-302014-teardown.session_id]",
+   "status": "PASS",
+   "detail": "expected '984210', Splunk returned '984210'"
+  },
+  {
+   "check": "field[asa-302014-teardown.src_ip]",
+   "status": "PASS",
+   "detail": "expected '198.51.100.80', Splunk returned '198.51.100.80'"
+  },
+  {
+   "check": "field[asa-302014-teardown.src_port]",
+   "status": "PASS",
+   "detail": "expected '443', Splunk returned '443'"
+  },
+  {
+   "check": "field[asa-302014-teardown.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '10.20.10.45', Splunk returned '10.20.10.45'"
+  },
+  {
+   "check": "field[asa-302014-teardown.dest_port]",
+   "status": "PASS",
+   "detail": "expected '52140', Splunk returned '52140'"
+  },
+  {
+   "check": "field[asa-302014-teardown.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[asa-302014-teardown.bytes]",
+   "status": "PASS",
+   "detail": "expected '148920', Splunk returned '148920'"
+  },
+  {
+   "check": "field[asa-302014-teardown.duration]",
+   "status": "PASS",
+   "detail": "expected '134', Splunk returned '134'"
+  },
+  {
+   "check": "field[asa-302014-teardown.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'teardown', Splunk returned 'teardown'"
+  },
+  {
+   "check": "field[asa-302014-teardown.action]",
+   "status": "PASS",
+   "detail": "expected 'teardown', Splunk returned 'teardown'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco_connection']"
+  },
+  {
+   "check": "tags[asa-302014-teardown]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "field[asa-106023-deny.message_id]",
+   "status": "PASS",
+   "detail": "expected '106023', Splunk returned '106023'"
+  },
+  {
+   "check": "field[asa-106023-deny.log_level]",
+   "status": "PASS",
+   "detail": "expected '4', Splunk returned '4'"
+  },
+  {
+   "check": "field[asa-106023-deny.src_ip]",
+   "status": "PASS",
+   "detail": "expected '203.0.113.88', Splunk returned '203.0.113.88'"
+  },
+  {
+   "check": "field[asa-106023-deny.src_port]",
+   "status": "PASS",
+   "detail": "expected '44820', Splunk returned '44820'"
+  },
+  {
+   "check": "field[asa-106023-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '10.20.10.5', Splunk returned '10.20.10.5'"
+  },
+  {
+   "check": "field[asa-106023-deny.dest_port]",
+   "status": "PASS",
+   "detail": "expected '22', Splunk returned '22'"
+  },
+  {
+   "check": "field[asa-106023-deny.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[asa-106023-deny.rule]",
+   "status": "PASS",
+   "detail": "expected 'outside_access_in', Splunk returned 'outside_access_in'"
+  },
+  {
+   "check": "field[asa-106023-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'deny', Splunk returned 'deny'"
+  },
+  {
+   "check": "field[asa-106023-deny.action]",
+   "status": "PASS",
+   "detail": "expected 'blocked', Splunk returned 'blocked'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco_connection']"
+  },
+  {
+   "check": "tags[asa-106023-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "field[asa-111008-command.message_id]",
+   "status": "PASS",
+   "detail": "expected '111008', Splunk returned '111008'"
+  },
+  {
+   "check": "field[asa-111008-command.log_level]",
+   "status": "PASS",
+   "detail": "expected '5', Splunk returned '5'"
+  },
+  {
+   "check": "field[asa-111008-command.user]",
+   "status": "PASS",
+   "detail": "expected 'admin', Splunk returned 'admin'"
+  },
+  {
+   "check": "field[asa-111008-command.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'executed', Splunk returned 'executed'"
+  },
+  {
+   "check": "field[asa-111008-command.action]",
+   "status": "PASS",
+   "detail": "expected 'executed', Splunk returned 'executed'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[asa-111008-command]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[no-asa-marker]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[no-asa-marker.message_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[no-asa-marker.log_level]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[no-asa-marker.session_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[ftd-marker-is-not-asa]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[unknown-asa-id-gets-no-connection-fields]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[unknown-asa-id-gets-no-connection-fields.session_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[unknown-asa-id-gets-no-connection-fields.transport]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[unknown-asa-id-gets-no-connection-fields.src_port]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "search.by_run_and_message_id",
+   "status": "PASS",
+   "detail": "Splunk: 6 events with message_id; add-on regex cisco_asa_log_level_message_id matches 6"
+  },
+  {
+   "check": "timestamp.parsed_from_event_text",
+   "status": "PASS",
+   "detail": "_time 2026-11-03T17:28:31.000+00:00 vs text 17:28:31 (skew 0s)"
+  }
+ ],
+ "summary": {
+  "PASS": 131,
+  "FAIL": 0,
+  "NOT_RUN": 0
+ }
+}

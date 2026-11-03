@@ -1,0 +1,161 @@
+{
+ "_note": "Read-only queries against the reference instance on 2026-11-03 (mcatalog values(_dims),values(path) by metric_name over 2026-03-15; mstats min/max over 2026-03-15 12:00-13:00 local, 1 hour). Used as the contract for the cisco:ios:mdt:metric generator. Constant-zero series were constant zero in that hour only.",
+ "index": "cisco_metrics",
+ "metrics": {
+  "interface_generic_counters.bytes_received": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 7815449109170
+  },
+  "interface_generic_counters.bytes_sent": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 7815455946913
+  },
+  "interface_generic_counters.packets_received": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 5190473197
+  },
+  "interface_generic_counters.packets_sent": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 5190477634
+  },
+  "interface_generic_counters.input_drops": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 0
+  },
+  "interface_generic_counters.output_drops": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 0
+  },
+  "interface_generic_counters.output_errors": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 0
+  },
+  "interface_generic_counters.input_errors": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+   "observed_min": 0,
+   "observed_max": 111713
+  },
+  "interface_generic_counters.bandwidth": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate",
+   "observed_min": 0,
+   "observed_max": 100000000
+  },
+  "interface_generic_counters.input_load": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate",
+   "observed_min": 0,
+   "observed_max": 9
+  },
+  "interface_generic_counters.output_load": {
+   "dims": [
+    "interface_name",
+    "path"
+   ],
+   "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate",
+   "observed_min": 0,
+   "observed_max": 29
+  },
+  "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute": {
+   "dims": [
+    "node_name",
+    "path",
+    "subscription"
+   ],
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization",
+   "observed_min": 1,
+   "observed_max": 11
+  },
+  "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": {
+   "dims": [
+    "node_name",
+    "path",
+    "subscription"
+   ],
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization",
+   "observed_min": 1,
+   "observed_max": 7
+  },
+  "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute": {
+   "dims": [
+    "node_name",
+    "path",
+    "subscription"
+   ],
+   "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization",
+   "observed_min": 1,
+   "observed_max": 6
+  }
+ },
+ "observed_dimension_values": {
+  "subscription": [
+   "health"
+  ],
+  "node_name": [
+   "0/0/CPU0",
+   "0/RP0/CPU0"
+  ],
+  "interface_name_examples": [
+   "FortyGigE0/0/1/0",
+   "FortyGigE0/0/1/1",
+   "FortyGigE0/0/1/2",
+   "GigabitEthernet0/0/0/20",
+   "GigabitEthernet0/0/0/21",
+   "GigabitEthernet0/0/0/21.100"
+  ],
+  "interface_name_distinct": 99
+ },
+ "observed_source": "device management address per HEC sender; sourcetype httpevent; host = HEC front end",
+ "not_observed": [
+  "metric values for any metric outside this list",
+  "dimension sets of the other 316 metric names",
+  "HEC request shape used by the real senders",
+  "timestamps beyond collection time = _time"
+ ],
+ "mpreview": "denied for the reference role; no raw metric event was inspected"
+}

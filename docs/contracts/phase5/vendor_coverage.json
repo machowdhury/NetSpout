@@ -22,17 +22,17 @@
   },
   "naming_conflicts": 27,
   "exact_with_payload_conflict": 11,
-  "exact_with_routing_conflict": 3,
+  "exact_with_routing_conflict": 2,
   "format_verification": {
    "NOT_APPLICABLE": 214,
-   "NOT_CHECKABLE": 38,
+   "NOT_CHECKABLE": 37,
    "FORMAT_VERIFIED": 16,
-   "FORMAT_PARTIAL": 35,
+   "FORMAT_PARTIAL": 36,
    "STRUCTURE_ONLY": 35,
    "FORMAT_CONFLICT": 11
   },
-  "generators_valid": 244,
-  "generators_valid_exact": 95,
+  "generators_valid": 245,
+  "generators_valid_exact": 96,
   "sample_backed": 235,
   "live_verified": 4,
   "catalog_sourcetypes_without_covering_package": 75,
@@ -1743,15 +1743,14 @@
    ],
    "exact_canonical_matches": 2,
    "naming_conflicts": 0,
-   "payload_or_routing_conflicts": 1,
-   "valid_generators": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
    "sample_backed": 1,
    "live_verified": 0,
    "specialized_ingestion_required": 0,
    "main_blockers": [
-    "1 exact matches with payload/routing conflicts",
     "no exact match live-verified",
-    "4 sourcetypes have no working generator"
+    "3 sourcetypes have no working generator"
    ]
   },
   {

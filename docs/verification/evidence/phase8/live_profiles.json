@@ -1,0 +1,268 @@
+{
+ "addon": "TA_cisco_catalyst 4.0.60",
+ "field_values_seen": {
+  "cisco:ios/direct": {
+   "dvc": "[{\"value\":\"device-01\",\"count\":3},{\"value\":\"device-02\",\"count\":3},{\"value\":\"device-03\",\"cou",
+   "facility": "[{\"value\":\"OSPF\",\"count\":5},{\"value\":\"ICMPV6\",\"count\":3}]",
+   "mnemonic": "[{\"value\":\"DUPRID\",\"count\":5},{\"value\":\"ND_RA_LOG\",\"count\":3}]",
+   "product": "[{\"value\":\"IOS\",\"count\":8}]",
+   "severity_id": "[{\"value\":\"4\",\"count\":5},{\"value\":\"3\",\"count\":3}]",
+   "vendor": "[{\"value\":\"Cisco\",\"count\":8}]"
+  },
+  "cisco:ios/sc4s": {
+   "dvc": "[{\"value\":\"10.0.0.252\",\"count\":4},{\"value\":\"10.0.0.253\",\"count\":4}]",
+   "facility": "[{\"value\":\"ICMPV6\",\"count\":4},{\"value\":\"OSPF\",\"count\":4}]",
+   "mnemonic": "[{\"value\":\"DUPRID\",\"count\":4},{\"value\":\"ND_RA_LOG\",\"count\":4}]",
+   "product": "[{\"value\":\"IOS\",\"count\":8}]",
+   "severity_id": "[{\"value\":\"3\",\"count\":4},{\"value\":\"4\",\"count\":4}]",
+   "vendor": "[{\"value\":\"Cisco\",\"count\":8}]"
+  },
+  "cisco:ise:syslog/direct": {
+   "action": "[{\"value\":\"success\",\"count\":5},{\"value\":\"failure\",\"count\":3}]",
+   "dest": "[{\"value\":\"device-01\",\"count\":1},{\"value\":\"device-02\",\"count\":1},{\"value\":\"device-03\",\"cou",
+   "dvc": "[{\"value\":\"ise-lab-01\",\"count\":8}]",
+   "product": "[{\"value\":\"Identity Services Engine\",\"count\":8}]",
+   "signature": "[{\"value\":\"Authentication succeeded\",\"count\":5},{\"value\":\"Authentication failed\",\"count\":3",
+   "src": "[{\"value\":\"02:00:00:00:00:01\",\"count\":8}]",
+   "src_ip": "[{\"value\":\"192.0.2.30\",\"count\":8}]",
+   "user": "[{\"value\":\"lab_user\",\"count\":8}]",
+   "vendor": "[{\"value\":\"Cisco\",\"count\":8}]"
+  },
+  "cisco:ise:syslog/sc4s": {
+   "action": "[{\"value\":\"failure\",\"count\":8}]",
+   "dest": "[{\"value\":\"192.0.2.11\",\"count\":3},{\"value\":\"192.0.2.12\",\"count\":3},{\"value\":\"192.0.2.13\",\"",
+   "dvc": "[{\"value\":\"ise-lab-01\",\"count\":8}]",
+   "product": "[{\"value\":\"Identity Services Engine\",\"count\":8}]",
+   "signature": "[{\"value\":\"Authentication failed\",\"count\":8}]",
+   "src": "[{\"value\":\"02:00:00:00:00:01\",\"count\":8}]",
+   "src_ip": "[{\"value\":\"192.0.2.30\",\"count\":8}]",
+   "user": "[{\"value\":\"lab_user\",\"count\":8}]",
+   "vendor": "[{\"value\":\"Cisco\",\"count\":8}]"
+  }
+ },
+ "status": "SPLUNK_VERIFIED for raw framing, source/host, time and field ownership in both the direct and sc4s profiles; cisco:ios add-on extraction checked, cisco:ise:syslog extraction only compared between profiles",
+ "section": "profiles",
+ "generated": "2026-11-03T20:29:51.631585+00:00",
+ "checks": [
+  {
+   "check": "lab.addon_installed[TA_cisco_catalyst]",
+   "status": "PASS",
+   "detail": "Cisco Enterprise Networking Add-on for Splunk 4.0.60"
+  },
+  {
+   "check": "hec.accepted[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "8 of 8 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "8 of 8"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.raw_is_exactly_what_was_sent[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "framing preserved"
+  },
+  {
+   "check": "splunk.sourcetype_and_index[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.source_follows_profile[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "['network-topology-simulator']"
+  },
+  {
+   "check": "direct.syslog_header_kept[cisco:ios]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.time_equals_explicit_hec_time[cisco:ios/direct]",
+   "status": "PASS",
+   "detail": "max skew 0.1s (raw carries its own timestamp)"
+  },
+  {
+   "check": "splunk.addon_extracts_facility_mnemonic_severity[direct]",
+   "status": "PASS",
+   "detail": "['dvc', 'facility', 'mnemonic', 'product', 'severity_id', 'vendor']"
+  },
+  {
+   "check": "splunk.vendor_is_the_addons_value_not_netspouts[direct]",
+   "status": "PASS",
+   "detail": "Cisco"
+  },
+  {
+   "check": "hec.accepted[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "8 of 8 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "8 of 8"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.raw_is_exactly_what_was_sent[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "framing preserved"
+  },
+  {
+   "check": "splunk.sourcetype_and_index[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.source_follows_profile[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "['sc4s']"
+  },
+  {
+   "check": "splunk.host_is_the_device_address[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "['10.0.0.252', '10.0.0.253']"
+  },
+  {
+   "check": "splunk.time_equals_explicit_hec_time[cisco:ios/sc4s]",
+   "status": "PASS",
+   "detail": "max skew 0.1s (raw carries no timestamp)"
+  },
+  {
+   "check": "splunk.addon_extracts_facility_mnemonic_severity[sc4s]",
+   "status": "PASS",
+   "detail": "['dvc', 'facility', 'mnemonic', 'product', 'severity_id', 'vendor']"
+  },
+  {
+   "check": "splunk.vendor_is_the_addons_value_not_netspouts[sc4s]",
+   "status": "PASS",
+   "detail": "Cisco"
+  },
+  {
+   "check": "hec.accepted[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "8 of 8 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "8 of 8"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.raw_is_exactly_what_was_sent[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "framing preserved"
+  },
+  {
+   "check": "splunk.sourcetype_and_index[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.source_follows_profile[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "['network-topology-simulator']"
+  },
+  {
+   "check": "direct.syslog_header_kept[cisco:ise:syslog]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.time_equals_explicit_hec_time[cisco:ise:syslog/direct]",
+   "status": "PASS",
+   "detail": "max skew 0.1s (raw carries its own timestamp)"
+  },
+  {
+   "check": "splunk.vendor_is_not_netspouts_cisco_ise[direct]",
+   "status": "PASS",
+   "detail": "Cisco"
+  },
+  {
+   "check": "splunk.addon_parses_in_event_time_via_raw_endpoint[direct]",
+   "status": "PASS",
+   "detail": "event time 2026-11-03 20:29:39.162 +00:00"
+  },
+  {
+   "check": "hec.accepted[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "8 of 8 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "8 of 8"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.raw_is_exactly_what_was_sent[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "framing preserved"
+  },
+  {
+   "check": "splunk.sourcetype_and_index[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.source_follows_profile[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "['sc4s']"
+  },
+  {
+   "check": "splunk.host_is_the_device_address[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "['192.0.2.11', '192.0.2.12', '192.0.2.13']"
+  },
+  {
+   "check": "splunk.time_equals_explicit_hec_time[cisco:ise:syslog/sc4s]",
+   "status": "PASS",
+   "detail": "max skew 0.1s (raw carries its own timestamp)"
+  },
+  {
+   "check": "splunk.vendor_is_not_netspouts_cisco_ise[sc4s]",
+   "status": "PASS",
+   "detail": "Cisco"
+  },
+  {
+   "check": "splunk.addon_parses_in_event_time_via_raw_endpoint[sc4s]",
+   "status": "PASS",
+   "detail": "event time 2026-11-03 20:29:43.853 +00:00"
+  },
+  {
+   "check": "splunk.same_addon_fields_in_both_profiles[cisco:ios]",
+   "status": "PASS",
+   "detail": "direct-only ['device_time', 'event_id'] | sc4s-only []"
+  },
+  {
+   "check": "splunk.same_addon_fields_in_both_profiles[cisco:ise:syslog]",
+   "status": "PASS",
+   "detail": "direct-only ['Passed_Authentication'] | sc4s-only []"
+  }
+ ],
+ "passed": true,
+ "summary": {
+  "PASS": 43,
+  "FAIL": 0
+ }
+}

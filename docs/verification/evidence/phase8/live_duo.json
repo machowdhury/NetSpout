@@ -1,0 +1,168 @@
+{
+ "addon": "CiscoSecurityCloud 3.7.3",
+ "status": "SPLUNK_VERIFIED for timestamp consistency (ctime, epoch, Splunk _time); field extraction of the Duo sourcetypes was not part of this check",
+ "section": "duo",
+ "generated": "2026-11-03T20:27:31.771140+00:00",
+ "checks": [
+  {
+   "check": "lab.addon_installed[CiscoSecurityCloud]",
+   "status": "PASS",
+   "detail": "Cisco Security Cloud 3.7.3"
+  },
+  {
+   "check": "hec.accepted[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "3 of 3 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "3 of 3"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.ctime_weekday_day_match_the_event_epoch[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "{\"ctime\": \"Tue Nov  3 20:27:11 2026\", \"access_device\": {\"bro"
+  },
+  {
+   "check": "splunk.addon_time_rule_reads_the_epoch_via_raw_endpoint[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "epoch 1793737631, ctime Tue Nov  3 20:27:11 2026"
+  },
+  {
+   "check": "splunk.ctime_agrees_with_splunk_time[cisco:duo:authentication_v2]",
+   "status": "PASS",
+   "detail": "Tue Nov  3 20:27:11 2026 | Tue Nov  3 20:27:11 2026"
+  },
+  {
+   "check": "hec.accepted[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "3 of 3 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "3 of 3"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.ctime_weekday_day_match_the_event_epoch[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "{\"ctime\": \"Tue Nov  3 20:27:12 2026\", \"action\": \"ad_sync_fin"
+  },
+  {
+   "check": "splunk.addon_time_rule_reads_the_epoch_via_raw_endpoint[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "epoch 1793737632, ctime Tue Nov  3 20:27:12 2026"
+  },
+  {
+   "check": "splunk.ctime_agrees_with_splunk_time[cisco:duo:administrator]",
+   "status": "PASS",
+   "detail": "Tue Nov  3 20:27:12 2026 | Tue Nov  3 20:27:12 2026"
+  },
+  {
+   "check": "hec.accepted[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "3 of 3 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "3 of 3"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.ctime_weekday_day_match_the_event_epoch[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "{\"ctime\": \"Tue Nov  3 20:27:16 2026\", \"access_device\": null,"
+  },
+  {
+   "check": "splunk.addon_time_rule_reads_the_epoch_via_raw_endpoint[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "epoch 1793737636, ctime Tue Nov  3 20:27:16 2026"
+  },
+  {
+   "check": "splunk.ctime_agrees_with_splunk_time[cisco:duo:activity]",
+   "status": "PASS",
+   "detail": "Tue Nov  3 20:27:16 2026 | Tue Nov  3 20:27:16 2026"
+  },
+  {
+   "check": "hec.accepted[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "3 of 3 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "3 of 3"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.ctime_weekday_day_match_the_event_epoch[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "{\"ctime\": \"Tue Nov  3 20:27:20 2026\", \"account_id\": \"DAOSZ4Y"
+  },
+  {
+   "check": "splunk.addon_time_rule_reads_the_epoch_via_raw_endpoint[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "epoch 1793737640, ctime Tue Nov  3 20:27:20 2026"
+  },
+  {
+   "check": "splunk.ctime_agrees_with_splunk_time[cisco:duo:account]",
+   "status": "PASS",
+   "detail": "Tue Nov  3 20:27:20 2026 | Tue Nov  3 20:27:20 2026"
+  },
+  {
+   "check": "hec.accepted[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "3 of 3 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "3 of 3"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.ctime_weekday_day_match_the_event_epoch[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "{\"ctime\": \"Tue Nov  3 20:27:27 2026\", \"alias1\": null, \"alias"
+  },
+  {
+   "check": "splunk.addon_time_rule_reads_the_epoch_via_raw_endpoint[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "epoch 1793737647, ctime Tue Nov  3 20:27:27 2026"
+  },
+  {
+   "check": "splunk.ctime_agrees_with_splunk_time[cisco:duo:user]",
+   "status": "PASS",
+   "detail": "Tue Nov  3 20:27:27 2026 | Tue Nov  3 20:27:27 2026"
+  }
+ ],
+ "passed": true,
+ "summary": {
+  "PASS": 31,
+  "FAIL": 0
+ }
+}

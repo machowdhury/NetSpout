@@ -465,7 +465,7 @@ Everything else is **not tested**. Detection content (Enterprise Security, corre
 | VMware by Broadcom | VMware vSphere ESXi Syslog | `vmw-syslog` | event | — | HEC (syslog format) | G | yes | yes | 1 | 1 | 0 | 0 |
 | VMware by Broadcom | Vmware Nsx Audit | `vmware:nsx:audit` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | VMware by Broadcom | Vmware Nsx Firewall | `vmware:nsx:firewall` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
-| VMware by Broadcom | Vmware Esx Perf | `vmware:perf:cpu` | metric | — | HEC (hec format) | R | - | - | 0 | 0 | 0 | 0 |
+| VMware by Broadcom | Vmware Esx Perf | `vmware:perf:cpu` | event | — | HEC (hec format) | R | - | - | 0 | 0 | 0 | 0 |
 | WatchGuard | Watchguard Fireware Alarm | `watchguard:fireware:alarm` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | WatchGuard | Watchguard Fireware Traffic | `watchguard:fireware:traffic` | event | — | HEC (syslog format) | - | - | - | 0 | 0 | 0 | 0 |
 | Wazuh | Wazuh Manager Alerts (alerts.log) | `wazuh:alerts` | event | rootcheck_hidden_process, rootcheck_hidden_file | HEC (syslog format) | G | yes | yes | 3 | 3 | 0 | 0 |

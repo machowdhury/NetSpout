@@ -1,6 +1,6 @@
 # Sourcetype Coverage Reference
 
-Generated 2026-11-02 by `scripts/generate_reference_docs.py` from `catalog/sourcetypes.json`, the coverage evidence and the replay registry. Machine-readable: `sourcetype_coverage.json` / `sourcetype_coverage.csv`.
+Generated 2026-11-03 by `scripts/generate_reference_docs.py` from `catalog/sourcetypes.json`, the coverage evidence and the replay registry. Machine-readable: `sourcetype_coverage.json` / `sourcetype_coverage.csv`.
 
 | Measure | Count |
 |---|---|
@@ -369,7 +369,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `vmw-syslog` | VMware vSphere ESXi Syslog | event | syslog | G | Y | Y | - | - | - | 1 | none recorded |
 | `vmware:nsx:audit` | Vmware Nsx Audit | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `vmware:nsx:firewall` | Vmware Nsx Firewall | event | syslog | - | - | - | - | - | - | - | none recorded |
-| `vmware:perf:cpu` | Vmware Esx Perf | metric | hec | R | - | - | - | Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry) | - | - | vendored replay sample vmware-esx-perf.yml |
+| `vmware:perf:cpu` | Vmware Esx Perf | event | hec | R | - | - | - | Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry) | - | - | vendored replay sample vmware-esx-perf.yml |
 
 ## Check Point Software (3)
 

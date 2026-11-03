@@ -182,6 +182,11 @@ def metric_sourcetypes() -> frozenset:
 # sourcetypes whose add-on parsing was verified live (scripts/ta_compat.py, docs/contracts/ta_live_results.json) the bare names are NOT sent at all:
 # an indexed field with the same name hides what the add-on extracts (proven for cisco:asa and fortigate_traffic: action/vendor_action, src_ip, dest_ip, signature, status).
 TA_PARSED_SOURCETYPES = frozenset({"cisco:asa", "cisco:ios", "fortigate_traffic", "pan:traffic"})
+# Phase 8: sourcetypes where the live check (scripts/phase8_live.py, evidence docs/verification/evidence/phase8/live_*.json) found NetSpout's own values indexed under bare vendor/CIM
+# field names (ISE src_ip/node_type, Meraki protocol/vendor/node_type, VMware and Duo all of them). Their add-on field extraction is not claimed as verified here (that is what
+# TA_PARSED_SOURCETYPES means), but the bare names are not sent either; the netspout_ copies remain.
+NAMESPACED_ONLY_SOURCETYPES = frozenset({"cisco:ise:syslog", "meraki:securityappliances", "vmware:perf:cpu", "cisco:duo:authentication_v2", "cisco:duo:administrator", "cisco:duo:activity",
+                                         "cisco:duo:account", "cisco:duo:user"})
 NETSPOUT_NAMESPACED_FIELDS = ("action", "signature", "status", "src_ip", "dest_ip", "protocol", "vendor", "node_type")
 
 
@@ -837,6 +842,10 @@ class TelemetryDispatcher:
 
             if is_metric:
                 metric_fields = self.extract_metric_fields(log)
+                if log.metric_profile == "iosxr_cisco_metrics":
+                    # documented cisco_metrics series carry exactly their own dimensions; NetSpout bookkeeping stays namespaced (netspout_*)
+                    for k in ("device", "host", "vendor", "status", "action"):
+                        metric_fields.pop(k, None)
                 if log.netspout_run_id:
                     metric_fields["netspout_run_id"] = log.netspout_run_id
                 if log.netspout_scenario_id:
@@ -865,8 +874,8 @@ class TelemetryDispatcher:
                 hec_payload = {
                     "time": time.time(),
                     "event": "metric",
-                    "host": log.device_id,
-                    "source": metric_source,
+                    "host": log.hec_host or log.device_id,
+                    "source": log.hec_source or metric_source,
                     "sourcetype": metric_sourcetype,
                     "index": target_index,
                     "fields": metric_fields
@@ -875,8 +884,8 @@ class TelemetryDispatcher:
                 hec_payload = {
                     "event": log.raw_log,
                     "time": time.time(),
-                    "host": log.device_id,
-                    "source": "network-topology-simulator",
+                    "host": log.hec_host or log.device_id,
+                    "source": log.hec_source or "network-topology-simulator",
                     "sourcetype": log.sourcetype or "cisco:ios",
                     "index": target_index,
                     "fields": {
@@ -902,7 +911,7 @@ class TelemetryDispatcher:
                 for k in NETSPOUT_NAMESPACED_FIELDS:
                     if f.get(k) is not None:
                         f["netspout_" + k] = f[k]
-                    if log.sourcetype in TA_PARSED_SOURCETYPES:
+                    if log.sourcetype in TA_PARSED_SOURCETYPES or log.sourcetype in NAMESPACED_ONLY_SOURCETYPES:
                         f.pop(k, None)          # the add-on owns the bare names for this sourcetype
             if is_metric:
                 # `_value` is only unambiguous for a single-measurement record; multi-metric records carry per-metric `metric_name:*` only.

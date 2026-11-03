@@ -77,7 +77,7 @@ test('unsupported and routing-conflict selections explain themselves and cannot 
   const cat = await (await request.get(`${API}/api/compat/catalog`)).json();
   const find = (st: string) => { for (const v of cat.vendors) for (const p of v.products) for (const s of p.sourcetypes) if (s.sourcetype === st) return { v: v.id, p: p.name, s }; throw new Error(st); };
   const before = await stats(request);
-  for (const st of ['cisco:thousandeyes:metric', 'cisco:intersight:metrics', 'vmware:perf:cpu']) {
+  for (const st of ['cisco:thousandeyes:metric', 'cisco:intersight:metrics']) {          // vmware:perf:cpu left this list in Phase 8 (generated as a TSV event)
     const f = find(st);
     await open(page, '/generate/quick');
     await page.getByTestId('show-all').check();

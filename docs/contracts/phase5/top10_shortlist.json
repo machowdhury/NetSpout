@@ -228,6 +228,33 @@
   "rank": 8
  },
  {
+  "vendor_id": "vmware_nsx",
+  "vendor": "VMware by Broadcom",
+  "ta_app_id": "Splunk_TA_vmware",
+  "ta_label": "Add-on for VMware",
+  "package_version": "4.2.1",
+  "package_file": "splunk-add-on-for-vmware_421.tgz",
+  "score": 8.0,
+  "exact_sourcetypes_ready": [
+   "vmware:perf:cpu"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 0,
+  "scenario_references": 0,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Medium",
+  "risks": [
+   "some sourcetypes emit fewer columns than the add-on lists"
+  ],
+  "evidence": "exact names defined at default/props.conf:[vmware:perf:cpu] in splunk-add-on-for-vmware_421.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (0 FORMAT_VERIFIED, 1 partial/structure-only)",
+  "rank": 9
+ },
+ {
   "vendor_id": "broadcom_symantec",
   "vendor": "Symantec (Broadcom), Web & Network Security",
   "ta_app_id": "Splunk_TA_bluecoat-proxysg",
@@ -249,32 +276,6 @@
   "estimated_complexity": "Low",
   "risks": [],
   "evidence": "exact names defined at default/props.conf:[bluecoat:proxysg:access:file] in splunk-add-on-for-symantec-blue-coat-proxysg_390.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
-  "rank": 9
- },
- {
-  "vendor_id": "okta",
-  "vendor": "Okta",
-  "ta_app_id": "Splunk_TA_okta_identity_cloud",
-  "ta_label": "Splunk Add-on for Okta Identity Cloud",
-  "package_version": "5.1.0",
-  "package_file": "splunk-add-on-for-okta-identity-cloud_510.spl",
-  "score": 5.6,
-  "exact_sourcetypes_ready": [
-   "OktaIM2:log"
-  ],
-  "exact_ready_count": 1,
-  "format_verified_count": 1,
-  "scenario_references": 6,
-  "shipped_yaml_sample": false,
-  "ingestion": [
-   "REST/API modular input"
-  ],
-  "delivery": "SUBSTITUTE_VIA_HEC",
-  "estimated_complexity": "Medium",
-  "risks": [
-   "the add-on's real input is an API/agent/script: NetSpout can only deliver the events over HEC"
-  ],
-  "evidence": "exact names defined at default/props.conf:[OktaIM2:log] in splunk-add-on-for-okta-identity-cloud_510.spl; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
   "rank": 10
  }
 ]

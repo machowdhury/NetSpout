@@ -1,0 +1,497 @@
+{
+ "spec": "palo_alto_traffic.json",
+ "ta": {
+  "id": "Splunk_TA_paloalto_networks",
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0"
+ },
+ "run_id": "tacompat-686f7dac58",
+ "generated": "2026-11-03T20:28:26+00:00",
+ "checks": [
+  {
+   "check": "ta.version",
+   "status": "PASS",
+   "detail": "installed package 4.0.0, expected 4.0.0"
+  },
+  {
+   "check": "props.sourcetype_stanza",
+   "status": "PASS",
+   "detail": "[pan:traffic] in props.conf"
+  },
+  {
+   "check": "props.report_transforms_exist",
+   "status": "PASS",
+   "detail": "1 REPORT transforms, missing: []"
+  },
+  {
+   "check": "transforms.force_sourcetype_defined",
+   "status": "PASS",
+   "detail": "1 transform(s) can set sourcetype::pan:traffic"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'pan:traffic', expected 'pan:traffic'"
+  },
+  {
+   "check": "timestamp.format_parses[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^(?:[^,]*,){6}' TIME_FORMAT='%Y/%m/%d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.src_zone]",
+   "status": "PASS",
+   "detail": "field src_zone is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.dest_zone]",
+   "status": "PASS",
+   "detail": "field dest_zone is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.app]",
+   "status": "PASS",
+   "detail": "field app is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.bytes]",
+   "status": "PASS",
+   "detail": "field bytes is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.bytes_in]",
+   "status": "PASS",
+   "detail": "field bytes_in is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.bytes_out]",
+   "status": "PASS",
+   "detail": "field bytes_out is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-allow.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "pan_traffic (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[pan-traffic-allow:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[pan-traffic-allow:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "add-on lookup pan_vendor_actions: vendor_action=allow -> action='allowed' (expected 'allowed')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'pan:traffic', expected 'pan:traffic'"
+  },
+  {
+   "check": "timestamp.format_parses[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^(?:[^,]*,){6}' TIME_FORMAT='%Y/%m/%d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.src_zone]",
+   "status": "PASS",
+   "detail": "field src_zone is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.dest_zone]",
+   "status": "PASS",
+   "detail": "field dest_zone is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.app]",
+   "status": "PASS",
+   "detail": "field app is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.bytes]",
+   "status": "PASS",
+   "detail": "field bytes is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.bytes_in]",
+   "status": "PASS",
+   "detail": "field bytes_in is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.bytes_out]",
+   "status": "PASS",
+   "detail": "field bytes_out is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "ta_defines_field[pan-traffic-deny.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [pan:traffic]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "pan_traffic (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[pan-traffic-deny:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[pan-traffic-deny:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "add-on lookup pan_vendor_actions: vendor_action=deny -> action='blocked' (expected 'blocked')"
+  },
+  {
+   "check": "force_sourcetype.rejects[threat-log-is-not-traffic]",
+   "status": "PASS",
+   "detail": "negative payload must not be routed to pan:traffic (add-on assigns None)"
+  },
+  {
+   "check": "lab.installed_version",
+   "status": "PASS",
+   "detail": "lab has Splunk Add-on for Palo Alto Networks 4.0.0, package 4.0.0"
+  },
+  {
+   "check": "routing.index_datatype",
+   "status": "PASS",
+   "detail": "index ta_validation datatype=event, expected event"
+  },
+  {
+   "check": "hec.accepted",
+   "status": "PASS",
+   "detail": "4/4 accepted"
+  },
+  {
+   "check": "index.event_count",
+   "status": "PASS",
+   "detail": "indexed 4 of 4"
+  },
+  {
+   "check": "index.sourcetype",
+   "status": "PASS",
+   "detail": "sourcetypes seen: ['pan:traffic']"
+  },
+  {
+   "check": "field[pan-traffic-allow.src_ip]",
+   "status": "PASS",
+   "detail": "expected '10.0.10.55', Splunk returned '10.0.10.55'"
+  },
+  {
+   "check": "field[pan-traffic-allow.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '198.51.100.80', Splunk returned '198.51.100.80'"
+  },
+  {
+   "check": "field[pan-traffic-allow.src_port]",
+   "status": "PASS",
+   "detail": "expected '49182', Splunk returned '49182'"
+  },
+  {
+   "check": "field[pan-traffic-allow.dest_port]",
+   "status": "PASS",
+   "detail": "expected '443', Splunk returned '443'"
+  },
+  {
+   "check": "field[pan-traffic-allow.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[pan-traffic-allow.rule]",
+   "status": "PASS",
+   "detail": "expected 'Outbound-Web-Rule', Splunk returned 'Outbound-Web-Rule'"
+  },
+  {
+   "check": "field[pan-traffic-allow.src_zone]",
+   "status": "PASS",
+   "detail": "expected 'trust', Splunk returned 'trust'"
+  },
+  {
+   "check": "field[pan-traffic-allow.dest_zone]",
+   "status": "PASS",
+   "detail": "expected 'untrust', Splunk returned 'untrust'"
+  },
+  {
+   "check": "field[pan-traffic-allow.app]",
+   "status": "PASS",
+   "detail": "expected 'ssl', Splunk returned 'ssl'"
+  },
+  {
+   "check": "field[pan-traffic-allow.session_id]",
+   "status": "PASS",
+   "detail": "expected '98422', Splunk returned '98422'"
+  },
+  {
+   "check": "field[pan-traffic-allow.bytes]",
+   "status": "PASS",
+   "detail": "expected '2480', Splunk returned '2480'"
+  },
+  {
+   "check": "field[pan-traffic-allow.bytes_in]",
+   "status": "PASS",
+   "detail": "expected '4300', Splunk returned '4300'"
+  },
+  {
+   "check": "field[pan-traffic-allow.bytes_out]",
+   "status": "PASS",
+   "detail": "expected '1820', Splunk returned '1820'"
+  },
+  {
+   "check": "field[pan-traffic-allow.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'allow', Splunk returned 'allow'"
+  },
+  {
+   "check": "field[pan-traffic-allow.action]",
+   "status": "PASS",
+   "detail": "expected 'allowed', Splunk returned 'allowed'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "Splunk returned ['pan', 'pan_firewall', 'pan_traffic']"
+  },
+  {
+   "check": "tags[pan-traffic-allow]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "field[pan-traffic-deny.src_ip]",
+   "status": "PASS",
+   "detail": "expected '198.51.100.150', Splunk returned '198.51.100.150'"
+  },
+  {
+   "check": "field[pan-traffic-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '10.0.10.80', Splunk returned '10.0.10.80'"
+  },
+  {
+   "check": "field[pan-traffic-deny.src_port]",
+   "status": "PASS",
+   "detail": "expected '58210', Splunk returned '58210'"
+  },
+  {
+   "check": "field[pan-traffic-deny.dest_port]",
+   "status": "PASS",
+   "detail": "expected '80', Splunk returned '80'"
+  },
+  {
+   "check": "field[pan-traffic-deny.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[pan-traffic-deny.rule]",
+   "status": "PASS",
+   "detail": "expected 'Perimeter-Drop-Rule', Splunk returned 'Perimeter-Drop-Rule'"
+  },
+  {
+   "check": "field[pan-traffic-deny.src_zone]",
+   "status": "PASS",
+   "detail": "expected 'untrust', Splunk returned 'untrust'"
+  },
+  {
+   "check": "field[pan-traffic-deny.dest_zone]",
+   "status": "PASS",
+   "detail": "expected 'trust', Splunk returned 'trust'"
+  },
+  {
+   "check": "field[pan-traffic-deny.app]",
+   "status": "PASS",
+   "detail": "expected 'web-browsing', Splunk returned 'web-browsing'"
+  },
+  {
+   "check": "field[pan-traffic-deny.session_id]",
+   "status": "PASS",
+   "detail": "expected '98421', Splunk returned '98421'"
+  },
+  {
+   "check": "field[pan-traffic-deny.bytes]",
+   "status": "PASS",
+   "detail": "expected '1420', Splunk returned '1420'"
+  },
+  {
+   "check": "field[pan-traffic-deny.bytes_in]",
+   "status": "PASS",
+   "detail": "expected '1420', Splunk returned '1420'"
+  },
+  {
+   "check": "field[pan-traffic-deny.bytes_out]",
+   "status": "PASS",
+   "detail": "expected '0', Splunk returned '0'"
+  },
+  {
+   "check": "field[pan-traffic-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'deny', Splunk returned 'deny'"
+  },
+  {
+   "check": "field[pan-traffic-deny.action]",
+   "status": "PASS",
+   "detail": "expected 'blocked', Splunk returned 'blocked'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['pan', 'pan_firewall', 'pan_traffic']"
+  },
+  {
+   "check": "tags[pan-traffic-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[threat-log-is-not-traffic]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[plain-text-no-csv]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[plain-text-no-csv.src_ip]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-csv.dest_ip]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-csv.session_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-csv.rule]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "search.by_run",
+   "status": "PASS",
+   "detail": "events searchable by run id and sourcetype"
+  },
+  {
+   "check": "timestamp.parsed_from_event_text",
+   "status": "PASS",
+   "detail": "_time 2026-11-03T17:28:23.000+00:00 vs text 17:28:23 (skew 0s)"
+  }
+ ],
+ "summary": {
+  "PASS": 96,
+  "FAIL": 0,
+  "NOT_RUN": 0
+ }
+}

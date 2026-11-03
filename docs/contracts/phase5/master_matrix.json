@@ -22,17 +22,17 @@
   },
   "naming_conflicts": 27,
   "exact_with_payload_conflict": 11,
-  "exact_with_routing_conflict": 3,
+  "exact_with_routing_conflict": 2,
   "format_verification": {
    "NOT_APPLICABLE": 214,
-   "NOT_CHECKABLE": 38,
+   "NOT_CHECKABLE": 37,
    "FORMAT_VERIFIED": 16,
-   "FORMAT_PARTIAL": 35,
+   "FORMAT_PARTIAL": 36,
    "STRUCTURE_ONLY": 35,
    "FORMAT_CONFLICT": 11
   },
-  "generators_valid": 244,
-  "generators_valid_exact": 95,
+  "generators_valid": 245,
+  "generators_valid_exact": 96,
   "sample_backed": 235,
   "live_verified": 4,
   "catalog_sourcetypes_without_covering_package": 75,
@@ -12675,7 +12675,7 @@
    "catalog_vendor_name": "VMware by Broadcom",
    "catalog_product": "Vmware Esx Perf",
    "catalog_sourcetype": "vmware:perf:cpu",
-   "catalog_data_kind": "metric",
+   "catalog_data_kind": "event",
    "catalog_protocol": "hec",
    "covering_packages": [
     "TA-nsx",
@@ -12693,14 +12693,12 @@
    "ta_sourcetype_role": "props-defined (parse/search-time rules; the package does not declare which input produces it)",
    "match_type": "exact",
    "naming_conflict": false,
-   "conflicts": [
-    "routing: catalog sends metric-index payloads; the add-on defines this as an event sourcetype"
-   ],
+   "conflicts": [],
    "generator_tier": "SAMPLE_REPLAY",
-   "generator_valid": false,
-   "generator_mode": null,
-   "generator_error": "TELEMETRY_NOT_GROUNDED: vmware:perf:cpu is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not p",
-   "payload_format": null,
+   "generator_valid": true,
+   "generator_mode": "native",
+   "generator_error": null,
+   "payload_format": "plain text",
    "sample_status": "SHIPPED_YAML",
    "shipped_yaml_samples": 1,
    "external_corpus_samples": 0,
@@ -12709,18 +12707,26 @@
     "scripted input"
    ],
    "ingestion_support": "SUPPORTED_DELIVERY",
-   "destination": "metric index",
+   "destination": "event index",
    "ta_destination": "event index (no metric schema in the add-on)",
-   "format_verification": "NOT_CHECKABLE (NetSpout cannot generate events for this sourcetype)",
-   "format_detail": null,
+   "format_verification": "FORMAT_PARTIAL",
+   "format_detail": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": null,
+    "passes": false
+   },
    "live_verification": "NOT_VERIFIED",
    "evidence": [
     "default/props.conf:[vmware:perf:cpu] in splunk-add-on-for-vmware_421.tgz"
    ],
    "scenarios": 0,
    "remediation": [
-    "align metric/event routing with the add-on (metric index vs event) before any live test",
-    "no generator output: add a generator/sample for the exact name (out of scope for Phase 5)"
+    "fix or extend the generator payload so the add-on's own extractions match",
+    "write a spec and run the one-add-on-at-a-time live check (Phase 4 method); only then drop the shadowing HEC fields"
    ],
    "sample_replayable": true,
    "also_defined_by": [],

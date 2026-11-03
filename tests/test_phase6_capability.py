@@ -24,7 +24,8 @@ client = TestClient(main.app)
 CFG = {"configured": True, "deployment_mode": "DOCKER_LAB", "indexes": ["dev_test_replay", "dev_test_replay_metrics"], "hec_url": "https://127.0.0.1:8088/services/collector"}
 GT = TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_token="tok-test", hec_metric_index="dev_test_replay_metrics")
 VERIFIED = {"cisco:asa": "cisco_asa", "cisco:ios": "cisco_ios", "fortigate_traffic": "fortinet", "pan:traffic": "palo_alto"}
-CONFLICTS = ["cisco:thousandeyes:metric", "cisco:intersight:metrics", "vmware:perf:cpu"]
+# vmware:perf:cpu left this list in Phase 8: the reference instance and Splunk_TA_vmware show it is a TSV event sourcetype, now generated as one
+CONFLICTS = ["cisco:thousandeyes:metric", "cisco:intersight:metrics"]
 
 
 class Out(tuple):
@@ -125,7 +126,7 @@ def test_unsupported_selection_is_refused_with_an_explanation_never_generated(en
 
 
 @pytest.mark.parametrize("st", CONFLICTS)
-def test_the_three_routing_conflicts_are_blocked_everywhere_and_never_converted(env, st):
+def test_the_remaining_routing_conflicts_are_blocked_everywhere_and_never_converted(env, st):
     rec = capability.get(st)
     assert rec["status"] == "UNSUPPORTED" and rec["block"]["code"] == "ROUTING_CONFLICT" and "metric" in rec["block"]["message"] and "event sourcetype" in rec["block"]["message"]
     vendor = rec["vendor_id"]
@@ -166,9 +167,9 @@ def test_scenario_eligibility_separates_runnable_from_splunk_verified(env):
 
 
 def test_a_scenario_that_requires_a_routing_conflict_sourcetype_is_not_runnable():
-    row = {"id": "x", "title": "x", "category": None, "summary": None, "engine": None, "dashboard": None, "catalog_runnable": True, "catalog_blocked_reason": None, "sourcetypes": ["cisco:asa", "vmware:perf:cpu"]}
+    row = {"id": "x", "title": "x", "category": None, "summary": None, "engine": None, "dashboard": None, "catalog_runnable": True, "catalog_blocked_reason": None, "sourcetypes": ["cisco:asa", "cisco:intersight:metrics"]}
     s = capability.scenario(row)
-    assert not s["runnable"] and s["run_state"] == "NOT_RUNNABLE" and "vmware:perf:cpu" in s["reasons"][0]
+    assert not s["runnable"] and s["run_state"] == "NOT_RUNNABLE" and "cisco:intersight:metrics" in s["reasons"][0]
     row["sourcetypes"] = ["cisco:asa", "cisco:ios", "fortigate_traffic", "pan:traffic"]
     s = capability.scenario(row)
     assert s["runnable"] and s["verified"] and s["run_state"] == "VERIFIED_IN_SPLUNK"

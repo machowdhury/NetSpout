@@ -72,6 +72,12 @@ def analytics_for(sourcetypes):
 
 
 # ------------------------------------------------------------------------------------------------------------------ scenario sources
+def _has_metric_stream(sourcetypes):
+    """Contracts that emit a metric sourcetype land gauge datapoints in the metric index (dimensions: netspout_scenario_id, netspout_run_id, netspout_phase), so the mstats panels apply."""
+    from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+    return any(is_metric_sourcetype(st) for st in sourcetypes)
+
+
 def sources(include_blocked=False):
     """-> list of dicts: id, title, kind, family, key_field, scenario_value, industries, subindustry, objective, phases, required_sourcetypes, detection_prerequisites, provenance, metric."""
     tax = json.load(open(ROOT / "catalog/explorer_taxonomy.json"))
@@ -146,6 +152,14 @@ def sources(include_blocked=False):
                     "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
                     "provenance": "Unified-generation scenario (%s); modeled and documented payloads as declared by its source contracts." % u.get("category", "").replace("_", " ").title().lower(),
                     "category": u.get("category")})
+    from netspout_core import scenario_contracts   # declarative contracts: events are indexed with netspout_run_id / netspout_scenario_id / netspout_phase
+    for row in scenario_contracts.catalog():
+        sid, sec = row["scenario_id"], row["kind"] == "security"
+        out.append({"id": sid, "title": row["title"], "kind": "security" if sec else "operational", "family": "contract", "key_field": "netspout_run_id", "scenario_value": sid,
+                    "industries": ind_map.get(sid, []), "subindustry": None, "objective": row["description"], "phases": [{"id": p, "source": {"kind": "native", "pack": sid}} for p in row["phases"]],
+                    "required_sourcetypes": row["sourcetypes"], "metric": _has_metric_stream(row["sourcetypes"]), "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
+                    "provenance": "Declarative scenario contract (%s): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase." % row["generator_family"],
+                    "category": row["category"]})
     return out
 
 
@@ -296,6 +310,43 @@ def impact_tab(d):
           handlers=[search_drill(b + ' | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | search pf_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)])
 
 
+def _status_varies(cid):
+    from netspout_core import scenario_contracts
+    return len({e.status for e in scenario_contracts.generate(cid, "dashboard-build")}) > 1
+
+
+def _has_modeled_measure(cid):
+    from netspout_core import scenario_contracts
+    return any("metric_name" in json.dumps(st) for st in scenario_contracts.get(cid)["streams"] if st["formatter"] == "format_modeled_state_event")
+
+
+def contract_panels(d, tab, y):
+    """Panels for declarative-contract scenarios: the phase story lives in the indexed status / action / signature fields (raw vendor text is fixed), shown in the contract's own phase order."""
+    s, b = d.src, d.base
+    order = "case(" + ",".join('pf_phase="%s",%d' % (p["id"], i + 1) for i, p in enumerate(s["phases"])) + ",true(),99)"
+    if _status_varies(s["id"]):
+        d.add(tab, "splunk.column", "Status by phase (how the story progresses)", 20, y, 700, 300,
+              query=b + PHASE + " | eval pf_ord=" + order + " | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by status",
+              options={"stackMode": "stacked", "seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
+              description="Each phase of the scenario contract with the status values its events carry (for example normal, degraded, blocked, mitigated, restored).")
+    else:   # a steady-state scenario: every event is normal by design, so a status chart would show one colour; show the load per phase and source instead
+        d.add(tab, "splunk.column", "Events by phase and source (steady-state scenario)", 20, y, 700, 300,
+              query=b + PHASE + " | eval pf_ord=" + order + " | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by pf_st",
+              options={"stackMode": "stacked", "seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
+              description="This scenario has no fault: every event is normal. The chart shows how much each source reports in each load phase.")
+    d.add(tab, "splunk.table", "What each phase reported (action and signature by device)", 740, y, 700, 300,
+          query=b + PHASE + " | eval pf_ord=" + order + " | stats count as events by pf_ord, pf_phase, pf_host, action, signature | sort pf_ord, - events | fields - pf_ord | head 40",
+          options={"count": 8, "backgroundColor": C["card"]}, handlers=[search_drill(b + ' netspout_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)],
+          description="The signature text each device reported in each phase; click a row to open the events of that phase.")
+    if _has_modeled_measure(s["id"]):
+        d.add(tab, "splunk.line", "Measured indicator by phase (modeled values)", 20, y + 320, 1420, 300,
+              query=b + PHASE + ' | search sourcetype="netspout:scenario:state" | spath input=_raw | where isnotnull(metric_value) | eval pf_ord=' + order + ' | eval step=printf("%d %s", pf_ord, pf_phase) | chart avg(metric_value) as value over step by metric_name',
+              options={"seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Value"},
+              description="The indicator this scenario models, averaged in each phase. The values are modeled (netspout:scenario:state), not measurements of any product.")
+        return y + 640
+    return y + 320
+
+
 def build_operational(s, probe):
     d = Dash(s)
     b = d.base
@@ -317,11 +368,18 @@ def build_operational(s, probe):
     d.add("engineer", "splunk.line", "Telemetry volume trend by source", 20, 130, 710, 300, query=b + PHASE + SECS + " | stats count by pf_sec, pf_st | xyseries pf_sec pf_st count | sort pf_sec | fillnull value=0",
           options={"seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "yAxisTitleText": "Events", "xAxisTitleText": "Seconds since the first event of the run"},
           description="Event throughput per source over the run: a drop after the incident phase is the health signal available from this telemetry.")
-    d.add("engineer", "splunk.column", "Before / during / after by source", 750, 130, 690, 300,
-          query=b + PHASE + CLASS + " | chart count over pf_st by pf_class | addtotals fieldname=_total | sort - _total | head 8 | fields - _total | rename pf_st as sourcetype",
-          options={"stackMode": "stacked", "seriesColors": [C["blue"], C["amber"], C["green"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
-          description="Events per source before the incident, during it and during recovery/validation (phase names from the scenario).")
+    if s["family"] == "contract" and not _status_varies(s["id"]):   # a steady-state scenario has no incident: do not label its events "During incident"
+        d.add("engineer", "splunk.column", "Events by source (steady-state scenario: no incident)", 750, 130, 690, 300, query=b + PHASE + " | chart count over pf_st | rename pf_st as sourcetype",
+              options={"seriesColors": SERIES, "legendDisplay": "off", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
+              description="Every event in this scenario is normal; the chart shows how much each source reports.")
+    else:
+        d.add("engineer", "splunk.column", "Before / during / after by source", 750, 130, 690, 300,
+              query=b + PHASE + CLASS + " | chart count over pf_st by pf_class | addtotals fieldname=_total | sort - _total | head 8 | fields - _total | rename pf_st as sourcetype",
+              options={"stackMode": "stacked", "seriesColors": [C["blue"], C["amber"], C["green"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
+              description="Events per source before the incident, during it and during recovery/validation (phase names from the scenario).")
     y = 450
+    if s["family"] == "contract":
+        y = contract_panels(d, "engineer", y)
     if s["metric"]:
         mb = 'index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="$run_tok$"' % s["scenario_value"]
         d.add("engineer", "splunk.line", "Health and performance metrics over the run (mstats)", 20, y, 710, 300,
@@ -371,6 +429,8 @@ def build_security(s, probe):
     md(d, "overview", amd, 740, 590, 700, 300)
     asset_tables(d, "investigation", 130, True)
     y = 470
+    if s["family"] == "contract":
+        y = contract_panels(d, "investigation", y)
     if probe.get("users"):
         d.add("investigation", "splunk.table", "Users and accounts seen in the events", 20, y, 700, 300,
               query=b + PHASE + " | eval who=coalesce(user, User, src_user, TargetUserName, SubjectUserName, Account_Name, 'userIdentity.userName', 'actor.alternateId') | stats count as events, dc(pf_host) as hosts by who | where isnotnull(who) | sort - events | head 25",

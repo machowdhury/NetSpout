@@ -1,0 +1,641 @@
+{
+ "environment": "isolated local Splunk Enterprise (docker splunk/splunk:10.2, amd64) + branch engine on 127.0.0.1:8095",
+ "sampled": 25,
+ "passed": 25,
+ "rows": [
+  {
+   "scenario_id": "lateral_movement",
+   "fidelity": "VENDOR_NATIVE",
+   "run_id": "run-b4a0d30146b5",
+   "contract_generated": 57,
+   "hec_accepted": 57,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:asa": 30,
+    "cisco:ios:syslog": 15,
+    "postgresql:audit": 12
+   },
+   "indexed_events_total": 57,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "SPREAD",
+    "CONTAINMENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 57,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "mixed_vendor_enterprise",
+   "fidelity": "VENDOR_NATIVE",
+   "run_id": "run-48187614ed89",
+   "contract_generated": 64,
+   "hec_accepted": 64,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "fortinet:fortigate:utm": 14,
+    "meraki:assurancealerts": 14,
+    "nginx:plus:kv": 14,
+    "pan:threat": 8,
+    "pan:traffic": 14
+   },
+   "indexed_events_total": 64,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "RECON",
+    "EXPLOIT",
+    "DEFENSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 64,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "normal_traffic",
+   "fidelity": "VENDOR_NATIVE",
+   "run_id": "run-fa38f5604172",
+   "contract_generated": 55,
+   "hec_accepted": 55,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:asa": 11,
+    "f5:bigip:ltm": 11,
+    "nginx:plus:kv": 11,
+    "pan:traffic": 11,
+    "postgresql:audit": 11
+   },
+   "indexed_events_total": 55,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "STEADY",
+    "PEAK",
+    "COOLDOWN"
+   ],
+   "parents_resolve": true,
+   "roots": 55,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "service_provider_mixed",
+   "fidelity": "VENDOR_NATIVE",
+   "run_id": "run-efe0c7f449e6",
+   "contract_generated": 39,
+   "hec_accepted": 39,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "juniper:junos": 11,
+    "nokia:sros:syslog": 14
+   },
+   "indexed_events_total": 25,
+   "metric_index": {
+    "metric_events": "14",
+    "datapoints": "140"
+   },
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 25,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "arch_gan_subsea_cloud",
+   "fidelity": "VENDOR_NATIVE",
+   "run_id": "run-38dafe68f8bf",
+   "contract_generated": 42,
+   "hec_accepted": 42,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "zscaler:zia": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": {
+    "metric_events": "28",
+    "datapoints": "210"
+   },
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "fidelity": "MIXED",
+   "run_id": "run-f4ceb0b30c72",
+   "contract_generated": 42,
+   "hec_accepted": 42,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:catalyst:networkhealth": 14,
+    "cisco:ios:syslog": 14,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 42,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 42,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "fidelity": "MIXED",
+   "run_id": "run-17f8798ea5fb",
+   "contract_generated": 28,
+   "hec_accepted": 28,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "arista:telemetry:json": 14,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 28,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 28,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "pure_cisco_enterprise",
+   "fidelity": "MIXED",
+   "run_id": "run-8c31dc8192d7",
+   "contract_generated": 76,
+   "hec_accepted": 76,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:catalyst:networkhealth": 14,
+    "cisco:catalyst:rogue:threat_details": 14,
+    "cisco:ise:syslog": 34,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 76,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 76,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-ENT-002",
+   "fidelity": "MODELED",
+   "run_id": "run-7899dc4dfcb9",
+   "contract_generated": 14,
+   "hec_accepted": 14,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-SP-008",
+   "fidelity": "MODELED",
+   "run_id": "run-076ed2bfa725",
+   "contract_generated": 14,
+   "hec_accepted": 14,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-CRI-018",
+   "fidelity": "MODELED",
+   "run_id": "run-03b8a9c20401",
+   "contract_generated": 14,
+   "hec_accepted": 14,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-DC-012",
+   "fidelity": "MODELED",
+   "run_id": "run-254042825a68",
+   "contract_generated": 14,
+   "hec_accepted": 14,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-SEC-005",
+   "fidelity": "MIXED",
+   "run_id": "run-bd7a6d93b592",
+   "contract_generated": 40,
+   "hec_accepted": 40,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:ise:syslog": 26,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 40,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 40,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-SEC-006",
+   "fidelity": "MIXED",
+   "run_id": "run-70b7d1c68484",
+   "contract_generated": 28,
+   "hec_accepted": 28,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:ise:syslog": 14,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 28,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 28,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "fidelity": "MIXED",
+   "run_id": "run-33c3bde72892",
+   "contract_generated": 27,
+   "hec_accepted": 27,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:ios:syslog": 13,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 27,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 27,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-ENT-005",
+   "fidelity": "MIXED",
+   "run_id": "run-693c341549dd",
+   "contract_generated": 37,
+   "hec_accepted": 37,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:sdwan:BGP-5-ADJCHANGE": 10,
+    "cisco:sdwan:linkhealth": 13,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 37,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 37,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-DC-008",
+   "fidelity": "MIXED",
+   "run_id": "run-87221bbef649",
+   "contract_generated": 27,
+   "hec_accepted": 27,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:dc:nexus9k:syslog": 13,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 27,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 27,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-SEC-015",
+   "fidelity": "MIXED",
+   "run_id": "run-13a591a30641",
+   "contract_generated": 34,
+   "hec_accepted": 34,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "cisco:duo:remote:vpn": 20,
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 34,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 34,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "C100-CRI-001",
+   "fidelity": "MIXED",
+   "run_id": "run-436dab3be3f7",
+   "contract_generated": 27,
+   "hec_accepted": 27,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 14
+   },
+   "indexed_events_total": 14,
+   "metric_index": {
+    "metric_events": "13",
+    "datapoints": "65"
+   },
+   "phase_order_indexed": [
+    "BASELINE",
+    "INCIDENT",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 14,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-14.3.9",
+   "fidelity": "MODELED",
+   "run_id": "run-0a5666010c13",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-8.1.1",
+   "fidelity": "MODELED",
+   "run_id": "run-f48a727b969d",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-22.1.5",
+   "fidelity": "MODELED",
+   "run_id": "run-ed70bed254ad",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-21.1.1",
+   "fidelity": "MODELED",
+   "run_id": "run-df8c6ba789b9",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-21.11.1",
+   "fidelity": "MODELED",
+   "run_id": "run-e2fc27f90bde",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  },
+  {
+   "scenario_id": "UCR-13.4.5",
+   "fidelity": "MODELED",
+   "run_id": "run-64942895db67",
+   "contract_generated": 23,
+   "hec_accepted": 23,
+   "hec_rejected": 0,
+   "indexed_events_by_sourcetype": {
+    "netspout:scenario:state": 23
+   },
+   "indexed_events_total": 23,
+   "metric_index": null,
+   "phase_order_indexed": [
+    "BASELINE",
+    "DEVIATION",
+    "ESCALATION",
+    "RESPONSE",
+    "RECOVERY"
+   ],
+   "parents_resolve": true,
+   "roots": 23,
+   "correlation_fields_on_all_events": true,
+   "status": "PASS",
+   "problems": []
+  }
+ ]
+}

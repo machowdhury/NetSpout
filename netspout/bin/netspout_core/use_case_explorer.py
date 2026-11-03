@@ -111,6 +111,8 @@ class UseCaseExplorer:
         runtime_approved_detections: Iterable[str],
         pack_scenario_ids: Iterable[str] = (),
         runner_scenario_ids: Optional[Iterable[str]] = None,
+        contract_scenario_ids: Iterable[str] = (),
+        contract_rows: Iterable[Dict[str, Any]] = (),
         incident_packs: Iterable[Dict[str, Any]] = (),
         replay_packs: Iterable[Dict[str, Any]] = (),
         netflow_packs: Iterable[Dict[str, Any]] = (),
@@ -130,6 +132,8 @@ class UseCaseExplorer:
         self._dashboard_verified = set(dashboard_verified)  # DASHBOARD_READY evidence recorded
         self._curated = {c["content_id"]: c for c in curated_stories}  # Analytic Stories curated for sector relevance (never implies executable)
         self._runner_ids = None if runner_scenario_ids is None else set(runner_scenario_ids)
+        self._contract_rows = {r["scenario_id"]: r for r in (contract_rows or [])}
+        self._contract_ids = set(contract_scenario_ids or []) | set(self._contract_rows)
         self.taxonomy = taxonomy
         self._industry_ids = [i["id"] for i in taxonomy["industries"]]
         self._validations = validations
@@ -232,15 +236,17 @@ class UseCaseExplorer:
         engine, runnable, blocked = "scenario_runner", True, None
         if sid in self._pack_ids:
             engine = "scenario_pack"
+        elif sid in self._contract_ids:
+            engine = "scenario_contract"
         elif self._runner_ids is not None and sid not in self._runner_ids:
             runnable, blocked = False, "Contract only in this release: no executable telemetry is implemented for this scenario"
         return self._operational_entry(
-            entry_id=f"op:{'pack' if engine == 'scenario_pack' else 'runner'}:{sid}", engine=engine, scenario_id=sid,
-            title=s.get("display_name") or s.get("name", sid), summary=s.get("description", ""),
+            entry_id=f"op:{ {'scenario_pack': 'pack', 'scenario_contract': 'contract'}.get(engine, 'runner') }:{sid}", engine=engine, scenario_id=sid,
+            title=s.get("display_name") or s.get("name", sid), summary=(self._contract_rows.get(sid) or {}).get("description") or s.get("description", ""),
             domain=str(s.get("category", "")).replace("_", " ").title(), category=s.get("category", ""),
-            vendors=list(s.get("vendor_scope", [])), sourcetypes=list(s.get("sourcetypes", [])), source_ids=[],
+            vendors=list(s.get("vendor_scope", [])), sourcetypes=list((self._contract_rows.get(sid) or {}).get("sourcetypes") or s.get("sourcetypes", [])), source_ids=[],
             raw_maturity=s.get("maturity", "NOT_ESTABLISHED"), runnable=runnable, blocked_reason=blocked,
-            dashboard=self._dashboard_ref(sid) or (self._replay_dashboard_ref(sid) if engine in ("scenario_pack", "scenario_runner") else None),
+            dashboard=self._dashboard_ref(sid) or (self._replay_dashboard_ref(sid) if engine in ("scenario_pack", "scenario_runner", "scenario_contract") else None),
         )
 
     def _candidate_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
@@ -252,6 +258,16 @@ class UseCaseExplorer:
         if deps.get("research_gaps"):
             extra.append("research gaps: " + "; ".join(str(g) for g in deps["research_gaps"][:3]))
         reason = ("Cataloged candidate: a documented definition exists but NetSpout has no generator or scenario contract for it. " + " ".join(extra)).strip()
+        contract = self._contract_rows.get(sid)
+        if contract:   # a declarative contract now executes this definition (see netspout_core/scenario_contracts.py)
+            entry = self._operational_entry(
+                entry_id=f"op:contract:{sid}", engine="scenario_contract", scenario_id=sid, title=row["title"], summary=contract["description"],
+                domain=row.get("domain") or (row.get("upstream_industry") or "Candidate"), category=str(row.get("upstream_industry") or ""), vendors=list(contract.get("vendors", [])),
+                sourcetypes=list(contract["sourcetypes"]), source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._replay_dashboard_ref(sid))
+            entry["telemetry_fidelity"] = contract.get("fidelity")
+            entry["industries"] = [{"id": i["id"], "basis": i["basis"]} for i in row.get("industries", [])]
+            entry["provenance"] = {"source_id": row["source_id"], "source_ref": row.get("source_ref"), "url": row.get("url"), "criticality": row.get("criticality")}
+            return entry
         entry = self._operational_entry(
             entry_id=f"op:candidate:{sid}", engine="cataloged", scenario_id=sid, title=row["title"],
             summary=("Documented " + ("compliance" if row.get("kind") == "compliance" else "operational") + " candidate (" + row["source_id"] + " " + str(row.get("source_ref")) + "). Not executable."),
@@ -366,8 +382,8 @@ class UseCaseExplorer:
             ver = ("POST", "/api/runs/{run_id}/verify", None)
             ing_note = "Normalized flow events are accepted by HEC; the IPFIX wire export (generated, UDP exported, collector decoded) is reported separately and is never counted as accepted"
             ver_note = "Success = Splunk's run-scoped event count equals the HEC-accepted count (independent search)"
-        elif e["engine"] in ("scenario_pack", "incident_pack"):
-            cfg = ("GET", "/api/setup", None)
+        elif e["engine"] in ("scenario_pack", "incident_pack", "scenario_contract"):
+            cfg = ("GET", f"/api/explorer/entries/{e['entry_id']}/preview", None) if e["engine"] == "scenario_contract" else ("GET", "/api/setup", None)
             gen = ("POST", "/api/generate/scenario-pack", {"scenario_id": sid, "dispatch": True})
             ver = ("POST", "/api/explorer/observe", {"run_id": "{run_id}"})
             ing_note = "HEC acceptance is counted per event from the dispatch results (accepted must equal generated)"

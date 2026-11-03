@@ -750,6 +750,11 @@ class TelemetryDispatcher:
                                 elif name == "buffer_utilization_pct":
                                     name = "buffer_utilization"
                                 metric_fields[f"metric_name:{name}"] = float(v)
+                    # Handle a flat `metrics` object (for example the ThousandEyes test result): one gauge per numeric value
+                    if "metrics" in raw_obj and isinstance(raw_obj["metrics"], dict):
+                        for k, v in raw_obj["metrics"].items():
+                            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                                metric_fields[f"metric_name:{k}"] = float(v)
                     # Handle data_gpbkv list
                     if "data_gpbkv" in raw_obj and isinstance(raw_obj["data_gpbkv"], list):
                         for entry in raw_obj["data_gpbkv"]:
@@ -822,6 +827,8 @@ class TelemetryDispatcher:
                     metric_fields["netspout_device_id"] = log.netspout_device_id
                 if log.netspout_event_id:
                     metric_fields["netspout_event_id"] = log.netspout_event_id
+                if log.netspout_parent_event_id:
+                    metric_fields["netspout_parent_event_id"] = log.netspout_parent_event_id
                 if log.netspout_ground_truth:
                     metric_fields["netspout_ground_truth"] = str(log.netspout_ground_truth)
 
@@ -866,6 +873,7 @@ class TelemetryDispatcher:
                         "netspout_phase": log.netspout_phase,
                         "netspout_device_id": log.netspout_device_id,
                         "netspout_event_id": log.netspout_event_id,
+                        "netspout_parent_event_id": log.netspout_parent_event_id,
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }

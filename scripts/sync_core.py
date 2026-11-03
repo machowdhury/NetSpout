@@ -68,6 +68,8 @@ CORE_MODULES = [
     "wave2_authentic_engine.py",
     "wave3_authentic_engine.py",
     "authentic_scenario_packs.py",
+    "scenario_contracts.py",
+    "modeled_telemetry.py",
     "release_candidate.py",
     "security_content_lab.py",
     "industry_packs.py",

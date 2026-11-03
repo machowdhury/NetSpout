@@ -96,7 +96,13 @@ def test_explorer_lists_all_incident_packs_as_runnable_modeled_contracted_scenar
     client = TestClient(main.app)
     items = []
     for demo in ("true", "false"):
-        items += client.get("/api/explorer/entries", params={"kind": "operational", "limit": 200, "demo_ready": demo}).json()["items"]
+        offset = 0
+        while True:   # page: there are more than 200 operational entries
+            page = client.get("/api/explorer/entries", params={"kind": "operational", "limit": 200, "offset": offset, "demo_ready": demo}).json()
+            items += page["items"]
+            offset += 200
+            if offset >= page["total"]:
+                break
     inc = [i for i in items if i["engine"] == "incident_pack"]
     assert len(inc) == 37 and all(i["runnable"] and i["maturity"]["tier"] == "CONTRACTED" and not i["demo_ready"] for i in inc)
     verify = next(s for s in inc[0]["workflow"] if s["step"] == "VERIFY")

@@ -2169,6 +2169,20 @@ def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
                 transport_config=_generator_transport(payload.get('index'), config, needs_metric_index=scenario_id in incident) if payload.get('dispatch') else None)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
+    from netspout_core import scenario_contracts
+    if scenario_id in scenario_contracts.ids():
+        try:
+            entries = scenario_contracts.generate(scenario_id, run_id=payload.get('run_id'), seed=payload.get('seed'))
+        except scenario_contracts.ContractError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        results = []
+        if payload.get('dispatch'):
+            from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+            cfg = _generator_transport(payload.get('index'), payload.get('transport_config'), needs_metric_index=any(is_metric_sourcetype(e.sourcetype) for e in entries))
+            results = [dispatcher.dispatch_log(e, cfg) for e in entries]
+        return dict(mode='SCENARIO', status='GENERATED', scenario_id=scenario_id, run_id=entries[0].netspout_run_id, count_generated=len(entries),
+                    telemetry='SCENARIO_CONTRACT', events=[{'host': e.device_id, 'sourcetype': e.sourcetype, 'phase': e.netspout_phase} for e in entries],
+                    dispatch_results=results, dispatched=bool(payload.get('dispatch')))
     raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")
 
 
@@ -2329,6 +2343,21 @@ def runs_start(payload: Dict[str, Any]):
         if kind == "scenario" and target in SCENARIO_PACK_IDS:
             items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in run_scenario_pack(target, run_id)]
             title, metric_index = target, None
+        elif kind == "scenario" and target in __import__("netspout_core.scenario_contracts", fromlist=["ids"]).ids():
+            # declarative scenario contract: shared topology, ordered phases, existing vendor formatters (see netspout_core/scenario_contracts.py)
+            from netspout_core import scenario_contracts
+            from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+            try:
+                entries = scenario_contracts.generate(target, run_id, seed=payload.get("seed"), scale=float(payload.get("scale", 1.0)))
+            except scenario_contracts.ContractError as exc:
+                raise HTTPException(status_code=422, detail=str(exc)) from exc
+            metric_index = None
+            if any(is_metric_sourcetype(e.sourcetype) for e in entries):
+                metric_index = cfg.hec_metric_index
+                if metric_index not in release_candidate_configuration.load().get("indexes", []):
+                    raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+            items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in entries]
+            title = scenario_contracts.get(target)["title"]
         elif kind == "scenario" and target in netflow_solution.IDS:
             # NetFlow/IPFIX solution: normalized NDJSON flow events over HEC are what the monitor counts; the IPFIX wire export is a separate, separately reported stage
             seed = int(payload.get("seed", 42))
@@ -2911,6 +2940,11 @@ def _replay_dashboards():
         out = {pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in doc["dashboards"].items()}
     except (OSError, ValueError, KeyError):
         out = {}
+    try:   # declarative-contract dashboards: offline evidence only (scripts/build_contract_dashboard_evidence.py), so they appear as IMPLEMENTED, never data-validated
+        c_doc = json.loads((root / "docs/verification/evidence/dashboards/contract_dashboard_maturity.json").read_text(encoding="utf-8"))
+        out.update({pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in c_doc["dashboards"].items() if v.get("implemented")})
+    except (OSError, ValueError, KeyError):
+        pass
     try:   # NetFlow solution dashboards are validated by their own evidence file (scripts/validate_netflow_dashboards.py)
         nf_doc = json.loads((root / "docs/verification/evidence/netflow/dashboard_maturity.json").read_text(encoding="utf-8"))
         out.update({pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in nf_doc["dashboards"].items()})
@@ -2936,6 +2970,8 @@ def _explorer() -> UseCaseExplorer:
         runtime_approved_detections=SUPPORTED_RUNTIME_DETECTIONS,
         pack_scenario_ids=SCENARIO_PACK_IDS,
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
+        contract_scenario_ids=__import__("netspout_core.scenario_contracts", fromlist=["ids"]).ids(),
+        contract_rows=__import__("netspout_core.scenario_contracts", fromlist=["catalog"]).catalog(),
         incident_packs=incident_catalog(),
         replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
         netflow_packs=__import__('netspout_core.netflow_solution', fromlist=['catalog']).catalog(),
@@ -3040,7 +3076,13 @@ def explorer_preview(entry_id: str):
     gt = getattr(current_topology, "global_transport", None) if current_topology else None
     volume = {"events": None, "metric_events": None, "phases": [], "basis": "not known before the run"}
     try:
-        if target in SCENARIO_PACK_IDS:
+        from netspout_core import scenario_contracts
+        if target in scenario_contracts.ids():
+            pv = scenario_contracts.preview(target)
+            volume = {"events": pv["total_events"], "metric_events": 0, "phases": [{"phase": p["id"], "events": p["events"]} for p in pv["phases"]],
+                      "basis": "declarative scenario contract (deterministic structure)"}
+            st = pv["sourcetypes"]
+        elif target in SCENARIO_PACK_IDS:
             evs = run_scenario_pack(target, "preview")
             ph = Counter(e.netspout_phase for e in evs if getattr(e, "netspout_phase", None))
             volume = {"events": len(evs), "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}

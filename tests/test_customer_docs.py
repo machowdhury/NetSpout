@@ -85,3 +85,24 @@ def test_every_runnable_scenario_is_registered_with_its_run_path():
         if r["runnable"] and r["engine"] in registry:
             assert r["scenario_id"] in registry[r["engine"]], (r["engine"], r["scenario_id"])
     assert sum(1 for r in S if r["runnable"] and r["engine"] in registry) >= 120          # the five code-registered engines cover most runnable scenarios
+
+
+def test_validation_claims_in_the_docs_match_the_evidence_files():
+    ev = ROOT / "docs" / "verification" / "evidence"
+    live_f = ev / "scenario_contracts" / "live_validation_all.json"
+    if not live_f.exists():
+        return
+    live = {r["scenario_id"]: r for r in json.loads(live_f.read_text())["rows"]}
+    dash = json.loads((ev / "dashboards" / "contract_dashboard_maturity.json").read_text())["dashboards"]
+    text = (ROOT / "docs" / "SCENARIOS.md").read_text()
+    rows = [l for l in text.splitlines() if l.startswith("| `")]
+    by_id = {l.split("`")[1]: l for l in rows}
+    for cid, line in by_id.items():
+        if cid in live and live[cid]["status"] == "PASS":
+            assert "live-indexed in the lab Splunk" in line, cid
+        elif cid in dash:
+            assert "live-indexed in the lab Splunk" not in line, "%s claims live indexing without a passing evidence row" % cid
+        if cid in dash:
+            assert ("visually inspected" in line) == bool(dash[cid]["screenshot_inspected"]), cid
+            assert ("search-validated against indexed data" in line) == bool(dash[cid]["search_results_validated"]), cid
+            assert ("parser-validated" in line) == bool(dash[cid]["splunk_spl_parser_validated"]), cid

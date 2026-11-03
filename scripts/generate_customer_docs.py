@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REF = ROOT / "docs" / "reference"
 VIEWS = ROOT / "netspout" / "default" / "data" / "ui" / "views"
 ENGINE_LABEL = {"scenario_pack": "Scenario pack", "incident_pack": "Incident pack", "replay_pack": "Replay pack (recorded data)", "netflow_solution": "NetFlow / IPFIX",
-                "scenario_runner": "Scenario runner", "unified_generation": "Unified generation"}
+                "scenario_runner": "Scenario runner", "unified_generation": "Unified generation", "scenario_contract": "Declarative scenario contract"}
 TIER_NOTE = {"CERTIFIED": "certified golden path", "VALIDATED": "validated", "CONTRACTED": "contract only", "FORMAT_VALIDATED": "format validated", "NOT_ESTABLISHED": "not established"}
 
 
@@ -29,6 +29,48 @@ def load(name):
     return d["generated"], d["rows"]
 
 
+def contract_info():
+    """scenario id -> declarative-contract row (fidelity, generator family, phases, emitted sourcetypes); empty if the module is unavailable."""
+    try:
+        import sys
+        sys.path[:0] = [str(ROOT / "src")]
+        from netspout_core import scenario_contracts
+        return {c["scenario_id"]: c for c in scenario_contracts.catalog()}
+    except Exception:
+        return {}
+
+
+FIDELITY = {"VENDOR_NATIVE": "Vendor-native formatters", "MODELED": "Modeled (labeled, not vendor-native)", "MIXED": "Mixed: native plus modeled stand-in"}
+
+
+def evidence():
+    """Live-indexing and dashboard evidence for the declarative contracts, read from the evidence files (empty if a file is absent)."""
+    import glob
+    ev = ROOT / "docs" / "verification" / "evidence"
+    live = {}
+    for f in sorted(glob.glob(str(ev / "scenario_contracts" / "live_validation_all.json"))):
+        for r in json.loads(Path(f).read_text())["rows"]:
+            live[r["scenario_id"]] = r
+    mf = ev / "dashboards" / "contract_dashboard_maturity.json"
+    return live, (json.loads(mf.read_text())["dashboards"] if mf.exists() else {})
+
+
+def contract_validation(cid, live, dash):
+    """What has actually been verified for one contract scenario, stated level by level."""
+    r, d = live.get(cid), dash.get(cid, {})
+    if r and r["status"] == "PASS":
+        m = (r.get("metric_index") or {})
+        extra = ", %s metric events carrying %s measurements" % (m.get("metric_events"), m.get("datapoints")) if m else ""
+        live_txt = "live-indexed in the lab Splunk (independent search: %d events%s)" % (r["indexed_events_total"], extra)
+    elif r:
+        live_txt = "live run FAILED verification"
+    else:
+        live_txt = "executed offline in tests only; not indexed in Splunk"
+    levels = [n for flag, n in (("splunk_spl_parser_validated", "parser-validated"), ("search_results_validated", "search-validated against indexed data"),
+                                ("browser_render_checks_pass", "browser-rendered"), ("screenshot_inspected", "visually inspected")) if d.get(flag)]
+    return "%s; dashboard %s" % (live_txt, ", ".join(levels) if levels else "structurally checked only")
+
+
 def describe(r):
     """What the scenario simulates, taken from its own definition (summary, else objective); never the placeholder stub text."""
     d = (r.get("summary") or r.get("objective") or "").strip()
@@ -40,6 +82,8 @@ def describe(r):
 
 def scenarios_doc(srows, trows):
     kind_of = {t["sourcetype"]: t["data_kind"] for t in trows}
+    cinfo = contract_info()
+    live_ev, dash_ev = evidence()
     run = [r for r in srows if r["runnable"]]
     cat = [r for r in srows if not r["runnable"]]
     by_engine = collections.Counter(r["engine"] for r in run)
@@ -48,40 +92,65 @@ def scenarios_doc(srows, trows):
          f"**{len(srows)}** scenarios are defined; **{len(run)}** are runnable in this release. The rest are catalog entries only: they describe a use case but have no generator yet.", "",
          "| Runnable scenarios by type | Count |", "|---|---|"]
     L += ["| %s | %d |" % (ENGINE_LABEL.get(e, e), n) for e, n in sorted(by_engine.items())]
-    L += ["", "**Runnable** means a real generator and run path exist and the output was independently found by a Splunk search in an isolated lab. It does not mean certified, "
-          "and it does not mean every sourcetype in the scenario has a vendor add-on installed. **Maturity** is the tier recorded in the registry. "
+    L += ["", "**Runnable** means a real generator and run path exist and the scenario executed. Scenarios run by the replay, pack, NetFlow, runner and unified engines were also independently found by a Splunk search in an isolated lab; "
+          "the declarative-contract scenarios were executed in automated tests only (see Validation). It does not mean certified, and it does not mean every sourcetype in the scenario has a vendor add-on installed. **Maturity** is the tier recorded in the registry. "
           "Delivery is through HEC unless a row says otherwise; start a run from *Use Case Explorer* or *Scenario Studio* (see [QUICKSTART](QUICKSTART.md)).", ""]
     for e in sorted(by_engine):
         rows = sorted((r for r in run if r["engine"] == e), key=lambda r: r["scenario_id"])
         L += ["## %s (%d)" % (ENGINE_LABEL.get(e, e), len(rows)), "",
-              "| ID | Name | What it simulates | Category | Vendor / technology | Sourcetypes | Telemetry | Transport | Maturity | Dashboard | Validation |", "|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| ID | Name | What it simulates | Category | Vendor / technology | Sourcetypes | Telemetry | Phases | Generator and fidelity | Transport | Maturity | Dashboard | Validation |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for r in rows:
             kinds = sorted({kind_of.get(s) or ("metric" if "metric" in s else "event") for s in r["sourcetypes"]}) or ["event"]
             dash = "`%s`" % r["dashboard"] if r.get("dashboard") and (VIEWS / (r["dashboard"] + ".xml")).exists() else "—"
-            val = "indexed in lab; dashboard " + {"DASHBOARD_VISUALLY_VERIFIED": "visually verified", "DASHBOARD_DATA_VALIDATED": "data-validated"}.get(r.get("dashboard_maturity"), "not validated")
-            L.append("| `%s` | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(r["category"], 30), cell(r["vendors"], 50),
-                                                                                  cell(["`%s`" % s for s in r["sourcetypes"]], 120), "/".join(kinds), "HEC" + (" + IPFIX wire" if e == "netflow_solution" else ""), r["maturity_tier"], dash, val))
+            ci = cinfo.get(r["scenario_id"])
+            dm = {"DASHBOARD_VISUALLY_VERIFIED": "visually verified", "DASHBOARD_DATA_VALIDATED": "data-validated", "DASHBOARD_IMPLEMENTED": "implemented, not data-validated"}.get(r.get("dashboard_maturity"), "not validated")
+            if ci:
+                val = contract_validation(r["scenario_id"], live_ev, dash_ev)
+                gen = "%s (%s)" % (ci["generator_family"], FIDELITY[ci["fidelity"]])
+                phases = " → ".join(ci["phases"])
+            else:
+                val = "indexed in lab; dashboard " + dm
+                gen, phases = ENGINE_LABEL.get(e, e), "—"
+            L.append("| `%s` | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(r["category"], 30), cell(r["vendors"] or (ci or {}).get("vendors", []), 50),
+                                                                                       cell(["`%s`" % s for s in r["sourcetypes"]], 120), "/".join(kinds), cell(phases, 70), cell(gen, 80),
+                                                                                       "HEC" + (" + IPFIX wire" if e == "netflow_solution" else ""), r["maturity_tier"], dash, val))
         L.append("")
     audit = {a["scenario_id"]: a for a in json.loads((REF / "scenario_activation_audit.json").read_text())["rows"]}
-    L += ["## Defined but not runnable (%d)" % len(cat), "",
-          "These have a definition but no executable telemetry. **Class C**: its sourcetypes have generators but no scenario sequence exists yet. **Class D**: blocked, because a needed data source is not in the catalog, has no generator, or is not named. "
-          "Nothing here is hidden behind a status flag: the reason is computed in [reference/SCENARIO_ACTIVATION_AUDIT.md](reference/SCENARIO_ACTIVATION_AUDIT.md).", "",
-          "| ID | Name | What it describes | Sourcetypes named | Class | Why not runnable |", "|---|---|---|---|---|---|"]
-    for r in sorted(cat, key=lambda x: (x["engine"], x["scenario_id"])):
-        a = audit.get(r["scenario_id"], {})
-        L.append("| `%s` | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(["`%s`" % x for x in r["sourcetypes"]], 100) or "—", a.get("class", "?"), cell(a.get("reason", ""), 170)))
-    L.append("")
+    if cat:
+        L += ["## Defined but not runnable (%d)" % len(cat), "",
+              "These have a definition but no executable telemetry. **Class C**: its sourcetypes have generators but no scenario sequence exists yet. **Class D**: blocked, because a needed data source is not in the catalog, has no generator, or is not named. "
+              "The reason is computed in [reference/SCENARIO_ACTIVATION_AUDIT.md](reference/SCENARIO_ACTIVATION_AUDIT.md).", "",
+              "| ID | Name | What it describes | Sourcetypes named | Class | Why not runnable |", "|---|---|---|---|---|---|"]
+        for r in sorted(cat, key=lambda x: (x["engine"], x["scenario_id"])):
+            a = audit.get(r["scenario_id"], {})
+            L.append("| `%s` | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(["`%s`" % x for x in r["sourcetypes"]], 100) or "—", a.get("class", "?"), cell(a.get("reason", ""), 170)))
+        L.append("")
+    else:
+        fid = collections.Counter(c["fidelity"] for c in cinfo.values())
+        live_pass = sum(1 for r in live_ev.values() if r["status"] == "PASS")
+        dv = list(dash_ev.values())
+        L += ["## Not runnable (0)", "", "Every defined scenario is runnable. %d of them run through **declarative scenario contracts** (shared topology, ordered phases, existing generators): "
+              "%d with vendor-native formatters only, %d mixed (native or recorded vendor events plus a labeled modeled stand-in or modeled context), and %d modeled in the labeled NetSpout schema `netspout:scenario:state`. "
+              "Modeled telemetry is **not** vendor-authentic; it is the honest representation of a scenario whose definition specifies a state progression or a monitoring use case, not a log format." % (
+                  len(cinfo), fid["VENDOR_NATIVE"], fid["MIXED"], fid["MODELED"]), "",
+              "**Evidence for these %d scenarios** (separate levels, from the evidence files): executed offline in tests: %d; **live-indexed** in an isolated lab Splunk and independently verified by run id: %d; "
+              "dashboards accepted by Splunk's SPL parser: %d; dashboards whose every search returned data from the indexed run: %d; dashboards opened in a browser without error: %d; dashboards whose screenshot was visually inspected: %d." % (
+                  len(cinfo), len(cinfo), live_pass, sum(1 for d in dv if d.get("splunk_spl_parser_validated")), sum(1 for d in dv if d.get("search_results_validated")),
+                  sum(1 for d in dv if d.get("browser_render_checks_pass")), sum(1 for d in dv if d.get("screenshot_inspected"))), ""]
     return "\n".join(L)
 
 
 def telemetry_doc(srows, trows):
-    dash_of = collections.defaultdict(int)
+    dash_of = collections.defaultdict(int)       # scenarios whose dashboard is data-validated or better
+    impl_of = collections.defaultdict(int)       # scenarios whose dashboard is implemented but not validated against data
     n_of = collections.defaultdict(int)
     for r in srows:
         for s in r["sourcetypes"]:
             n_of[s] += 1
-            if r.get("dashboard"):
+            if r.get("dashboard_maturity") in ("DASHBOARD_DATA_VALIDATED", "DASHBOARD_VISUALLY_VERIFIED"):
                 dash_of[s] += 1
+            elif r.get("dashboard"):
+                impl_of[s] += 1
     gen = collections.Counter(t["generator_tier"] for t in trows)
     vis_of = collections.defaultdict(int)
     for r in srows:
@@ -102,8 +171,12 @@ def telemetry_doc(srows, trows):
          "| Add-on parsing checked | Parsed by the installed add-on in a lab | %d |" % sum(t["ta_parsing_checked_in_lab"] for t in trows),
          "| CIM validated | No CIM data model was installed in any lab | %d |" % sum(t["cim_validated"] for t in trows),
          "| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | %d |" % sum(1 for t in trows if dash_of[t["sourcetype"]]),
+         "| Dashboard implemented only | Referenced by a scenario whose dashboard exists but is not validated against data | %d |" % sum(1 for t in trows if impl_of[t["sourcetype"]] and not dash_of[t["sourcetype"]]),
          "| Visually verified | Referenced by a scenario whose dashboard was rendered and inspected | %d |" % sum(1 for t in trows if vis_of[t["sourcetype"]]),
+         "| Executed by a scenario contract | Emitted by a declarative scenario contract in automated tests (HEC stubbed) | %d |" % len({st for c in contract_info().values() for st in c["sourcetypes"]} & {t["sourcetype"] for t in trows}),
+         "| Live-indexed via a scenario contract | Emitted by a scenario contract into the lab Splunk and independently found there by run id | %d |" % len({st for r in evidence()[0].values() if r["status"] == "PASS" for st in (r.get("indexed_events_by_sourcetype") or {})} & {t["sourcetype"] for t in trows}),
          "| Not yet implemented | No generator: cataloged only | %d |" % gen["NONE"], "",
+         "**Modeled sourcetype.** `netspout:scenario:state` is a NetSpout-defined schema (JSON with entity, component, state, previous state, severity, message and an optional measurement), used by %d scenario contracts where a definition specifies a state progression or a monitoring use case and no vendor log format exists. It is **not** vendor-native and is not in the catalog above." % sum(1 for c in contract_info().values() if "netspout:scenario:state" in c["sourcetypes"]), "",
          "Everything else is **not tested**. Detection content (Enterprise Security, correlation searches) is not claimed.", "",
          "## Transports", "",
          "| Transport | Status in this release |", "|---|---|",
@@ -121,15 +194,34 @@ def telemetry_doc(srows, trows):
         ts = by[v]
         L.append("| %s | %d | %d | %d | %d | %s |" % (cell(v, 40), len(ts), sum(t["generator_tier"] == "NATIVE_ENGINE" for t in ts), sum(t["generator_tier"] == "SAMPLE_REPLAY" for t in ts),
                                                        sum(t["independently_indexed"] for t in ts), cell(sorted({t["protocol"] for t in ts}), 40)))
-    L += ["", "## By sourcetype", "", "`G` generated, `R` sample replay, `-` none. **Event categories** are the generator's own event families (— where the generator does not enumerate them). Scenarios counts the registered scenarios that use the sourcetype; Dash counts those with a dashboard; Visual counts those whose dashboard was visually verified.", "",
-          "| Vendor | Product | Sourcetype | Kind | Event categories | Transport | Gen | Byte | Indexed | Scenarios | Dash | Visual |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    L += ["", "## By sourcetype", "", "`G` generated, `R` sample replay, `-` none. **Event categories** are the generator's own event families (— where the generator does not enumerate them). Scenarios counts the registered scenarios that emit the sourcetype; Dash validated counts those whose dashboard is validated against data; Dash implemented counts those whose dashboard is not yet validated; Visual counts those visually verified.", "",
+          "| Vendor | Product | Sourcetype | Kind | Event categories | Transport | Gen | Byte | Indexed | Scenarios | Dash validated | Dash implemented | Visual |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for t in sorted(trows, key=lambda x: (x["vendor"].lower(), x["sourcetype"])):
         g = {"NATIVE_ENGINE": "G", "SAMPLE_REPLAY": "R"}.get(t["generator_tier"], "-")
-        L.append("| %s | %s | `%s` | %s | %s | %s | %s | %s | %s | %d | %d | %d |" % (cell(t["vendor"], 30), cell(t["product"], 40), t["sourcetype"], t["data_kind"], cell(fam.get(t["sourcetype"], []), 60) or "—",
+        L.append("| %s | %s | `%s` | %s | %s | %s | %s | %s | %s | %d | %d | %d | %d |" % (cell(t["vendor"], 30), cell(t["product"], 40), t["sourcetype"], t["data_kind"], cell(fam.get(t["sourcetype"], []), 60) or "—",
                                                                                   "HEC (" + t["protocol"] + " format)", g, "yes" if t["format_byte_verified"] else "-", "yes" if t["independently_indexed"] else "-",
-                                                                                  n_of[t["sourcetype"]], dash_of[t["sourcetype"]], vis_of[t["sourcetype"]]))
+                                                                                  n_of[t["sourcetype"]], dash_of[t["sourcetype"]], impl_of[t["sourcetype"]], vis_of[t["sourcetype"]]))
     L.append("")
     return "\n".join(L)
+
+
+def update_readme(srows, trows):
+    """The README's three coverage bullets are owned by this generator, so the numbers cannot drift from the registries."""
+    import re
+    f = ROOT / "README.md"
+    t = f.read_text()
+    run = sum(r["runnable"] for r in srows)
+    dash = [r for r in srows if r.get("dashboard")]
+    vis = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_VISUALLY_VERIFIED")
+    dv = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_DATA_VALIDATED")
+    impl = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_IMPLEMENTED")
+    live, dmat = evidence()
+    n_contract = len(dmat)
+    live_pass = sum(1 for r in live.values() if r["status"] == "PASS")
+    t = re.sub(r"- \*\*\d+ runnable scenarios\*\* \(\d+ defined\):.*", "- **%d runnable scenarios** (%d defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios.%s See [SCENARIOS](docs/SCENARIOS.md)." % (run, len(srows), " The other %d are documented but not runnable yet, each with the reason." % (len(srows) - run) if run < len(srows) else " Every defined scenario runs; the table says which telemetry is vendor-native, mixed or modeled, and what has been independently indexed."), t)
+    t = re.sub(r"- \*\*\d+ Dashboard Studio dashboards\*\*.*", "- **%d Dashboard Studio dashboards**, one per runnable scenario: %d validated against indexed data (%d of those also visually verified) and %d implemented but not yet validated against data." % (len(dash), dv + vis, vis, impl), t)
+    t = re.sub(r"- Delivery through \*\*HEC\*\*.*", "- Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement. Of the %d scenarios added most recently, %d were independently indexed in a lab Splunk and %d have Splunk-parser-validated dashboards; their telemetry is vendor-native, mixed or **modeled** as labeled in [SCENARIOS](docs/SCENARIOS.md)." % (n_contract, live_pass, sum(1 for d in dmat.values() if d.get("splunk_spl_parser_validated"))), t)
+    f.write_text(t)
 
 
 if __name__ == "__main__":
@@ -137,4 +229,5 @@ if __name__ == "__main__":
     _, trows = load("sourcetype_coverage.json")
     (ROOT / "docs" / "SCENARIOS.md").write_text(scenarios_doc(srows, trows))
     (ROOT / "docs" / "TELEMETRY_COVERAGE.md").write_text(telemetry_doc(srows, trows))
+    update_readme(srows, trows)
     print("wrote docs/SCENARIOS.md and docs/TELEMETRY_COVERAGE.md")

@@ -11,7 +11,7 @@ Generated 2026-11-02 by `scripts/generate_reference_docs.py` from `catalog/sourc
 | Recorded replay source (authentic recording, continuous replay) | 9 |
 | TA parsing checked in an isolated lab | 6 |
 | CIM validated | 0 (no CIM data model is installed in any lab) |
-| Referenced by at least one dashboard-backed scenario | 152 |
+| Referenced by at least one dashboard-backed scenario | 153 |
 
 Columns are separate evidence. A sample-replay catalog entry is **not** a native generator; a recorded replay source is **not** coverage of the catalog sourcetype unless its sourcetype name matches. `TA` shows the add-on named by the catalog (`verified` = Splunkbase declares that exact sourcetype for the app; declaration only). `TA lab` means parsing was exercised with the installed package; nothing else was.
 
@@ -23,17 +23,17 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `cisco:aci:fault` | Cisco Aci Fault | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `cisco:aci:syslog` | Cisco Aci Syslog | event | syslog | - | - | - | - | - | - | - | none recorded |
-| `cisco:asa` | Cisco ASA Firewall Connection & Policy | event | syslog | G | - | - | - | Splunk Add-on for Cisco ASA | - | 3 | vendored replay sample cisco-asa.yml |
+| `cisco:asa` | Cisco ASA Firewall Connection & Policy | event | syslog | G | - | - | - | Splunk Add-on for Cisco ASA | - | 5 | vendored replay sample cisco-asa.yml |
 | `cisco:asa:syslog` | Cisco ASA Syslog Message Stream | event | syslog | R | - | - | - | Splunk Add-on for Cisco ASA | - | - | vendored replay sample cisco-asa-syslog.yml |
 | `cisco:catalyst:client` | Cisco Catalyst Client | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-client.yml |
-| `cisco:catalyst:clienthealth` | Cisco Catalyst Clienthealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-catalyst-clienthealth.yml |
+| `cisco:catalyst:clienthealth` | Cisco Catalyst Clienthealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 4 | vendored replay sample cisco-catalyst-clienthealth.yml |
 | `cisco:catalyst:compliance` | Cisco Catalyst Compliance | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-compliance.yml |
 | `cisco:catalyst:devicehealth` | Cisco Catalyst Devicehealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-devicehealth.yml |
 | `cisco:catalyst:issue` | Cisco Catalyst Issue | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-issue.yml |
-| `cisco:catalyst:networkhealth` | Cisco Catalyst Networkhealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-networkhealth.yml |
+| `cisco:catalyst:networkhealth` | Cisco Catalyst Networkhealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 2 | vendored replay sample cisco-catalyst-networkhealth.yml |
 | `cisco:catalyst:rogue:allowed` | Cisco Catalyst Rogue Allowed | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-allowed.yml |
 | `cisco:catalyst:rogue:counts` | Cisco Catalyst Rogue Counts | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-counts.yml |
-| `cisco:catalyst:rogue:threat_details` | Cisco Catalyst Rogue Threat Details | event | syslog | G | - | - | - | - | - | 2 | vendored replay sample cisco-catalyst-rogue-threat-details.yml |
+| `cisco:catalyst:rogue:threat_details` | Cisco Catalyst Rogue Threat Details | event | syslog | G | - | - | - | - | - | 4 | vendored replay sample cisco-catalyst-rogue-threat-details.yml |
 | `cisco:catalyst:rogue:verbose` | Cisco Catalyst Rogue Verbose | event | syslog | G | Y | Y | - | - | - | 3 | universe_batch6.json: Captured records in netspout/appserver/static/sa |
 | `cisco:catalyst:rogue:verbose:legacy` | Cisco Catalyst Rogue Verbose Legacy | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-verbose-legacy.yml |
 | `cisco:catalyst:rogue:wired` | Cisco Catalyst Rogue Wired | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-wired.yml |
@@ -54,9 +54,9 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:cloud_security:proxy` | Cisco Cloud Security Web Proxy | event | syslog | G | Y | Y | - | Splunk Add-on for Cisco Cloud Security | - | 3 | none recorded |
 | `cisco:dc:aci:class` | Cisco Dc Aci Class | event | syslog | G | Y | Y | - | - | - | - | universe_batch6.json: Captured records in netspout/appserver/static/sa |
 | `cisco:dc:aci:events` | Cisco ACI Fabric State Events | event | syslog | R | - | - | - | Cisco ACI Add-on for Splunk Enterprise | - | - | vendored replay sample cisco-dc-aci-events.yml |
-| `cisco:dc:aci:health` | Cisco Dc Aci Bridge Domain | event | syslog | G | - | Y | - | - | - | 1 | vendored replay sample cisco-dc-aci-bridge-domain.yml |
+| `cisco:dc:aci:health` | Cisco Dc Aci Bridge Domain | event | syslog | G | - | Y | - | - | - | 3 | vendored replay sample cisco-dc-aci-bridge-domain.yml |
 | `cisco:dc:nexus9k` | Cisco Dc Nexus9K | event | syslog | G | Y | Y | - | - | - | - | universe_batch6.json: Captured records in netspout/appserver/static/sa |
-| `cisco:dc:nexus9k:syslog` | Cisco Dc Nexus9K Syslog | event | syslog | G | - | Y | - | - | - | 2 | vendored replay sample cisco-dc-nexus9k-syslog.yml |
+| `cisco:dc:nexus9k:syslog` | Cisco Dc Nexus9K Syslog | event | syslog | G | - | Y | - | - | - | 5 | vendored replay sample cisco-dc-nexus9k-syslog.yml |
 | `cisco:dnac:audit:logs` | Cisco Dnac Audit Logs | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-audit-logs.yml |
 | `cisco:dnac:client` | Cisco Dnac Client | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-client.yml |
 | `cisco:dnac:clienthealth` | Cisco Dnac Clienthealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-clienthealth.yml |
@@ -80,12 +80,12 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:intersight:targets` | Cisco Intersight Targets | event | syslog | R | - | - | - | Cisco Intersight Add-on for Splunk (verified) | - | - | vendored replay sample cisco-intersight-targets.yml |
 | `cisco:ios` | Cisco Ios | event | syslog | G | Y | Y | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-ios.yml |
 | `cisco:ios:mdt` | Cisco Ios Mdt | event | syslog | G | - | Y | - | - | - | 2 | none recorded |
-| `cisco:ios:mdt:metric` | Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON) | metric | hec | G | - | - | - | Splunk Add-on for Cisco IOS | - | 1 | vendored replay sample cisco-ios-mdt-metric.yml |
-| `cisco:ios:syslog` | Cisco IOS System Syslog Facility | event | syslog | G | - | - | - | Splunk Add-on for Cisco IOS | - | 4 | vendored replay sample cisco-ios-syslog.yml |
+| `cisco:ios:mdt:metric` | Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON) | metric | hec | G | - | - | - | Splunk Add-on for Cisco IOS | - | 4 | vendored replay sample cisco-ios-mdt-metric.yml |
+| `cisco:ios:syslog` | Cisco IOS System Syslog Facility | event | syslog | G | - | - | - | Splunk Add-on for Cisco IOS | - | 18 | vendored replay sample cisco-ios-syslog.yml |
 | `cisco:ise:nac:8021x` | Cisco Ise Nac 8021X | event | syslog | - | - | - | - | - | - | 1 | none recorded |
 | `cisco:ise:radius:authz:policy` | Cisco Ise Radius Authz Policy | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-radius-authz-policy.yml |
 | `cisco:ise:radius:policyset` | Cisco Ise Radius Policyset | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-radius-policyset.yml |
-| `cisco:ise:syslog` | Cisco Ise Syslog | event | syslog | G | - | - | - | Splunk Add-on for Cisco ISE | - | 1 | vendored replay sample cisco-ise-syslog.yml |
+| `cisco:ise:syslog` | Cisco Ise Syslog | event | syslog | G | - | - | - | Splunk Add-on for Cisco ISE | - | 7 | vendored replay sample cisco-ise-syslog.yml |
 | `cisco:ise:tacacs:authz:policy` | Cisco Ise Tacacs Authz Policy | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-tacacs-authz-policy.yml |
 | `cisco:ise:tacacs:policyset` | Cisco Ise Tacacs Policyset | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-tacacs-policyset.yml |
 | `cisco:ise:trustsec:sgt` | Cisco Ise Trustsec Sgt | event | syslog | - | - | - | - | - | - | - | none recorded |
@@ -103,7 +103,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT` | Cisco Sdwan Aaa 6 Notify Mlist State To Aaa Client | event | syslog | G | Y | Y | - | - | - | 2 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE` | Cisco Sdwan Aaa Audit Message 6 Method List State | event | syslog | G | Y | Y | - | - | - | 2 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT` | Cisco Sdwan Aaa Audit Message 6 Notify Mlist State To Aaa Client | event | syslog | G | Y | Y | - | - | - | 2 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
-| `cisco:sdwan:BGP-5-ADJCHANGE` | Cisco Sdwan Bgp 5 Adjchange | event | syslog | G | Y | Y | - | - | - | 5 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
+| `cisco:sdwan:BGP-5-ADJCHANGE` | Cisco Sdwan Bgp 5 Adjchange | event | syslog | G | Y | Y | - | - | - | 8 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:BGP-5-NBR_RESET` | Cisco Sdwan Bgp 5 Nbr Reset | event | syslog | G | Y | Y | - | - | - | 4 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:BGP-6-NEXTHOP` | Cisco Sdwan Bgp 6 Nexthop | event | syslog | G | Y | Y | - | - | - | - | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:BGP_SESSION-5-ADJCHANGE` | Cisco Sdwan Bgp Session 5 Adjchange | event | syslog | G | Y | Y | - | - | - | - | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
@@ -131,7 +131,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:sdwan:PLATFORM-4-ELEMENT_WARNING` | Cisco Sdwan Platform 4 Element Warning | event | syslog | G | Y | Y | - | - | - | 4 | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:SYS-5-CONFIG_P` | Cisco Sdwan Sys 5 Config P | event | syslog | G | Y | Y | - | - | - | - | universe_batch5.json: Captured IOS-XE messages in netspout/appserver/s |
 | `cisco:sdwan:access` | Cisco SD-WAN Management Access | event | syslog | G | Y | Y | - | - | - | 1 | none recorded |
-| `cisco:sdwan:linkhealth` | Cisco Sdwan Linkhealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-sdwan-linkhealth.yml |
+| `cisco:sdwan:linkhealth` | Cisco Sdwan Linkhealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 7 | vendored replay sample cisco-sdwan-linkhealth.yml |
 | `cisco:sdwan:sitehealth` | Cisco Sdwan Sitehealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-sdwan-sitehealth.yml |
 | `cisco:sdwan:ssetunnels` | Cisco Sdwan Ssetunnels | event | syslog | G | Y | Y | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 2 | universe_batch6.json: Captured records in netspout/appserver/static/sa |
 | `cisco:sdwan:syslog` | Cisco Sdwan Syslog | event | syslog | G | Y | Y | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-sdwan-syslog.yml |
@@ -145,7 +145,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:sfw:estreamer` | Cisco Sfw Estreamer | event | syslog | G | Y | Y | - | - | - | 1 | vendored replay sample cisco-sfw-estreamer.yml |
 | `cisco:sfw:policy` | Cisco Sfw Policy | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-sfw-policy.yml |
 | `cisco:thousandeyes:event` | Cisco Thousandeyes Event | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-thousandeyes-event.yml |
-| `cisco:thousandeyes:metric` | Cisco Thousandeyes Metric | metric | hec | G | - | - | - | Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry) | - | 2 | vendored replay sample cisco-thousandeyes-metric.yml |
+| `cisco:thousandeyes:metric` | Cisco Thousandeyes Metric | metric | hec | G | - | - | - | Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry) | - | 6 | vendored replay sample cisco-thousandeyes-metric.yml |
 | `cisco:thousandeyes:path-vis` | Cisco Thousandeyes Path Vis | event | syslog | R | - | - | - | - | - | 1 | vendored replay sample cisco-thousandeyes-path-vis.yml |
 | `cisco_syslog` | Cisco Syslog | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-syslog.yml |
 | `datablaster:preflight` | NetSpout Ingestion Preflight Probe | event | syslog | R | - | - | - | NetSpout Telemetry App | - | - | vendored replay sample datablaster-preflight.yml |
@@ -177,8 +177,8 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `kube:events` | Kube Events | event | syslog | R | - | - | - | Splunk Add-on for Unix and Linux | - | - | vendored replay sample kube-events.yml |
 | `kube:object:pods` | Kube Object Pods | event | syslog | R | - | - | - | Splunk Add-on for Unix and Linux | - | - | vendored replay sample kube-object-pods.yml |
 | `netapp:ontap:nas` | Netapp Ontap Nas | event | syslog | - | - | - | - | - | - | - | none recorded |
-| `nginx:plus:kv` | Nginx Plus Kv | event | syslog | G | - | - | - | - | - | 3 | none recorded |
-| `postgresql:audit` | Postgresql Audit | event | syslog | G | - | - | - | - | - | 1 | none recorded |
+| `nginx:plus:kv` | Nginx Plus Kv | event | syslog | G | - | - | - | - | - | 5 | none recorded |
+| `postgresql:audit` | Postgresql Audit | event | syslog | G | - | - | - | - | - | 3 | none recorded |
 | `stream:netflow` | Stream Netflow | event | syslog | R | - | - | - | Splunk Add-on for Unix and Linux | - | - | vendored replay sample stream-netflow.yml |
 
 ## Cisco Meraki (17)
@@ -186,12 +186,12 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | Sourcetype | Product | Kind | Protocol | Gen | B | I | RR | TA | TA lab | Scenarios | Provenance |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `cisco:meraki:syslog` | Cisco Meraki Syslog | event | syslog | G | Y | Y | - | - | - | 1 | none recorded |
-| `meraki:accesspoints` | Meraki Accesspoints | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | 1 | vendored replay sample meraki-accesspoints.yml |
+| `meraki:accesspoints` | Meraki Accesspoints | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | 2 | vendored replay sample meraki-accesspoints.yml |
 | `meraki:airmarshal` | Meraki Airmarshal | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | - | vendored replay sample meraki-airmarshal.yml |
 | `meraki:appliance` | Meraki Appliance | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `meraki:appliancesdwanstatistics` | Meraki Appliancesdwanstatistics | event | syslog | R | - | - | - | Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry) | - | - | vendored replay sample meraki-appliancesdwanstatistics.yml |
 | `meraki:appliancesdwanstatuses` | Meraki Appliancesdwanstatuses | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | - | vendored replay sample meraki-appliancesdwanstatuses.yml |
-| `meraki:assurancealerts` | Meraki Assurancealerts | event | syslog | G | - | - | - | Splunk Add-on for Cisco Meraki | - | 1 | vendored replay sample meraki-assurancealerts.yml |
+| `meraki:assurancealerts` | Meraki Assurancealerts | event | syslog | G | - | - | - | Splunk Add-on for Cisco Meraki | - | 2 | vendored replay sample meraki-assurancealerts.yml |
 | `meraki:devices` | Meraki Devices | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | - | vendored replay sample meraki-devices.yml |
 | `meraki:devicesavailabilitieschangehistory` | Meraki Devices Availabilities | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | - | vendored replay sample meraki-devices-availabilities.yml |
 | `meraki:organizationsecurity` | Meraki Organizationsecurity | event | syslog | R | - | - | - | Splunk Add-on for Cisco Meraki | - | - | vendored replay sample meraki-organizationsecurity.yml |
@@ -236,7 +236,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:duo:authentication_v2` | Cisco Duo Authentication V2 | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-duo-authentication-v2.yml |
 | `cisco:duo:endpoint` | Cisco Duo Endpoint | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-duo-endpoint.yml |
 | `cisco:duo:push:prompt` | Cisco Duo Push Prompt | event | syslog | - | - | - | - | - | - | 1 | none recorded |
-| `cisco:duo:remote:vpn` | Cisco Duo Remote Vpn | event | syslog | G | - | - | - | - | - | 1 | none recorded |
+| `cisco:duo:remote:vpn` | Cisco Duo Remote Vpn | event | syslog | G | - | - | - | - | - | 2 | none recorded |
 | `cisco:duo:user` | Cisco Duo User | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-duo-user.yml |
 
 ## Fortinet (8)
@@ -250,7 +250,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `fortinet:fortigate` | Fortinet FortiGate Unified Security Event | event | syslog | R | - | - | - | Fortinet FortiGate Add-on for Splunk | - | - | vendored replay sample fortinet-fortigate.yml |
 | `fortinet:fortigate:event` | Fortinet Fortigate Event | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `fortinet:fortigate:traffic` | Fortinet Fortigate Traffic | event | syslog | - | - | - | - | - | - | - | none recorded |
-| `fortinet:fortigate:utm` | Fortinet Fortigate Utm | event | syslog | G | - | - | - | - | - | 1 | none recorded |
+| `fortinet:fortigate:utm` | Fortinet Fortigate Utm | event | syslog | G | - | - | - | - | - | 2 | none recorded |
 
 ## Microsoft Windows (8)
 
@@ -293,7 +293,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `zscaler:tunnel` | Zscaler Sse Tunnel | event | syslog | R | - | - | - | Zscaler Technical Add-on for Splunk | - | - | vendored replay sample zscaler-sse-tunnel.yml |
 | `zscaler:web` | Zscaler Sse Web | event | syslog | R | - | - | - | Zscaler Technical Add-on for Splunk | - | - | vendored replay sample zscaler-sse-web.yml |
-| `zscaler:zia` | Zscaler Internet Access (ZIA) NSS Log | event | syslog | G | - | - | - | TA-Zscaler_CIM | - | 1 | vendored replay sample zscaler-zia.yml |
+| `zscaler:zia` | Zscaler Internet Access (ZIA) NSS Log | event | syslog | G | - | - | - | TA-Zscaler_CIM | - | 2 | vendored replay sample zscaler-zia.yml |
 | `zscaler:zia:tunnel` | Zscaler Zia Tunnel | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `zscaler:zia:web` | Zscaler Zia Web | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `zscalernss-web` | Zscaler NSS Web Proxy Logs | event | hec_event | G | Y | Y | - | Zscaler App for Splunk (NSS) | - | 6 | none recorded |
@@ -305,8 +305,8 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `pan:ble:iot:sensor` | Pan Ble Iot Sensor | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `pan:config` | Pan Config | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `pan:system` | Pan System | event | syslog | G | - | Y | - | Splunk Add-on for Palo Alto Networks | - | 3 | vendored replay sample pan-system.yml |
-| `pan:threat` | Pan Threat | event | syslog | G | - | Y | - | Splunk Add-on for Palo Alto Networks | - | 5 | vendored replay sample pan-threat.yml |
-| `pan:traffic` | Pan Traffic | event | syslog | G | - | Y | - | Splunk Add-on for Palo Alto Networks | - | 4 | vendored replay sample pan-traffic.yml |
+| `pan:threat` | Pan Threat | event | syslog | G | - | Y | - | Splunk Add-on for Palo Alto Networks | - | 6 | vendored replay sample pan-threat.yml |
+| `pan:traffic` | Pan Traffic | event | syslog | G | - | Y | - | Splunk Add-on for Palo Alto Networks | - | 7 | vendored replay sample pan-traffic.yml |
 
 ## Amazon Web Services (4)
 
@@ -391,7 +391,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 
 | Sourcetype | Product | Kind | Protocol | Gen | B | I | RR | TA | TA lab | Scenarios | Provenance |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| `juniper:junos` | Juniper Junos Routing & System Log | event | syslog | G | - | - | - | Juniper Networks Add-on for Splunk | - | 2 | vendored replay sample juniper-junos.yml |
+| `juniper:junos` | Juniper Junos Routing & System Log | event | syslog | G | - | - | - | Juniper Networks Add-on for Splunk | - | 4 | vendored replay sample juniper-junos.yml |
 | `juniper:junos:syslog` | Juniper Junos Syslog Transport | event | syslog | R | - | - | - | Juniper Networks Add-on for Splunk | - | - | vendored replay sample juniper-junos-syslog.yml |
 | `juniper:syslog` | Juniper Syslog | event | syslog | R | - | - | - | Splunk Add-on for Juniper | - | - | vendored replay sample juniper-syslog.yml |
 
@@ -401,7 +401,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `nokia:sr:syslog` | Nokia Sr Syslog | event | syslog | - | - | - | - | - | - | - | none recorded |
 | `nokia:sros` | Nokia 7750 SR OS Service Router Event | event | syslog | R | - | - | - | Nokia SR OS Splunk Add-on | - | - | vendored replay sample nokia-sros.yml |
-| `nokia:sros:syslog` | Nokia 7750 SR OS Syslog Facility | event | syslog | G | - | - | - | Nokia SR OS Splunk Add-on | - | 2 | vendored replay sample nokia-sros-syslog.yml |
+| `nokia:sros:syslog` | Nokia 7750 SR OS Syslog Facility | event | syslog | G | - | - | - | Nokia SR OS Splunk Add-on | - | 3 | vendored replay sample nokia-sros-syslog.yml |
 
 ## A10 Networks (2)
 
@@ -435,7 +435,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 
 | Sourcetype | Product | Kind | Protocol | Gen | B | I | RR | TA | TA lab | Scenarios | Provenance |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| `f5:bigip:ltm` | F5 BIG-IP Local Traffic Manager (LTM) | event | syslog | G | - | - | - | F5 Networks Add-on for Splunk | - | 1 | vendored replay sample f5-bigip-ltm.yml |
+| `f5:bigip:ltm` | F5 BIG-IP Local Traffic Manager (LTM) | event | syslog | G | - | - | - | F5 Networks Add-on for Splunk | - | 2 | vendored replay sample f5-bigip-ltm.yml |
 | `f5:bigip:syslog` | F5 Bigip Syslog | event | syslog | R | - | - | - | Splunk Add-on for F5 BIG-IP | - | - | vendored replay sample f5-bigip-syslog.yml |
 
 ## Forcepoint (2)

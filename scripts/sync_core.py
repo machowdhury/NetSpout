@@ -62,6 +62,7 @@ CORE_MODULES = [
     "noc_soc_metrics.py",
     "catalog.py",
     "catalog_contracts.py",
+    "capability.py",
     "pack_contracts.py",
     "phase8c_reference_packs.py",
     "phase9_security_packs.py",

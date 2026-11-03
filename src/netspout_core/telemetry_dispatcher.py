@@ -799,10 +799,12 @@ class TelemetryDispatcher:
     def _dispatch_log(
         self,
         log: LogEntry,
-        transport: Optional[TelemetryTransportConfig] = None
+        transport: Optional[TelemetryTransportConfig] = None,
+        capture: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
         """
         Route log entry to configured transports (HEC, Syslog, OTel, Telegraf).
+        `capture` (preview only): the HEC payload built by this very code path is appended to it and nothing is sent.
         """
         if not transport:
             return {"hec": None, "syslog": None, "otel": None, "telegraf": None}
@@ -810,7 +812,17 @@ class TelemetryDispatcher:
         results = {}
 
         # 1. Splunk HEC Transport
-        if transport.hec_enabled and transport.hec_url and transport.hec_token:
+        try:
+            from netspout_core import capability as _cap
+        except ImportError:
+            from app import capability as _cap
+        _rb = _cap.routing_block(log.sourcetype) if capture is None else None
+        if _rb and transport.hec_enabled:
+            # a sourcetype whose metric/event routing conflicts with its add-on is neither sent as a metric nor silently turned into a log
+            results["hec"] = {"success": False, "message": _rb["message"], "state": HEC_FAILED, "http_status": None, "error_class": "routing_conflict_not_dispatched"}
+            self.stats["hec_generated"] += 1
+            self.stats["hec_failed"] += 1
+        elif transport.hec_enabled and transport.hec_url and transport.hec_token:
             target_index = transport.hec_index or "idx_network_ops"
             # Metric routing is decided by the catalog's data_kind, not by a
             # hardcoded Cisco-only sourcetype list, so SNMP-derived and other
@@ -917,6 +929,9 @@ class TelemetryDispatcher:
                 self.stats["hec_errors"] += 1
                 self.stats["hec_generated"] += 1
                 self.stats["hec_failed"] += 1
+            elif capture is not None:
+                capture.append(hec_payload)
+                results["hec"] = {"success": True, "message": "preview only; not sent", "state": HEC_ACCEPTED, "http_status": None, "error_class": None}
             else:
                 ssl_v = getattr(transport, "hec_ssl_verify", True)
                 insec = getattr(transport, "hec_allow_insecure_tls", False)

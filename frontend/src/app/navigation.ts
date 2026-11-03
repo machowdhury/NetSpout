@@ -19,6 +19,7 @@ export type AppRoute =
   | '/'
   | '/explore'
   | '/generate/quick'
+  | '/generate/advanced'
   | '/generate/scenarios'
   | '/build/studio'
   | '/build/industry-studio'
@@ -53,6 +54,8 @@ export interface NavigationItem {
   route: AppRoute;
   icon: string;
   advancedOnly?: boolean;
+  /** Shown in the simple three-item navigation. Everything else is reachable only in Advanced mode. */
+  primary?: boolean;
   availability?: ProductMaturity;
 }
 
@@ -109,17 +112,18 @@ export const DOMAINS: DomainDefinition[] = [
 export const NAVIGATION: NavigationGroup[] = [
   {
     label: 'Home',
-    items: [{ label: 'Overview', route: '/', icon: 'home' }],
+    items: [{ label: 'Overview', route: '/', icon: 'home', advancedOnly: true }],
   },
   {
     label: 'Explore',
-    items: [{ label: 'Use Case Explorer', route: '/explore', icon: 'search', availability: 'BETA' }],
+    items: [{ label: 'Use Case Explorer', route: '/explore', icon: 'search', availability: 'BETA', advancedOnly: true }],
   },
   {
     label: 'Generate',
     items: [
-      { label: 'Quick Generate', route: '/generate/quick', icon: 'zap' },
-      { label: 'Scenarios', route: '/generate/scenarios', icon: 'layers' },
+      { label: 'Generate Data', route: '/generate/quick', icon: 'zap', primary: true },
+      { label: 'Scenarios', route: '/generate/scenarios', icon: 'layers', primary: true },
+      { label: 'Generator Modes (legacy)', route: '/generate/advanced', icon: 'zap', advancedOnly: true },
     ],
   },
   {
@@ -208,7 +212,7 @@ export const NAVIGATION: NavigationGroup[] = [
   {
     label: 'System',
     items: [
-      { label: 'Connections', route: '/system/connections', icon: 'settings' },
+      { label: 'Connections', route: '/system/connections', icon: 'settings', primary: true },
       { label: 'Destination Manager', route: '/destinations', icon: 'server' },
       { label: 'Guided Workflow', route: '/guided-workflow', icon: 'workflow' },
     ],

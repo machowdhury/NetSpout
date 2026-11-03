@@ -2084,6 +2084,54 @@ def _generator_transport(index=None, explicit=None, needs_metric_index=False):
     return None
 
 
+@app.get("/api/compat/catalog")
+def compat_catalog(verified_only: bool = False):
+    """Vendor -> product -> sourcetype tree with the honest capability status of every entry (evidence-derived; see netspout_core/capability.py)."""
+    from netspout_core import capability
+    return {"labels": capability.data()["labels"], "vendors": capability.tree(verified_only)}
+
+
+@app.get("/api/compat/scenarios")
+def compat_scenarios():
+    from netspout_core import capability
+    return {"labels": capability.data()["labels"], "scenarios": capability.scenarios()}
+
+
+@app.post("/api/generate/preview")
+def generate_preview(payload: Dict[str, Any]):
+    """Preview = the real thing minus the send: same prepare_sourcetype_entries and same HEC payload builder as a monitored run. Nothing is sent and no value is hard-coded."""
+    from netspout_core import capability
+    from netspout_core.models import TelemetryTransportConfig
+    from netspout_core.telemetry_dispatcher import dispatcher as _disp
+    from app.generator_modes import generator_service
+    vendor, st = str(payload.get("vendor_id") or ""), str(payload.get("sourcetype") or "")
+    count = int(payload.get("count", 3))
+    if not st or not 1 <= count <= 5:
+        raise HTTPException(status_code=422, detail="sourcetype is required and count must be between 1 and 5")
+    b = capability.block(st)
+    if b:
+        raise HTTPException(status_code=409, detail=b["message"])
+    try:
+        entries, prov = generator_service.prepare_sourcetype_entries(vendor, st, count, None, "preview")
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    cfg = TelemetryTransportConfig(hec_enabled=True, hec_url="https://preview.invalid/services/collector", hec_token="preview", hec_index=str(payload.get("index") or getattr(gt, "hec_index", None) or "idx_network_ops"),
+                                   hec_metric_index=getattr(gt, "hec_metric_index", None) or "cisco_mdt_metrics")
+    events = []
+    for e in entries:
+        cap: list = []
+        _disp._dispatch_log(e, cfg, capture=cap)
+        pl = cap[0]
+        is_metric = pl.get("event") == "metric"
+        events.append({"raw": None if is_metric else e.raw_log, "sourcetype": pl["sourcetype"], "index": pl["index"], "host": pl["host"], "source": pl["source"], "kind": "metric" if is_metric else "event",
+                       "metrics": {k[len("metric_name:"):]: v for k, v in pl["fields"].items() if k.startswith("metric_name:")} if is_metric else None})
+    rec = capability.get(st)
+    return {"sourcetype": st, "vendor_id": vendor, "generator_mode": prov.get("mode"), "provenance": prov.get("source"), "status": rec["status"] if rec else None, "status_label": rec["status_label"] if rec else None,
+            "notes": rec["notes"] if rec else [], "events": events,
+            "disclaimer": "This is a sample of what the next run would send, produced by the same generator and payload builder. Values differ between runs. It does not prove an add-on parses the data; only the status above says what has been tested."}
+
+
 @app.post("/api/generate/single-event")
 def post_generate_single_event(payload: Dict[str, Any]):
     from app.generator_modes import generator_service
@@ -2323,6 +2371,13 @@ def runs_start(payload: Dict[str, Any]):
     kind, target = payload.get("kind"), payload.get("target")
     if kind not in ("scenario", "sourcetype") or not target:
         raise HTTPException(status_code=422, detail="kind must be scenario or sourcetype and target is required")
+    from netspout_core import capability
+    if kind == "sourcetype" and capability.block(target):
+        raise HTTPException(status_code=409, detail=capability.block(target)["message"])
+    if kind == "scenario":
+        sc = next((x for x in capability.scenarios() if x["id"] == target), None)
+        if sc and not sc["runnable"]:
+            raise HTTPException(status_code=409, detail="Scenario is not runnable: " + " ".join(sc["reasons"]))
     gt, index, host = _replay_destination(payload)
     name = _destination_name(gt)
     from netspout_core import replay_packs, incident_packs, netflow_solution, netflow_wire

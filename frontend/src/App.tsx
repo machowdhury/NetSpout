@@ -27,6 +27,8 @@ import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
 import { Cisco100View } from './components/catalog/Cisco100View';
 import { SecuritySourceCatalog } from './components/catalog/SecuritySourceCatalog';
 import { SetupWizard } from './components/setup/SetupWizard';
+import { GenerateData } from './components/generate/GenerateData';
+import { ScenariosView } from './components/generate/ScenariosView';
 import { SecurityContentLab } from './components/security/SecurityContentLab';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
@@ -65,6 +67,7 @@ import {
   PRESET_PURE_CISCO_ENT
 } from './presets/defaultTopologies';
 
+const PRIMARY_ROUTES: AppRoute[] = ['/generate/quick', '/generate/scenarios', '/system/connections'];
 const BACKEND_HTTP = getApiBaseUrl();
 const BACKEND_ORIGIN =
   BACKEND_HTTP || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8081');
@@ -72,6 +75,7 @@ const BACKEND_WS = `${BACKEND_ORIGIN.replace(/^http/, 'ws')}/ws/logs`;
 
 const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
   '/generate/quick': 'generator',
+  '/generate/advanced': 'generator',
   '/generate/scenarios': 'workflow',
   '/build/studio': 'advanced',
   '/build/industry-studio': 'workflow',
@@ -661,10 +665,15 @@ export const App: React.FC = () => {
     navigate(MODE_TO_ROUTE[mode]);
   };
 
+  // Simple mode has three places in its navigation; the home page is not one of them. Deep links to the other pages still open.
+  useEffect(() => {
+    if (experienceMode === 'simple' && route === '/') navigate('/generate/quick');
+  }, [experienceMode, route, navigate]);
+
   const handleExperienceModeChange = (mode: ExperienceMode) => {
     setExperienceMode(mode);
-    if (mode === 'simple' && route === '/build/scenario-builder') {
-      navigate('/');
+    if (mode === 'simple' && !PRIMARY_ROUTES.includes(route)) {
+      navigate('/generate/quick');
     }
   };
 
@@ -719,11 +728,15 @@ export const App: React.FC = () => {
     }
 
     if (route === '/generate/quick') {
+      return <GenerateData />;
+    }
+
+    if (route === '/generate/advanced') {
       return <GenerationLab experienceMode={experienceMode} initialMode="DATA_SOURCE" />;
     }
 
     if (route === '/generate/scenarios') {
-      return <GuidedScenarioLab experienceMode={experienceMode} />;
+      return experienceMode === 'advanced' ? <GuidedScenarioLab experienceMode={experienceMode} /> : <ScenariosView />;
     }
 
     if (route === '/observe/live-runs') {

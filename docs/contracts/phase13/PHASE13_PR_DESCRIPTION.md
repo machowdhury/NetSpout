@@ -2,7 +2,7 @@
 
 > **This is a review PR. It is NOT a customer-release approval.** Do not merge until the reviewers have signed off; no GitHub release, no deployment and no publication of artifacts is part of it.
 
-Brings recovery phases 1–13 onto `main`: 24 commits on top of `origin/main` (`3f2e63f`, an ancestor of this branch, so no conflicts); about 730 files, mostly evidence, tests and dashboards.
+Brings recovery phases 1–13 onto `main`: about 25 commits on top of `origin/main` (`3f2e63f`, an ancestor of this branch, so no conflicts); about 730 files, mostly evidence, tests and dashboards.
 
 ### What changes for users
 - **Generate Data**: one sourcetype, or several at once (events and metrics together, bounded or continuous), with Preview → Generate → Verify → Investigate. **Scenarios**: preview, run, Dashboard Studio investigation. **Connections**.

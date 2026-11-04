@@ -2,15 +2,15 @@
 
 > **Review PR. This is NOT a customer-release approval.** It is not to be merged without explicit approval; no GitHub release, no deployment and no publication of artifacts are part of it. Customer release: **NO-GO** (see below).
 
-**Size, exactly:** 30 commits on top of `origin/main` (`3f2e63f`, an ancestor of this branch, so no conflicts; GitHub: mergeable/clean), **900 files, +~229k / −1,041 lines**. The line count is dominated by generated and evidence files, not logic:
+**Size, exactly:** 30 commits on top of `origin/main` (`3f2e63f`, an ancestor of this branch, so no conflicts; GitHub: mergeable/clean), **901 files, +229,265 / −1,041 lines**. The line count is dominated by generated and evidence files, not logic:
 
 | What | Files | Why it is large and how to review it |
 |---|---|---|
 | **Generated dashboards** (`netspout/default/data/ui/views`) | 225 (224 modified, 1 new) | One mechanical rewrite of the same few lines per dashboard: queries now read NetSpout's namespaced fields with a fallback (`eval pf_action=coalesce(netspout_action, action), pf_signature=coalesce(netspout_signature, signature)`, `pf_status=coalesce(netspout_status, status)`, then `rename … as action/signature/status`), so NetSpout values no longer shadow add-on fields. Checked for all 225: XML well formed, embedded JSON parses, query counts and the `$run_tok$`, `$index_tok$`, `netspout_run_id`, `netspout_scenario_id` tokens unchanged, no empty pipes. Do not read line by line; the one new view is `netspout_run_investigation.xml` |
 | **Mirrored code** (generated copies of `src/netspout_core`) | 14 in `netspout/bin/netspout_core`, 12 in `netspout/bin`, 12 in `backend/app` (against 12 changed source files) | `scripts/sync_core.py` writes them; `scripts/verify_sources.py` now guards all 78 mirrored modules (it guarded 59); 266 mirrored files compared, 0 differences. **Review `src/netspout_core`, not the copies** |
-| **Evidence** (`docs/verification/evidence/**`) | ~460 (≈250 screenshots, the rest JSON) | outputs of the lab runs that back the claims; no code |
+| **Evidence** (`docs/verification/evidence/**`) | 445 (257 screenshots, the rest JSON) | outputs of the lab runs that back the claims; no code |
 | Tests | 34 | 29 packaged browser acceptance tests live in `frontend/tests/phase9-acceptance.spec.ts` |
-| Docs | ~70 | phase reports, runbook, support matrix, upgrade guide, release-artifact guide |
+| Docs | 69 | phase reports, runbook, support matrix, upgrade guide, release-artifact guide |
 | Built UI bundle | 3 | generated from `frontend/src` (13 files); a clean rebuild equals the committed bundle |
 
 ### What changes for users

@@ -65,5 +65,38 @@
    "timestamp.format_parses[ios-ospf-duprid]"
   ],
   "generated": "2026-11-03T16:56:32+00:00"
+ },
+ "pan:threat": {
+  "passed": true,
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0",
+  "spec": "tests/ta_specs/palo_alto_threat.json",
+  "evidence": "docs/verification/evidence/phase10/pan_threat_after_fix.json",
+  "run_id": "tacompat-71511e0842",
+  "summary": {
+   "PASS": 152,
+   "FAIL": 0,
+   "NOT_RUN": 0
+  },
+  "not_run": [],
+  "generated": "2026-11-03T21:51:34+00:00"
+ },
+ "pan:system": {
+  "passed": true,
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0",
+  "spec": "tests/ta_specs/palo_alto_system.json",
+  "evidence": "docs/verification/evidence/phase10/pan_system_after_fix.json",
+  "run_id": "tacompat-49a9f42776",
+  "summary": {
+   "PASS": 61,
+   "FAIL": 0,
+   "NOT_RUN": 2
+  },
+  "not_run": [
+   "timestamp.format_parses[pan-system-globalprotect]",
+   "timestamp.format_parses[pan-system-vpn-critical]"
+  ],
+  "generated": "2026-11-03T21:51:42+00:00"
  }
 }

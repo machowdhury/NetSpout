@@ -34,7 +34,7 @@
   "generators_valid": 245,
   "generators_valid_exact": 96,
   "sample_backed": 235,
-  "live_verified": 4,
+  "live_verified": 6,
   "catalog_sourcetypes_without_covering_package": 75,
   "catalog_sourcetypes_not_defined_by_any_package": 223,
   "ta_sourcetypes_absent_from_netspout": 1499,
@@ -1316,7 +1316,7 @@
    "payload_or_routing_conflicts": 0,
    "valid_generators": 3,
    "sample_backed": 3,
-   "live_verified": 1,
+   "live_verified": 3,
    "specialized_ingestion_required": 1,
    "main_blockers": [
     "2 sourcetypes have no working generator"

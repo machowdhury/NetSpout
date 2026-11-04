@@ -1,6 +1,6 @@
 {
  "scenario": "paloalto_threat_investigation",
- "run_id": "NS-20261103-4f06116e",
+ "run_id": "NS-20261104-a2849bf5",
  "required": [
   {
    "sourcetype": "pan:traffic",
@@ -10,18 +10,83 @@
   },
   {
    "sourcetype": "pan:threat",
-   "status": "FORMAT_CHECKED",
-   "status_label": "Checked offline only, not tested in Splunk",
+   "status": "VERIFIED",
+   "status_label": "Verified in Splunk",
    "block": null
   },
   {
    "sourcetype": "pan:system",
-   "status": "FORMAT_CHECKED",
-   "status_label": "Checked offline only, not tested in Splunk",
+   "status": "VERIFIED",
+   "status_label": "Verified in Splunk",
    "block": null
   }
  ],
- "state_label": "Can run, not fully tested in Splunk",
+ "state_label": "Verified in Splunk",
+ "ta_parsing": {
+  "pan:traffic": {
+   "events": 25,
+   "fields_extracted_on_every_event": [
+    "src_ip",
+    "dest_ip",
+    "src_port",
+    "dest_port",
+    "transport",
+    "rule",
+    "app",
+    "vendor_action",
+    "action",
+    "session_id"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 23.962278,
+   "actions": [
+    "allow->allowed",
+    "deny->blocked",
+    "drop->blocked",
+    "reset-both->blocked"
+   ]
+  },
+  "pan:threat": {
+   "events": 13,
+   "fields_extracted_on_every_event": [
+    "src_ip",
+    "dest_ip",
+    "rule",
+    "app",
+    "vendor_action",
+    "action",
+    "raw_category",
+    "severity",
+    "direction",
+    "threat_name",
+    "threat_id",
+    "log_subtype"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 19.126131,
+   "actions": [
+    "alert->allowed",
+    "block-ip->blocked",
+    "drop->blocked",
+    "reset-both->blocked",
+    "reset-client->blocked",
+    "reset-server->blocked"
+   ]
+  },
+  "pan:system": {
+   "events": 9,
+   "fields_extracted_on_every_event": [
+    "log_subtype",
+    "event_id",
+    "module",
+    "severity",
+    "description",
+    "sequence_number",
+    "signature",
+    "result"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 5.050672,
+   "actions": []
+  }
+ },
  "ui_outcome": "Verified: found 47 of 47 events in index ta_validation that this run sent.",
  "sent": {
   "events": 47,
@@ -44,32 +109,32 @@
    {
     "phase": "BASELINE",
     "count": 6,
-    "first": 1793741713.059644,
-    "last": 1793741713.104529
+    "first": 1793795998.56402,
+    "last": 1793795998.6617641
    },
    {
     "phase": "DEGRADE",
     "count": 11,
-    "first": 1793741713.112736,
-    "last": 1793741713.201344
+    "first": 1793795998.679424,
+    "last": 1793795998.789345
    },
    {
     "phase": "FAULT",
     "count": 13,
-    "first": 1793741713.212991,
-    "last": 1793741713.362858
+    "first": 1793795998.798059,
+    "last": 1793795998.932221
    },
    {
     "phase": "FAILOVER",
     "count": 11,
-    "first": 1793741713.374107,
-    "last": 1793741713.480404
+    "first": 1793795998.94109,
+    "last": 1793795999.037722
    },
    {
     "phase": "RECOVER",
     "count": 6,
-    "first": 1793741713.490939,
-    "last": 1793741713.542461
+    "first": 1793795999.045865,
+    "last": 1793795999.086318
    }
   ],
   "by_sourcetype": {
@@ -130,7 +195,7 @@
   },
   {
    "source": "ds_runs",
-   "rows": 4
+   "rows": 1
   },
   {
    "source": "ds_phase_list",

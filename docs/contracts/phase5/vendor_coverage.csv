@@ -61,7 +61,7 @@ ollama,Ollama (local LLM runtime),1,1,0,0,0,0,1,0,0,0,no downloaded add-on cover
 opentelemetry,OpenTelemetry,1,1,1,0,0,0,0,0,0,1,covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator
 oracle,Oracle,1,1,0,0,0,0,1,1,0,0,no downloaded add-on covers this vendor
 osquery,osquery,1,1,1,1,0,1,1,1,0,1,1 exact matches with payload/routing conflicts; no exact match live-verified
-palo_alto,Palo Alto Networks,5,5,1,4,0,0,3,3,1,1,2 sourcetypes have no working generator
+palo_alto,Palo Alto Networks,5,5,1,4,0,0,3,3,3,1,2 sourcetypes have no working generator
 pfsense_netgate,pfSense (Netgate),1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
 proofpoint,Proofpoint,1,1,4,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
 qualys,Qualys,1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names

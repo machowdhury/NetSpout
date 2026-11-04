@@ -58,7 +58,7 @@ export function Outcome({ runId }: { runId: string }) {
     <div className="sx-box" data-testid="outcome" role="status" data-verification={verify?.status ?? 'PENDING'}>
       <p className={tone} data-testid="outcome-text">{text}</p>
       <div className="sx-row">
-        {run.controls.stop && <button type="button" onClick={() => void controlRun(runId, 'stop')}>Stop</button>}
+        {run.controls.stop && <button type="button" data-testid="stop-run" onClick={() => void controlRun(runId, 'stop')}>Stop</button>}
         {final && accepted > 0 && <button type="button" data-testid="check-again" disabled={verifying} onClick={() => { attempts.current = 0; void doVerify(); }}>{verifying ? 'Checking…' : 'Check Splunk again'}</button>}
       </div>
     </div>

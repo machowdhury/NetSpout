@@ -27,7 +27,8 @@ from netspout_core.yaml_sample_replay import SampleError, SampleSet, load_sample
 from netspout_core.asa_generator import SOURCETYPE as ASA_SOURCETYPE, generate_asa_entries
 from netspout_core.vendor_catalog import get_vendor_by_id
 from netspout_core import ingestion_profiles
-from netspout_core.real_format_generators import (VMWARE_CPU_SOURCETYPE, family_violations, iosxr_metric_entries, refresh_event_time, vmware_perf_cpu_entries)
+from netspout_core.real_format_generators import (PAN_SYSTEM_SOURCETYPE, PAN_THREAT_SOURCETYPE, PAN_TRAFFIC_SOURCETYPE, VMWARE_CPU_SOURCETYPE, family_violations, iosxr_metric_entries, pan_system_entries,
+                                                  pan_threat_entries, pan_traffic_entries, refresh_event_time, vmware_perf_cpu_entries)
 from netspout_core.models import (
     EcosystemMode,
     LogEntry,
@@ -71,7 +72,8 @@ def _mdt_metric_entries(count: int) -> List[LogEntry]:
     return iosxr_metric_entries(count)
 
 
-_NATIVE = {ASA_SOURCETYPE: generate_asa_entries, MDT_METRIC_SOURCETYPE: _mdt_metric_entries, VMWARE_CPU_SOURCETYPE: vmware_perf_cpu_entries}
+_NATIVE = {ASA_SOURCETYPE: generate_asa_entries, MDT_METRIC_SOURCETYPE: _mdt_metric_entries, VMWARE_CPU_SOURCETYPE: vmware_perf_cpu_entries,
+           PAN_TRAFFIC_SOURCETYPE: pan_traffic_entries, PAN_THREAT_SOURCETYPE: pan_threat_entries, PAN_SYSTEM_SOURCETYPE: pan_system_entries}
 
 
 class TelemetryGeneratorService:
@@ -517,6 +519,9 @@ class TelemetryGeneratorService:
     _NATIVE_PROVENANCE = {
         ASA_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/asa_generator.py; message formats per Cisco ASA syslog guide (302013-302016, 106023); sourcetype declared by Splunk Add-on for Cisco ASA (Splunkbase 1620); TA parsing NOT verified"},
         MDT_METRIC_SOURCETYPE: {"classification": "REAL_TELEMETRY_OBSERVED", "source": "docs/contracts/phase7/real_metric_inventory.json and phase8_metric_evidence.json (cisco_metrics series: interface_generic_counters.* and the native wdsysmon CPU names); delivered as Splunk HEC metrics; mstats-verified in the isolated lab"},
+        PAN_TRAFFIC_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS traffic log columns, the layout the paloalto scenarios use); live-verified against the Splunk Add-on for Palo Alto Networks 4.0.0 (docs/contracts/ta_live_results.json)"},
+        PAN_THREAT_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS threat log columns, the layout the paloalto scenarios use); checked against the Splunk Add-on for Palo Alto Networks 4.0.0 field list in the isolated lab"},
+        PAN_SYSTEM_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS system log columns, the layout the paloalto scenarios use); checked against the Splunk Add-on for Palo Alto Networks 4.0.0 field list in the isolated lab"},
         VMWARE_CPU_SOURCETYPE: {"classification": "REAL_TELEMETRY_OBSERVED", "source": "tests/fixtures/phase7_real_samples (vmware:perf:cpu TSV row) and the Splunk_TA_vmware 4.2.1 collector layout; column semantics and value ranges not evidenced"},
     }
 

@@ -34,7 +34,7 @@
   "generators_valid": 245,
   "generators_valid_exact": 96,
   "sample_backed": 235,
-  "live_verified": 4,
+  "live_verified": 6,
   "catalog_sourcetypes_without_covering_package": 75,
   "catalog_sourcetypes_not_defined_by_any_package": 223,
   "ta_sourcetypes_absent_from_netspout": 1499,
@@ -11900,7 +11900,7 @@
    "conflicts": [],
    "generator_tier": "NATIVE_ENGINE",
    "generator_valid": true,
-   "generator_mode": "grounded_sample",
+   "generator_mode": "native",
    "generator_error": null,
    "payload_format": "csv-like",
    "sample_status": "SHIPPED_YAML+EXTERNAL_CORPUS",
@@ -11922,16 +11922,15 @@
     "force_sourcetype_match": 4,
     "passes": true
    },
-   "live_verification": "NOT_VERIFIED",
+   "live_verification": "SPLUNK_VERIFIED (Phase 4 live evidence, splunk-add-on-for-palo-alto-networks_400.spl 4.0.0)",
    "evidence": [
     "default/props.conf:[pan_system] rename in splunk-add-on-for-palo-alto-networks_400.spl",
     "default/props.conf:[pan:system] in splunk-add-on-for-palo-alto-networks_400.spl",
-    "default/transforms.conf:[pan_system] in splunk-add-on-for-palo-alto-networks_400.spl"
+    "default/transforms.conf:[pan_system] in splunk-add-on-for-palo-alto-networks_400.spl",
+    "docs/verification/evidence/phase10/pan_system_after_fix.json"
    ],
    "scenarios": 3,
-   "remediation": [
-    "write a spec and run the one-add-on-at-a-time live check (Phase 4 method); only then drop the shadowing HEC fields"
-   ],
+   "remediation": [],
    "sample_replayable": true,
    "also_defined_by": [],
    "ingestion_note": "text sourcetype not tied to an API/agent input in inputs.conf (inferred; not a documented statement)"
@@ -11958,7 +11957,7 @@
    "conflicts": [],
    "generator_tier": "NATIVE_ENGINE",
    "generator_valid": true,
-   "generator_mode": "grounded_sample",
+   "generator_mode": "native",
    "generator_error": null,
    "payload_format": "csv-like",
    "sample_status": "SHIPPED_YAML",
@@ -11980,16 +11979,15 @@
     "force_sourcetype_match": 4,
     "passes": true
    },
-   "live_verification": "NOT_VERIFIED",
+   "live_verification": "SPLUNK_VERIFIED (Phase 4 live evidence, splunk-add-on-for-palo-alto-networks_400.spl 4.0.0)",
    "evidence": [
     "default/props.conf:[pan_threat] rename in splunk-add-on-for-palo-alto-networks_400.spl",
     "default/props.conf:[pan:threat] in splunk-add-on-for-palo-alto-networks_400.spl",
-    "default/transforms.conf:[pan_threat] in splunk-add-on-for-palo-alto-networks_400.spl"
+    "default/transforms.conf:[pan_threat] in splunk-add-on-for-palo-alto-networks_400.spl",
+    "docs/verification/evidence/phase10/pan_threat_after_fix.json"
    ],
    "scenarios": 6,
-   "remediation": [
-    "write a spec and run the one-add-on-at-a-time live check (Phase 4 method); only then drop the shadowing HEC fields"
-   ],
+   "remediation": [],
    "sample_replayable": true,
    "also_defined_by": [],
    "ingestion_note": "text sourcetype not tied to an API/agent input in inputs.conf (inferred; not a documented statement)"
@@ -12016,7 +12014,7 @@
    "conflicts": [],
    "generator_tier": "NATIVE_ENGINE",
    "generator_valid": true,
-   "generator_mode": "grounded_sample",
+   "generator_mode": "native",
    "generator_error": null,
    "payload_format": "csv-like",
    "sample_status": "SHIPPED_YAML+EXTERNAL_CORPUS",

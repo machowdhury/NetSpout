@@ -248,12 +248,14 @@ class TestIosXrMetrics(unittest.TestCase):
     def test_counters_are_cumulative_per_interface(self):
         last = {}
         for e in self.entries(80):
-            f = capture(e)["fields"]
+            pl = capture(e)
+            f = pl["fields"]
             k = "metric_name:interface_generic_counters.bytes_received"
             if k in f:
-                if f["interface_name"] in last:
-                    self.assertGreater(f[k], last[f["interface_name"]])
-                last[f["interface_name"]] = f[k]
+                series = (pl["source"], f["interface_name"])               # a series is one device address and one interface
+                if series in last:
+                    self.assertGreater(f[k], last[series])
+                last[series] = f[k]
         self.assertGreaterEqual(len(last), 3)
 
     def test_source_is_the_device_address_and_index_follows_the_transport(self):
@@ -386,3 +388,20 @@ class TestFieldOwnershipEvidence(unittest.TestCase):
         pl = capture(svc().prepare_sourcetype_entries("cisco_ftd", "cisco:ftd:syslog", 1)[0][0])
         self.assertIn("src_ip", pl["fields"])
         self.assertIn("netspout_src_ip", pl["fields"])
+
+
+class TestIosXrCountersAcrossCalls(unittest.TestCase):
+    """A streaming run asks for a few entries at a time; counters must keep climbing across those calls (Phase 10)."""
+
+    def test_counters_never_go_backwards_across_many_small_calls_per_device_and_interface(self):
+        last = {}
+        k = "metric_name:interface_generic_counters.bytes_received"
+        for _ in range(200):
+            for e in rfg.iosxr_metric_entries(random.randint(1, 5)):
+                f = json.loads(e.raw_log)["fields"]
+                if k in f:
+                    key = (e.device_id, f["interface_name"])
+                    if key in last:
+                        self.assertGreater(f[k], last[key], key)
+                    last[key] = f[k]
+        self.assertGreaterEqual(len(last), 6)                       # several (device, interface) series, each independent and increasing

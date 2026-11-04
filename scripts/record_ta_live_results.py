@@ -10,6 +10,8 @@ EVID = {  # sourcetype -> (spec, evidence written after the fix)
     "fortigate_traffic": ("tests/ta_specs/fortinet_fortigate.json", "docs/verification/evidence/ta_compat/fortigate_traffic_after_fix.json"),
     "pan:traffic": ("tests/ta_specs/palo_alto_traffic.json", "docs/verification/evidence/ta_compat/pan_traffic_after_fix.json"),
     "cisco:ios": ("tests/ta_specs/cisco_ios_catalyst.json", "docs/verification/evidence/ta_compat/cisco_ios_after_fix.json"),
+    "pan:threat": ("tests/ta_specs/palo_alto_threat.json", "docs/verification/evidence/phase10/pan_threat_after_fix.json"),       # Phase 10
+    "pan:system": ("tests/ta_specs/palo_alto_system.json", "docs/verification/evidence/phase10/pan_system_after_fix.json"),       # Phase 10
 }
 
 

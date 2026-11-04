@@ -1,0 +1,63 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Raw events are NetSpout's pan:system output (PanOsGenerator layout, 17 columns; the add-on lists 26). Expected values are the CSV columns named by the add-on's own FIELDS list for extract_system plus its FIELDALIAS signature and result (both event_id). object is the add-on's FIELDALIAS 'log_subtype AS object', not the CSV column of that name.",
+ "ta": {
+  "id": "Splunk_TA_paloalto_networks",
+  "package_glob": "splunk-add-on-for-palo-alto-networks_*",
+  "expected_version": "4.0.0"
+ },
+ "sourcetype": "pan:system",
+ "index": "ta_validation",
+ "kind": "event",
+ "vendor": "palo_alto",
+ "events": [
+  {
+   "id": "pan-system-globalprotect",
+   "raw": "1,{TS_SLASH},001801000001,SYSTEM,globalprotect,2304,{TS_SLASH},,firewall-management,gateway-agent,0,0,globalprotect,informational,GlobalProtect gateway client connection established,12345690,0x0",
+   "expect": {
+    "log_subtype": "globalprotect",
+    "event_id": "firewall-management",
+    "object": "globalprotect",
+    "module": "globalprotect",
+    "severity": "informational",
+    "description": "GlobalProtect gateway client connection established",
+    "sequence_number": "12345690",
+    "signature": "firewall-management",
+    "result": "firewall-management"
+   },
+   "eventtype": "pan_system",
+   "tags": []
+  },
+  {
+   "id": "pan-system-vpn-critical",
+   "raw": "1,{TS_SLASH},001801000001,SYSTEM,vpn,2304,{TS_SLASH},,firewall-management,gateway-agent,0,0,vpn,critical,IKE tunnel negotiated successfully,12345691,0x0",
+   "expect": {
+    "log_subtype": "vpn",
+    "event_id": "firewall-management",
+    "object": "vpn",
+    "module": "vpn",
+    "severity": "critical",
+    "description": "IKE tunnel negotiated successfully",
+    "sequence_number": "12345691",
+    "signature": "firewall-management",
+    "result": "firewall-management"
+   },
+   "eventtype": "pan_system",
+   "tags": []
+  }
+ ],
+ "negative": [
+  {
+   "id": "plain-text-no-csv",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin",
+   "expect_absent": [
+    "event_id",
+    "module",
+    "object"
+   ]
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

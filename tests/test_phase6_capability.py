@@ -23,7 +23,7 @@ from netspout_core.telemetry_dispatcher import dispatcher
 client = TestClient(main.app)
 CFG = {"configured": True, "deployment_mode": "DOCKER_LAB", "indexes": ["dev_test_replay", "dev_test_replay_metrics"], "hec_url": "https://127.0.0.1:8088/services/collector"}
 GT = TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_token="tok-test", hec_metric_index="dev_test_replay_metrics")
-VERIFIED = {"cisco:asa": "cisco_asa", "cisco:ios": "cisco_ios", "fortigate_traffic": "fortinet", "pan:traffic": "palo_alto"}
+VERIFIED = {"cisco:asa": "cisco_asa", "cisco:ios": "cisco_ios", "fortigate_traffic": "fortinet", "pan:traffic": "palo_alto", "pan:threat": "palo_alto", "pan:system": "palo_alto"}   # Phase 10 added pan:threat and pan:system
 # vmware:perf:cpu left this list in Phase 8: the reference instance and Splunk_TA_vmware show it is a TSV event sourcetype, now generated as one
 CONFLICTS = ["cisco:thousandeyes:metric", "cisco:intersight:metrics"]
 
@@ -59,7 +59,7 @@ def wait_done(rid):
     return s
 
 
-def test_the_four_verified_integrations_are_exactly_the_live_evidence_and_lead_the_tree():
+def test_the_verified_integrations_are_exactly_the_live_evidence_and_lead_the_tree():
     live = {k for k, v in __import__("json").loads((ROOT / "docs/contracts/ta_live_results.json").read_text()).items() if v["passed"]}
     got = {s: r for s, r in capability.data()["sourcetypes"].items() if r["status"] == "VERIFIED"}
     assert set(got) == live == set(VERIFIED)

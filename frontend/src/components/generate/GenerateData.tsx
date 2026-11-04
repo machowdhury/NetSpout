@@ -158,7 +158,7 @@ export function GenerateData() {
         <details className="sx-advanced"><summary>More options</summary>
           <div className="sx-row">
             <label>Send<select value={mode} onChange={(e) => setMode(e.target.value as Mode)} data-testid="mode"><option value="finite">A set number of events</option><option value="continuous">Keep streaming until I stop</option></select></label>
-            <label>Events per second<input type="number" min={1} max={200} value={eps} onChange={(e) => setEps(Math.max(1, Math.min(200, Number(e.target.value) || 1)))} /></label>
+            <label>Events per second<input type="number" data-testid="eps" min={1} max={200} value={eps} onChange={(e) => setEps(Math.max(1, Math.min(200, Number(e.target.value) || 1)))} /></label>
           </div>
         </details>
         <div className="sx-row">

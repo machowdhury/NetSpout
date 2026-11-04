@@ -1,12 +1,12 @@
 {
  "sourcetype": "pan:traffic",
  "vendor": "palo_alto",
- "run_id": "run-70ef2c656cc0",
+ "run_id": "run-572e2e1ea300",
  "ui": {
   "status_badge": "Verified in Splunk",
   "preview_sourcetype": "pan:traffic",
-  "preview_info": "Sourcetype that will be sent: pan:traffic · index ta_validation · generator: grounded_sample",
-  "preview_first_event": "1,2026/09/18 17:16:26,001801000001,TRAFFIC,allow,2304,2026/09/18 17:16:26,10.0.10.55,198.51.100.80,0.0.0.0,0.0.0.0,Outbound-Web-Rule,jdoe,,ssl,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,2026/09/18 17:16:26,98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,2026/09/18 17:16:26,12,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,aged-out,0,0,0,0,,PA-5250,from-policy",
+  "preview_info": "Sourcetype that will be sent: pan:traffic · index ta_validation · generator: native",
+  "preview_first_event": "1,2026/11/04 12:39:45,001801000003,TRAFFIC,end,2304,2026/11/04 12:39:45,10.0.30.11,198.51.100.201,0.0.0.0,0.0.0.0,Perimeter-Web-Access,svc-update,,ms-dce-rpc,vsys1,trust,untrust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/04 12:39:45,98422,1,50787,80,0,0,0x0,udp,allow,2073,1036,1037,3,2026/11/04 12:39:45,277,any,0,12345679,0x0,10.0.0.0-10.255.255.255,NL,0,14,15,tcp-reset,0,0,0,0,,PA-3260,from-po",
   "outcome": "Verified: found 20 of 20 events in index ta_validation that this run sent."
  },
  "outgoing_by_tap": {
@@ -18,9 +18,8 @@
    "ta_validation"
   ],
   "hosts": [
-   "device-01",
-   "device-02",
-   "device-03"
+   "pa-3260-01.lab.example",
+   "pa-5250-01.lab.example"
   ],
   "hec_status": [
    200
@@ -31,15 +30,14 @@
   "sourcetype": "pan:traffic",
   "index": "ta_validation",
   "hosts": [
-   "device-01",
-   "device-02",
-   "device-03"
+   "pa-3260-01.lab.example",
+   "pa-5250-01.lab.example"
   ],
   "sources": "network-topology-simulator",
-  "time_first": 1793741703.5642009,
-  "time_last": 1793741707.412799,
-  "send_time_first": 1793741703.5642009,
-  "send_time_last": 1793741707.412799
+  "time_first": 1793795988.769504,
+  "time_last": 1793795992.628246,
+  "send_time_first": 1793795988.769504,
+  "send_time_last": 1793795992.628246
  },
  "ta_fields_extracted_counts": {
   "src_ip": 20,
@@ -64,20 +62,20 @@
  "bare_vendor_fields_in_outgoing_payload": [],
  "sample_events": [
   {
-   "_time": "2026-11-03 21:35:07.412 GMT",
-   "host": "device-02",
+   "_time": "2026-11-04 12:39:52.628 GMT",
+   "host": "pa-3260-01.lab.example",
    "source": "network-topology-simulator",
    "sourcetype": "pan:traffic",
    "index": "ta_validation",
-   "_raw": "1,2026/09/18 17:16:26,001801000001,TRAFFIC,allow,2304,2026/09/18 17:16:26,10.0.10.55,198.51.100.80,0.0.0.0,0.0.0.0,Outbound-Web-Rule,jdoe,,ssl,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,2026/09/18 17:16:26,98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,2026/09/18 17:16:26,12,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,aged-out,0,0,0,0,,PA-5250,from-policy"
+   "_raw": "1,2026/11/04 12:39:47,001801000003,TRAFFIC,end,2304,2026/11/04 12:39:47,10.0.10.80,198.51.100.150,0.0.0.0,0.0.0.0,Perimeter-Web-Access,jdoe,,unknown-tcp,vsys1,trust,untrust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/04 12:39:47,98441,1,54752,80,0,0,0x0,udp,allow,580,290,290,34,2026/11/04 12:39:47,29,any,0,12345698,0x0,10.0.0.0-10.255.255.255,DE,0,4,2,policy-deny,0,0,0,0,,PA-5250,from-policy"
   },
   {
-   "_time": "2026-11-03 21:35:07.207 GMT",
-   "host": "device-01",
+   "_time": "2026-11-04 12:39:52.423 GMT",
+   "host": "pa-5250-01.lab.example",
    "source": "network-topology-simulator",
    "sourcetype": "pan:traffic",
    "index": "ta_validation",
-   "_raw": "1,2026/09/18 17:16:25,001801000001,TRAFFIC,drop,2304,2026/09/18 17:16:25,198.51.100.150,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,jdoe,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/09/18 17:16:25,98421,1,58210,80,0,0,0x0,tcp,deny,1420,0,1420,1,2026/09/18 17:16:25,0,any,0,12345678,0x0,10.0.0.0-10.255.255.255,US,0,1,0,policy-deny,0,0,0,0,,PA-5250,from-policy"
+   "_raw": "1,2026/11/04 12:39:46,001801000003,TRAFFIC,drop,2304,2026/11/04 12:39:46,198.51.100.201,172.16.4.9,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,asmith,,outlook-web-access,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/04 12:39:46,98440,1,51954,80,0,0,0x0,udp,deny,6292,3146,3146,39,2026/11/04 12:39:46,0,any,0,12345697,0x0,10.0.0.0-10.255.255.255,NL,0,8,10,idle-age-out,0,0,0,0,,PA-3260,from-policy"
   }
  ]
 }

@@ -110,6 +110,9 @@ for (const c of CASES) {
     // Generate Data: select, preview
     await open(page, '/generate/quick');
     await page.getByTestId('vendor').selectOption(c.vendor);
+    const where = await findEntry(request, c.st);                      // a vendor can have several verified sourcetypes (Palo Alto has three): choose this one explicitly
+    await page.getByTestId('product').selectOption(where.product);
+    await page.getByTestId('sourcetype').selectOption(c.st);
     await expect(page.getByTestId('sourcetype')).toHaveValue(c.st);
     await expect(page.getByTestId('status-badge')).toHaveText('Verified in Splunk');
     await expect(page.getByTestId('preview-sourcetype')).toHaveText(c.st);
@@ -428,7 +431,9 @@ test('[pan] scenario through the UI: events indexed, correlation ids, phase orde
   await open(page, '/generate/scenarios');
   await page.getByTestId('category').selectOption('ALL');
   await page.getByTestId('scenario').selectOption(SCENARIO);
-  await expect(page.getByTestId('scenario-state')).toHaveText('Can run, not fully tested in Splunk');       // not verified: two required sources are only format-checked
+  // every required source is verified against the Palo Alto add-on (traffic in Phase 4, threat and system in Phase 10), so the page may say Verified; the assertions below back that up
+  await expect(page.getByTestId('scenario-state')).toHaveText('Verified in Splunk');
+  for (const r of sc.required) expect(r.status, r.sourcetype).toBe('VERIFIED');
   await page.screenshot({ path: `${SHOTS}/p9_40_scenario_selected.png`, fullPage: true });
   const [resp] = await Promise.all([page.waitForResponse((r) => r.url().endsWith('/api/runs') && r.request().method() === 'POST'), page.getByTestId('run-scenario').click()]);
   expect(resp.ok()).toBeTruthy();
@@ -451,6 +456,27 @@ test('[pan] scenario through the UI: events indexed, correlation ids, phase orde
   const bySt = await splunk(`${base} | stats count by sourcetype`);
   const sentSt = out.reduce<Record<string, number>>((m, p) => { m[p.sourcetype] = (m[p.sourcetype] ?? 0) + 1; return m; }, {});
   for (const r of bySt) expect(Number(r.count)).toBe(sentSt[r.sourcetype]);
+  // add-on parsing of every required source, on the scenario's own events
+  const TA: Record<string, string[]> = {
+    'pan:traffic': ['src_ip', 'dest_ip', 'src_port', 'dest_port', 'transport', 'rule', 'app', 'vendor_action', 'action', 'session_id'],
+    'pan:threat': ['src_ip', 'dest_ip', 'rule', 'app', 'vendor_action', 'action', 'raw_category', 'severity', 'direction', 'threat_name', 'threat_id', 'log_subtype'],
+    'pan:system': ['log_subtype', 'event_id', 'module', 'severity', 'description', 'sequence_number', 'signature', 'result'],
+  };
+  const taEvidence: Record<string, unknown> = {};
+  for (const [st, fields] of Object.entries(TA)) {
+    const want = sentSt[st];
+    const r = await splunk(`${base} sourcetype="${st}" | stats count as total ${fields.map((f) => `count(${f}) as ${f}`).join(' ')} min(_time) as t0 max(_time) as t1`);
+    expect(Number(r[0].total), `${st} events indexed`).toBe(want);
+    for (const f of fields) expect(Number(r[0][f]), `${st}: add-on field ${f} extracted on every event`).toBe(want);
+    const va = await splunk(`${base} sourcetype="${st}" | stats count by action vendor_action`);
+    if (st !== 'pan:system') expect(va.every((x) => x.action !== 'unknown'), `${st}: no action fell through to unknown`).toBeTruthy();
+    for (const f of SHADOW) { const t = await splunk(`| tstats count WHERE index=${EVENT_INDEX} netspout_run_id="${runId}" sourcetype="${st}" BY ${f}`); expect(t.filter((x) => x[f] !== undefined && String(x[f]) !== '').length, `${st}: indexed bare field ${f}`).toBe(0); }
+    const raw = await splunk(`${base} sourcetype="${st}" | eval gen=strptime(generated_time,"%Y/%m/%d %H:%M:%S"), d=abs(_time-gen) | stats max(d) as maxdiff count(gen) as n`);
+    expect(Number(raw[0].n)).toBe(want);
+    expect(Number(raw[0].maxdiff), `${st}: the time inside the event agrees with the time Splunk stored`).toBeLessThan(120);
+    taEvidence[st] = { events: want, fields_extracted_on_every_event: fields, max_seconds_between_event_time_and_stored_time: Number(raw[0].maxdiff), actions: va.map((x) => `${x.vendor_action}->${x.action}`) };
+  }
+  for (const p of out) for (const f of SHADOW) expect(p.field_names ?? [], `bare ${f} in the outgoing payload`).not.toContain(f);
   // the scenario's own investigation searches: every data source of its Dashboard Studio dashboard, run against this run's data
   const xml = readFileSync(resolve(process.cwd(), '..', 'netspout', 'default', 'data', 'ui', 'views', `pf_${SCENARIO}.xml`), 'utf8');
   const def = JSON.parse(/<!\[CDATA\[([\s\S]*?)\]\]>/.exec(xml)![1]) as { dataSources: Record<string, { options: { query?: string } }> };
@@ -463,7 +489,7 @@ test('[pan] scenario through the UI: events indexed, correlation ids, phase orde
   }
   expect(searches.length).toBeGreaterThanOrEqual(12);
   for (const x of searches) expect(x.rows, `dashboard search ${x.source} returns rows for this run`).toBeGreaterThan(0);
-  save('scenario_paloalto_threat_investigation', { scenario: SCENARIO, run_id: runId, required: sc.required, state_label: 'Can run, not fully tested in Splunk', ui_outcome: await page.getByTestId('outcome-text').textContent(),
+  save('scenario_paloalto_threat_investigation', { scenario: SCENARIO, run_id: runId, required: sc.required, state_label: 'Verified in Splunk', ta_parsing: taEvidence, ui_outcome: await page.getByTestId('outcome-text').textContent(),
     sent: { events: n, by_sourcetype: sentSt, phases: order }, indexed: { total, by_phase: byPhase.map((r) => ({ phase: r.netspout_phase, count: Number(r.count), first: Number(r.t0), last: Number(r.t1) })), by_sourcetype: Object.fromEntries(bySt.map((r) => [r.sourcetype, Number(r.count)])) },
     dashboard: sc.dashboard, dashboard_searches_run: searches });
   // this scenario's investigation view is a native Splunk dashboard (pf_*), not a Dashboard Studio dashboard: the page must say so rather than show a dead link
@@ -491,4 +517,128 @@ test('[pan] a scenario that has a Dashboard Studio dashboard shows the link with
   const n = await until(() => splunk(`search index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count`), (r) => Number(r[0]?.count ?? 0) >= out.filter((p) => p.kind === 'event').length);
   expect(Number(n[0].count)).toBe(out.filter((p) => p.kind === 'event').length);
   save('scenario_with_studio_link', { scenario: 'C100-SEC-001', dashboard_id: dash.dashboard_id, run_id: runId, link_href: await link.getAttribute('href'), events_indexed: Number(n[0].count), note: 'sourcetype netspout:cisco:asa:syslog is a NetSpout-defined source, not a TA sourcetype: delivery and indexing are checked, TA parsing is not claimed' });
+});
+
+
+// ------------------------------------------------------------------------------------------------------------------------------ continuous metric streaming (Phase 10)
+const apiRun = async (request: APIRequestContext, id: string) => (await (await request.get(`${API}/api/runs/${id}`)).json()) as { state: string; counters: { generated: number; accepted: number; rejected: number; unknown: number }; error?: string | null };
+const FINAL_STATES = ['COMPLETED', 'STOPPED', 'FAILED', 'INTERRUPTED'];
+async function startStream(page: Page, request: APIRequestContext, eps: number) {
+  await pick(page, request, METRIC_ST);
+  await page.getByText('More options').click();
+  await page.getByTestId('mode').selectOption('continuous');
+  await page.getByTestId('eps').fill(String(eps));
+  return startFromUi(page);
+}
+const mstatsBase = (runId: string) => `index=${METRIC_INDEX} AND (metric_name="interface_generic_counters.*" OR metric_name="Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_*") AND netspout_run_id="${runId}"`;
+
+test('[metrics] a continuous stream: counts grow over time, Stop ends it promptly, the metrics in cisco_metrics match what was sent', async ({ page, request }) => {
+  group('metrics');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { metricIndex: METRIC_INDEX });
+  const runId = await startStream(page, request, 5);
+  await expect(page.getByTestId('outcome-text')).toContainText('streaming until stopped', { timeout: 30_000 });
+  await page.screenshot({ path: `${SHOTS}/p10_01_stream_running.png`, fullPage: true });
+  const early = await until(() => tapped(request, runId), (r) => r.length >= 10, 30_000, 500);
+  const t1 = early.length;
+  await until(() => tapped(request, runId), (r) => r.length >= t1 + 25, 40_000, 500);          // still generating five seconds later: the count keeps growing
+  const mid = (await tapped(request, runId)).length;
+  expect(mid).toBeGreaterThan(t1);
+  const clickAt = Date.now();
+  await page.getByTestId('stop-run').click();
+  const stopped = await until(() => apiRun(request, runId), (r) => FINAL_STATES.includes(r.state), 15_000, 250);
+  const stopLatency = (Date.now() - clickAt) / 1000;
+  expect(stopped.state).toBe('STOPPED');
+  expect(stopLatency, 'seconds from the Stop click to a stopped run').toBeLessThan(5);
+  await expect(page.getByTestId('stop-run')).toHaveCount(0);
+  const atStop = (await tapped(request, runId)).length;
+  await new Promise((r) => setTimeout(r, 8000));
+  const later = (await tapped(request, runId)).length;
+  expect(later, 'no event is generated after the run stopped').toBe(atStop);
+  expect((await apiRun(request, runId)).counters.generated).toBeLessThanOrEqual(atStop + 1);
+  const out = await tapped(request, runId);
+  expect(out.every((p) => p.kind === 'metric' && p.index === METRIC_INDEX && p.upstream_status === 200)).toBeTruthy();
+  const datapoints = out.reduce((n, p) => n + (p.metric_names?.length ?? 0), 0);
+  await expect(page.getByTestId('outcome-text')).toContainText(`Verified: found ${datapoints} of ${datapoints} metric datapoints in metric index ${METRIC_INDEX} (mstats search)`, { timeout: 120_000 });
+  await page.screenshot({ path: `${SHOTS}/p10_02_stream_stopped_verified.png`, fullPage: true });
+  // counts over time, from the metric index
+  const buckets = await until(() => splunk(`| mstats count(_value) as n WHERE ${mstatsBase(runId)} span=2s | stats count as buckets sum(n) as total min(_time) as t0 max(_time) as t1`), (r) => Number(r[0]?.total ?? 0) >= datapoints);
+  expect(Number(buckets[0].total)).toBe(datapoints);
+  expect(Number(buckets[0].buckets), 'datapoints are spread over several seconds, not one burst').toBeGreaterThanOrEqual(4);
+  expect(Number(buckets[0].t1) - Number(buckets[0].t0)).toBeGreaterThanOrEqual(8);
+  const sentSpan = Math.max(...out.map((p) => p.time)) - Math.min(...out.map((p) => p.time));
+  expect(Math.abs((Number(buckets[0].t1) - Number(buckets[0].t0)) - sentSpan)).toBeLessThanOrEqual(4);
+  // names, values and dimensions
+  const per = await splunk(`| mstats sum(_value) as v count(_value) as n WHERE ${mstatsBase(runId)} BY metric_name`);
+  const sums: Record<string, number> = {}; for (const p of out) for (const [k, v] of Object.entries(p.metric_values ?? {})) sums[k] = (sums[k] ?? 0) + v;
+  expect(new Set(per.map((r) => r.metric_name))).toEqual(new Set(Object.keys(sums)));
+  for (const r of per) expect(Math.abs(Number(r.v) - sums[r.metric_name])).toBeLessThanOrEqual(1e-6 * Math.max(1, sums[r.metric_name]));
+  const ev = JSON.parse(readFileSync(resolve(process.cwd(), '..', 'docs', 'contracts', 'phase7', 'phase8_metric_evidence.json'), 'utf8')).metrics as Record<string, { dims: string[]; path: string }>;
+  const dims = await splunk(`| mcatalog values(_dims) as dims values(path) as path WHERE ${mstatsBase(runId)} BY metric_name | eval dims=mvjoin(dims,",")`);
+  for (const r of dims) { expect(new Set(r.dims.split(',').filter((d: string) => !d.startsWith('netspout_')))).toEqual(new Set(ev[r.metric_name].dims)); expect(r.path).toBe(ev[r.metric_name].path); }
+  // cumulative counters keep climbing over time in every (device, interface) series, across the many small chunks of a stream
+  const dec = await splunk(`| mstats max(_value) as v WHERE index=${METRIC_INDEX} AND metric_name="interface_generic_counters.bytes_received" AND netspout_run_id="${runId}" BY source interface_name span=1s | sort 0 source interface_name _time | streamstats current=f last(v) as prev by source interface_name | where isnotnull(prev) AND v<prev`);
+  expect(dec.length, 'counter decreases').toBe(0);
+  const series = await splunk(`| mstats count(_value) as n WHERE index=${METRIC_INDEX} AND metric_name="interface_generic_counters.bytes_received" AND netspout_run_id="${runId}" BY source interface_name`);
+  expect((await splunk(`search index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count`))[0]?.count ?? '0').toBe('0');
+  save('streaming_metrics', { run_id: runId, eps: 5, hec_events: out.length, datapoints, stop: { state: stopped.state, seconds_from_click_to_stopped: stopLatency, events_at_stop: atStop, events_8s_later: later },
+    generated_in_run_counter: (await apiRun(request, runId)).counters.generated, mstats: { total: Number(buckets[0].total), buckets_2s: Number(buckets[0].buckets), first: Number(buckets[0].t0), last: Number(buckets[0].t1), sent_span_s: sentSpan },
+    metric_names: Object.keys(sums).length, counter_decreases: dec.length, series_with_bytes_received: series.length, ui: await page.getByTestId('outcome-text').textContent() });
+});
+
+test('[metrics] a temporary outage mid-stream: events are rejected and counted, the stream recovers, only what was accepted is indexed, and the UI does not say Verified', async ({ page, request }) => {
+  group('metrics');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { metricIndex: METRIC_INDEX });
+  const runId = await startStream(page, request, 5);
+  await until(() => tapped(request, runId), (r) => r.length >= 12, 30_000, 500);
+  await tapMode(request, 'reject');
+  await page.screenshot({ path: `${SHOTS}/p10_03_stream_during_outage.png`, fullPage: true });
+  await until(() => apiRun(request, runId), (r) => r.counters.rejected >= 8, 60_000, 500);
+  expect((await apiRun(request, runId)).state).toBe('RUNNING');                       // a short outage does not kill the stream
+  await tapMode(request, 'pass');
+  const before = (await tapped(request, runId)).filter((p) => p.upstream_status === 200).length;
+  await until(() => tapped(request, runId), (r) => r.filter((p) => p.upstream_status === 200).length >= before + 10, 90_000, 500);   // it reconnects by itself
+  await page.getByTestId('stop-run').click();
+  const done = await until(() => apiRun(request, runId), (r) => FINAL_STATES.includes(r.state), 15_000, 250);
+  expect(done.state).toBe('STOPPED');
+  expect(done.counters.rejected).toBeGreaterThanOrEqual(8); expect(done.counters.accepted).toBeGreaterThan(before);
+  await expect(page.getByTestId('outcome-text')).toContainText('were accepted', { timeout: 30_000 });
+  const t = await NEVER_VERIFIED(page);
+  await page.screenshot({ path: `${SHOTS}/p10_04_stream_after_outage.png`, fullPage: true });
+  const ok = (await tapped(request, runId)).filter((p) => p.upstream_status === 200);
+  const acceptedPoints = ok.reduce((n, p) => n + (p.metric_names?.length ?? 0), 0);
+  const idx = await until(() => splunk(`| mstats count(_value) as n WHERE ${mstatsBase(runId)}`), (r) => Number(r[0]?.n ?? 0) >= acceptedPoints);
+  expect(Number(idx[0].n), 'only what HEC accepted is in the metric index').toBe(acceptedPoints);
+  save('streaming_outage', { run_id: runId, ui: t, final: done, accepted_datapoints_sent: acceptedPoints, datapoints_in_metric_index: Number(idx[0].n), rejected_events: done.counters.rejected });
+  await tapMode(request, 'pass');
+});
+
+test('[metrics] a sustained failure ends the stream as failed, nothing keeps being generated, and a new run works once the destination is back', async ({ page, request }) => {
+  group('metrics');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { metricIndex: METRIC_INDEX });
+  await tapMode(request, 'reject');
+  const runId = await startStream(page, request, 10);
+  const failed = await until(() => apiRun(request, runId), (r) => FINAL_STATES.includes(r.state), 150_000, 1000);
+  expect(failed.state).toBe('FAILED');
+  await expect(page.getByTestId('outcome-text')).toContainText('Splunk did not receive this data', { timeout: 30_000 });
+  await NEVER_VERIFIED(page);
+  await expect(page.getByTestId('stop-run')).toHaveCount(0);
+  await page.screenshot({ path: `${SHOTS}/p10_05_stream_failed.png`, fullPage: true });
+  const n1 = (await tapped(request, runId)).length;
+  await new Promise((r) => setTimeout(r, 8000));
+  expect((await tapped(request, runId)).length, 'a failed stream generates nothing more').toBe(n1);
+  expect(failed.counters.accepted).toBe(0);
+  // back to normal: a fresh bounded run is verified
+  await tapMode(request, 'pass'); await tapReset(request);
+  await page.reload();                                                  // a fresh page: the stream left the send mode on "keep streaming", which hides the event count
+  await pick(page, request, METRIC_ST);
+  await page.getByTestId('count').fill('14');
+  const run2 = await startFromUi(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('Verified: found', { timeout: 120_000 });
+  save('streaming_failure', { run_id: runId, state: failed.state, error: failed.error, counters: failed.counters, events_attempted_before_failing: n1, recovery_run_id: run2, recovery_ui: await page.getByTestId('outcome-text').textContent() });
 });

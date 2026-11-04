@@ -186,7 +186,7 @@ def metric_sourcetypes() -> frozenset:
 # that parses it. NetSpout's own metadata is sent as netspout_<name>. Every event carries the netspout_ copies (additive, a migration path for searches). For
 # sourcetypes whose add-on parsing was verified live (scripts/ta_compat.py, docs/contracts/ta_live_results.json) the bare names are NOT sent at all:
 # an indexed field with the same name hides what the add-on extracts (proven for cisco:asa and fortigate_traffic: action/vendor_action, src_ip, dest_ip, signature, status).
-TA_PARSED_SOURCETYPES = frozenset({"cisco:asa", "cisco:ios", "fortigate_traffic", "pan:traffic"})
+TA_PARSED_SOURCETYPES = frozenset({"cisco:asa", "cisco:ios", "fortigate_traffic", "pan:traffic", "pan:threat", "pan:system"})
 # Phase 8: sourcetypes where the live check (scripts/phase8_live.py, evidence docs/verification/evidence/phase8/live_*.json) found NetSpout's own values indexed under bare vendor/CIM
 # field names (ISE src_ip/node_type, Meraki protocol/vendor/node_type, VMware and Duo all of them). Their add-on field extraction is not claimed as verified here (that is what
 # TA_PARSED_SOURCETYPES means), but the bare names are not sent either; the netspout_ copies remain.

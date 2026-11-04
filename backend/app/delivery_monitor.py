@@ -233,6 +233,7 @@ class ContinuousRun(DeliveryRun):
     just before it is sent and carries a current timestamp. Failures back off, and a destination that rejects FAIL_LIMIT events in a row ends the run
     as FAILED instead of hammering it."""
     CHUNK, FAIL_LIMIT, BACKOFF_MAX = 25, 50, 5.0
+    FAIL_LIMIT_NEVER_ACCEPTED = 10      # a destination that has not accepted a single event is misconfigured (wrong token or address); do not retry it for minutes (Phase 10)
 
     def __init__(self, *a, produce, max_events: Optional[int] = None, duration_s: Optional[float] = None, **kw):
         super().__init__(*a, **kw)
@@ -259,8 +260,9 @@ class ContinuousRun(DeliveryRun):
 
     def _after(self, state):
         self._fails = 0 if state == "accepted" else self._fails + 1
-        if self._fails >= self.FAIL_LIMIT:
-            raise StreamAbort("destination rejected %d events in a row" % self._fails)
+        never = self.counts.get("accepted", 0) == 0
+        if self._fails >= (self.FAIL_LIMIT_NEVER_ACCEPTED if never else self.FAIL_LIMIT):
+            raise StreamAbort("destination rejected %d events in a row%s" % (self._fails, " and has not accepted any" if never else ""))
         if self._fails:
             self._cancel.wait(min(self.BACKOFF_MAX, 0.2 * 2 ** min(self._fails, 5)))
 

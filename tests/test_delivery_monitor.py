@@ -317,3 +317,32 @@ def test_preview_states_phases_volume_and_blockers():
     with patch.object(main, '_explorer', return_value=SimpleNamespace(get=lambda _id: blocked)):
         b = main.explorer_preview('op:contract:lateral_movement')
     assert not b['runnable'] and b['blockers'] and b['volume']['events'] is None and b['dashboard'] is None
+
+
+def test_a_stream_to_a_destination_that_never_accepted_fails_fast_but_a_mid_stream_outage_is_ridden_out():
+    """Phase 10: wrong token or address (nothing ever accepted) ends the stream after 10 rejections in a row; an outage after acceptance keeps the longer limit."""
+    from netspout_core.delivery_monitor import ContinuousRun, Item
+    saved = ContinuousRun.BACKOFF_MAX
+    ContinuousRun.BACKOFF_MAX = 0.01
+    try:
+        never = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], produce=_producer('rejected')).start()
+        assert never.wait(20) == 'FAILED'
+        s = never.snapshot()
+        assert s['counters']['accepted'] == 0 and s['counters']['attempts'] == ContinuousRun.FAIL_LIMIT_NEVER_ACCEPTED and 'has not accepted any' in s['error']
+        sent = []
+
+        def produce(n):
+            def one():
+                sent.append(1)
+                return ('accepted', None) if len(sent) <= 3 else ('rejected', 'HEC HTTP 503')
+            return [Item('x:y', None, one) for _ in range(n)]
+        outage = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], produce=produce).start()
+        for _ in range(100):
+            if len(sent) >= 30:
+                break
+            time.sleep(0.05)
+        assert len(sent) >= 30 and outage.snapshot()['state'] == 'RUNNING'          # 27 rejections in a row after three accepted events: still going
+        outage.stop()
+        assert outage.wait(10) in ('STOPPED', 'COMPLETED')
+    finally:
+        ContinuousRun.BACKOFF_MAX = saved

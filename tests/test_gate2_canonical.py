@@ -164,6 +164,7 @@ class TestGate2CanonicalSourceOfTruth(unittest.TestCase):
         self.assertIn("core-switch-01", msg)
         self.assertIn("LINK_STATUS", msg)
 
+    @unittest.skipUnless(os.path.isfile(os.path.join(REPO_ROOT, "netspout.spl")), "netspout.spl is built by scripts/build_splunk_package.py; not present in this checkout")
     def test_08_splunk_package_integrity(self):
         """Ensure netspout.spl contains netspout_core and is valid."""
         spl_path = os.path.join(REPO_ROOT, "netspout.spl")

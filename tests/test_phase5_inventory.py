@@ -94,7 +94,7 @@ def test_matrix_reconciles_with_catalog_and_phase4_evidence():
     assert sum(v["catalog_sourcetypes"] for v in vc["vendors"]) == len(cov)
     live = json.loads((ROOT / "docs/contracts/ta_live_results.json").read_text())
     verified = {r["catalog_sourcetype"] for r in m["rows"] if r["live_verification"].startswith("SPLUNK_VERIFIED")}
-    assert verified == {k for k, v in live.items() if v["passed"]} and len(verified) == 4
+    assert verified == {k for k, v in live.items() if v["passed"]} and len(verified) == 6   # asa, ios, fortigate_traffic, pan:traffic, pan:threat, pan:system (Phase 10 added the last two)
 
 
 def test_no_candidate_or_conflict_is_reported_as_confirmed():

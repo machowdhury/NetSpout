@@ -1,0 +1,76 @@
+{
+ "sourcetype": "cisco:asa",
+ "vendor": "cisco_asa",
+ "run_id": "run-393c3d14912a",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "cisco:asa",
+  "preview_info": "Sourcetype that will be sent: cisco:asa · index idx_network_ops · generator: native",
+  "preview_first_event": "Nov  4 22:09:30 asa-fw-01 %ASA-4-106023: Deny udp src outside:192.0.2.14/55287 dst inside:10.20.10.45/53 by access-group \"OUTSIDE_IN\" [0x0, 0x0]",
+  "outcome": "Verified: found 20 of 20 events in index idx_network_ops that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "cisco:asa"
+  ],
+  "indexes": [
+   "idx_network_ops"
+  ],
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "cisco:asa",
+  "index": "idx_network_ops",
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793830170.9245324,
+  "time_last": 1793830174.749569,
+  "send_time_first": 1793830170.9245324,
+  "send_time_last": 1793830174.749569
+ },
+ "ta_fields_extracted_counts": {
+  "message_id": 20,
+  "vendor_action": 20,
+  "action": 20,
+  "src_ip": 20,
+  "dest_ip": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-04 22:09:34.749 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "idx_network_ops",
+   "_raw": "Nov  4 22:09:30 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 687793 for outside:198.51.100.80/80 (198.51.100.80/80) to inside:10.20.10.71/57256 (10.20.10.71/57256)"
+  },
+  {
+   "_time": "2026-11-04 22:09:34.548 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "idx_network_ops",
+   "_raw": "Nov  4 22:09:30 asa-fw-01 %ASA-6-302016: Teardown UDP connection 687776 for outside:203.0.113.88/53 to inside:10.20.10.60/20966 duration 0:03:39 bytes 282360"
+  }
+ ]
+}

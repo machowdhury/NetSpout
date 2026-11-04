@@ -15,14 +15,18 @@ test.describe('Use Case Explorer', () => {
     expect(await industries.count()).toBe(19); // 18 + "All industries"
   });
 
-  test('every approved industry lists documented candidates that are never runnable', async ({ page }) => {
+  // Updated for the current explorer contract: the approved industries no longer list "documented candidates that are never runnable". Their operational items are runnable but
+  // labelled "Contracted only", and the page must say what that does and does not prove.
+  test('contracted-only items say exactly what they do not prove (no TA parsing, dashboard or detection claim)', async ({ page }) => {
     await page.getByLabel('Demo-ready only').uncheck();
     await page.getByLabel('Industry').selectOption('insurance-insurtech');
-    const cards = page.getByTestId('explorer-card');
-    await expect(cards.first()).toContainText('Cataloged candidate');
+    const cards = page.getByTestId('explorer-card').filter({ hasText: 'Contracted only' });
+    await expect(cards.first()).toContainText('Contracted only');
     await cards.first().click();
-    await expect(page.getByTestId('candidate-provenance')).toContainText('Documented candidate, not executable');
-    await expect(page.getByTestId('explorer-workflow').getByRole('button', { name: 'Run' })).toHaveCount(0);
+    const wf = page.getByTestId('explorer-workflow');
+    await expect(wf).toContainText('Contract only: this scenario has not been validated end to');
+    await expect(wf).toContainText('does not imply TA parsing, a dashboard or a detection');
+    await expect(wf.getByTestId('step-DASHBOARD')).not.toContainText(/dashboard[_ ]ready/i);
   });
 
   test('search narrows results and empty industries are not padded', async ({ page }) => {
@@ -34,7 +38,7 @@ test.describe('Use Case Explorer', () => {
   });
 
   test('operational workflow shows ordered steps and never claims dashboard readiness', async ({ page }) => {
-    await page.getByLabel('Type').selectOption('operational');
+    await page.getByLabel('Type', { exact: true }).selectOption('operational');
     await expect(page.getByTestId('explorer-card').first()).toContainText('Operational');
     await page.getByTestId('explorer-card').first().click();
     const wf = page.getByTestId('explorer-workflow');
@@ -48,7 +52,7 @@ test.describe('Use Case Explorer', () => {
   });
 
   test('security story: only runtime-approved stories offer the full workflow, with no dashboard step', async ({ page }) => {
-    await page.getByLabel('Type').selectOption('security');
+    await page.getByLabel('Type', { exact: true }).selectOption('security');
     await expect(page.getByTestId('explorer-card')).toHaveCount(1); // exactly one runtime-approved story today
     await expect(page.getByTestId('explorer-card').first()).toContainText('RUNTIME APPROVED');
     await page.getByTestId('explorer-card').first().click();
@@ -64,7 +68,7 @@ test.describe('Use Case Explorer', () => {
   });
 
   test('replay-only story blocks enable and verify with a reason', async ({ page }) => {
-    await page.getByLabel('Type').selectOption('security');
+    await page.getByLabel('Type', { exact: true }).selectOption('security');
     await page.getByLabel('Search use cases').fill('phishing');
     await page.getByLabel('Demo-ready only').uncheck();
     await expect(page.getByTestId('explorer-card').first()).toContainText('REPLAY ONLY');

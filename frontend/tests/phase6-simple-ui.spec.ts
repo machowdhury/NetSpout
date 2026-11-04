@@ -48,6 +48,11 @@ for (const [vendor, st, rx] of [['cisco_asa', 'cisco:asa', /%ASA-/], ['cisco_ios
     const before = (await stats(request)).by_sourcetype[st] ?? 0;
     await open(page, '/generate/quick');
     await page.getByTestId('vendor').selectOption(vendor);
+    // a vendor can have several verified sourcetypes (Palo Alto has three since Phase 10): choose this one explicitly
+    const cat = await (await request.get(`${API}/api/compat/catalog`)).json();
+    const prod = cat.vendors.find((v: { id: string }) => v.id === vendor).products.find((p: { sourcetypes: Array<{ sourcetype: string }> }) => p.sourcetypes.some((x) => x.sourcetype === st)).name;
+    await page.getByTestId('product').selectOption(prod);
+    await page.getByTestId('sourcetype').selectOption(st);
     await expect(page.getByTestId('sourcetype')).toHaveValue(st);
     await expect(page.getByTestId('preview-sourcetype')).toHaveText(st);
     expect(await page.getByTestId('preview-raw').first().textContent()).toMatch(rx);
@@ -125,9 +130,15 @@ test('with no reachable or saved destination the Generate button explains why', 
 });
 
 test('scenarios: eligibility, run state and the difference between runnable and verified', async ({ page, request }) => {
-  const all = (await (await request.get(`${API}/api/compat/scenarios`)).json()).scenarios as Array<{ id: string; title: string; run_state: string; runnable: boolean }>;
-  expect(all.filter((s) => s.run_state === 'VERIFIED_IN_SPLUNK')).toHaveLength(0);   // no scenario has every source verified; the UI must not imply otherwise
+  const all = (await (await request.get(`${API}/api/compat/scenarios`)).json()).scenarios as Array<{ id: string; title: string; run_state: string; runnable: boolean; required: Array<{ sourcetype: string; status: string }> }>;
+  // a scenario is verified only when every source it needs is verified (Phase 10: paloalto_threat_investigation, after pan:threat and pan:system were verified against the add-on); the UI must not imply more
+  const verified = all.filter((s) => s.run_state === 'VERIFIED_IN_SPLUNK');
+  expect(verified.map((s) => s.id)).toEqual(['paloalto_threat_investigation']);
+  for (const s of all) expect(s.run_state === 'VERIFIED_IN_SPLUNK').toBe(s.required.length > 0 && s.required.every((r) => r.status === 'VERIFIED'));
   await open(page, '/generate/scenarios');
+  await expect(page.getByTestId('scenario-state')).toHaveText('Verified in Splunk');            // verified scenarios lead the list
+  const unverified = all.find((s) => s.runnable && s.run_state === 'RUNNABLE_UNVERIFIED')!;
+  await page.getByTestId('scenario').selectOption(unverified.id);
   await expect(page.getByTestId('scenario-state')).toHaveText('Can run, not fully tested in Splunk');
   await expect(page.getByTestId('scenario-detail')).toContainText('That is not the same as verified');
   await expect(page.getByTestId('required').locator('li').first()).toBeVisible();

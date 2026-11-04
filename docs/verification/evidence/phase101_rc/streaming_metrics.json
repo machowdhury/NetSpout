@@ -1,0 +1,24 @@
+{
+ "run_id": "run-941315d19f80",
+ "eps": 5,
+ "hec_events": 36,
+ "datapoints": 178,
+ "stop": {
+  "state": "STOPPED",
+  "seconds_from_click_to_stopped": 0.096,
+  "events_at_stop": 36,
+  "events_8s_later": 36
+ },
+ "generated_in_run_counter": 37,
+ "mstats": {
+  "total": 178,
+  "buckets_2s": 4,
+  "first": 1793811932,
+  "last": 1793811938,
+  "sent_span_s": 7.073886871337891
+ },
+ "metric_names": 14,
+ "counter_decreases": 0,
+ "series_with_bytes_received": 8,
+ "ui": "Verified: found 178 of 178 metric datapoints in metric index cisco_mdt_metrics (mstats search) that this run sent."
+}

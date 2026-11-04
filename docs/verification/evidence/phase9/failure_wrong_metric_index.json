@@ -1,5 +1,5 @@
 {
- "ui_run": "Not confirmed: Splunk accepted 14, but a search found none of the 72 metric datapoints in metric index cisco_metrics (mstats search), after 6 checks. It may have gone to a different index, been dropped, or still be indexing. Accepted by Splunk is not the same as searchable.",
+ "ui_run": "Not confirmed: Splunk accepted 14, but a search found none of the 67 metric datapoints in metric index cisco_metrics (mstats search), after 6 checks. It may have gone to a different index, been dropped, or still be indexing. Accepted by Splunk is not the same as searchable.",
  "datapoints_in_expected_metric_index": 0,
- "datapoints_actually_in_dev_test_replay_metrics": 66
+ "datapoints_actually_in_dev_test_replay_metrics": 58
 }

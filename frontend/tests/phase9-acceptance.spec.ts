@@ -723,7 +723,7 @@ test('[multi] four verified sourcetypes in one run: each counted, indexed and ve
   await expect(page.getByTestId('outcome-text')).toContainText(`Verified: found ${total} of ${total} events in index ${EVENT_INDEX}`, { timeout: 180_000 });
   for (const x of FOUR) { await expect(page.getByTestId(`source-${x.st}`)).toHaveAttribute('data-result', 'VERIFIED'); await expect(page.getByTestId(`source-${x.st}`)).toContainText(`${x.n} of ${x.n}`); }
   await expect(page.getByTestId('totals')).toContainText(`${total} accepted`);
-  await page.screenshot({ path: `${SHOTS}/p101_02_multi_verified.png`, fullPage: true });
+  await page.getByTestId('outcome').scrollIntoViewIfNeeded(); await page.getByTestId('outcome').screenshot({ path: `${SHOTS}/p101_02_multi_verified.png` });   // the result panel itself (the page scrolls inside the app shell)
   // the exact outgoing payloads
   const out = await tapped(request, runId);
   expect(out.length).toBe(total);
@@ -775,7 +775,7 @@ test('[multi] one event sourcetype and IOS XR metrics: events by search, metrics
   await expect(page.getByTestId('outcome-text')).toContainText(`events in index ${EVENT_INDEX} and`, { timeout: 180_000 });
   await expect(page.getByTestId('outcome-text')).toContainText(`metric datapoints in metric index ${METRIC_INDEX} (mstats search)`);
   await expect(page.getByTestId('outcome-text')).toContainText('Verified:');
-  await page.screenshot({ path: `${SHOTS}/p101_05_mixed_verified.png`, fullPage: true });
+  await page.getByTestId('outcome').scrollIntoViewIfNeeded(); await page.getByTestId('outcome').screenshot({ path: `${SHOTS}/p101_05_mixed_verified.png` });   // the result panel itself (the page scrolls inside the app shell)
   const out = await tapped(request, runId);
   const ev = out.filter((p) => p.kind === 'event'), mt = out.filter((p) => p.kind === 'metric');
   expect(ev.length).toBe(9); expect(mt.length).toBe(6);
@@ -790,6 +790,42 @@ test('[multi] one event sourcetype and IOS XR metrics: events by search, metrics
   expect(Number(wrongIndex[0]?.count ?? 0), 'no metric landed in the event index').toBe(0);
   await expect(page.getByTestId(`source-${METRIC_ST}`)).toContainText(`${points} of ${points} datapoints`);
   save('multi_mixed_event_and_metric', { run_id: runId, events: { sourcetype: 'cisco:asa', index: EVENT_INDEX, sent: 9, found_by_search: 9 }, metrics: { sourcetype: METRIC_ST, index: METRIC_INDEX, events_sent: 6, datapoints_sent: points, datapoints_found_by_mstats: Number(mrows[0].n) }, ui_outcome: await page.getByTestId('outcome-text').textContent() });
+});
+
+test('[multi] streaming several sourcetypes: each source keeps growing, Stop ends the run promptly, events and metrics are each verified', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { metricIndex: METRIC_INDEX });
+  await addSources(page, request, ['cisco:asa', METRIC_ST]);
+  await page.getByText('More options').click();
+  await page.getByTestId('mode').selectOption('continuous');
+  await page.getByTestId('eps').fill('6');
+  const runId = await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('streaming until stopped', { timeout: 30_000 });
+  const per = async () => countsBySt(await tapped(request, runId));
+  const first = await until(per, (c) => (c['cisco:asa'] ?? 0) >= 6 && (c[METRIC_ST] ?? 0) >= 6, 60_000, 500);
+  const later = await until(per, (c) => (c['cisco:asa'] ?? 0) >= first['cisco:asa'] + 6 && (c[METRIC_ST] ?? 0) >= first[METRIC_ST] + 6, 60_000, 500);
+  expect(later['cisco:asa']).toBeGreaterThan(first['cisco:asa']); expect(later[METRIC_ST]).toBeGreaterThan(first[METRIC_ST]);   // both sources are still being generated
+  await page.screenshot({ path: `${SHOTS}/p101_11_multi_streaming.png`, fullPage: true });
+  const clickAt = Date.now();
+  await page.getByTestId('stop-run').click();
+  const stopped = await until(() => apiRun(request, runId), (r) => FINAL_STATES.includes(r.state), 15_000, 250);
+  expect(stopped.state).toBe('STOPPED');
+  expect((Date.now() - clickAt) / 1000, 'seconds from Stop to stopped').toBeLessThan(5);
+  const atStop = await per();
+  await new Promise((r) => setTimeout(r, 6000));
+  expect(await per(), 'nothing is generated after Stop').toEqual(atStop);
+  const out = await tapped(request, runId);
+  const ev = out.filter((p) => p.kind === 'event'), mt = out.filter((p) => p.kind === 'metric');
+  const points = mt.reduce((n, p) => n + (p.metric_names?.length ?? 0), 0);
+  await expect(page.getByTestId('outcome-text')).toContainText('Verified:', { timeout: 150_000 });
+  await expect(page.getByTestId('source-cisco:asa')).toHaveAttribute('data-result', 'VERIFIED');
+  await expect(page.getByTestId(`source-${METRIC_ST}`)).toHaveAttribute('data-result', 'VERIFIED');
+  const e = await until(() => splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count`), (r) => Number(r[0]?.count ?? 0) >= ev.length);
+  const m = await until(() => splunk(`| mstats count(_value) as n WHERE index=${METRIC_INDEX} AND metric_name=* AND netspout_run_id="${runId}"`), (r) => Number(r[0]?.n ?? 0) >= points);
+  expect(Number(e[0].count)).toBe(ev.length); expect(Number(m[0].n)).toBe(points);
+  save('multi_streaming', { run_id: runId, counts_first_look: first, counts_later: later, counts_at_stop: atStop, events_found: Number(e[0].count), metric_datapoints_found: Number(m[0].n), ui: await page.getByTestId('outcome-text').textContent() });
 });
 
 test('[multi] a partly rejected batch: the failed source is named, the others are verified, nothing says Verified for the whole run', async ({ page, request }) => {
@@ -807,7 +843,7 @@ test('[multi] a partly rejected batch: the failed source is named, the others ar
   await expect(page.getByTestId('source-fortigate_traffic')).toHaveAttribute('data-result', /NOT_SENT/);
   for (const st of ['cisco:asa', 'cisco:ios', 'pan:traffic']) await expect(page.getByTestId(`source-${st}`)).toHaveAttribute('data-result', 'VERIFIED', { timeout: 120_000 });
   await expect(page.getByTestId('outcome')).toHaveAttribute('data-verification', 'PARTIAL', { timeout: 60_000 });
-  await page.screenshot({ path: `${SHOTS}/p101_06_multi_partial_rejection.png`, fullPage: true });
+  await page.getByTestId('outcome').scrollIntoViewIfNeeded(); await page.getByTestId('outcome').screenshot({ path: `${SHOTS}/p101_06_multi_partial_rejection.png` });   // the result panel itself (the page scrolls inside the app shell)
   const rows = await splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count by sourcetype`);
   expect(Object.fromEntries(rows.map((r) => [r.sourcetype, Number(r.count)]))).toEqual({ 'cisco:asa': 8, 'cisco:ios': 6, 'pan:traffic': 6 });
   save('failure_multi_partial_rejection', { run_id: runId, rejected_sourcetype: 'fortigate_traffic', indexed_by_sourcetype: Object.fromEntries(rows.map((r) => [r.sourcetype, Number(r.count)])), ui: await page.getByTestId('outcome-text').textContent() });
@@ -825,7 +861,7 @@ test('[multi] accepted but not indexed in a multi-source run is never Verified',
   await expect(page.getByTestId('outcome-text')).toContainText('Not confirmed', { timeout: 240_000 });
   await expect(page.getByTestId('outcome-text')).not.toContainText('Verified');
   await expect(page.getByTestId('outcome')).not.toHaveAttribute('data-verification', 'VERIFIED');
-  await page.screenshot({ path: `${SHOTS}/p101_07_multi_accepted_not_indexed.png`, fullPage: true });
+  await page.getByTestId('outcome').scrollIntoViewIfNeeded(); await page.getByTestId('outcome').screenshot({ path: `${SHOTS}/p101_07_multi_accepted_not_indexed.png` });   // the result panel itself (the page scrolls inside the app shell)
   await tapMode(request, 'pass');
 });
 

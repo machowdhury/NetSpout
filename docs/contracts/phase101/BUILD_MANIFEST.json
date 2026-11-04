@@ -1,0 +1,27 @@
+{
+ "release_candidate": "rc3-ae3342d",
+ "built_from_commit": "ae3342d70ed2facc8115b3cf7b180191fa2a9967",
+ "build": "clean git worktree of that commit (frontend/node_modules symlinked); scripts/build_frontend.py, build_splunk_package.py, build_splunk_cloud_package.py, build_engine_package.py with the repo test venv python",
+ "built_at": "2026-11-04T12:34:52-0500",
+ "version": "2.0.1 (app.conf, app.manifest, frontend/package.json, engine openapi). The released artifacts and RC1/RC2 are 2.0.0.",
+ "artifacts": {
+  "netspout.spl": {
+   "bytes": 7529612,
+   "sha256": "c070b29e9c98712e17c8606c2fe076a6b510eff6e1259771888362a7d0018149"
+  },
+  "netspout_cloud.spl": {
+   "bytes": 709799,
+   "sha256": "01f0bd84e6d218ea21342ff8af9d27ab7ca7ec869e83dc97b36a272ab966ea9c"
+  },
+  "pulseforge-engine.tar.gz": {
+   "bytes": 10544267,
+   "sha256": "aa33e60ac09121264d559482431dd98bb46483e77e8a233086124f40f767ddcb"
+  }
+ },
+ "released_artifacts_unchanged": "existing-released-artifacts.sha256 is re-checked against the repository-root files (see report)",
+ "previous_candidates": "rc1-d92ec22 and rc2-3f6cc0f are untouched in ~/netspout/release-candidates/",
+ "notes": [
+  "builds are not byte-reproducible (archive timestamps)",
+  "commits after ae3342d change only tests, lab scripts and evidence; no packaged path"
+ ]
+}

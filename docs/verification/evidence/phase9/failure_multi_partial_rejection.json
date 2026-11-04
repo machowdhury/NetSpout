@@ -1,5 +1,5 @@
 {
- "run_id": "run-7864c930195d",
+ "run_id": "run-ea80edc8d5ff",
  "rejected_sourcetype": "fortigate_traffic",
  "indexed_by_sourcetype": {
   "cisco:asa": 8,

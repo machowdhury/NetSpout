@@ -18,7 +18,7 @@ Versus RC5: the Cloud package and the engine package are identical member by mem
 | # | Check | Result | Evidence |
 |---|---|---|---|
 | 1 | Clean checkout of the exact head: no root packages, no sample folders, `npm ci`, venv with only `backend/requirements.txt` → frontend, Enterprise, Cloud, engine builds, `verify_sources` (78 modules) | all pass; `git status` empty afterwards (outputs git-ignored, committed bundle = rebuilt bundle) | `PHASE13_BINARY_MIGRATION.md` method, `rc7` manifest |
-| 2 | Package audit, 3 archives, git provenance and lab-credential check | **0 findings** | `evidence/phase14/` (audit run output in the manifest) |
+| 2 | Package audit, 3 archives, git provenance and lab-credential check | **0 findings** | `evidence/phase14/package_audit.json` |
 | 3 | Packaged RC7 installed into the isolated lab (fresh engine container from the tarball) | version 2.0.1 | |
 | 4 | **Installation checks** | **20/20 PASS** | `evidence/phase14/rc7_install_check.json` |
 | 5 | **Packaged browser acceptance**: asa 11, ios 1, fortinet 1, pan 3, metrics 4, multi 8, engine 1 | **29/29 pass**, all groups exit 0 | `evidence/phase14_rc/`, `phase14_rc_ui/` |

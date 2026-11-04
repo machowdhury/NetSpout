@@ -45,3 +45,7 @@ tests/lab/**/.env*
 .cloud_stage/
 pulseforge-engine.tar.gz
 .lab_engine_cfg/
+
+# Private sample corpora (never ship; Phase 11)
+/samples/
+/netspout/datapet-test-es/

@@ -2,7 +2,7 @@
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Explorer or Command Center shows no data | Gateway cannot reach the engine | Check `NETSPOUT_BACKEND_URL` (own line in `splunk-launch.conf`; restart splunkd), engine process, firewall; test `GET /services/netspout_gateway/api/explorer/summary` with your Splunk credentials |
+| Explorer or Command Center shows no data | Gateway cannot reach the engine | "Engine not configured." means no URL is saved: set it under Connections > PulseForge Engine. "Engine not connected." means the saved URL does not answer from the Splunk server: check the URL, the engine process and the firewall; test `GET /services/netspout_gateway/api/explorer/summary` with your Splunk credentials |
 | HTTP 403 starting a run | Your Splunk role lacks `admin`/`sc_admin`/`power`, or the index is not on the allowlist, or a non-lab destination without `confirm_destination` | Use a write role; pick an allowlisted index; confirm the destination |
 | HTTP 409 on replay | Connection Center not configured | Save the destination and run `POST /api/setup/validate` |
 | `rejected > 0` | HEC refused the events (token, disabled input, index not allowed for the token) | Fix the token's allowed indexes; re-run |

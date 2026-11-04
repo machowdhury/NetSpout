@@ -58,7 +58,7 @@ sudo tar xzf pulseforge-engine.tar.gz -C /opt
 sudo install -m 600 /opt/pulseforge-engine/deploy/engine/engine.env.example /etc/pulseforge/engine.env   # edit: port, state directory, secrets
 /opt/pulseforge-engine/deploy/engine/pulseforge-engine
 ```
-The engine listens on `127.0.0.1:8081` by default. If it is on another port or host, point Splunk's gateway at it with `NETSPOUT_BACKEND_URL`; the exact steps, and a systemd unit, are in [the installation guide](guides/03_INSTALLATION.md). **You use PulseForge through Splunk Web, not through the engine's port.**
+The engine listens on `127.0.0.1:8081` by default. Enter its URL once under **Connections > PulseForge Engine** in the app (there is no default and no environment variable; see the upgrade notes in `contracts/phase11/PHASE11_UPGRADE.md`); a systemd unit and the other steps are in [the installation guide](guides/03_INSTALLATION.md). **You use PulseForge through Splunk Web, not through the engine's port.**
 
 **Who can do what:** the Splunk roles `admin`, `sc_admin` and `power` can start runs and change settings; other roles are read-only.
 
@@ -66,4 +66,4 @@ The engine listens on `127.0.0.1:8081` by default. If it is on another port or h
 
 **Upgrade:** install the newer `netspout.spl` over the old one, restart Splunk, and keep the engine's state directory.
 **Uninstall:** *Manage Apps* → *Delete*, stop the engine, and delete its state directory. Your indexes and data stay.
-**Troubleshooting:** pages say the engine is unreachable → check that it is running and that `NETSPOUT_BACKEND_URL` is right ([Troubleshooting](TROUBLESHOOTING.md)).
+**Troubleshooting:** pages say the engine is unreachable → check that it is running and that the URL under Connections > PulseForge Engine is right ([Troubleshooting](TROUBLESHOOTING.md)).

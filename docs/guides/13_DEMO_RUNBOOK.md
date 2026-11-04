@@ -1,5 +1,7 @@
 # 13 Demo runbook (Nov 3, 2026, 9 AM ET)
 
+> **Superseded for version 2.0.1 by `docs/contracts/phase11/PHASE11_DEMO_RUNBOOK.md`** (single, several and scenario workflows; engine URL is set in Connections). The page below is the earlier NetFlow/streaming rehearsal and assumes 2.0.0.
+
 One page for the live demo against the isolated Docker lab. No credentials appear here: the lab password and HEC token live only in the git-ignored `tests/lab/phase4e/.env.lab`, and the engine reads them from there (`scripts/start_lab_engine.sh`). Never use port 8081 (another engine may own it); this runbook uses 8091.
 
 Lab: Splunk Web <http://localhost:18000>, management 18191, HEC 18088 (container `netspout_phase4e_splunk`). Sign in as `admin` with the password from `.env.lab`.

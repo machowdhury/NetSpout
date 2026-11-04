@@ -1,0 +1,11 @@
+{
+ "not_configured": {
+  "engine_status": "Engine not configured.",
+  "gateway_http": 503
+ },
+ "unreachable": {
+  "engine_status": "Engine not connected.",
+  "gateway_http": 502
+ },
+ "invalid_url_http": 422
+}

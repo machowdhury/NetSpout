@@ -1,0 +1,22 @@
+{
+ "release_candidate": "rc5-654762b",
+ "built_from_commit": "654762bca73d1269e599862a8de1e2121f71e018",
+ "build": "clean git worktree of that commit with 'npm ci' (frontend lockfile) and a virtualenv holding only backend/requirements.txt (Python 3.15.0); scripts/build_frontend.py, build_splunk_package.py, build_splunk_cloud_package.py, build_engine_package.py. No samples/ or netspout/datapet-test-es present in the worktree. After the build the worktree showed no change other than the rebuilt root artifacts (the committed UI bundle equals the rebuilt one).",
+ "version": "2.0.1 (the same version string as rc3-ae3342d; nothing has been released as 2.0.1. The build identity is this directory name, the commit above and the sha256 values)",
+ "artifacts": {
+  "netspout.spl": {
+   "bytes": 7529621,
+   "sha256": "0d46ca40ef77560dea9bccd7b6c50d6edb25de75cf967c2649aa51ba915b08f6"
+  },
+  "netspout_cloud.spl": {
+   "bytes": 709799,
+   "sha256": "a233248f43ed8d188953ebde7366a3a0f68b5bb391c8b6a02107ca28e6f03cfa"
+  },
+  "pulseforge-engine.tar.gz": {
+   "bytes": 10544275,
+   "sha256": "7c46313ea23e475de984b64781b31c6af10f2657f75f6a8e24975694963b4512"
+  }
+ },
+ "difference_from_rc3": "EngineConnection.tsx (the Engine URL field keeps what the admin typed, including an emptied field, while the first status loads) with its rebuilt bundle; the engine launcher comment from Phase 11. rc3-ae3342d is untouched; rc4-036d59c was a failed intermediate (superseded).",
+ "reproducibility": "A clean checkout of 0c83df0 rebuilt netspout.spl byte for byte equal to rc3-ae3342d (c070b29e...8149); netspout_cloud.spl and the engine package matched member by member."
+}

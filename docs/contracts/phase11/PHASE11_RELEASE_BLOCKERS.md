@@ -9,7 +9,7 @@ Controlled demo: **READY** (RC3, packaged, isolated lab; engine URL set once). B
 | 3 | **Protected-lab Phase 4 specs NOT RUN** (`phase4e-live-lab`, `phase4f-*`, `phase4g`, `phase4h`; they use the protected lab's credentials and port 18000) | Someone with that lab, or a re-pointed isolated equivalent | Medium |
 | 4 | **Engine as a service on a VM, non-Docker Splunk, distributed Splunk, TLS engine URL** not tested | Environment and time | Medium |
 | 5 | **Real in-place upgrade** (existing data, saved destinations, runs) not tested; only a fresh 2.0.0 → 2.0.1 in the lab | A copy of a real 2.0.0 install | Medium |
-| 6 | **PR scope**: 196 commits, 2,357 files; no human review of the whole line yet | Reviewer plan (by area, see the PR summary) | Medium |
+| 6 | ~~PR scope 196 commits~~ **Corrected in Phase 12:** the PR against `origin/main` is 21 commits / 728 files (see `docs/contracts/phase12/PHASE12_CHANGE_INVENTORY.md`) | Reviewer plan by area | Medium |
 | 7 | **Private corpora next to the app** (`netspout/datapet-test-es`, 1 GB) — now git-ignored but still inside the app folder | Move it out of `netspout/` | Low (the audit proves archives exclude it) |
 | 8 | Scenario coverage claim: only `paloalto_threat_investigation` was run end to end with its Dashboard Studio dashboard; the other 371 definitions are not verified against vendor add-ons | Do not claim; per-scenario work if wanted | Low for a controlled demo |
 | 9 | Build reproducibility: RC3+ archives are not byte-reproducible; identity is the manifest plus SHA256 | Policy | Low |

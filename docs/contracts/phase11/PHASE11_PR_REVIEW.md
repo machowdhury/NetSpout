@@ -1,5 +1,7 @@
 # PR review summary — `recovery/phase1-ta-compat` → `main`
 
+> **Superseded in part by Phase 12:** this page compared the branch with the stale local `main` (`b9521c1`). The real target `origin/main` (`3f2e63f`) already contains ~178 of these commits; the PR is **21 commits and 728 files**. Use `docs/contracts/phase12/PHASE12_CHANGE_INVENTORY.md` for sizes and the file inventory. The statements about untracked files, the stale tracked binaries and upgrade implications still hold.
+
 **Not opened.** This is the draft text and the review, for your decision. Branch head at the start of Phase 11: `cb52875`.
 
 ## Size and shape

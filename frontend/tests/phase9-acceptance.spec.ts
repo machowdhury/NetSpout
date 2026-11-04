@@ -3,7 +3,7 @@
 // Searches that prove the result do not use the app's own verification: they query the lab Splunk directly with the lab credentials (read from the git-ignored lab env file; never logged).
 //   PHASE9_API_BASE=http://127.0.0.1:18681 PHASE9_TAP=http://127.0.0.1:19990 PHASE9_LAB_ENV=<.env.lab> PHASE9_ONLY=asa PLAYWRIGHT_BASE_URL=http://127.0.0.1:14273 npx playwright test tests/phase9-acceptance.spec.ts --workers=1 --trace off
 // Driven by scripts/phase9_acceptance.py, which installs the matching add-on in the lab for each group. Skipped unless all three variables are set.
-import { expect, test, type APIRequestContext, type Locator, type Page } from '@playwright/test';
+import { expect, test as base, type APIRequestContext, type Locator, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { request as httpsRequest } from 'node:https';
 import { resolve } from 'node:path';
@@ -12,25 +12,49 @@ const API = process.env.PHASE9_API_BASE ?? '';
 const TAP = process.env.PHASE9_TAP ?? '';
 const LAB_ENV = process.env.PHASE9_LAB_ENV ?? '';
 const ONLY = process.env.PHASE9_ONLY ?? '';
-const SHOTS = resolve(process.cwd(), '..', 'docs', 'verification', 'evidence', 'phase9_ui');
-const EVID = resolve(process.cwd(), '..', 'docs', 'verification', 'evidence', 'phase9');
-test.skip(!API || !TAP || !LAB_ENV, 'set PHASE9_API_BASE, PHASE9_TAP and PHASE9_LAB_ENV (isolated backend, recording tap, lab env file)');
+// Splunk Web mode (the packaged release candidate): the browser signs in to Splunk Web, the app's static bundle is loaded from the Splunk origin and every API call goes through the app's gateway to
+// the engine. Direct mode (default) talks to a dev engine. PHASE9_API_BASE is then the gateway URL.
+//   PHASE9_SPLUNK_WEB=http://127.0.0.1:39000  PHASE9_API_BASE=http://127.0.0.1:39000/en-US/splunkd/__raw/services/netspout_gateway
+const WEB = process.env.PHASE9_SPLUNK_WEB ?? '';
+// as the ENGINE sees them (in the packaged lab the engine runs in a container): the tap and the Splunk search endpoint, and the indexes to use
+const ENGINE_TAP = process.env.PHASE9_ENGINE_TAP ?? '';
+const ENGINE_SEARCH = process.env.PHASE9_ENGINE_SEARCH_URL ?? 'https://127.0.0.1:19191/services/search/jobs/export';
+const OUT = process.env.PHASE9_OUT ?? 'phase9';           // evidence folder name under docs/verification/evidence (screenshots go to <name>_ui)
+const SHOTS = resolve(process.cwd(), '..', 'docs', 'verification', 'evidence', `${OUT}_ui`);
+const EVID = resolve(process.cwd(), '..', 'docs', 'verification', 'evidence', OUT);
 mkdirSync(SHOTS, { recursive: true });
 mkdirSync(EVID, { recursive: true });
 
 const lab: Record<string, string> = LAB_ENV ? Object.fromEntries(readFileSync(LAB_ENV, 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')).trim(), l.slice(l.indexOf('=') + 1).trim()])) : {};
-if (LAB_ENV) { if (lab.LAB_MGMT_PORT !== '19191' || lab.LAB_HEC_PORT !== '19088') throw new Error('Phase 9 only runs against the isolated TA-validation lab (mgmt 19191, HEC 19088)'); }
-const TAP_HEC = `${TAP}/services/collector`;
-const SEARCH_URL = 'https://127.0.0.1:19191/services/search/jobs/export';
-const EVENT_INDEX = 'ta_validation';
-const METRIC_INDEX = 'cisco_metrics';
+if (LAB_ENV) { const ok = (lab.LAB_MGMT_PORT === '19191' && lab.LAB_HEC_PORT === '19088') || (lab.LAB_MGMT_PORT === '39191' && lab.LAB_HEC_PORT === '39088'); if (!ok) throw new Error('this suite only runs against the isolated labs (TA-validation 19191/19088, release-candidate install 39191/39088)'); }
+const TAP_HEC = `${ENGINE_TAP || TAP}/services/collector`;
+const SEARCH_URL = ENGINE_SEARCH;
+const EVENT_INDEX = process.env.PHASE9_EVENT_INDEX ?? 'ta_validation';
+const METRIC_INDEX = process.env.PHASE9_METRIC_INDEX ?? 'cisco_metrics';
+async function login(page: Page) {
+  await page.goto(`${WEB}/en-US/account/login`);
+  await page.locator('input[name="username"]').fill('admin');
+  try { await page.locator('input[name="password"]').fill(lab.LAB_SPLUNK_PASSWORD); } catch { throw new Error('could not fill the Splunk password'); }
+  await page.keyboard.press('Enter');
+  await page.waitForURL(/\/app\//, { timeout: 90_000 });
+}
+const test = base.extend({
+  request: async ({ page, playwright }, use) => {
+    if (WEB) { await use(page.request); return; }          // the browser's own session: gateway calls carry the Splunk login
+    const ctx = await playwright.request.newContext(); await use(ctx); await ctx.dispose();
+  },
+  page: async ({ page }, use) => { if (WEB) await login(page); await use(page); },
+});
+if (WEB) test.use({ extraHTTPHeaders: { 'X-Requested-With': 'XMLHttpRequest' } });
+test.skip(!API || !TAP || !LAB_ENV, 'set PHASE9_API_BASE, PHASE9_TAP and PHASE9_LAB_ENV (isolated backend, recording tap, lab env file)');
+
 const group = (g: string) => test.skip(!!ONLY && ONLY !== g, `group ${g} is not selected`);
 
 // ------------------------------------------------------------------------------------------------------------------------------ helpers
 function splunk(search: string, earliest = '-3h'): Promise<Array<Record<string, any>>> {
   return new Promise((ok, bad) => {
     const body = new URLSearchParams({ search: /^\s*(\||search )/.test(search) ? search : 'search ' + search, output_mode: 'json', earliest_time: earliest, latest_time: '+1h' }).toString();
-    const req = httpsRequest({ host: '127.0.0.1', port: 19191, path: '/services/search/jobs/export', method: 'POST', rejectUnauthorized: false, headers: { Authorization: 'Basic ' + Buffer.from('admin:' + lab.LAB_SPLUNK_PASSWORD).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) } }, (res) => {
+    const req = httpsRequest({ host: '127.0.0.1', port: Number(lab.LAB_MGMT_PORT), path: '/services/search/jobs/export', method: 'POST', rejectUnauthorized: false, headers: { Authorization: 'Basic ' + Buffer.from('admin:' + lab.LAB_SPLUNK_PASSWORD).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) } }, (res) => {
       let d = ''; res.on('data', (c) => (d += c)); res.on('end', () => ok(d.split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter((x) => x && x.result).map((x) => x.result)));
     });
     req.on('error', bad); req.write(body); req.end();
@@ -41,7 +65,7 @@ async function until<T>(fn: () => Promise<T>, good: (v: T) => boolean, ms = 90_0
   while (!good(v) && Date.now() < end) { await new Promise((r) => setTimeout(r, every)); v = await fn(); }
   return v;
 }
-const open = async (page: Page, route: string) => { await page.setViewportSize({ width: 1280, height: 1500 }); await page.goto(`/?api_base=${encodeURIComponent(API)}#${route}`); };
+const open = async (page: Page, route: string) => { await page.setViewportSize({ width: 1280, height: 1500 }); await page.goto(WEB ? `${WEB}/en-US/static/app/netspout/dist/index.html#${route}` : `/?api_base=${encodeURIComponent(API)}#${route}`); };
 const secret = async (loc: Locator, value: string) => { try { await loc.fill(value); } catch (e) { throw new Error('could not fill a secret field: ' + String((e as Error).message).split(value).join('***').split('\n').slice(0, 4).join(' | ').slice(0, 300)); } };   // a failing fill must never print the secret
 type Cfg = { hec?: string; search?: string; token?: string; secret?: string; eventIndex?: string; metricIndex?: string };
 async function configure(page: Page, o: Cfg = {}) {

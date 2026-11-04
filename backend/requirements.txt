@@ -8,3 +8,4 @@ cryptography==50.0.2
 pygnmi==0.8.15
 
 httpx==0.28.1
+PyYAML==6.0.3

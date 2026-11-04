@@ -14,7 +14,7 @@ header) so the exact outgoing payload is independent evidence. Fault modes exist
   POST /_mode?m=reject                   answer HEC's "incorrect index" error
   GET  /_payloads  /  POST /_reset       read / clear the recorded summaries
 
-Binds to 127.0.0.1 only and refuses any upstream other than the isolated lab (127.0.0.1:19088).
+Binds to 127.0.0.1 only and refuses any upstream other than the two isolated labs: the TA-validation lab (127.0.0.1:19088) and the release-candidate install lab (127.0.0.1:39088).
 """
 import argparse
 import http.client
@@ -134,7 +134,8 @@ def main():
     a.add_argument("--port", type=int, default=19990)
     a.add_argument("--upstream-port", type=int, default=19088)
     args = a.parse_args()
-    assert args.upstream_port == 19088, "this tap only fronts the isolated TA-validation lab (HEC 19088)"
+    assert args.upstream_port in (19088, 39088), "this tap only fronts the isolated labs (HEC 19088 TA-validation, 39088 release-candidate install)"
+    UPSTREAM = ("127.0.0.1", args.upstream_port)
     ThreadingHTTPServer(("127.0.0.1", args.port), H).serve_forever()
 
 

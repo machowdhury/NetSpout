@@ -1,0 +1,332 @@
+{
+ "archives": [
+  {
+   "archive": "netspout.spl",
+   "bytes": 7524302,
+   "sha256": "86724bdf653d1bd538145bab7212e5b333c7f4fb3d21e954bffd080917178838",
+   "findings": [],
+   "notes": [],
+   "members": 1390,
+   "roots": [
+    "netspout"
+   ],
+   "largest": [
+    {
+     "bytes": 14644899,
+     "name": "netspout/bin/catalog_data/phase13a_splunk_security_content.json"
+    },
+    {
+     "bytes": 3036699,
+     "name": "netspout/bin/catalog_data/phase13a_security_content_coverage.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "netspout/catalog/scenario_contracts.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "netspout/bin/netspout_core/catalog_data/scenario_contracts.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "netspout/bin/catalog_data/scenario_contracts.json"
+    },
+    {
+     "bytes": 1032483,
+     "name": "netspout/appserver/static/dist/assets/index-D7N3LLKX.js"
+    },
+    {
+     "bytes": 951212,
+     "name": "netspout/samples/cisco_intersight_advisories.sample"
+    },
+    {
+     "bytes": 906069,
+     "name": "netspout/samples/cisco_intersight_networkelements.sample"
+    }
+   ],
+   "reviewed": [
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "netspout/bin/netspout_core/gnmi/server.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "netspout/bin/netspout_core/gnmi/splunk_e2e.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "netspout/bin/netspout_core/wave2_authentic_engine.py",
+     "reason": "example file paths inside simulated attack telemetry content (CVE proof-of-concept strings), not a path on a developer machine"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "netspout/bin/wave2_authentic_engine.py",
+     "reason": "example file paths inside simulated attack telemetry content (CVE proof-of-concept strings), not a path on a developer machine"
+    }
+   ],
+   "reviewed_summary": {
+    "secret-looking-text:password-assignment": 2,
+    "developer-absolute-path": 2
+   },
+   "summary": {},
+   "examples": {},
+   "clean": true
+  },
+  {
+   "archive": "netspout_cloud.spl",
+   "bytes": 709795,
+   "sha256": "75c7e58b67bb91082216643f7c51c64980cbe68cba6930133b351ee0e435c9d8",
+   "findings": [],
+   "notes": [],
+   "members": 383,
+   "roots": [
+    "netspout"
+   ],
+   "largest": [
+    {
+     "bytes": 36977,
+     "name": "netspout/default/data/ui/views/pf_telco_02_registration_auth.xml"
+    },
+    {
+     "bytes": 36944,
+     "name": "netspout/default/data/ui/views/pf_telco_05_mobile_transport.xml"
+    },
+    {
+     "bytes": 36920,
+     "name": "netspout/default/data/ui/views/pf_network_22_authentication_storm.xml"
+    },
+    {
+     "bytes": 36918,
+     "name": "netspout/default/data/ui/views/pf_telco_08_roaming_mobility.xml"
+    },
+    {
+     "bytes": 36915,
+     "name": "netspout/default/data/ui/views/pf_network_23_containment_request.xml"
+    },
+    {
+     "bytes": 36899,
+     "name": "netspout/default/data/ui/views/pf_telco_09_core_user_plane.xml"
+    },
+    {
+     "bytes": 36875,
+     "name": "netspout/default/data/ui/views/pf_network_24_policy_disagreement.xml"
+    },
+    {
+     "bytes": 36833,
+     "name": "netspout/default/data/ui/views/pf_telco_06_broadband_cpe.xml"
+    }
+   ],
+   "reviewed": [
+    {
+     "kind": "not-tracked-in-repository",
+     "member": "netspout/README",
+     "reason": "generated into the Cloud edition by scripts/build_splunk_cloud_package.py (its own README text); not a copy of any untracked file"
+    }
+   ],
+   "reviewed_summary": {
+    "not-tracked-in-repository": 1
+   },
+   "summary": {},
+   "examples": {},
+   "clean": true
+  },
+  {
+   "archive": "pulseforge-engine.tar.gz",
+   "bytes": 10541196,
+   "sha256": "a254958e3462cca23e53c80be042f3fc7fdccfd2d852c0e336b45420dea81e87",
+   "findings": [],
+   "notes": [],
+   "members": 1197,
+   "roots": [
+    "pulseforge-engine"
+   ],
+   "largest": [
+    {
+     "bytes": 14644899,
+     "name": "pulseforge-engine/catalog/phase13a_splunk_security_content.json"
+    },
+    {
+     "bytes": 14644899,
+     "name": "pulseforge-engine/backend/app/catalog_data/phase13a_splunk_security_content.json"
+    },
+    {
+     "bytes": 3036699,
+     "name": "pulseforge-engine/catalog/phase13a_security_content_coverage.json"
+    },
+    {
+     "bytes": 3036699,
+     "name": "pulseforge-engine/backend/app/catalog_data/phase13a_security_content_coverage.json"
+    },
+    {
+     "bytes": 1452765,
+     "name": "pulseforge-engine/catalog/vendor_universe/splunkbase_apps_snapshot.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "pulseforge-engine/netspout/catalog/scenario_contracts.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "pulseforge-engine/catalog/scenario_contracts.json"
+    },
+    {
+     "bytes": 1277319,
+     "name": "pulseforge-engine/backend/app/catalog_data/scenario_contracts.json"
+    }
+   ],
+   "reviewed": [
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "pulseforge-engine/backend/app/gnmi/server.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "pulseforge-engine/backend/app/gnmi/splunk_e2e.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/backend/app/wave2_authentic_engine.py",
+     "reason": "example file paths inside simulated attack telemetry content (CVE proof-of-concept strings), not a path on a developer machine"
+    },
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "pulseforge-engine/src/netspout_core/gnmi/server.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "pulseforge-engine/src/netspout_core/gnmi/splunk_e2e.py",
+     "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/src/netspout_core/wave2_authentic_engine.py",
+     "reason": "example file paths inside simulated attack telemetry content (CVE proof-of-concept strings), not a path on a developer machine"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ARISTA-ENTITY-SENSOR-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ARISTA-HARDWARE-UTILIZATION-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ARISTA-PFC-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ARISTA-QOS-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ARISTA-QUEUE-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/BGP4-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/CISCO-BGP4-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/CISCO-ENVMON-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/CISCO-MEMORY-POOL-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/CISCO-PROCESS-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/ENTITY-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/IF-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/IP-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/JUNIPER-ALARM-EXT-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/JUNIPER-ALARM-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/JUNIPER-COS-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/JUNIPER-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/OSPF-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/SNMPv2-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/TCP-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "developer-absolute-path",
+     "member": "pulseforge-engine/catalog/mib_reference/sc4snmp/UDP-MIB.py",
+     "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+    },
+    {
+     "kind": "secret-looking-text:password-assignment",
+     "member": "pulseforge-engine/catalog/raw_reference/universe_batch2/vault.bin",
+     "reason": "public HashiCorp Vault audit-log sample; client tokens in it are HMAC-SHA256 hashes, not secrets"
+    }
+   ],
+   "reviewed_summary": {
+    "secret-looking-text:password-assignment": 5,
+    "developer-absolute-path": 23
+   },
+   "summary": {},
+   "examples": {},
+   "clean": true
+  }
+ ],
+ "lab_credentials_checked": true,
+ "provenance_checked_against_git": true
+}

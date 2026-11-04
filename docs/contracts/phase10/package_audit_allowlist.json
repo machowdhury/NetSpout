@@ -1,0 +1,30 @@
+{
+ "_about": "Findings of scripts/phase10_package_audit.py that were reviewed by reading the matched members and judged not to be credentials or developer paths. Each entry needs a reason.",
+ "allow": [
+  {
+   "kind": "secret-looking-text:password-assignment",
+   "member_regex": "(^|/)gnmi/(server|splunk_e2e)\\.py$",
+   "reason": "literal test credentials ('correct-password', 'invalid-password') inside the gNMI server self-test code; not a real credential"
+  },
+  {
+   "kind": "secret-looking-text:password-assignment",
+   "member_regex": "catalog/raw_reference/universe_batch2/vault\\.bin$",
+   "reason": "public HashiCorp Vault audit-log sample; client tokens in it are HMAC-SHA256 hashes, not secrets"
+  },
+  {
+   "kind": "developer-absolute-path",
+   "member_regex": "wave2_authentic_engine\\.py$",
+   "reason": "example file paths inside simulated attack telemetry content (CVE proof-of-concept strings), not a path on a developer machine"
+  },
+  {
+   "kind": "developer-absolute-path",
+   "member_regex": "catalog/mib_reference/.*-MIB\\.py$",
+   "reason": "upstream pysnmp-generated MIB modules whose header comment records the third party's own compile path"
+  },
+  {
+   "kind": "not-tracked-in-repository",
+   "member_regex": "^netspout/README$",
+   "reason": "generated into the Cloud edition by scripts/build_splunk_cloud_package.py (its own README text); not a copy of any untracked file"
+  }
+ ]
+}

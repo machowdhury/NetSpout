@@ -56,3 +56,17 @@ def test_repo_root_release_binary_is_not_a_stale_version(name):
     if built != want:
         msg = "%s in the repository root is version %s but the source is %s: it is a stale build; do not install it" % (name, built, want)
         pytest.fail(msg) if strict else pytest.skip(msg)
+
+
+def test_release_packages_are_not_tracked_and_are_git_ignored():
+    """Policy A (Phase 13): generated packages and manifests are build outputs; the builders keep writing them to the repository root, where Git ignores them."""
+    names = ["netspout.spl", "netspout_cloud.spl", "netspout.spl.manifest.json", "netspout_cloud.spl.manifest.json", "pulseforge-engine.tar.gz", "SHA256SUMS", "BUILD_MANIFEST.json"]
+    tracked = subprocess.run(["git", "ls-files"] + names, cwd=ROOT, capture_output=True, text=True).stdout.split()
+    assert not tracked, tracked
+    ignored = subprocess.run(["git", "check-ignore"] + names, cwd=ROOT, capture_output=True, text=True).stdout.split()
+    assert sorted(ignored) == sorted(names)
+
+
+def test_builders_still_write_the_ignored_root_paths():
+    for script, out in (("build_splunk_package.py", "netspout.spl"), ("build_splunk_cloud_package.py", "netspout_cloud.spl"), ("build_engine_package.py", "pulseforge-engine.tar.gz")):
+        assert out in (ROOT / "scripts" / script).read_text(), script

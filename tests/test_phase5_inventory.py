@@ -119,7 +119,7 @@ def test_top10_candidates_are_unverified_exact_and_have_working_generators():
 
 def test_no_package_archives_or_config_text_are_tracked():
     out = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split("\n")
-    assert not [f for f in out if f.endswith((".spl", ".tgz", ".tar.gz")) and f not in ("netspout.spl", "netspout_cloud.spl")]   # those two are NetSpout's own builds
+    assert not [f for f in out if f.endswith((".spl", ".tgz", ".tar.gz"))]   # NetSpout's own builds are generated release artifacts, not tracked (Phase 13)
     assert not [f for f in out if f.startswith("samples/") or "private-packs" in f]
     for f in P5.glob("*.json"):
         assert '"REGEX"' not in f.read_text() and '"TIME_PREFIX"' not in f.read_text()

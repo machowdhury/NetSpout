@@ -43,9 +43,17 @@ backend/.env
 # Phase 4E lab credentials
 tests/lab/**/.env*
 .cloud_stage/
-pulseforge-engine.tar.gz
 .lab_engine_cfg/
 
 # Private sample corpora (never ship; Phase 11)
 /samples/
 /netspout/datapet-test-es/
+
+# Generated release packages (Policy A, Phase 13): built by scripts/build_*package.py, published as versioned release artifacts, never tracked
+/netspout.spl
+/netspout_cloud.spl
+/netspout.spl.manifest.json
+/netspout_cloud.spl.manifest.json
+/pulseforge-engine.tar.gz
+/SHA256SUMS
+/BUILD_MANIFEST.json

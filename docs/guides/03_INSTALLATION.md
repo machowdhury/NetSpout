@@ -16,7 +16,7 @@ Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run a
 1. **Build the package**
    ```bash
    cd NetSpout && python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
-   PYTHONPATH=src:backend .venv/bin/python scripts/build_splunk_package.py      # writes netspout.spl and netspout.spl.manifest.json
+   PYTHONPATH=src:backend .venv/bin/python scripts/build_splunk_package.py      # writes netspout.spl and netspout.spl.manifest.json (generated, git-ignored; see docs/RELEASE_ARTIFACTS.md)
    ```
 2. **Install the app** (Apps > Manage Apps > Install app from file, or by REST):
    ```bash

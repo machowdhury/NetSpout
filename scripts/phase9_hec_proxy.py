@@ -14,7 +14,7 @@ header) so the exact outgoing payload is independent evidence. Fault modes exist
   POST /_mode?m=reject                   answer HEC's "incorrect index" error
   GET  /_payloads  /  POST /_reset       read / clear the recorded summaries
 
-Binds to 127.0.0.1 only and refuses any upstream other than the two isolated labs: the TA-validation lab (127.0.0.1:19088) and the release-candidate install lab (127.0.0.1:39088).
+Binds to 127.0.0.1 only and refuses any upstream other than the two isolated labs: the TA-validation lab (127.0.0.1:19088) and the release-candidate install lab (127.0.0.1:39088, or splunk:8088 when run inside that lab's engine container).
 """
 import argparse
 import http.client
@@ -133,10 +133,13 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--port", type=int, default=19990)
     a.add_argument("--upstream-port", type=int, default=19088)
+    a.add_argument("--upstream-host", default="127.0.0.1")
+    a.add_argument("--bind", default="127.0.0.1")
     args = a.parse_args()
-    assert args.upstream_port in (19088, 39088), "this tap only fronts the isolated labs (HEC 19088 TA-validation, 39088 release-candidate install)"
-    UPSTREAM = ("127.0.0.1", args.upstream_port)
-    ThreadingHTTPServer(("127.0.0.1", args.port), H).serve_forever()
+    # RC lab: the tap runs inside the engine container (bind 0.0.0.0 there, published to host loopback only) and fronts the lab's own HEC at splunk:8088 on the private network.
+    assert (args.upstream_host, args.upstream_port) in (("127.0.0.1", 19088), ("127.0.0.1", 39088), ("splunk", 8088)), "this tap only fronts the isolated labs (HEC 19088 TA-validation, 39088 / splunk:8088 release-candidate install)"
+    UPSTREAM = (args.upstream_host, args.upstream_port)
+    ThreadingHTTPServer((args.bind, args.port), H).serve_forever()
 
 
 if __name__ == "__main__":

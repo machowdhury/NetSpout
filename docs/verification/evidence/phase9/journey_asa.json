@@ -1,12 +1,12 @@
 {
  "sourcetype": "cisco:asa",
  "vendor": "cisco_asa",
- "run_id": "run-ca33e003c342",
+ "run_id": "run-456edbe49214",
  "ui": {
   "status_badge": "Verified in Splunk",
   "preview_sourcetype": "cisco:asa",
   "preview_info": "Sourcetype that will be sent: cisco:asa · index ta_validation · generator: native",
-  "preview_first_event": "Nov  3 21:31:55 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 523967 for outside:192.0.2.14/80 (192.0.2.14/80) to inside:10.20.10.60/12509 (10.20.10.60/12509)",
+  "preview_first_event": "Nov  4 14:29:54 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 805655 for outside:198.51.100.81/80 (198.51.100.81/80) to inside:10.20.10.52/7879 (10.20.10.52/7879)",
   "outcome": "Verified: found 20 of 20 events in index ta_validation that this run sent."
  },
  "outgoing_by_tap": {
@@ -32,10 +32,10 @@
    "asa-fw-01"
   ],
   "sources": "network-topology-simulator",
-  "time_first": 1793741515.5516632,
-  "time_last": 1793741519.421488,
-  "send_time_first": 1793741515.5516632,
-  "send_time_last": 1793741519.421488
+  "time_first": 1793802594.1615932,
+  "time_last": 1793802598.048227,
+  "send_time_first": 1793802594.1615932,
+  "send_time_last": 1793802598.048227
  },
  "ta_fields_extracted_counts": {
   "message_id": 20,
@@ -57,20 +57,20 @@
  "bare_vendor_fields_in_outgoing_payload": [],
  "sample_events": [
   {
-   "_time": "2026-11-03 21:31:59.421 GMT",
+   "_time": "2026-11-04 14:29:58.048 GMT",
    "host": "asa-fw-01",
    "source": "network-topology-simulator",
    "sourcetype": "cisco:asa",
    "index": "ta_validation",
-   "_raw": "Nov  3 21:31:55 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 439128 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10.60/3299 (10.20.10.60/3299)"
+   "_raw": "Nov  4 14:29:54 asa-fw-01 %ASA-6-302016: Teardown UDP connection 766804 for outside:198.51.100.81/123 to inside:10.20.10.45/6483 duration 0:06:57 bytes 85152"
   },
   {
-   "_time": "2026-11-03 21:31:59.216 GMT",
+   "_time": "2026-11-04 14:29:57.840 GMT",
    "host": "asa-fw-01",
    "source": "network-topology-simulator",
    "sourcetype": "cisco:asa",
    "index": "ta_validation",
-   "_raw": "Nov  3 21:31:55 asa-fw-01 %ASA-4-106023: Deny tcp src outside:203.0.113.88/60727 dst inside:10.20.10.60/443 by access-group \"OUTSIDE_IN\" [0x0, 0x0]"
+   "_raw": "Nov  4 14:29:54 asa-fw-01 %ASA-6-302015: Built outbound UDP connection 766804 for outside:198.51.100.81/123 (198.51.100.81/123) to inside:10.20.10.45/6483 (10.20.10.45/6483)"
   }
  ]
 }

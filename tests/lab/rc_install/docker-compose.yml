@@ -16,6 +16,7 @@ services:
     container_name: netspout_rc_engine
     ports:
       - "127.0.0.1:${RC_ENGINE_PORT:-38081}:8081"
+      - "127.0.0.1:39990:39990"   # recording tap, run INSIDE the engine container so the engine reaches it on its own loopback (the product refuses plain HTTP anywhere else)
     volumes:
       - netspout_rc_engine_state:/var/lib/pulseforge
     networks: [netspout_rc_net]

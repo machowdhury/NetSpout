@@ -1,5 +1,5 @@
 {
- "release_candidate": "rc1-d92ec22",
+ "release_candidate": "rc2-3f6cc0f",
  "checks": [
   {
    "check": "app.installed_and_enabled",

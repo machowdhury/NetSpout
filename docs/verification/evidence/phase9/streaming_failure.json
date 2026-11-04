@@ -1,5 +1,5 @@
 {
- "run_id": "run-514af76ef4f2",
+ "run_id": "run-92154058faad",
  "state": "FAILED",
  "error": "destination rejected 10 events in a row and has not accepted any",
  "counters": {
@@ -12,6 +12,6 @@
   "indexed": null
  },
  "events_attempted_before_failing": 10,
- "recovery_run_id": "run-6922d506555b",
- "recovery_ui": "Verified: found 72 of 72 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
+ "recovery_run_id": "run-b109af623b60",
+ "recovery_ui": "Verified: found 67 of 67 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
 }

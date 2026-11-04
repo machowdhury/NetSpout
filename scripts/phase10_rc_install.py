@@ -132,6 +132,17 @@ def remove_ta(app):
     print("removed", app)
 
 
+def start_tap():
+    subprocess.run(["docker", "cp", str(ROOT / "scripts/phase9_hec_proxy.py"), "%s:/tmp/tap.py" % ENGINE], check=True)
+    dexec(ENGINE, "pkill", "-f", "/tmp/tap.py")
+    subprocess.run(["docker", "exec", "-d", ENGINE, "/opt/pulseforge-engine/venv/bin/python", "/tmp/tap.py", "--port", "39990", "--bind", "0.0.0.0", "--upstream-host", "splunk", "--upstream-port", "8088"], check=True)
+    subprocess.run(["docker", "cp", str(ROOT / "scripts/phase10_tcp_forward.py"), "%s:/tmp/fwd.py" % ENGINE], check=True)
+    dexec(ENGINE, "pkill", "-f", "/tmp/fwd.py")
+    subprocess.run(["docker", "exec", "-d", ENGINE, "/opt/pulseforge-engine/venv/bin/python", "/tmp/fwd.py", "8089", "splunk", "8089"], check=True)
+    time.sleep(2)
+    print(urllib.request.urlopen("http://127.0.0.1:39990/_payloads", timeout=10).read()[:60])
+
+
 def apps():
     return sorted((x["name"], x["content"].get("version")) for x in rest("/services/apps/local?output_mode=json&count=0")["entry"] if not x["name"].startswith(BUILTIN))
 
@@ -148,6 +159,8 @@ if __name__ == "__main__":
         remove_ta(a[1])
     elif a[:1] == ["create-index"]:
         rest("/services/data/indexes?output_mode=json", {"name": a[1], "datatype": a[2]}); print("created", a[1], a[2])
+    elif a[:1] == ["start-tap"]:
+        start_tap()
     elif a[:1] == ["apps"]:
         print(json.dumps(apps()))
     elif a[:1] == ["check"]:

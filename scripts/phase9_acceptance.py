@@ -55,7 +55,7 @@ def run_group(g):
                PLAYWRIGHT_BASE_URL="http://127.0.0.1:14273", PLAYWRIGHT_CHROMIUM_PATH=CHROMIUM)
     if RC:
         env.update(PHASE9_SPLUNK_WEB="http://127.0.0.1:39000", PHASE9_API_BASE="http://127.0.0.1:39000/en-US/splunkd/__raw/services/netspout_gateway", PHASE9_TAP="http://127.0.0.1:39990",
-                   PHASE9_ENGINE_TAP="http://host.docker.internal:39990", PHASE9_ENGINE_SEARCH_URL="https://splunk:8089/services/search/jobs/export", PHASE9_LAB_ENV=str(ROOT / "tests/lab/rc_install/.env.lab"),
+                   PHASE9_ENGINE_TAP="http://127.0.0.1:39990", PHASE9_ENGINE_SEARCH_URL="https://127.0.0.1:8089/services/search/jobs/export", PHASE9_LAB_ENV=str(ROOT / "tests/lab/rc_install/.env.lab"),
                    PHASE9_EVENT_INDEX="idx_network_ops", PHASE9_METRIC_INDEX="cisco_mdt_metrics", PHASE9_OUT="phase10_rc", PLAYWRIGHT_BASE_URL="http://127.0.0.1:39000")
     return subprocess.run(["npx", "playwright", "test", "tests/phase9-acceptance.spec.ts", "--workers=1", "--trace", "off", "--reporter=list"], cwd=ROOT / "frontend", env=env).returncode
 

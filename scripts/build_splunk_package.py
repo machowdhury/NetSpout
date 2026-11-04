@@ -136,7 +136,7 @@ def build_package():
 
     print("\n>> Archive Verification:")
     print(f"  [PASS] File exists: {SPL_ARCHIVE}")
-    print(f"  [PASS] Archive size: {size_mb:.2f} MB (< 5.0 MB)")
+    print(f"  [INFO] Archive size: {size_mb:.2f} MB (reported, not limited)")
     print(f"  [PASS] Total member count: {len(members)} entries")
     print(f"  [PASS] Top-level directory: {list(top_levels)}")
     print(f"  [PASS] Canonical core packaged: {has_core}")

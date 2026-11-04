@@ -1,12 +1,12 @@
 {
  "sourcetype": "cisco:ios",
  "vendor": "cisco_ios",
- "run_id": "run-00220bd4c567",
+ "run_id": "run-4cee2bd6aeba",
  "ui": {
   "status_badge": "Verified in Splunk",
   "preview_sourcetype": "cisco:ios",
   "preview_info": "Sourcetype that will be sent: cisco:ios · index ta_validation · generator: grounded_sample",
-  "preview_first_event": "Nov 03 21:34:34 10.0.0.253 : 2026 Nov 03 21:34:34 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped",
+  "preview_first_event": "Nov 04 14:32:36 10.0.0.253 : 2026 Nov 04 14:32:36 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped",
   "outcome": "Verified: found 20 of 20 events in index ta_validation that this run sent."
  },
  "outgoing_by_tap": {
@@ -36,10 +36,10 @@
    "device-03"
   ],
   "sources": "network-topology-simulator",
-  "time_first": 1793741674.484422,
-  "time_last": 1793741678.3614771,
-  "send_time_first": 1793741674.484422,
-  "send_time_last": 1793741678.3614771
+  "time_first": 1793802756.580534,
+  "time_last": 1793802760.453065,
+  "send_time_first": 1793802756.580534,
+  "send_time_last": 1793802760.453065
  },
  "ta_fields_extracted_counts": {
   "facility": 20,
@@ -59,20 +59,20 @@
  "bare_vendor_fields_in_outgoing_payload": [],
  "sample_events": [
   {
-   "_time": "2026-11-03 21:34:38.361 GMT",
+   "_time": "2026-11-04 14:32:40.453 GMT",
    "host": "device-02",
    "source": "network-topology-simulator",
    "sourcetype": "cisco:ios",
    "index": "ta_validation",
-   "_raw": "Nov 03 21:34:34 10.0.0.252 OTT-CORE01: 2026 Nov 03 21:34:34 UTC: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19462]  fe80::232:17ff:fe3c:ac58 on Vlan503 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 "
+   "_raw": "Nov 04 14:32:36 10.0.0.252 OTT-CORE01: 2026 Nov 04 14:32:36 UTC: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19462]  fe80::232:17ff:fe3c:ac58 on Vlan503 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 "
   },
   {
-   "_time": "2026-11-03 21:34:38.159 GMT",
+   "_time": "2026-11-04 14:32:40.249 GMT",
    "host": "device-01",
    "source": "network-topology-simulator",
    "sourcetype": "cisco:ios",
    "index": "ta_validation",
-   "_raw": "Nov 03 21:34:34 10.0.0.253 : 2026 Nov 03 21:34:34 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped"
+   "_raw": "Nov 04 14:32:36 10.0.0.252 OTT-CORE01: 2026 Nov 04 14:32:36 UTC: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19462]  fe80::232:17ff:fe3c:ac58 on Vlan503 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 "
   }
  ]
 }

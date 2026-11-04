@@ -1,8 +1,8 @@
 {
- "run_id": "run-805e1dc9786d",
- "ui": "Only 25 of 34 were accepted (8 rejected, 0 unconfirmed). HEC HTTP 400",
+ "run_id": "run-bfc7060e7c01",
+ "ui": "Only 24 of 33 were accepted (8 rejected, 0 unconfirmed). HEC HTTP 400",
  "final": {
-  "run_id": "run-805e1dc9786d",
+  "run_id": "run-bfc7060e7c01",
   "kind": "sourcetype",
   "target": "cisco:ios:mdt:metric",
   "title": "cisco:ios:mdt:metric",
@@ -14,18 +14,18 @@
    "metric_index": "cisco_metrics"
   },
   "mode": "continuous",
-  "started_at": "2026-11-04T12:48:50.825660+00:00",
-  "ended_at": "2026-11-04T12:49:21.819043+00:00",
+  "started_at": "2026-11-04T14:34:25.620437+00:00",
+  "ended_at": "2026-11-04T14:34:56.666920+00:00",
   "elapsed_s": 31,
   "progress": {
    "total": null,
-   "done": 33,
+   "done": 32,
    "pct": null
   },
   "counters": {
-   "generated": 34,
-   "attempts": 33,
-   "accepted": 25,
+   "generated": 33,
+   "attempts": 32,
+   "accepted": 24,
    "rejected": 8,
    "unknown": 0,
    "pending": 1,
@@ -33,113 +33,113 @@
   },
   "rate": {
    "current_eps": 0,
-   "average_eps": 1.06,
+   "average_eps": 1.03,
    "limit_eps": 5
   },
   "eta_s": null,
   "by_sourcetype": {
    "cisco:ios:mdt:metric": {
-    "total": 34,
-    "accepted": 25,
+    "total": 33,
+    "accepted": 24,
     "rejected": 8
    }
   },
   "by_phase": [],
   "throughput": [
    {
-    "t": "2026-11-04T12:48:51+00:00",
+    "t": "2026-11-04T14:34:26+00:00",
+    "eps": 7
+   },
+   {
+    "t": "2026-11-04T14:34:27+00:00",
+    "eps": 3
+   },
+   {
+    "t": "2026-11-04T14:34:28+00:00",
+    "eps": 5
+   },
+   {
+    "t": "2026-11-04T14:34:29+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:31+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:34+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:39+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:44+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:49+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:54+00:00",
+    "eps": 1
+   },
+   {
+    "t": "2026-11-04T14:34:55+00:00",
+    "eps": 6
+   },
+   {
+    "t": "2026-11-04T14:34:56+00:00",
     "eps": 4
-   },
-   {
-    "t": "2026-11-04T12:48:52+00:00",
-    "eps": 6
-   },
-   {
-    "t": "2026-11-04T12:48:53+00:00",
-    "eps": 5
-   },
-   {
-    "t": "2026-11-04T12:48:54+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:48:56+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:48:59+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:49:04+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:49:09+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:49:14+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:49:19+00:00",
-    "eps": 1
-   },
-   {
-    "t": "2026-11-04T12:49:20+00:00",
-    "eps": 6
-   },
-   {
-    "t": "2026-11-04T12:49:21+00:00",
-    "eps": 5
    }
   ],
   "recent_errors": [
    {
-    "at": "2026-11-04T12:48:53.475296+00:00",
+    "at": "2026-11-04T14:34:28.313561+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:48:53.885910+00:00",
+    "at": "2026-11-04T14:34:28.722514+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:48:54.698252+00:00",
+    "at": "2026-11-04T14:34:29.541997+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:48:56.307437+00:00",
+    "at": "2026-11-04T14:34:31.159374+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:48:59.525045+00:00",
+    "at": "2026-11-04T14:34:34.378866+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:49:04.541050+00:00",
+    "at": "2026-11-04T14:34:39.402645+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:49:09.557552+00:00",
+    "at": "2026-11-04T14:34:44.421552+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
    },
    {
-    "at": "2026-11-04T12:49:14.578325+00:00",
+    "at": "2026-11-04T14:34:49.441790+00:00",
     "sourcetype": "cisco:ios:mdt:metric",
     "outcome": "rejected",
     "message": "HEC HTTP 400"
@@ -158,8 +158,8 @@
   },
   "key_field": "netspout_run_id",
   "metric_accepted": {
-   "events": 25,
-   "datapoints": 125
+   "events": 24,
+   "datapoints": 117
   },
   "accounting_note": "accepted is the transport acknowledgement, not proof of indexing; indexed comes only from an independent Splunk search",
   "source_mode": "native",
@@ -168,7 +168,7 @@
    "duration_s": null
   }
  },
- "accepted_datapoints_sent": 125,
- "datapoints_in_metric_index": 125,
+ "accepted_datapoints_sent": 117,
+ "datapoints_in_metric_index": 117,
  "rejected_events": 8
 }

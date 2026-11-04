@@ -1,23 +1,23 @@
 {
  "sourcetype": "cisco:ios:mdt:metric",
  "product": "Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON)",
- "run_id": "run-c7247405bfbd",
+ "run_id": "run-e4b2ffce5751",
  "ui": {
   "status_badge": "Can send data, not tested in Splunk",
   "preview_info": "Sourcetype that will be sent: cisco:ios:mdt:metric · metric index cisco_metrics · generator: native",
   "preview_metrics": [
-   "interface_generic_counters.packets_received = 30688819",
-   "interface_generic_counters.packets_sent = 47340282",
-   "interface_generic_counters.bytes_received = 24908728928",
-   "interface_generic_counters.bytes_sent = 35085648323",
-   "interface_generic_counters.input_drops = 0",
-   "interface_generic_counters.output_drops = 0"
+   "interface_generic_counters.bandwidth = 1000000",
+   "interface_generic_counters.input_load = 3",
+   "interface_generic_counters.output_load = 4",
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute = 4",
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute = 4",
+   "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute = 2"
   ],
-  "outcome": "Verified: found 139 of 139 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
+  "outcome": "Verified: found 144 of 144 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
  },
  "outgoing_by_tap": {
   "hec_events": 28,
-  "datapoints": 139,
+  "datapoints": 144,
   "index": [
    "cisco_metrics"
   ],
@@ -45,87 +45,87 @@
  "mstats": [
   {
    "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute",
-   "datapoints": 6,
-   "sum": 18,
-   "sent_sum": 18
+   "datapoints": 4,
+   "sum": 14,
+   "sent_sum": 14
   },
   {
    "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute",
-   "datapoints": 6,
-   "sum": 18,
-   "sent_sum": 18
+   "datapoints": 4,
+   "sum": 10,
+   "sent_sum": 10
   },
   {
    "metric_name": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
-   "datapoints": 6,
-   "sum": 42,
-   "sent_sum": 42
+   "datapoints": 4,
+   "sum": 21,
+   "sent_sum": 21
   },
   {
    "metric_name": "interface_generic_counters.bandwidth",
-   "datapoints": 11,
-   "sum": 206000000,
-   "sent_sum": 206000000
+   "datapoints": 12,
+   "sum": 246000000,
+   "sent_sum": 246000000
   },
   {
    "metric_name": "interface_generic_counters.bytes_received",
-   "datapoints": 11,
-   "sum": 558520313681,
-   "sent_sum": 558520313681
+   "datapoints": 12,
+   "sum": 542703791890,
+   "sent_sum": 542703791890
   },
   {
    "metric_name": "interface_generic_counters.bytes_sent",
-   "datapoints": 11,
-   "sum": 430737940048,
-   "sent_sum": 430737940048
+   "datapoints": 12,
+   "sum": 421217649246,
+   "sent_sum": 421217649246
   },
   {
    "metric_name": "interface_generic_counters.input_drops",
-   "datapoints": 11,
+   "datapoints": 12,
    "sum": 0,
    "sent_sum": 0
   },
   {
    "metric_name": "interface_generic_counters.input_errors",
-   "datapoints": 11,
+   "datapoints": 12,
    "sum": 0,
    "sent_sum": 0
   },
   {
    "metric_name": "interface_generic_counters.input_load",
-   "datapoints": 11,
-   "sum": 44,
-   "sent_sum": 44
+   "datapoints": 12,
+   "sum": 55,
+   "sent_sum": 55
   },
   {
    "metric_name": "interface_generic_counters.output_drops",
-   "datapoints": 11,
+   "datapoints": 12,
    "sum": 0,
    "sent_sum": 0
   },
   {
    "metric_name": "interface_generic_counters.output_errors",
-   "datapoints": 11,
+   "datapoints": 12,
    "sum": 0,
    "sent_sum": 0
   },
   {
    "metric_name": "interface_generic_counters.output_load",
-   "datapoints": 11,
-   "sum": 155,
-   "sent_sum": 155
+   "datapoints": 12,
+   "sum": 209,
+   "sent_sum": 209
   },
   {
    "metric_name": "interface_generic_counters.packets_received",
-   "datapoints": 11,
-   "sum": 396824446,
-   "sent_sum": 396824446
+   "datapoints": 12,
+   "sum": 431771958,
+   "sent_sum": 431771958
   },
   {
    "metric_name": "interface_generic_counters.packets_sent",
-   "datapoints": 11,
-   "sum": 573239642,
-   "sent_sum": 573239642
+   "datapoints": 12,
+   "sum": 720499131,
+   "sent_sum": 720499131
   }
  ],
  "mcatalog_dims": [

@@ -60,18 +60,28 @@ def install(rc):
     out = rest("/services/apps/local?output_mode=json", {"name": "/tmp/rc_netspout.spl", "filename": "true", "update": "true"})
     c = out["entry"][0]["content"]
     print(json.dumps({"installed": out["entry"][0]["name"], "version": c.get("version"), "label": c.get("label"), "disabled": c.get("disabled")}))
-    # splunkd does not hand the container's environment to REST handler processes; splunk-launch.conf is the supported place, and without it the gateway falls back to the host demo port 8081.
-    subprocess.run(["docker", "exec", "-u", "root", SPLUNK, "bash", "-c", "grep -q '^NETSPOUT_BACKEND_URL=' /opt/splunk/etc/splunk-launch.conf || printf '\\nNETSPOUT_BACKEND_URL=http://engine:8081\\n' >> /opt/splunk/etc/splunk-launch.conf"], check=True)
     try:
         rest("/services/server/control/restart?output_mode=json", {}, "POST")
     except Exception:
         pass
     time.sleep(25)
     wait()
+    set_engine("http://engine:8081")
+
+
+def set_engine(url):
+    """What an admin does in Connections > PulseForge Engine, through the same Splunk configuration endpoint the app's gateway uses (stored in the app's local/netspout_engine.conf)."""
+    base = "/servicesNS/nobody/netspout/configs/conf-netspout_engine"
+    try:
+        rest(base + "/engine?output_mode=json", {"url": url})
+    except urllib.error.HTTPError:
+        rest(base + "?output_mode=json", {"name": "engine", "url": url})
+    print("engine url set to", url or "(empty)")
 
 
 def check(rc, out_path):
     rc = Path(rc)
+    pkg_version = json.loads((ROOT / "frontend/package.json").read_text())["version"]
     checks = []
 
     def add(name, ok, detail=""):
@@ -81,7 +91,7 @@ def check(rc, out_path):
         members = {m.name: m for m in tf.getmembers() if m.isfile()}
         arc = lambda n: hashlib.sha256(tf.extractfile(members[n]).read()).hexdigest()
         app = rest("/services/apps/local/netspout?output_mode=json")["entry"][0]["content"]
-        add("app.installed_and_enabled", not app.get("disabled") and app.get("version") == "2.0.0", "%s %s" % (app.get("label"), app.get("version")))
+        add("app.installed_and_enabled", not app.get("disabled") and app.get("version") == pkg_version, "%s %s" % (app.get("label"), app.get("version")))
         conf_ver = [l.split("=")[1].strip() for l in tf.extractfile(members["netspout/default/app.conf"]).read().decode().splitlines() if l.startswith("version")][0]
         manifest = json.loads(tf.extractfile(members["netspout/app.manifest"]).read())
         pkg = json.loads((ROOT / "frontend/package.json").read_text())
@@ -109,8 +119,9 @@ def check(rc, out_path):
     add("gateway.forwards_to_the_engine", "netspout-simulation-engine" in gw.stdout or '"ok"' in gw.stdout, gw.stdout[:120].replace(e["LAB_SPLUNK_PASSWORD"], "***"))
     codes = {r: dexec(SPLUNK, "curl", "-sk", "-m", "30", "-o", "/dev/null", "-w", "%{http_code}", "-u", "admin:" + e["LAB_SPLUNK_PASSWORD"], "https://127.0.0.1:8089/services/netspout_gateway" + r).stdout for r in ("/api/runs", "/api/replay/sources", "/api/compat/catalog", "/api/compat/scenarios", "/api/catalog/sourcetypes")}
     add("gateway.routes_reach_this_engine_build", set(codes.values()) == {"200"}, codes)
-    env_in = dexec(SPLUNK, "printenv", "NETSPOUT_BACKEND_URL").stdout.strip()
-    add("no_development_services_required", env_in == "http://engine:8081" and "8081" in env_in and not subprocess.run(["lsof", "-nP", "-iTCP:5173", "-sTCP:LISTEN"], capture_output=True).stdout, "gateway uses the engine container; no Vite server is listening on 5173")
+    cfg = rest("/servicesNS/nobody/netspout/configs/conf-netspout_engine/engine?output_mode=json")["entry"][0]["content"].get("url")
+    add("engine.url_is_the_configured_setting_not_a_default", cfg == "http://engine:8081", cfg)
+    add("no_development_services_required", cfg == "http://engine:8081" and not subprocess.run(["lsof", "-nP", "-iTCP:5173", "-sTCP:LISTEN"], capture_output=True).stdout, "gateway uses the engine container; no Vite server is listening on 5173")
     Path(out_path).write_text(json.dumps({"release_candidate": rc.name, "checks": checks, "passed": all(c["status"] == "PASS" for c in checks)}, indent=1) + "\n")
     return 0 if all(c["status"] == "PASS" for c in checks) else 1
 
@@ -159,6 +170,8 @@ if __name__ == "__main__":
         remove_ta(a[1])
     elif a[:1] == ["create-index"]:
         rest("/services/data/indexes?output_mode=json", {"name": a[1], "datatype": a[2]}); print("created", a[1], a[2])
+    elif a[:1] == ["set-engine"]:
+        set_engine(a[1] if len(a) > 1 else "")
     elif a[:1] == ["start-tap"]:
         start_tap()
     elif a[:1] == ["apps"]:

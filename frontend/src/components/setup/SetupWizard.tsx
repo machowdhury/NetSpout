@@ -1,3 +1,4 @@
+import { EngineConnection } from './EngineConnection';
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { CheckCircle2, CircleAlert, ShieldCheck } from 'lucide-react';
@@ -126,6 +127,8 @@ export function SetupWizard() {
         <h2>Connections</h2>
         <p data-testid="connection-status"><strong>{configuration?.configured ? 'A Splunk destination is saved.' : 'No Splunk destination is saved yet.'}</strong> {configuration?.secret_state.hec_token_configured ? 'The HEC token is stored on the server and is never shown again.' : 'No HEC token is stored.'}</p>
       </header>
+
+      <EngineConnection />
 
       <div className="setup-security-note"><ShieldCheck /><div><strong>Secrets stay server-side and in memory.</strong><span>They are never returned by this API, persisted to the browser, written to the metadata file, or placed in a URL. Use environment-backed secret injection for durable deployments.</span></div></div>
       {error && <div className="sx-box sx-blocked" role="alert"><CircleAlert /> {error}</div>}

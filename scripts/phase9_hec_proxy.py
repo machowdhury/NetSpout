@@ -12,6 +12,7 @@ header) so the exact outgoing payload is independent evidence. Fault modes exist
   POST /_mode?m=reindex_event&to=main    forward, but rewrite the index of log events (events land in the wrong index)
   POST /_mode?m=reindex_metric&to=NAME   forward, but rewrite the index of metric events (metrics land in the wrong metric index)
   POST /_mode?m=reject                   answer HEC's "incorrect index" error
+  POST /_mode?m=reject_st&to=a,b         answer that error only for events of the listed sourcetypes (a partly rejected multi-source batch); everything else is forwarded
   GET  /_payloads  /  POST /_reset       read / clear the recorded summaries
 
 Binds to 127.0.0.1 only and refuses any upstream other than the two isolated labs: the TA-validation lab (127.0.0.1:19088) and the release-candidate install lab (127.0.0.1:39088, or splunk:8088 when run inside that lab's engine container).
@@ -98,6 +99,10 @@ class H(BaseHTTPRequestHandler):
             except ValueError:
                 events = []
         if events and mode == "reject":
+            with STATE["lock"]:
+                STATE["log"] += [summarize(o, mode, 400) for o in events if isinstance(o, dict)]
+            return self._send(400, b'{"text":"Incorrect index","code":7,"invalid-event-number":0}')
+        if events and mode == "reject_st" and any(isinstance(o, dict) and o.get("sourcetype") in to.split(",") for o in events):
             with STATE["lock"]:
                 STATE["log"] += [summarize(o, mode, 400) for o in events if isinstance(o, dict)]
             return self._send(400, b'{"text":"Incorrect index","code":7,"invalid-event-number":0}')

@@ -1,5 +1,7 @@
 import { apiUrl } from './api';
 
+export interface SourceVerification { kind: 'event' | 'metric'; index: string; accepted: number; rejected: number; unknown: number; expected: number; indexed: number | null; hosts: string[]; status: 'VERIFIED' | 'INCOMPLETE' | 'NOT_SENT' | 'UNKNOWN' | 'UNMATCHED' }
+
 export interface RunSnapshot {
   run_id: string;
   kind: string;
@@ -19,7 +21,9 @@ export interface RunSnapshot {
   throughput?: Array<{ t: number; eps: number }>;
   recent_errors?: Array<{ at: string; sourcetype?: string; outcome?: string; message: string }>;
   controls: { pause: boolean; resume: boolean; stop: boolean };
-  verification?: { status: string; indexed?: number | null; accepted?: number; error?: string | null; note?: string; expected_log_events?: number; metric_datapoints_indexed?: number | null; metric_datapoints_expected?: number; metric_events_accepted?: number } | null;
+  sources?: Array<{ sourcetype: string; vendor_id: string; count: number; index: string }>;
+  started_at?: string | null;
+  verification?: { status: string; by_sourcetype?: Record<string, SourceVerification>; indexed?: number | null; accepted?: number; error?: string | null; note?: string; expected_log_events?: number; metric_datapoints_indexed?: number | null; metric_datapoints_expected?: number; metric_events_accepted?: number } | null;
   links?: Record<string, string>;
   interrupted_note?: string | null;
   accounting_note?: string;

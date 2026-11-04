@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { compatApi, type ScenarioCompat } from '../../lib/compatApi';
+import { compatApi, type ScenarioCompat, type ScenarioPreview } from '../../lib/compatApi';
 import { explorerApi } from '../../lib/explorerApi';
 import { startRun } from '../../lib/runsApi';
 import { LiveDeliveryMonitor } from '../monitor/LiveDeliveryMonitor';
 import { Outcome } from './Outcome';
+import { EngineNotice } from './EngineNotice';
+import { useEngineStatus } from '../../lib/engineApi';
 import './simple.css';
 
 const STATE_TEXT: Record<ScenarioCompat['run_state'], { label: string; cls: string; explain: string }> = {
@@ -23,6 +25,9 @@ export function ScenariosView() {
   const [index, setIndex] = useState('');
   const [runId, setRunId] = useState<string | null>(null);
   const [startErr, setStartErr] = useState('');
+  const engine = useEngineStatus();
+  const [preview, setPreview] = useState<ScenarioPreview | null>(null);
+  const [previewErr, setPreviewErr] = useState('');
 
   useEffect(() => {
     compatApi.scenarios().then((r) => setList(r.scenarios), (e) => setErr(e instanceof Error ? e.message : String(e)));
@@ -34,8 +39,15 @@ export function ScenariosView() {
   const visible = useMemo(() => list.filter((s) => (category === 'ALL' || (s.category ?? 'OTHER') === category) && (!canRunOnly || s.runnable)), [list, category, canRunOnly]);
   const sc = visible.find((s) => s.id === id) ?? visible[0];
   useEffect(() => { setRunId(null); setStartErr(''); }, [sc?.id]);
+  useEffect(() => {
+    setPreview(null); setPreviewErr('');
+    if (!sc || !sc.runnable) return undefined;
+    let alive = true;
+    compatApi.scenarioPreview(sc.id, index || undefined).then((p) => alive && setPreview(p), (e) => alive && setPreviewErr(e instanceof Error ? e.message : String(e)));
+    return () => { alive = false; };
+  }, [sc?.id, sc?.runnable, index]);   // eslint-disable-line react-hooks/exhaustive-deps
 
-  const reason = !sc ? '' : !sc.runnable ? sc.reasons.join(' ') : configured === false ? 'No Splunk destination is set up yet. Open Connections, save a destination, then come back.' : '';
+  const reason = engine && !engine.connected ? engine.message : !sc ? '' : !sc.runnable ? sc.reasons.join(' ') : configured === false ? 'No Splunk destination is set up yet. Open Connections, save a destination, then come back.' : '';
   const run = async () => {
     if (!sc) return;
     setStartErr('');
@@ -44,6 +56,7 @@ export function ScenariosView() {
   const st = sc ? STATE_TEXT[sc.run_state] : null;
   const dashboardId = sc ? studio.get(sc.id) : undefined;
   const hasDashboard = !!dashboardId;
+  const hasOwnView = !!sc?.dashboard;   // the scenario's own Dashboard Studio view installed with the app; Outcome links it with the run id
 
   return (
     <div className="sx" data-testid="scenarios-view">
@@ -51,7 +64,8 @@ export function ScenariosView() {
         <h2>Scenarios</h2>
         <p className="sx-muted">Run a prepared incident story. Each one lists the sources it needs and whether they are ready.</p>
       </div>
-      {err && <div className="sx-box sx-blocked" role="alert">The scenario list could not be loaded: {err}</div>}
+      <EngineNotice status={engine} />
+      {err && !engine && <div className="sx-box sx-blocked" role="alert">The scenario list could not be loaded: {err}</div>}
       <section className="sx-box">
         <span className="sx-step">1 · Choose</span>
         <div className="sx-row">
@@ -77,8 +91,29 @@ export function ScenariosView() {
         </section>
       )}
 
+      {sc && sc.runnable && (
+        <section className="sx-box" data-testid="scenario-preview">
+          <span className="sx-step">2 · Preview</span>
+          {!preview && !previewErr && <p className="sx-muted">Preparing a preview…</p>}
+          {previewErr && <p className="sx-bad" role="alert" data-testid="preview-error">Preview failed: {previewErr}</p>}
+          {preview && !preview.available && <p className="sx-muted">{preview.note}</p>}
+          {preview?.available && (
+            <div>
+              <p data-testid="preview-summary"><b>{preview.total_events} events</b> in {preview.phases?.length} phases, about {preview.estimated_seconds} seconds. <span className="sx-muted">{preview.estimate_note}</span></p>
+              <ul className="sx-list" data-testid="preview-phases">{preview.phases?.map((p) => <li key={p.phase}>{p.phase}: {p.events} events</li>)}</ul>
+              <ul className="sx-list" data-testid="preview-counts">{Object.entries(preview.by_sourcetype ?? {}).map(([k, v]) => <li key={k}><code>{k}</code>: {v} events</li>)}</ul>
+              {preview.samples?.map((x) => (
+                <div key={x.sourcetype} data-testid={`sample-${x.sourcetype}`}>
+                  <p className="sx-muted"><code>{x.sourcetype}</code> · host <code>{x.host}</code> · {x.kind === 'metric' ? 'metric index' : 'index'} <code>{x.index}</code>{x.phase ? ` · phase ${x.phase}` : ''}</p>
+                  <pre className="sx-pre" data-testid="preview-raw">{x.kind === 'metric' ? Object.entries(x.metrics ?? {}).map(([k, v]) => `${k} = ${v}`).join('\n') : x.raw}</pre>
+                </div>))}
+            </div>
+          )}
+        </section>
+      )}
+
       <section className="sx-box">
-        <span className="sx-step">2 · Run</span>
+        <span className="sx-step">3 · Run</span>
         <div className="sx-row">{index && <span className="sx-muted" data-testid="scenario-index">Sends to index <code>{index}</code></span>}<button type="button" className="sx-primary" data-testid="run-scenario" disabled={!sc || !!reason} onClick={() => void run()}>Run scenario</button>{configured === false && <a href="#/system/connections">Set up Connections</a>}</div>
         {reason && <p className="sx-bad" data-testid="cannot-run">{reason}</p>}
         {startErr && <p className="sx-bad" role="alert" data-testid="start-error">{startErr}</p>}
@@ -86,12 +121,12 @@ export function ScenariosView() {
 
       {runId && sc && (
         <section className="sx-box">
-          <span className="sx-step">3 · Watch and investigate</span>
+          <span className="sx-step">4 · Verify and investigate</span>
           <Outcome runId={runId} />
           <details><summary>Delivery details</summary><LiveDeliveryMonitor runId={runId} /></details>
           {hasDashboard
             ? <a href={`?dashboard=${encodeURIComponent(dashboardId!)}&run=${encodeURIComponent(runId)}#/observe/dashboards`}>Investigate in Dashboard Studio</a>
-            : <p className="sx-muted">This scenario has no Dashboard Studio dashboard yet.</p>}
+            : hasOwnView ? null : <p className="sx-muted" data-testid="no-dashboard">No Dashboard Studio dashboard exists for this scenario yet. The run investigation dashboard and the Splunk search above still show everything it sent.</p>}
         </section>
       )}
     </div>

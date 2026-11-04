@@ -71,6 +71,9 @@ def _current_eps(samples, horizon=5.0):
     return round((c_end - start[1]) / max(t_end - start[0], 1e-6), 2) if t_end > start[0] else 0.0
 
 
+NO_TELEMETRY = "No telemetry was sent: the run finished without delivering a single event to the destination."
+
+
 class StreamAbort(RuntimeError):
     """A stream ended deliberately with a user-facing reason."""
 
@@ -172,6 +175,8 @@ class DeliveryRun:
                 self.samples.append((time.time(), self.counts["attempts"]))
                 if self.state != "FAILED":
                     self.state = "STOPPED" if self._cancel.is_set() and (self.counts["attempts"] < self.counts["generated"] or getattr(self, "unbounded", False)) else "COMPLETED"
+                if self.state == "COMPLETED" and self.counts["attempts"] == 0:
+                    self.state, self.error = "FAILED", NO_TELEMETRY
                 self.ended = _now()
             if self._persist:
                 self._persist()
@@ -190,6 +195,7 @@ class DeliveryRun:
             if key == "accepted" and datapoints:
                 self.metric["events"] += 1
                 self.metric["datapoints"] += datapoints
+                self.by_st.setdefault(sourcetype, Counter())["datapoints"] += datapoints   # what an mstats search will count for this sourcetype
             self.by_st.setdefault(sourcetype, Counter())[key] += 1
             if phase:
                 self.by_phase.setdefault(phase, Counter())[key] += 1
@@ -331,6 +337,8 @@ class ObservedRun(DeliveryRun):
             self.samples.append((time.time(), self.counts["attempts"]))
             self.error = clean_error(error) if error else None
             self.state = "FAILED" if error else "COMPLETED"
+            if self.state == "COMPLETED" and self.counts["attempts"] == 0:
+                self.state, self.error = "FAILED", NO_TELEMETRY
             self.ended = _now()
         if self._persist:
             self._persist()

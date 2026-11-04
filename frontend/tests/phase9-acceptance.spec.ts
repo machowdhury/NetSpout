@@ -16,6 +16,7 @@ const ONLY = process.env.PHASE9_ONLY ?? '';
 // the engine. Direct mode (default) talks to a dev engine. PHASE9_API_BASE is then the gateway URL.
 //   PHASE9_SPLUNK_WEB=http://127.0.0.1:39000  PHASE9_API_BASE=http://127.0.0.1:39000/en-US/splunkd/__raw/services/netspout_gateway
 const WEB = process.env.PHASE9_SPLUNK_WEB ?? '';
+const ENGINE_URL = process.env.PHASE9_ENGINE_URL ?? '';       // packaged lab only: the address the Splunk app is configured with (as Splunk reaches the engine)
 // as the ENGINE sees them (in the packaged lab the engine runs in a container): the tap and the Splunk search endpoint, and the indexes to use
 const ENGINE_TAP = process.env.PHASE9_ENGINE_TAP ?? '';
 const ENGINE_SEARCH = process.env.PHASE9_ENGINE_SEARCH_URL ?? 'https://127.0.0.1:19191/services/search/jobs/export';
@@ -75,6 +76,7 @@ type Cfg = { hec?: string; search?: string; token?: string; secret?: string; eve
 async function configure(page: Page, o: Cfg = {}) {
   await open(page, '/system/connections');
   await expect(page.getByTestId('setup-wizard')).toBeVisible();
+  await expect(page.locator('form[data-loaded="true"]')).toBeVisible({ timeout: 30_000 });   // the saved destination has been read: a late answer can no longer overwrite what is typed
   await page.getByLabel('HEC endpoint').fill(o.hec ?? TAP_HEC);
   await page.getByLabel('Search API endpoint').fill(o.search ?? SEARCH_URL);
   await page.getByLabel('Search username').fill('admin');
@@ -522,9 +524,23 @@ test('[pan] scenario through the UI: events indexed, correlation ids, phase orde
   save('scenario_paloalto_threat_investigation', { scenario: SCENARIO, run_id: runId, required: sc.required, state_label: 'Verified in Splunk', ta_parsing: taEvidence, ui_outcome: await page.getByTestId('outcome-text').textContent(),
     sent: { events: n, by_sourcetype: sentSt, phases: order }, indexed: { total, by_phase: byPhase.map((r) => ({ phase: r.netspout_phase, count: Number(r.count), first: Number(r.t0), last: Number(r.t1) })), by_sourcetype: Object.fromEntries(bySt.map((r) => [r.sourcetype, Number(r.count)])) },
     dashboard: sc.dashboard, dashboard_searches_run: searches });
-  // this scenario's investigation view is a native Splunk dashboard (pf_*), not a Dashboard Studio dashboard: the page must say so rather than show a dead link
-  await expect(page.getByRole('link', { name: 'Investigate in Dashboard Studio' })).toHaveCount(0);
-  await expect(page.getByText('has no Dashboard Studio dashboard yet')).toBeVisible();
+  // Investigate: the scenario's own Dashboard Studio dashboard and the generic run investigation dashboard, opened with this run's tokens
+  await expect(page.getByRole('link', { name: 'Investigate in Dashboard Studio' })).toHaveCount(0);   // that in-app link is for the other kind of dashboard
+  if (WEB) {
+    const own = page.getByTestId('investigate-scenario-dashboard');
+    await expect(own).toHaveAttribute('href', new RegExp(`/app/netspout/pf_${SCENARIO}\\?.*form\\.run_tok=${runId}`));
+    const studio = await page.context().newPage();
+    await studio.setViewportSize({ width: 1500, height: 1400 });
+    await studio.goto(`${WEB}${await own.getAttribute('href')}`);
+    await expect(studio.getByText('Palo Alto Networks Threat Investigation').first()).toBeVisible({ timeout: 90_000 });
+    await expect(studio.locator('[data-test="visualization"], [data-testid="visualization"], .dashboard-element, [data-component="visualization"]').first()).toBeVisible({ timeout: 90_000 }).catch(() => undefined);
+    await studio.waitForTimeout(25_000);                       // Dashboard Studio runs its data sources on load
+    await studio.screenshot({ path: `${SHOTS}/p101_scenario_studio_dashboard.png`, fullPage: true });
+    const text = (await studio.locator('body').innerText()).toLowerCase();
+    expect(text, 'the Studio dashboard shows data from this scenario').toMatch(/pan:threat|pan:traffic|threat|traffic/);
+    expect(text).not.toContain('search did not return any results');
+    await studio.close();
+  }
 });
 
 test('[pan] a scenario that has a Dashboard Studio dashboard shows the link with the run id', async ({ page, request }) => {
@@ -671,4 +687,225 @@ test('[metrics] a sustained failure ends the stream as failed, nothing keeps bei
   const run2 = await startFromUi(page);
   await expect(page.getByTestId('outcome-text')).toContainText('Verified: found', { timeout: 120_000 });
   save('streaming_failure', { run_id: runId, state: failed.state, error: failed.error, counters: failed.counters, events_attempted_before_failing: n1, recovery_run_id: run2, recovery_ui: await page.getByTestId('outcome-text').textContent() });
+});
+
+
+// ------------------------------------------------------------------------------------------------------------------------------ Phase 10.1: several sourcetypes in one run
+const FOUR = [{ st: 'cisco:asa', n: 8 }, { st: 'cisco:ios', n: 6 }, { st: 'fortigate_traffic', n: 5 }, { st: 'pan:traffic', n: 6 }] as const;
+async function addSources(page: Page, request: APIRequestContext, sts: string[]) {
+  await open(page, '/generate/quick');
+  await page.getByTestId('show-all').check();
+  await page.getByTestId('mode-multi').check();
+  for (const st of sts) {
+    const f = await findEntry(request, st);
+    await page.getByTestId('vendor').selectOption(f.vendor);
+    await page.getByTestId('product').selectOption(f.product);
+    await page.getByTestId('sourcetype').selectOption(st);
+    await page.getByTestId('add-source').click();
+    await expect(page.getByTestId(`selected-${st}`)).toBeVisible();
+    await expect(page.getByTestId(`preview-${st}`).getByTestId('preview-raw').first()).toBeVisible({ timeout: 60_000 });
+  }
+}
+const multiRun = async (page: Page) => startFromUi(page);
+const countsBySt = (out: Tapped[]) => out.reduce<Record<string, number>>((m, p) => { m[p.sourcetype] = (m[p.sourcetype] ?? 0) + 1; return m; }, {});
+
+test('[multi] four verified sourcetypes in one run: each counted, indexed and verified on its own', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page);
+  await addSources(page, request, FOUR.map((x) => x.st));
+  for (const x of FOUR) await page.getByTestId(`count-${x.st}`).fill(String(x.n));
+  const total = FOUR.reduce((a, x) => a + x.n, 0);
+  await expect(page.getByTestId('total-count')).toHaveValue(String(total));
+  await page.screenshot({ path: `${SHOTS}/p101_01_multi_selected_and_previewed.png`, fullPage: true });
+  const runId = await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText(`Verified: found ${total} of ${total} events in index ${EVENT_INDEX}`, { timeout: 180_000 });
+  for (const x of FOUR) { await expect(page.getByTestId(`source-${x.st}`)).toHaveAttribute('data-result', 'VERIFIED'); await expect(page.getByTestId(`source-${x.st}`)).toContainText(`${x.n} of ${x.n}`); }
+  await expect(page.getByTestId('totals')).toContainText(`${total} accepted`);
+  await page.screenshot({ path: `${SHOTS}/p101_02_multi_verified.png`, fullPage: true });
+  // the exact outgoing payloads
+  const out = await tapped(request, runId);
+  expect(out.length).toBe(total);
+  expect(countsBySt(out)).toEqual(Object.fromEntries(FOUR.map((x) => [x.st, x.n])));
+  expect(out.every((p) => p.upstream_status === 200 && p.index === EVENT_INDEX && p.host && p.kind === 'event')).toBeTruthy();
+  // independent search: count, index and host per sourcetype
+  const rows = await until(() => splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count values(index) as ix values(host) as hosts values(source) as src by sourcetype`), (r) => r.reduce((a, x) => a + Number(x.count), 0) >= total);
+  expect(rows.reduce((a, x) => a + Number(x.count), 0)).toBe(total);                                  // aggregate = sum, nothing double counted
+  for (const x of FOUR) {
+    const r = rows.find((y) => y.sourcetype === x.st)!;
+    expect(Number(r.count), `${x.st} indexed`).toBe(x.n);
+    expect([].concat(r.ix)).toEqual([EVENT_INDEX]);
+    expect([].concat(r.hosts).sort(), `${x.st}: host in Splunk is the host NetSpout sent`).toEqual([...new Set(out.filter((p) => p.sourcetype === x.st).map((p) => p.host))].sort());
+  }
+  const unrelated = await splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" NOT (${FOUR.map((x) => `sourcetype="${x.st}"`).join(' OR ')}) | stats count`);
+  expect(Number(unrelated[0]?.count ?? 0)).toBe(0);
+  // Investigate: the run investigation dashboard, opened with this run's tokens, shows the same counts
+  let dashboardEvidence: unknown = null;
+  if (WEB) {
+    const href = await page.getByTestId('investigate-dashboard').getAttribute('href');
+    expect(href).toContain(`form.run_tok=${runId}`); expect(href).toContain(`form.index_tok=${EVENT_INDEX}`);
+    const dash = await page.context().newPage();
+    await dash.setViewportSize({ width: 1500, height: 1500 });
+    await dash.goto(`${WEB}${href}`);
+    const tbl = dash.locator('#by_sourcetype');
+    await expect(tbl).toContainText('pan:traffic', { timeout: 120_000 });
+    const text = await tbl.innerText();
+    for (const x of FOUR) { expect(text).toContain(x.st); }
+    const dashRows = await tbl.locator('tbody tr').allInnerTexts();
+    for (const x of FOUR) expect(dashRows.some((r) => r.includes(x.st) && r.replace(/\s+/g, ' ').includes(` ${x.n} `) || r.includes(x.st) && r.split(/\s+/).includes(String(x.n))), `${x.st} count ${x.n} on the dashboard`).toBeTruthy();
+    await dash.screenshot({ path: `${SHOTS}/p101_03_run_investigation_dashboard.png`, fullPage: true });
+    dashboardEvidence = { href, rows: dashRows };
+    await dash.close();
+  }
+  save('multi_four_sourcetypes', { run_id: runId, requested: Object.fromEntries(FOUR.map((x) => [x.st, x.n])), outgoing_by_tap: countsBySt(out), indexes: [...new Set(out.map((p) => p.index))],
+    splunk: rows.map((r) => ({ sourcetype: r.sourcetype, count: Number(r.count), index: r.ix, hosts: r.hosts })), aggregate: { sent: total, indexed: total }, ui_outcome: await page.getByTestId('outcome-text').textContent(), dashboard: dashboardEvidence });
+});
+
+test('[multi] one event sourcetype and IOS XR metrics: events by search, metrics by mstats, each in its own index', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { metricIndex: METRIC_INDEX });
+  await addSources(page, request, ['cisco:asa', METRIC_ST]);
+  await page.getByTestId('count-cisco:asa').fill('9');
+  await page.getByTestId(`count-${METRIC_ST}`).fill('6');
+  await page.screenshot({ path: `${SHOTS}/p101_04_mixed_selected.png`, fullPage: true });
+  const runId = await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText(`events in index ${EVENT_INDEX} and`, { timeout: 180_000 });
+  await expect(page.getByTestId('outcome-text')).toContainText(`metric datapoints in metric index ${METRIC_INDEX} (mstats search)`);
+  await expect(page.getByTestId('outcome-text')).toContainText('Verified:');
+  await page.screenshot({ path: `${SHOTS}/p101_05_mixed_verified.png`, fullPage: true });
+  const out = await tapped(request, runId);
+  const ev = out.filter((p) => p.kind === 'event'), mt = out.filter((p) => p.kind === 'metric');
+  expect(ev.length).toBe(9); expect(mt.length).toBe(6);
+  expect(ev.every((p) => p.sourcetype === 'cisco:asa' && p.index === EVENT_INDEX)).toBeTruthy();
+  expect(mt.every((p) => p.sourcetype === METRIC_ST && p.index === METRIC_INDEX)).toBeTruthy();
+  const points = mt.reduce((n, p) => n + (p.metric_names?.length ?? 0), 0);
+  const evRows = await until(() => splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count by sourcetype`), (r) => Number(r[0]?.count ?? 0) >= 9);
+  expect(evRows.map((r) => [r.sourcetype, Number(r.count)])).toEqual([['cisco:asa', 9]]);
+  const mrows = await until(() => splunk(`| mstats count(_value) as n WHERE index=${METRIC_INDEX} AND metric_name=* AND netspout_run_id="${runId}"`), (r) => Number(r[0]?.n ?? 0) >= points);
+  expect(Number(mrows[0].n)).toBe(points);
+  const wrongIndex = await splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" sourcetype="${METRIC_ST}" | stats count`);
+  expect(Number(wrongIndex[0]?.count ?? 0), 'no metric landed in the event index').toBe(0);
+  await expect(page.getByTestId(`source-${METRIC_ST}`)).toContainText(`${points} of ${points} datapoints`);
+  save('multi_mixed_event_and_metric', { run_id: runId, events: { sourcetype: 'cisco:asa', index: EVENT_INDEX, sent: 9, found_by_search: 9 }, metrics: { sourcetype: METRIC_ST, index: METRIC_INDEX, events_sent: 6, datapoints_sent: points, datapoints_found_by_mstats: Number(mrows[0].n) }, ui_outcome: await page.getByTestId('outcome-text').textContent() });
+});
+
+test('[multi] a partly rejected batch: the failed source is named, the others are verified, nothing says Verified for the whole run', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapReset(request);
+  await configure(page);
+  await addSources(page, request, FOUR.map((x) => x.st));
+  for (const x of FOUR) await page.getByTestId(`count-${x.st}`).fill(String(x.n));
+  await tapMode(request, 'reject_st', 'fortigate_traffic');
+  const runId = await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('Only', { timeout: 180_000 });
+  await expect(page.getByTestId('outcome-text')).not.toContainText('Verified');
+  await expect(page.getByTestId('source-fortigate_traffic')).toContainText('Nothing accepted');
+  await expect(page.getByTestId('source-fortigate_traffic')).toHaveAttribute('data-result', /NOT_SENT/);
+  for (const st of ['cisco:asa', 'cisco:ios', 'pan:traffic']) await expect(page.getByTestId(`source-${st}`)).toHaveAttribute('data-result', 'VERIFIED', { timeout: 120_000 });
+  await expect(page.getByTestId('outcome')).toHaveAttribute('data-verification', 'PARTIAL', { timeout: 60_000 });
+  await page.screenshot({ path: `${SHOTS}/p101_06_multi_partial_rejection.png`, fullPage: true });
+  const rows = await splunk(`index=${EVENT_INDEX} netspout_run_id="${runId}" | stats count by sourcetype`);
+  expect(Object.fromEntries(rows.map((r) => [r.sourcetype, Number(r.count)]))).toEqual({ 'cisco:asa': 8, 'cisco:ios': 6, 'pan:traffic': 6 });
+  save('failure_multi_partial_rejection', { run_id: runId, rejected_sourcetype: 'fortigate_traffic', indexed_by_sourcetype: Object.fromEntries(rows.map((r) => [r.sourcetype, Number(r.count)])), ui: await page.getByTestId('outcome-text').textContent() });
+  await tapMode(request, 'pass');
+});
+
+test('[multi] accepted but not indexed in a multi-source run is never Verified', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapReset(request);
+  await configure(page);
+  await addSources(page, request, ['cisco:asa', 'cisco:ios']);
+  await tapMode(request, 'drop');
+  await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('Not confirmed', { timeout: 240_000 });
+  await expect(page.getByTestId('outcome-text')).not.toContainText('Verified');
+  await expect(page.getByTestId('outcome')).not.toHaveAttribute('data-verification', 'VERIFIED');
+  await page.screenshot({ path: `${SHOTS}/p101_07_multi_accepted_not_indexed.png`, fullPage: true });
+  await tapMode(request, 'pass');
+});
+
+test('[multi] a sourcetype that cannot send data is refused, not skipped', async ({ page, request }) => {
+  group('multi');
+  const c = await catalog(request);
+  const noGen = c.vendors.flatMap((v) => v.products.flatMap((p) => p.sourcetypes.filter((s) => s.block).map((s) => ({ v: v.id, p: p.name, s }))))[0];
+  await configure(page);
+  await open(page, '/generate/quick');
+  await page.getByTestId('show-all').check();
+  await page.getByTestId('mode-multi').check();
+  await page.getByTestId('vendor').selectOption(noGen.v);
+  await page.getByTestId('product').selectOption(noGen.p);
+  await page.getByTestId('sourcetype').selectOption(noGen.s.sourcetype);
+  await expect(page.getByTestId('add-source')).toBeDisabled();
+  await expect(page.getByTestId('add-blocked')).toContainText(noGen.s.block!.message);
+  const r = await request.post(`${API}/api/runs`, { data: { kind: 'multi', index: EVENT_INDEX, sources: [{ vendor_id: 'cisco_asa', sourcetype: 'cisco:asa', count: 2 }, { vendor_id: noGen.v, sourcetype: noGen.s.sourcetype, count: 2 }] } });
+  expect(r.status()).toBe(409);
+  expect(((await r.json()) as { detail: string }).detail).toContain(noGen.s.sourcetype);
+  save('failure_multi_unsupported', { sourcetype: noGen.s.sourcetype, ui: 'add disabled with the reason', api_status: r.status() });
+});
+
+test('[multi] an invalid Splunk destination in a multi-source run says Splunk did not receive the data', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(240_000);
+  await tapReset(request);
+  await configure(page, { hec: ENGINE_TAP ? 'http://127.0.0.1:19997/services/collector' : 'http://127.0.0.1:19997/services/collector' });
+  await addSources(page, request, ['cisco:asa', 'cisco:ios']);
+  await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('Splunk did not receive this data', { timeout: 200_000 });
+  await expect(page.getByTestId('outcome-text')).not.toContainText('Verified');
+});
+
+test('[multi] Splunk search unavailable: the multi-source result says it could not check, not Verified', async ({ page, request }) => {
+  group('multi');
+  test.setTimeout(300_000);
+  await tapMode(request, 'pass'); await tapReset(request);
+  await configure(page, { search: ENGINE_SEARCH.replace(/:\d+/, ':1') });
+  await addSources(page, request, ['cisco:asa', 'cisco:ios']);
+  await multiRun(page);
+  await expect(page.getByTestId('outcome-text')).toContainText('could not check', { timeout: 200_000 });
+  await expect(page.getByTestId('outcome-text')).not.toContainText('Verified');
+});
+
+// ------------------------------------------------------------------------------------------------------------------------------ Phase 10.1: engine connection (packaged app only)
+test('[engine] missing engine URL and unreachable engine are named, nothing is generated, and the saved address is the one used', async ({ page, request }) => {
+  group('engine');
+  test.skip(!WEB || !ENGINE_URL, 'needs the packaged app (PHASE9_SPLUNK_WEB and PHASE9_ENGINE_URL)');
+  test.setTimeout(240_000);
+  const saveEngineUrl = async (url: string) => { await open(page, '/system/connections'); await expect(page.getByTestId('engine-connection')).toBeVisible(); await page.getByTestId('engine-url').fill(url); await page.getByTestId('save-engine').click(); };
+  try {
+    await saveEngineUrl('');
+    await expect(page.getByTestId('engine-status')).toHaveText('Engine not configured.', { timeout: 30_000 });
+    await page.screenshot({ path: `${SHOTS}/p101_08_engine_not_configured_connections.png`, fullPage: true });
+    await open(page, '/generate/quick');
+    await expect(page.getByTestId('engine-notice')).toContainText('Engine not configured.', { timeout: 30_000 });
+    await expect(page.getByTestId('generate')).toBeDisabled();
+    await page.screenshot({ path: `${SHOTS}/p101_09_engine_not_configured_generate.png`, fullPage: true });
+    await open(page, '/generate/scenarios');
+    await expect(page.getByTestId('engine-notice')).toContainText('Engine not configured.');
+    await expect(page.getByTestId('run-scenario')).toBeDisabled();
+    const gw = await request.get(`${API}/api/runs`);
+    expect(gw.status()).toBe(503);
+    expect(((await gw.json()) as { detail: string }).detail).toBe('Engine not configured.');
+    // a port nothing listens on: configured, but not connected
+    await saveEngineUrl('http://127.0.0.1:9');
+    await expect(page.getByTestId('engine-status')).toHaveText('Engine not connected.', { timeout: 30_000 });
+    await open(page, '/generate/quick');
+    await expect(page.getByTestId('engine-notice')).toContainText('Engine not connected.', { timeout: 30_000 });
+    await expect(page.getByTestId('generate')).toBeDisabled();
+    await page.screenshot({ path: `${SHOTS}/p101_10_engine_not_connected.png`, fullPage: true });
+    const gw2 = await request.get(`${API}/api/runs`);
+    expect(gw2.status()).toBe(502);
+    expect(((await gw2.json()) as { detail: string }).detail).toBe('Engine not connected.');
+    // the demo port of the host is never contacted: with a wrong address the answer stays "not connected"
+    const bad = await request.post(`${API}/engine`, { data: { url: 'http://user:pw@host:1' } });
+    expect(bad.status()).toBe(422);
+    save('failure_engine_connection', { not_configured: { engine_status: 'Engine not configured.', gateway_http: gw.status() }, unreachable: { engine_status: 'Engine not connected.', gateway_http: gw2.status() }, invalid_url_http: bad.status() });
+  } finally {
+    await saveEngineUrl(ENGINE_URL);
+    await expect(page.getByTestId('engine-status')).toContainText('Engine connected', { timeout: 30_000 });
+  }
 });

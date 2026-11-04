@@ -1,0 +1,5 @@
+{
+ "sourcetype": "cisco:asa:syslog",
+ "ui": "add disabled with the reason",
+ "api_status": 409
+}

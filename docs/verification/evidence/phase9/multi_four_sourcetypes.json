@@ -1,0 +1,61 @@
+{
+ "run_id": "run-42113c661c17",
+ "requested": {
+  "cisco:asa": 8,
+  "cisco:ios": 6,
+  "fortigate_traffic": 5,
+  "pan:traffic": 6
+ },
+ "outgoing_by_tap": {
+  "cisco:asa": 8,
+  "cisco:ios": 6,
+  "fortigate_traffic": 5,
+  "pan:traffic": 6
+ },
+ "indexes": [
+  "ta_validation"
+ ],
+ "splunk": [
+  {
+   "sourcetype": "cisco:asa",
+   "count": 8,
+   "index": "ta_validation",
+   "hosts": "asa-fw-01"
+  },
+  {
+   "sourcetype": "cisco:ios",
+   "count": 6,
+   "index": "ta_validation",
+   "hosts": [
+    "device-01",
+    "device-02",
+    "device-03"
+   ]
+  },
+  {
+   "sourcetype": "fortigate_traffic",
+   "count": 5,
+   "index": "ta_validation",
+   "hosts": [
+    "device-01",
+    "device-02",
+    "device-03"
+   ]
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "count": 6,
+   "index": "ta_validation",
+   "hosts": [
+    "pa-3260-01.lab.example",
+    "pa-5250-01.lab.example"
+   ]
+  }
+ ],
+ "aggregate": {
+  "sent": 25,
+  "indexed": 25
+ },
+ "ui_outcome": "Verified: found 25 of 25 events in index ta_validation that this run sent.",
+ "dashboard": null
+}

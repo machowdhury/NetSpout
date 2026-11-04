@@ -1,0 +1,88 @@
+<form version="1.1" theme="dark">
+  <label>NetSpout Run Investigation</label>
+  <description>Everything one NetSpout run sent, found in Splunk by its run id. Opened from the run result with the run's own index and time range.</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="text" token="run_tok" searchWhenChanged="true">
+      <label>Run ID</label>
+    </input>
+    <input type="text" token="index_tok" searchWhenChanged="true">
+      <label>Event index</label>
+      <default>idx_network_ops</default>
+    </input>
+    <input type="text" token="mindex_tok" searchWhenChanged="true">
+      <label>Metric index</label>
+      <default>cisco_mdt_metrics</default>
+    </input>
+    <input type="time" token="global_time" searchWhenChanged="true">
+      <label>Time range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row depends="$run_tok$">
+    <panel>
+      <title>Events found, by sourcetype</title>
+      <table id="by_sourcetype">
+        <search>
+          <query>index="$index_tok$" netspout_run_id="$run_tok$" | stats count as events dc(host) as hosts values(host) as host_names min(_time) as first_event max(_time) as last_event by index sourcetype | convert ctime(first_event) ctime(last_event) | sort - events</query>
+          <earliest>$global_time.earliest$</earliest>
+          <latest>$global_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Events over time</title>
+      <chart id="over_time">
+        <search>
+          <query>index="$index_tok$" netspout_run_id="$run_tok$" | timechart span=10s count by sourcetype</query>
+          <earliest>$global_time.earliest$</earliest>
+          <latest>$global_time.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+  </row>
+  <row depends="$run_tok$">
+    <panel>
+      <title>Scenario phases (scenario runs)</title>
+      <table id="by_phase">
+        <search>
+          <query>index="$index_tok$" netspout_run_id="$run_tok$" netspout_phase=* | stats count as events min(_time) as first_event by netspout_phase | sort first_event | convert ctime(first_event)</query>
+          <earliest>$global_time.earliest$</earliest>
+          <latest>$global_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Metric datapoints by metric name (mstats)</title>
+      <table id="metrics">
+        <search>
+          <query>| mstats count(_value) as datapoints WHERE index="$mindex_tok$" AND metric_name=* AND netspout_run_id="$run_tok$" BY metric_name | sort - datapoints</query>
+          <earliest>$global_time.earliest$</earliest>
+          <latest>$global_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$run_tok$">
+    <panel>
+      <title>Latest events from this run</title>
+      <table id="samples">
+        <search>
+          <query>index="$index_tok$" netspout_run_id="$run_tok$" | sort - _time | head 20 | table _time host sourcetype _raw</query>
+          <earliest>$global_time.earliest$</earliest>
+          <latest>$global_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+</form>

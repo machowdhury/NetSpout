@@ -1,8 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { controlRun, getRun, verifyRun, type RunSnapshot } from '../../lib/runsApi';
+import { insideSplunk } from '../../lib/engineApi';
 
 const FINAL = ['COMPLETED', 'STOPPED', 'FAILED', 'INTERRUPTED'];
 const MAX_CHECKS = 6;
+const RESULT_WORD: Record<string, string> = { VERIFIED: 'Verified', INCOMPLETE: 'Not all found yet', NOT_SENT: 'Nothing accepted', UNKNOWN: 'Could not be checked', UNMATCHED: 'Could not be matched by name' };
+
+// Where the run's data can be examined in Splunk: the app's run-investigation dashboard (its own index, time range and run id) and a plain search.
+function investigationLinks(run: RunSnapshot) {
+  const m = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\/static\/app\/netspout\//);
+  if (!m) return null;
+  const idx = run.destination?.index ?? '', midx = run.destination?.metric_index ?? '';
+  const t0 = run.started_at ? Math.floor(Date.parse(run.started_at) / 1000) - 300 : Math.floor(Date.now() / 1000) - 3600;
+  const t1 = Math.floor(Date.now() / 1000) + 300;
+  const q = new URLSearchParams({ 'form.run_tok': run.run_id, 'form.index_tok': idx, 'form.global_time.earliest': String(t0), 'form.global_time.latest': String(t1) });
+  if (midx) q.set('form.mindex_tok', midx);
+  const search = new URLSearchParams({ q: `search index="${idx}" netspout_run_id="${run.run_id}" | stats count by sourcetype, host`, earliest: String(t0), latest: String(t1) });
+  const own = run.links?.dashboard_view;   // the scenario's own dashboard, when it has one
+  return { own: own ? `/${m[1]}/app/netspout/${own}?${q}` : null, dashboard: `/${m[1]}/app/netspout/netspout_run_investigation?${q}`, search: `/${m[1]}/app/search/search?${search}` };
+}
 type Verify = NonNullable<RunSnapshot['verification']>;
 
 // Plain-language answer to "did Splunk receive it?". Delivery (HEC accepted it) and indexing (a search finds it) are different facts, and the page
@@ -45,6 +61,11 @@ export function Outcome({ runId }: { runId: string }) {
     wantsEvents ? `${(verify?.indexed ?? 0) === 0 ? 'none of the' : `${verify?.indexed} of`} ${verify?.expected_log_events ?? c.accepted} events in index ${idx}` : '',
     wantsMetric ? `${(verify?.metric_datapoints_indexed ?? 0) === 0 ? 'none of the' : `${verify?.metric_datapoints_indexed} of`} ${verify?.metric_datapoints_expected} metric datapoints in metric index ${midx} (mstats search)` : '',
   ].filter(Boolean).join(' and ');
+  const sources = run.kind === 'scenario' || run.kind === 'multi' ? Object.entries(run.by_sourcetype ?? {}) : [];
+  const vs = Object.values(verify?.by_sourcetype ?? {}).filter((x) => x.accepted > 0);
+  const okSources = vs.filter((x) => x.status === 'VERIFIED').length, sentSources = vs.length;
+  const partial = final && sentSources > 1 && okSources > 0 && okSources < sentSources;
+  const links = final && accepted > 0 && run.kind !== 'replay' ? investigationLinks(run) : null;
   let tone = '', text = '';
   if (!final) text = `Sending… ${c.accepted.toLocaleString()} accepted by Splunk HEC so far${c.rejected ? `, ${c.rejected} rejected` : ''}${run.mode === 'continuous' ? ' (streaming until stopped)' : ''}.`;
   else if (run.state === 'FAILED' || (c.generated > 0 && c.accepted === 0)) { tone = 'sx-bad'; text = `Splunk did not receive this data. ${run.error ?? run.recent_errors?.slice(-1)[0]?.message ?? 'The destination rejected it or could not be reached.'}`; }
@@ -57,10 +78,34 @@ export function Outcome({ runId }: { runId: string }) {
   return (
     <div className="sx-box" data-testid="outcome" role="status" data-verification={verify?.status ?? 'PENDING'}>
       <p className={tone} data-testid="outcome-text">{text}</p>
+      {partial && <p className="sx-bad" data-testid="partial">Partly verified: {okSources} of {sentSources} sources were found in Splunk. The table shows which ones were not.</p>}
+      {sources.length > 0 && (
+        <table className="sx-table" data-testid="by-source"><thead><tr><th>Sourcetype</th><th>Goes to</th><th>Accepted</th><th>Rejected</th><th>Found in Splunk</th><th>Result</th></tr></thead>
+          <tbody>{sources.map(([st, c]) => { const v = verify?.by_sourcetype?.[st]; const metric = v?.kind === 'metric'; const rej = (c.rejected ?? 0) + (c.unknown ?? 0); return (
+            <tr key={st} data-testid={`source-${st}`} data-result={v?.status ?? (rej && !(c.accepted ?? 0) ? 'NOT_SENT' : 'PENDING')}>
+              <td><code>{st}</code></td><td>{metric ? `metric index ${v?.index}` : `index ${v?.index ?? idx}`}</td>
+              <td>{c.accepted ?? 0}</td><td>{rej}</td>
+              <td>{v ? (v.indexed === null ? 'unknown' : metric ? `${v.indexed} of ${v.expected} datapoints` : `${v.indexed} of ${v.expected}`) : '…'}</td>
+              <td className={v?.status === 'VERIFIED' ? 'sx-ok' : v || rej ? 'sx-bad' : ''}>{v ? RESULT_WORD[v.status] : rej && !(c.accepted ?? 0) ? 'Nothing accepted' : final ? 'Checking…' : 'Sending…'}</td>
+            </tr>); })}</tbody></table>
+      )}
+      {sources.length > 1 && final && (
+        <p className="sx-muted" data-testid="totals">Totals: {c.accepted} accepted · {c.rejected + c.unknown} rejected or unconfirmed{verify?.indexed != null ? ` · ${verify.indexed} events found in Splunk` : ''}{verify?.metric_datapoints_indexed != null ? ` · ${verify.metric_datapoints_indexed} of ${verify.metric_datapoints_expected} metric datapoints found` : ''}.</p>
+      )}
       <div className="sx-row">
         {run.controls.stop && <button type="button" data-testid="stop-run" onClick={() => void controlRun(runId, 'stop')}>Stop</button>}
         {final && accepted > 0 && <button type="button" data-testid="check-again" disabled={verifying} onClick={() => { attempts.current = 0; void doVerify(); }}>{verifying ? 'Checking…' : 'Check Splunk again'}</button>}
       </div>
+      {final && accepted > 0 && (
+        <div data-testid="investigate">
+          <b>Investigate</b>
+          {links ? <div className="sx-row">
+            {links.own && <a data-testid="investigate-scenario-dashboard" href={links.own} target="_blank" rel="noreferrer">Open the scenario's Dashboard Studio dashboard</a>}
+            <a data-testid="investigate-dashboard" href={links.dashboard} target="_blank" rel="noreferrer">Open this run in the investigation dashboard</a>
+            <a data-testid="investigate-search" href={links.search} target="_blank" rel="noreferrer">Search this run in Splunk</a>
+          </div> : <p className="sx-muted">{insideSplunk() ? '' : 'Open the app inside Splunk to investigate this run in a dashboard. Its run id is '}<code>{run.run_id}</code></p>}
+        </div>
+      )}
     </div>
   );
 }

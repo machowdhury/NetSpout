@@ -20,6 +20,9 @@ export interface CompatCatalog { labels: Record<CapabilityStatus, string>; vendo
 export interface PreviewEvent { raw: string | null; sourcetype: string; index: string; host: string; source: string; kind: 'event' | 'metric'; metrics: Record<string, number> | null }
 export interface Preview { sourcetype: string; vendor_id: string; generator_mode: string | null; provenance: string | null; status: CapabilityStatus | null; status_label: string | null; notes: string[]; events: PreviewEvent[]; disclaimer: string }
 
+export interface ScenarioPreview { scenario_id: string; available: boolean; note?: string; total_events?: number; by_sourcetype?: Record<string, number>; phases?: Array<{ phase: string; events: number }>; estimated_seconds?: number; estimate_note?: string;
+  samples?: Array<{ sourcetype: string; phase: string | null; index: string | null; host: string | null; kind: 'event' | 'metric'; raw: string | null; metrics: Record<string, number> | null }> }
+
 export interface ScenarioRequirement { sourcetype: string; status: CapabilityStatus; status_label: string; note?: string; block?: { code: string; message: string } | null }
 export interface ScenarioCompat {
   id: string; title: string; category: string | null; summary: string | null; engine: string | null; dashboard: string | null; required: ScenarioRequirement[];
@@ -49,5 +52,6 @@ export const compatApi = {
   catalog: () => call<CompatCatalog>('GET', '/api/compat/catalog'),
   scenarios: () => call<{ labels: Record<string, string>; scenarios: ScenarioCompat[] }>('GET', '/api/compat/scenarios'),
   preview: (vendor_id: string, sourcetype: string, count = 3, index?: string) => call<Preview>('POST', '/api/generate/preview', { vendor_id, sourcetype, count, index }),
+  scenarioPreview: (scenario_id: string, index?: string) => call<ScenarioPreview>('POST', '/api/scenarios/preview', { scenario_id, index }),
   dashboards: () => call<{ dashboards: Array<{ dashboard_id: string; scenario_id: string; runtime_scenario_id: string }> }>('GET', '/api/dashboards'),
 };

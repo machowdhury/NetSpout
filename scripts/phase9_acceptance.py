@@ -5,7 +5,7 @@
 
 --rc runs the same suite against the PACKAGED release candidate: the browser signs in to Splunk Web of the RC install lab (tests/lab/rc_install, web 39000), the app's own static bundle is served by
 Splunk, every API call goes through the app's gateway to the engine container built from the candidate's tarball, the event and metric indexes are the ones the app defines (idx_network_ops,
-cisco_mdt_metrics), a tap on 39990 fronts that lab's HEC, and add-ons are installed into that lab with scripts/phase10_rc_install.py. Evidence goes to docs/verification/evidence/phase10_rc[_ui].
+cisco_mdt_metrics), a tap on 39990 fronts that lab's HEC, and add-ons are installed into that lab with scripts/phase10_rc_install.py. Evidence goes to docs/verification/evidence/phase101_rc[_ui] (groups: asa ios fortinet pan metrics multi engine).
 
 Prerequisites (started by the operator, all isolated from the demo): the recording tap (scripts/phase9_hec_proxy.py, 19990), a backend with its own config dir
 (backend/run.py --port 18681 with NETSPOUT_CONFIG_DIR set), and the Vite dev server (14273). For each group the matching add-on is installed in the lab (one at a time, via
@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKS = Path.home() / "netspout/private-packs"
 ASA = ("Splunk_TA_cisco-asa", "splunk-add-on-for-cisco-asa_612.spl")
 TA = {"asa": ASA, "ios": ("TA_cisco_catalyst", "cisco-enterprise-networking-add-on-for-splunk_4060.tgz"), "fortinet": ("Splunk_TA_fortinet_fortigate", "fortinet-fortigate-add-on-for-splunk_1610.tar.gz"),
-      "pan": ("Splunk_TA_paloalto_networks", "splunk-add-on-for-palo-alto-networks_400.spl"), "metrics": ASA}
+      "pan": ("Splunk_TA_paloalto_networks", "splunk-add-on-for-palo-alto-networks_400.spl"), "metrics": ASA, "multi": ASA, "engine": ASA}
 MANAGED = {v[0] for v in TA.values()}
 RC = False
 LAB_TA = [sys.executable, str(ROOT / "scripts/lab_ta.py")]
@@ -56,7 +56,7 @@ def run_group(g):
     if RC:
         env.update(PHASE9_SPLUNK_WEB="http://127.0.0.1:39000", PHASE9_API_BASE="http://127.0.0.1:39000/en-US/splunkd/__raw/services/netspout_gateway", PHASE9_TAP="http://127.0.0.1:39990",
                    PHASE9_ENGINE_TAP="http://127.0.0.1:39990", PHASE9_ENGINE_SEARCH_URL="https://127.0.0.1:8089/services/search/jobs/export", PHASE9_LAB_ENV=str(ROOT / "tests/lab/rc_install/.env.lab"),
-                   PHASE9_EVENT_INDEX="idx_network_ops", PHASE9_METRIC_INDEX="cisco_mdt_metrics", PHASE9_OUT="phase10_rc", PLAYWRIGHT_BASE_URL="http://127.0.0.1:39000")
+                   PHASE9_EVENT_INDEX="idx_network_ops", PHASE9_METRIC_INDEX="cisco_mdt_metrics", PHASE9_OUT="phase101_rc", PHASE9_ENGINE_URL="http://engine:8081", PLAYWRIGHT_BASE_URL="http://127.0.0.1:39000")
     return subprocess.run(["npx", "playwright", "test", "tests/phase9-acceptance.spec.ts", "--workers=1", "--trace", "off", "--reporter=list"], cwd=ROOT / "frontend", env=env).returncode
 
 
@@ -64,7 +64,7 @@ def main(a):
     if "--rc" in a:
         a.remove("--rc")
         rc_mode()
-    groups = a or ["asa", "ios", "fortinet", "pan", "metrics"]
+    groups = a or ["asa", "ios", "fortinet", "pan", "metrics", "multi"] + (["engine"] if RC else [])
     rc = {}
     try:
         for g in groups:

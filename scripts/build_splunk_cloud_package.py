@@ -21,11 +21,11 @@ OUT = ROOT / "netspout_cloud.spl"
 APP_CONF = """[launcher]
 author = Mahamudul Chowdhury
 description = PulseForge scenario dashboards for Splunk: Dashboard Studio views over telemetry produced by a customer-hosted PulseForge engine
-version = 2.0.0
+version = 2.0.1
 
 [id]
 name = netspout
-version = 2.0.0
+version = 2.0.1
 
 [package]
 id = netspout

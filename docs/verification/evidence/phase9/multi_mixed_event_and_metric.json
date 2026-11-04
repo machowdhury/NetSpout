@@ -1,0 +1,17 @@
+{
+ "run_id": "run-615193aaaaab",
+ "events": {
+  "sourcetype": "cisco:asa",
+  "index": "ta_validation",
+  "sent": 9,
+  "found_by_search": 9
+ },
+ "metrics": {
+  "sourcetype": "cisco:ios:mdt:metric",
+  "index": "cisco_metrics",
+  "events_sent": 6,
+  "datapoints_sent": 28,
+  "datapoints_found_by_mstats": 28
+ },
+ "ui_outcome": "Verified: found 9 of 9 events in index ta_validation and 28 of 28 metric datapoints in metric index cisco_metrics (mstats search) that this run sent."
+}

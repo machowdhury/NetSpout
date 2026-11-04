@@ -85,7 +85,7 @@ def engine_status(session_key):
     if not url:
         return {"configured": False, "connected": False, "url": "", "message": "Engine not configured."}
     try:
-        with urllib.request.urlopen(url + "/health", timeout=4) as r:
+        with urllib.request.urlopen(url + "/api/health", timeout=4) as r:
             health = json.loads(r.read().decode() or "{}")
         return {"configured": True, "connected": True, "url": url, "message": "Engine connected.", "version": health.get("version")}
     except Exception:

@@ -29,8 +29,6 @@ _LOOPBACK_CTX.verify_mode = ssl.CERT_NONE
 
 
 ENGINE_CONF = "https://127.0.0.1:8089/servicesNS/nobody/netspout/configs/conf-netspout_engine"
-_CACHE = {"url": None, "at": 0.0}
-CACHE_SECONDS = 5
 
 
 def normalize_engine_url(value):
@@ -52,18 +50,15 @@ def _splunk(url, session_key, data=None):
 
 
 def configured_engine(session_key):
-    """The URL the customer saved in the app's own configuration (netspout_engine.conf, stanza [engine]); "" when none. There is NO default engine: nothing is guessed."""
-    import time
-    if _CACHE["url"] is not None and time.time() - _CACHE["at"] < CACHE_SECONDS:
-        return _CACHE["url"]
+    """The URL the customer saved in the app's own configuration (netspout_engine.conf, stanza [engine]); "" when none. There is NO default engine: nothing is guessed.
+    Read on every request (about 9 ms): a change made in Connections or directly in the configuration applies to the very next request and never routes to an old engine."""
     try:
         url = _splunk(ENGINE_CONF + "/engine", session_key)["entry"][0]["content"].get("url", "") or ""
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
         url = ""
-    _CACHE.update(url=url.strip().rstrip("/"), at=time.time())
-    return _CACHE["url"]
+    return url.strip().rstrip("/")
 
 
 def save_engine(session_key, url):
@@ -73,7 +68,6 @@ def save_engine(session_key, url):
         if e.code != 404:
             raise
         _splunk(ENGINE_CONF, session_key, {"name": "engine", "url": url})
-    _CACHE.update(url=url, at=0.0)
 
 
 NOT_CONFIGURED = {"detail": "Engine not configured.", "code": "ENGINE_NOT_CONFIGURED"}

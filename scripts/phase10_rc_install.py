@@ -53,9 +53,18 @@ def dexec(c, *cmd):
     return subprocess.run(["docker", "exec", c] + list(cmd), capture_output=True, text=True)
 
 
-def install(rc):
-    wait()
+def package_version(pkg):
+    with tarfile.open(pkg) as tf:
+        conf = next(m for m in tf.getmembers() if m.name.endswith("/default/app.conf"))
+        return next(l.split("=")[1].strip() for l in tf.extractfile(conf).read().decode().splitlines() if l.startswith("version"))
+
+
+def install(rc, allow_other_version=False):
     pkg = Path(rc) / "netspout.spl"
+    built, want = package_version(pkg), json.loads((ROOT / "frontend/package.json").read_text())["version"]
+    if built != want and not allow_other_version:   # a stale build (for example the 2.0.0 binary in the repository root) must not be installed by mistake
+        raise SystemExit("refusing to install %s: it is version %s, the source is %s" % (pkg, built, want))
+    wait()
     subprocess.run(["docker", "cp", str(pkg), "%s:/tmp/rc_netspout.spl" % SPLUNK], check=True)
     out = rest("/services/apps/local?output_mode=json", {"name": "/tmp/rc_netspout.spl", "filename": "true", "update": "true"})
     c = out["entry"][0]["content"]

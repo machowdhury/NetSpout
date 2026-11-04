@@ -7,7 +7,7 @@ export function EngineConnection() {
   const [url, setUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  useEffect(() => { if (insideSplunk()) engineStatus().then((s) => { setStatus(s); setUrl(s.url); }, (e) => setError(e instanceof Error ? e.message : String(e))); }, []);
+  useEffect(() => { if (insideSplunk()) engineStatus().then((s) => { setStatus(s); setUrl((typed) => typed || s.url); }, (e) => setError(e instanceof Error ? e.message : String(e))); }, []);
   if (!insideSplunk()) return null;
   const save = async () => {
     setBusy(true); setError('');

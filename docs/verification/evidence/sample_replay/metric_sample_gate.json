@@ -1,0 +1,128 @@
+{
+ "definition": "genuine Splunk metric-index sourcetype per catalog data_kind=metric; replay allowed only when every event carries numeric measurements; log sourcetypes with numeric fields are never converted",
+ "rows": [
+  {
+   "sourcetype": "cisco:intersight:metrics",
+   "vendor_id": "cisco_intersight",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "cisco:intersight:metrics is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "cisco:ios:mdt:metric",
+   "vendor_id": "cisco_ios",
+   "native_generator": true,
+   "replay_events": 3,
+   "replay_status": "VERIFIED_PUBLIC_SAMPLE",
+   "reason": null,
+   "sample_source": "netspout/appserver/static/samples/cisco-ios-mdt-metric/cisco-ios-mdt-metric.yml"
+  },
+  {
+   "sourcetype": "cisco:metrics",
+   "vendor_id": "cisco_ios",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "SAMPLE_INVALID",
+   "reason": "sample invalid: cisco-metrics-splunk-otel.yml: sample file claims ['httpevent'], not cisco:metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "cisco:thousandeyes:metric",
+   "vendor_id": "cisco_ios",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "cisco:thousandeyes:metric is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "extrahop:eda:metrics",
+   "vendor_id": "extrahop",
+   "native_generator": false,
+   "replay_events": 2,
+   "replay_status": "VERIFIED_PUBLIC_SAMPLE",
+   "reason": null,
+   "sample_source": "netspout/appserver/static/samples/extrahop-metrics-performance/extrahop-metrics-performance.yml"
+  },
+  {
+   "sourcetype": "kube:container:metrics",
+   "vendor_id": "splunk",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "kube:container:metrics is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "kube:container:metrics-server",
+   "vendor_id": "splunk",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "kube:container:metrics-server is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "nutanixpc_cluster_performance",
+   "vendor_id": "nutanix",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "nutanixpc_cluster_performance is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "nutanixpc_disk_performance",
+   "vendor_id": "nutanix",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "nutanixpc_disk_performance is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "nutanixpc_host_performance",
+   "vendor_id": "nutanix",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "nutanixpc_host_performance is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "nutanixpc_vm_performance",
+   "vendor_id": "nutanix",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "nutanixpc_vm_performance is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "sc4snmp:metric",
+   "vendor_id": "sc4snmp",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "UNSUPPORTED_TELEMETRY",
+   "reason": "No verified public sample or documented vendor contract exists for sourcetype 'sc4snmp:metric'",
+   "sample_source": null
+  },
+  {
+   "sourcetype": "vmware:perf:cpu",
+   "vendor_id": "vmware_nsx",
+   "native_generator": false,
+   "replay_events": 0,
+   "replay_status": "METRIC_REPLAY_UNSUPPORTED",
+   "reason": "vmware:perf:cpu is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics",
+   "sample_source": null
+  }
+ ],
+ "summary": {
+  "METRIC_REPLAY_UNSUPPORTED": 9,
+  "VERIFIED_PUBLIC_SAMPLE": 2,
+  "SAMPLE_INVALID": 1,
+  "UNSUPPORTED_TELEMETRY": 1
+ }
+}

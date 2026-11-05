@@ -1,0 +1,1835 @@
+{
+ "summary": {
+  "package_files": 171,
+  "files_inspected": 171,
+  "files_failed": 0,
+  "byte_identical_duplicate_files": 11,
+  "distinct_app_identities": 162,
+  "distinct_app_ids": 162,
+  "distinct_vendor_groups_by_monitored_product": 97,
+  "distinct_publishers_app_conf_author": 97,
+  "ta_sourcetype_names_distinct_incl_patterns": 1649,
+  "ta_sourcetype_names_literal": 1634,
+  "ta_sourcetype_patterns": 15,
+  "catalog_vendors": 88,
+  "catalog_sourcetypes": 349,
+  "catalog_products": 347,
+  "match_types": {
+   "none": 75,
+   "candidate": 121,
+   "exact": 126,
+   "conflict": 27
+  },
+  "naming_conflicts": 27,
+  "exact_with_payload_conflict": 11,
+  "exact_with_routing_conflict": 2,
+  "format_verification": {
+   "NOT_APPLICABLE": 214,
+   "NOT_CHECKABLE": 37,
+   "FORMAT_VERIFIED": 16,
+   "FORMAT_PARTIAL": 36,
+   "STRUCTURE_ONLY": 35,
+   "FORMAT_CONFLICT": 11
+  },
+  "generators_valid": 245,
+  "generators_valid_exact": 96,
+  "sample_backed": 235,
+  "live_verified": 6,
+  "catalog_sourcetypes_without_covering_package": 75,
+  "catalog_sourcetypes_not_defined_by_any_package": 223,
+  "ta_sourcetypes_absent_from_netspout": 1499,
+  "ingestion_support_exact_rows": {
+   "SUPPORTED_DELIVERY": 40,
+   "SUBSTITUTE_VIA_HEC": 85,
+   "NOT_EMULATED": 1
+  },
+  "reconciliation_with_phase4": {
+   "phase4_exact_names_in_14_packages": 89,
+   "phase5_catalog_names_defined_by_the_same_14_packages": 89,
+   "equal": true,
+   "note": "Phase 5 re-classifies names that an add-on only renames (legacy names) as naming conflicts, so its exact count is lower than the literal-name count"
+  }
+ },
+ "vendors": [
+  {
+   "vendor_id": "a10_networks",
+   "vendor": "A10 Networks",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "amazon_aws",
+   "vendor": "Amazon Web Services",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "Splunk_TA_aws",
+    "SA-aws_security_hub"
+   ],
+   "exact_canonical_matches": 4,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 4,
+   "live_verified": 0,
+   "specialized_ingestion_required": 2,
+   "main_blockers": [
+    "no exact match live-verified",
+    "4 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "arista_eos",
+   "vendor": "Arista Networks",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "aristanetworks"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 3,
+   "sample_backed": 3,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "aruba_cx",
+   "vendor": "Aruba / HPE",
+   "products": 6,
+   "catalog_sourcetypes": 6,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-aruba_networks"
+   ],
+   "exact_canonical_matches": 3,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 4,
+   "sample_backed": 4,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "1 naming conflicts",
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "atlassian",
+   "vendor": "Atlassian",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "confluence_and_jira_audit_addon_for_splunk",
+    "bitbucket_addon_for_splunk"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "barracuda",
+   "vendor": "Barracuda Networks",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "BarracudaEGD"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "beyondtrust",
+   "vendor": "BeyondTrust",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "bitdefender",
+   "vendor": "Bitdefender",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "checkpoint",
+   "vendor": "Check Point Software",
+   "products": 3,
+   "catalog_sourcetypes": 3,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_duo",
+   "vendor": "Cisco Duo",
+   "products": 10,
+   "catalog_sourcetypes": 10,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "CiscoSecurityCloud"
+   ],
+   "exact_canonical_matches": 7,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 8,
+   "sample_backed": 9,
+   "live_verified": 0,
+   "specialized_ingestion_required": 10,
+   "main_blockers": [
+    "1 naming conflicts",
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_meraki",
+   "vendor": "Cisco Meraki",
+   "products": 17,
+   "catalog_sourcetypes": 17,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_cisco_meraki"
+   ],
+   "exact_canonical_matches": 14,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 14,
+   "sample_backed": 14,
+   "live_verified": 0,
+   "specialized_ingestion_required": 17,
+   "main_blockers": [
+    "no exact match live-verified",
+    "3 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_aci",
+   "vendor": "Cisco Systems",
+   "products": 8,
+   "catalog_sourcetypes": 8,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 6,
+   "sample_backed": 6,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_asa",
+   "vendor": "Cisco Systems",
+   "products": 6,
+   "catalog_sourcetypes": 6,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "Splunk_TA_cisco-asa",
+    "CiscoSecurityCloud"
+   ],
+   "exact_canonical_matches": 5,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 3,
+   "live_verified": 1,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 naming conflicts",
+    "4 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_catalyst",
+   "vendor": "Cisco Systems",
+   "products": 34,
+   "catalog_sourcetypes": 34,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA_cisco_catalyst"
+   ],
+   "exact_canonical_matches": 17,
+   "naming_conflicts": 2,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 32,
+   "sample_backed": 32,
+   "live_verified": 0,
+   "specialized_ingestion_required": 33,
+   "main_blockers": [
+    "2 naming conflicts",
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_intersight",
+   "vendor": "Cisco Systems",
+   "products": 11,
+   "catalog_sourcetypes": 11,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_Cisco_Intersight"
+   ],
+   "exact_canonical_matches": 11,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 2,
+   "valid_generators": 10,
+   "sample_backed": 11,
+   "live_verified": 0,
+   "specialized_ingestion_required": 11,
+   "main_blockers": [
+    "2 exact matches with payload/routing conflicts",
+    "no exact match live-verified",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_ios",
+   "vendor": "Cisco Systems",
+   "products": 26,
+   "catalog_sourcetypes": 26,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA_cisco_catalyst"
+   ],
+   "exact_canonical_matches": 13,
+   "naming_conflicts": 5,
+   "payload_or_routing_conflicts": 2,
+   "valid_generators": 14,
+   "sample_backed": 18,
+   "live_verified": 1,
+   "specialized_ingestion_required": 23,
+   "main_blockers": [
+    "5 naming conflicts",
+    "2 exact matches with payload/routing conflicts",
+    "12 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_ise",
+   "vendor": "Cisco Systems",
+   "products": 7,
+   "catalog_sourcetypes": 7,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "Splunk_TA_cisco-ise",
+    "TA_cisco_catalyst"
+   ],
+   "exact_canonical_matches": 5,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 6,
+   "sample_backed": 7,
+   "live_verified": 0,
+   "specialized_ingestion_required": 4,
+   "main_blockers": [
+    "no exact match live-verified",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "cisco_sdwan",
+   "vendor": "Cisco Systems",
+   "products": 41,
+   "catalog_sourcetypes": 41,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA_cisco_catalyst"
+   ],
+   "exact_canonical_matches": 8,
+   "naming_conflicts": 2,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 40,
+   "sample_backed": 40,
+   "live_verified": 0,
+   "specialized_ingestion_required": 37,
+   "main_blockers": [
+    "2 naming conflicts",
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "citrix_netscaler",
+   "vendor": "Citrix / Cloud Software Group",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_citrix-netscaler"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 naming conflicts",
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "claroty",
+   "vendor": "Claroty",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "cloudflare",
+   "vendor": "Cloudflare",
+   "products": 3,
+   "catalog_sourcetypes": 3,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "cloudflare",
+    "TA_cloudflare_r2"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 3,
+   "main_blockers": [
+    "1 naming conflicts",
+    "no exact match live-verified",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "crowdstrike",
+   "vendor": "CrowdStrike",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 4,
+   "matching_addon_ids": [
+    "Splunk_TA_CrowdStrike_FDR",
+    "TA-crowdstrike-falcon-event-streams",
+    "TA_crowdstrike_falcon_detections",
+    "TA-crowdstrike_falcon_discover"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "crushftp",
+   "vendor": "CrushFTP",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "cybereason",
+   "vendor": "Cybereason",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "darktrace",
+   "vendor": "Darktrace",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "dell_os10",
+   "vendor": "Dell Technologies",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "docker",
+   "vendor": "Docker",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-docker-add-on-for-splunk"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "elastic",
+   "vendor": "Elastic",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-elastic-search"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "extrahop",
+   "vendor": "ExtraHop Networks",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-extrahop_addon"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 2,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "extreme_networks",
+   "vendor": "Extreme Networks",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "f5_bigip",
+   "vendor": "F5 Networks",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_f5-bigip"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "forcepoint",
+   "vendor": "Forcepoint",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "fortinet",
+   "vendor": "Fortinet",
+   "products": 7,
+   "catalog_sourcetypes": 8,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_fortinet_fortigate"
+   ],
+   "exact_canonical_matches": 2,
+   "naming_conflicts": 2,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 5,
+   "sample_backed": 5,
+   "live_verified": 1,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "2 naming conflicts",
+    "3 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "github",
+   "vendor": "GitHub",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "gitlab",
+   "vendor": "GitLab",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "TA-gitlab-add-on-for-splunk",
+    "TA-gitlab-saas-add-on-for-splunk",
+    "TA_gitlab"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "google_cloud",
+   "vendor": "Google Cloud",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_google-cloudplatform"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "google_workspace",
+   "vendor": "Google Workspace",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_Google_Workspace"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 2,
+   "main_blockers": [
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "hashicorp",
+   "vendor": "HashiCorp",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "huawei_vrp",
+   "vendor": "Huawei Technologies",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "ibm_qradar",
+   "vendor": "IBM",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "ibm_mq",
+   "vendor": "IBM MQ",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "imperva",
+   "vendor": "Imperva",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_CCX_Imperva_WAF"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "juniper_junos",
+   "vendor": "Juniper Networks",
+   "products": 3,
+   "catalog_sourcetypes": 3,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_juniper"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 3,
+   "sample_backed": 3,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "1 naming conflicts"
+   ]
+  },
+  {
+   "vendor_id": "kubernetes",
+   "vendor": "Kubernetes & Falco (CNCF)",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "linux_infrastructure",
+   "vendor": "Linux Infrastructure",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_nix"
+   ],
+   "exact_canonical_matches": 3,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 3,
+   "live_verified": 0,
+   "specialized_ingestion_required": 2,
+   "main_blockers": [
+    "no exact match live-verified",
+    "4 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "microsoft_365",
+   "vendor": "Microsoft 365",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "splunk_ta_o365",
+    "TA_MS_Teams",
+    "Splunk_TA_MS_Security"
+   ],
+   "exact_canonical_matches": 3,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 4,
+   "main_blockers": [
+    "no exact match live-verified",
+    "4 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "microsoft_azure",
+   "vendor": "Microsoft Azure Monitor",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "TA-MS-AAD",
+    "Splunk_TA_microsoft-cloudservices"
+   ],
+   "exact_canonical_matches": 2,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 2,
+   "main_blockers": [
+    "no exact match live-verified",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "microsoft_windows",
+   "vendor": "Microsoft Windows",
+   "products": 8,
+   "catalog_sourcetypes": 8,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "Splunk_TA_windows",
+    "Splunk_TA_microsoft_sysmon",
+    "SA-admon"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 5,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 3,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "5 naming conflicts",
+    "8 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "mikrotik",
+   "vendor": "MikroTik",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "model_context_protocol",
+   "vendor": "Model Context Protocol (agentic AI)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "mongodb",
+   "vendor": "MongoDB",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "netscout",
+   "vendor": "NetScout Systems",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Omnis_Streamer-TA"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "netskope",
+   "vendor": "Netskope",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-NetSkopeAppForSplunk"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 2,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 4,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "2 naming conflicts",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "nginx_f5",
+   "vendor": "NGINX (F5)",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_nginx"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 1,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 naming conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "nokia_sr",
+   "vendor": "Nokia",
+   "products": 3,
+   "catalog_sourcetypes": 3,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "nozomi_networks",
+   "vendor": "Nozomi Networks",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "nutanix",
+   "vendor": "Nutanix",
+   "products": 16,
+   "catalog_sourcetypes": 16,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 10,
+   "sample_backed": 14,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "6 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "okta",
+   "vendor": "Okta",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_okta_identity_cloud"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "ollama",
+   "vendor": "Ollama (local LLM runtime)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "opentelemetry",
+   "vendor": "OpenTelemetry",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_otel_windows_x86_64"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "oracle",
+   "vendor": "Oracle",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "osquery",
+   "vendor": "osquery",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-OSqueryv1"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "palo_alto",
+   "vendor": "Palo Alto Networks",
+   "products": 5,
+   "catalog_sourcetypes": 5,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_paloalto_networks"
+   ],
+   "exact_canonical_matches": 4,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 3,
+   "sample_backed": 3,
+   "live_verified": 3,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "pfsense_netgate",
+   "vendor": "pfSense (Netgate)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "proofpoint",
+   "vendor": "Proofpoint",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 4,
+   "matching_addon_ids": [
+    "TA-bxti-proofpoint-ser",
+    "TA-pps_ondemand",
+    "TA-proofpoint-casb-addon-for-splunk",
+    "TA-proofpoint-incidents"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "qualys",
+   "vendor": "Qualys",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-Qualys-Cloud-Connector"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "radware",
+   "vendor": "Radware",
+   "products": 3,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 2,
+   "sample_backed": 2,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "rapid7",
+   "vendor": "Rapid7",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 2,
+   "matching_addon_ids": [
+    "TA-rapid7-insightvm",
+    "TA-insightappsec"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "sailpoint",
+   "vendor": "SailPoint",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-sailpoint-identitynow-auditevent-add-on"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "sentinelone",
+   "vendor": "SentinelOne",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "slack",
+   "vendor": "Slack",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-slack-add-on-for-splunk"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "sonicwall",
+   "vendor": "SonicWall",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "sonicwall_sma1000_ta"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "sophos",
+   "vendor": "Sophos",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "TA-sophos_xg_firewall",
+    "TA-sophos-central-cef",
+    "TA-sophos-email-security"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no exact match live-verified",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "splunk",
+   "vendor": "Splunk / Native",
+   "products": 21,
+   "catalog_sourcetypes": 21,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "Splunk_TA_stream_wire_data",
+    "Splunk_TA_stream",
+    "splunk_app_stream_ipfix_cisco_hsl"
+   ],
+   "exact_canonical_matches": 2,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 16,
+   "sample_backed": 18,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "no exact match live-verified",
+    "5 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "sc4snmp",
+   "vendor": "Splunk Community / SC4SNMP",
+   "products": 6,
+   "catalog_sourcetypes": 6,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 5,
+   "sample_backed": 5,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "suricata_oisf",
+   "vendor": "Suricata (OISF)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Splunk_TA_CCX_Suricata"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "broadcom_symantec",
+   "vendor": "Symantec (Broadcom), Web & Network Security",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 3,
+   "matching_addon_ids": [
+    "Splunk_TA_bluecoat-proxysg",
+    "Splunk_TA_symantec-ep",
+    "Splunk_TA_CCX_Symantec_BlueCoat_ProxySG_Extensions"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "sysdig",
+   "vendor": "Sysdig",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-Sysdig"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "tanium",
+   "vendor": "Tanium",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-Tanium"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "tenable",
+   "vendor": "Tenable",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-tenable"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 1,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "1 exact matches with payload/routing conflicts",
+    "no exact match live-verified"
+   ]
+  },
+  {
+   "vendor_id": "traefik",
+   "vendor": "Traefik Labs",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "trellix_mcafee",
+   "vendor": "Trellix (formerly McAfee)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "Trellix_Splunk"
+   ],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 1,
+   "main_blockers": [
+    "covering add-on defines none of the catalog's sourcetype names"
+   ]
+  },
+  {
+   "vendor_id": "veeam",
+   "vendor": "Veeam",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "vmware_nsx",
+   "vendor": "VMware by Broadcom",
+   "products": 4,
+   "catalog_sourcetypes": 4,
+   "downloaded_matching_addons": 5,
+   "matching_addon_ids": [
+    "TA-nsx",
+    "Splunk_TA_vmware",
+    "TA-vmware-vision",
+    "TA-vmware_esxi_syslog",
+    "Splunk_TA_vmware_inframon"
+   ],
+   "exact_canonical_matches": 2,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no exact match live-verified",
+    "3 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "watchguard",
+   "vendor": "WatchGuard",
+   "products": 2,
+   "catalog_sourcetypes": 2,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "2 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "wazuh",
+   "vendor": "Wazuh",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 1,
+   "sample_backed": 0,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor"
+   ]
+  },
+  {
+   "vendor_id": "zeek",
+   "vendor": "Zeek (Bro)",
+   "products": 1,
+   "catalog_sourcetypes": 1,
+   "downloaded_matching_addons": 0,
+   "matching_addon_ids": [],
+   "exact_canonical_matches": 0,
+   "naming_conflicts": 0,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 0,
+   "sample_backed": 1,
+   "live_verified": 0,
+   "specialized_ingestion_required": 0,
+   "main_blockers": [
+    "no downloaded add-on covers this vendor",
+    "1 sourcetypes have no working generator"
+   ]
+  },
+  {
+   "vendor_id": "zscaler_zia",
+   "vendor": "Zscaler",
+   "products": 6,
+   "catalog_sourcetypes": 6,
+   "downloaded_matching_addons": 1,
+   "matching_addon_ids": [
+    "TA-Zscaler_CIM"
+   ],
+   "exact_canonical_matches": 1,
+   "naming_conflicts": 2,
+   "payload_or_routing_conflicts": 0,
+   "valid_generators": 3,
+   "sample_backed": 4,
+   "live_verified": 0,
+   "specialized_ingestion_required": 5,
+   "main_blockers": [
+    "2 naming conflicts",
+    "no exact match live-verified",
+    "3 sourcetypes have no working generator"
+   ]
+  }
+ ]
+}

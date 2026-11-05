@@ -44,12 +44,12 @@ Use PulseForge through Splunk Web. The file also publishes the engine's own API 
 
 > **Status:** verified end to end on Splunk Enterprise 10.2.7 in an isolated Docker lab. A VM or physical-host install follows the same steps but was not run.
 
-This release has **two parts**: the app (`netspout.spl`) and the PulseForge engine, which generates the telemetry. You run the engine yourself. Splunk starts nothing for you.
+This release has **two parts**: the app (`netspout.spl`, a versioned release artifact: it is not stored in Git, see [Release artifacts](RELEASE_ARTIFACTS.md)) and the PulseForge engine, which generates the telemetry. You run the engine yourself. Splunk starts nothing for you.
 
 **Prerequisites:** Splunk Enterprise and an account that can install apps; a host for the engine with Python 3.11 or newer; HEC enabled with a token for an index you are allowed to write to.
 
 **Install the app**
-1. Splunk Web → *Apps* → *Manage Apps* → *Install app from file*, choose `netspout.spl`, restart Splunk if asked.
+1. Splunk Web → *Apps* → *Manage Apps* → *Install app from file*, choose the `netspout.spl` you downloaded (verify it against `SHA256SUMS`), restart Splunk if asked.
 
 **Install and start the engine** (from `pulseforge-engine.tar.gz`)
 ```bash
@@ -58,7 +58,7 @@ sudo tar xzf pulseforge-engine.tar.gz -C /opt
 sudo install -m 600 /opt/pulseforge-engine/deploy/engine/engine.env.example /etc/pulseforge/engine.env   # edit: port, state directory, secrets
 /opt/pulseforge-engine/deploy/engine/pulseforge-engine
 ```
-The engine listens on `127.0.0.1:8081` by default. If it is on another port or host, point Splunk's gateway at it with `NETSPOUT_BACKEND_URL`; the exact steps, and a systemd unit, are in [the installation guide](guides/03_INSTALLATION.md). **You use PulseForge through Splunk Web, not through the engine's port.**
+The engine listens on `127.0.0.1:8081` by default. Enter its URL once under **Connections > PulseForge Engine** in the app (there is no default and no environment variable; see the upgrade notes in `contracts/phase11/PHASE11_UPGRADE.md`); a systemd unit and the other steps are in [the installation guide](guides/03_INSTALLATION.md). **You use PulseForge through Splunk Web, not through the engine's port.**
 
 **Who can do what:** the Splunk roles `admin`, `sc_admin` and `power` can start runs and change settings; other roles are read-only.
 
@@ -66,4 +66,4 @@ The engine listens on `127.0.0.1:8081` by default. If it is on another port or h
 
 **Upgrade:** install the newer `netspout.spl` over the old one, restart Splunk, and keep the engine's state directory.
 **Uninstall:** *Manage Apps* → *Delete*, stop the engine, and delete its state directory. Your indexes and data stay.
-**Troubleshooting:** pages say the engine is unreachable → check that it is running and that `NETSPOUT_BACKEND_URL` is right ([Troubleshooting](TROUBLESHOOTING.md)).
+**Troubleshooting:** pages say the engine is unreachable → check that it is running and that the URL under Connections > PulseForge Engine is right ([Troubleshooting](TROUBLESHOOTING.md)).

@@ -1,0 +1,58 @@
+{
+ "addon": "Splunk_TA_cisco_meraki 3.5.0",
+ "status": "SPLUNK_VERIFIED for the network-event family (routing, family boundary, extraction, time)",
+ "section": "meraki",
+ "generated": "2026-11-03T20:26:56.283422+00:00",
+ "checks": [
+  {
+   "check": "lab.addon_installed[Splunk_TA_cisco_meraki]",
+   "status": "PASS",
+   "detail": "Cisco Meraki Add-on for Splunk 3.5.0"
+  },
+  {
+   "check": "hec.accepted[meraki:securityappliances]",
+   "status": "PASS",
+   "detail": "30 of 30 accepted by HEC"
+  },
+  {
+   "check": "splunk.event_count",
+   "status": "PASS",
+   "detail": "30 of 30"
+  },
+  {
+   "check": "splunk.no_netspout_value_under_a_bare_field_name[meraki:securityappliances]",
+   "status": "PASS",
+   "detail": "shadowed: []"
+  },
+  {
+   "check": "splunk.no_foreign_family_fields",
+   "status": "PASS",
+   "detail": "[{'count': '0'}]"
+  },
+  {
+   "check": "splunk.addon_extracts_the_fields_the_real_data_shows",
+   "status": "PASS",
+   "detail": "missing vs real fieldsummary: []"
+  },
+  {
+   "check": "splunk.meraki_event_type_alias_present",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "splunk.occurredAt_is_current_not_a_stale_sample_time",
+   "status": "PASS",
+   "detail": "[{'d': '0.320752'}]"
+  },
+  {
+   "check": "splunk.addon_time_rule_uses_occurredAt_via_raw_endpoint",
+   "status": "PASS",
+   "detail": "occurredAt 2026-11-03T20:26:47.608877Z"
+  }
+ ],
+ "passed": true,
+ "summary": {
+  "PASS": 9,
+  "FAIL": 0
+ }
+}

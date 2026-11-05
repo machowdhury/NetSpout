@@ -1,0 +1,139 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Raw events are NetSpout's pan:threat output (PanOsGenerator layout, 45 columns; the add-on lists 123 and extracts what is present). Expected values are the CSV columns named by the add-on's own FIELDS list for extract_threat, the severity/category regex of extract_threat_core_fields, threat name and id from extract_threat_name/extract_threat_id, and action from the add-on lookup pan_vendor_actions_300.csv. Phase 10: block-ip (not blockip) is the action name the add-on knows.",
+ "ta": {
+  "id": "Splunk_TA_paloalto_networks",
+  "package_glob": "splunk-add-on-for-palo-alto-networks_*",
+  "expected_version": "4.0.0"
+ },
+ "sourcetype": "pan:threat",
+ "index": "ta_validation",
+ "kind": "event",
+ "vendor": "palo_alto",
+ "events": [
+  {
+   "id": "pan-threat-vuln-critical",
+   "raw": "1,{TS_SLASH},001801000001,THREAT,vulnerability,2304,{TS_SLASH},203.0.113.9,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Inspection,jdoe,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,{TS_SLASH},98425,1,49500,80,0,0,0x0,tcp,reset-both,/payload.bin,Apache Log4j Remote Code Execution(30845),any,critical,client-to-server,12345679,0x0,10.0.0.0-10.255.255.255,US,0,,0,,PA-5250",
+   "expect": {
+    "src_ip": "203.0.113.9",
+    "dest_ip": "10.0.10.80",
+    "src_port": "49500",
+    "dest_port": "80",
+    "transport": "tcp",
+    "rule": "Perimeter-Inspection",
+    "app": "web-browsing",
+    "src_zone": "untrust",
+    "dest_zone": "trust",
+    "session_id": "98425",
+    "log_subtype": "vulnerability",
+    "raw_category": "any",
+    "severity": "critical",
+    "direction": "client-to-server",
+    "vendor_action": "reset-both",
+    "action": "blocked",
+    "threat_name": "Apache Log4j Remote Code Execution",
+    "threat_id": "30845"
+   },
+   "lookup": {
+    "file_contains": "pan_vendor_actions",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "reset-both",
+    "expect": "blocked"
+   },
+   "eventtype": "pan_threat",
+   "tags": [
+    "ids",
+    "attack"
+   ]
+  },
+  {
+   "id": "pan-threat-spyware-high-blockip",
+   "raw": "1,{TS_SLASH},001801000001,THREAT,spyware,2304,{TS_SLASH},10.0.10.99,198.51.100.44,0.0.0.0,0.0.0.0,Outbound-C2-Block,jdoe,,dns,vsys1,trust,untrust,ethernet1/1,ethernet1/2,log-forwarder,{TS_SLASH},98428,1,54921,53,0,0,0x0,udp,block-ip,example.test,ET TROJAN Possible C2 Beacon(58232),any,high,client-to-server,12345680,0x0,10.0.0.0-10.255.255.255,US,0,,0,,PA-5250",
+   "expect": {
+    "src_ip": "10.0.10.99",
+    "dest_ip": "198.51.100.44",
+    "src_port": "54921",
+    "dest_port": "53",
+    "transport": "udp",
+    "rule": "Outbound-C2-Block",
+    "app": "dns",
+    "src_zone": "trust",
+    "dest_zone": "untrust",
+    "session_id": "98428",
+    "log_subtype": "spyware",
+    "raw_category": "any",
+    "severity": "high",
+    "direction": "client-to-server",
+    "vendor_action": "block-ip",
+    "action": "blocked",
+    "threat_name": "ET TROJAN Possible C2 Beacon",
+    "threat_id": "58232"
+   },
+   "lookup": {
+    "file_contains": "pan_vendor_actions",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "block-ip",
+    "expect": "blocked"
+   },
+   "eventtype": "pan_threat",
+   "tags": [
+    "ids",
+    "attack"
+   ]
+  },
+  {
+   "id": "pan-threat-scan-low-alert",
+   "raw": "1,{TS_SLASH},001801000001,THREAT,scan,2304,{TS_SLASH},192.0.2.77,10.0.10.20,0.0.0.0,0.0.0.0,Perimeter-Inspection,jdoe,,ssl,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,{TS_SLASH},98430,1,50111,443,0,0,0x0,tcp,alert,/index.html,Phishing known-bad URL(46009),any,low,server-to-client,12345681,0x0,10.0.0.0-10.255.255.255,US,0,,0,,PA-5250",
+   "expect": {
+    "src_ip": "192.0.2.77",
+    "dest_ip": "10.0.10.20",
+    "src_port": "50111",
+    "dest_port": "443",
+    "transport": "tcp",
+    "rule": "Perimeter-Inspection",
+    "app": "ssl",
+    "src_zone": "untrust",
+    "dest_zone": "trust",
+    "session_id": "98430",
+    "log_subtype": "scan",
+    "raw_category": "any",
+    "severity": "low",
+    "direction": "server-to-client",
+    "vendor_action": "alert",
+    "action": "allowed",
+    "threat_name": "Phishing known-bad URL",
+    "threat_id": "46009"
+   },
+   "lookup": {
+    "file_contains": "pan_vendor_actions",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "alert",
+    "expect": "allowed"
+   },
+   "eventtype": "pan_threat",
+   "tags": [
+    "ids",
+    "attack"
+   ]
+  }
+ ],
+ "negative": [
+  {
+   "id": "plain-text-no-csv",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin",
+   "expect_absent": [
+    "src_ip",
+    "dest_ip",
+    "session_id",
+    "rule",
+    "severity"
+   ]
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

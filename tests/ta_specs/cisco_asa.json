@@ -1,0 +1,151 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Expected values come from the Cisco message text and the add-on's own lookups, not from NetSpout's catalog. {TS} and {HOST} are rendered at run time.",
+ "ta": {
+  "id": "Splunk_TA_cisco-asa",
+  "package_glob": "splunk-add-on-for-cisco-asa_*.spl",
+  "expected_version": "6.1.2"
+ },
+ "sourcetype": "cisco:asa",
+ "index": "ta_validation",
+ "kind": "event",
+ "id_transform": "cisco_asa_log_level_message_id",
+ "vendor": "cisco_asa",
+ "events": [
+  {
+   "id": "asa-302013-built",
+   "raw": "{TS} {HOST} %ASA-6-302013: Built outbound TCP connection 984210 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10.45/52140 (198.51.100.200/52140)",
+   "expect": {
+    "message_id": "302013",
+    "log_level": "6",
+    "session_id": "984210",
+    "src_interface": "outside",
+    "dest_interface": "inside",
+    "src_ip": "198.51.100.80",
+    "src_port": "443",
+    "dest_ip": "10.20.10.45",
+    "dest_port": "52140",
+    "transport": "tcp",
+    "direction": "outbound",
+    "vendor_action": "built",
+    "action": "allowed"
+   },
+   "eventtype": "cisco_connection",
+   "tags": [
+    "network",
+    "communicate"
+   ],
+   "lookup": {
+    "file_contains": "cisco_asa_action_lookup",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "built",
+    "expect": "allowed"
+   }
+  },
+  {
+   "id": "asa-302014-teardown",
+   "raw": "{TS} {HOST} %ASA-6-302014: Teardown TCP connection 984210 for outside:198.51.100.80/443 to inside:10.20.10.45/52140 duration 0:02:14 bytes 148920 TCP FINs",
+   "expect": {
+    "message_id": "302014",
+    "session_id": "984210",
+    "src_ip": "198.51.100.80",
+    "src_port": "443",
+    "dest_ip": "10.20.10.45",
+    "dest_port": "52140",
+    "transport": "tcp",
+    "bytes": "148920",
+    "duration": "134",
+    "vendor_action": "teardown",
+    "action": "teardown"
+   },
+   "eventtype": "cisco_connection",
+   "tags": [
+    "network",
+    "communicate"
+   ],
+   "lookup": {
+    "file_contains": "cisco_asa_action_lookup",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "teardown",
+    "expect": "teardown"
+   }
+  },
+  {
+   "id": "asa-106023-deny",
+   "raw": "{TS} {HOST} %ASA-4-106023: Deny tcp src outside:203.0.113.88/44820 dst inside:10.20.10.5/22 by access-group \"outside_access_in\" [0x8f2a1b9c, 0x0]",
+   "expect": {
+    "message_id": "106023",
+    "log_level": "4",
+    "src_ip": "203.0.113.88",
+    "src_port": "44820",
+    "dest_ip": "10.20.10.5",
+    "dest_port": "22",
+    "transport": "tcp",
+    "rule": "outside_access_in",
+    "vendor_action": "deny",
+    "action": "blocked"
+   },
+   "eventtype": "cisco_connection",
+   "tags": [
+    "network",
+    "communicate"
+   ],
+   "lookup": {
+    "file_contains": "cisco_asa_action_lookup",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "deny",
+    "expect": "blocked"
+   }
+  },
+  {
+   "id": "asa-111008-command",
+   "raw": "{TS} {HOST} %ASA-5-111008: User 'admin' executed the 'write memory' command.",
+   "expect": {
+    "message_id": "111008",
+    "log_level": "5",
+    "user": "admin",
+    "vendor_action": "executed",
+    "action": "executed"
+   },
+   "lookup": {
+    "file_contains": "cisco_asa_action_lookup",
+    "key": "vendor_action",
+    "value": "action",
+    "input": "executed",
+    "expect": "executed"
+   }
+  }
+ ],
+ "negative": [
+  {
+   "id": "no-asa-marker",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin from 10.20.10.45 port 52140 ssh2",
+   "expect_absent": [
+    "message_id",
+    "log_level",
+    "session_id"
+   ],
+   "expect_no_force_match": true
+  },
+  {
+   "id": "ftd-marker-is-not-asa",
+   "raw": "{TS} {HOST} %FTD-6-430003: DeviceUUID: x, InstanceID: 1",
+   "expect_no_force_match": true
+  },
+  {
+   "id": "unknown-asa-id-gets-no-connection-fields",
+   "raw": "{TS} {HOST} %ASA-6-999999: made-up message with outside:1.2.3.4/80 to inside:5.6.7.8/90",
+   "expect_absent": [
+    "session_id",
+    "transport",
+    "src_port"
+   ]
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

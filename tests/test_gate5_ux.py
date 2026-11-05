@@ -51,7 +51,7 @@ class TestGate5UX(unittest.TestCase):
         self.assertIn("<AppShell", app)
         self.assertIn("'/generate/scenarios'", app)
         self.assertIn("'/build/scenario-builder'", app)
-        self.assertIn("Quick Generate", navigation)
+        self.assertIn("Generate Data", navigation)       # renamed from Quick Generate in Phase 6
         self.assertIn("Pipeline Health", navigation)
         self.assertIn("Security Intelligence", navigation)
 

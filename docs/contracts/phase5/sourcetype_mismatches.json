@@ -1,0 +1,1254 @@
+{
+ "naming_conflicts": [
+  {
+   "catalog": "aruba:syslog",
+   "vendor": "aruba_cx",
+   "ta_candidate": "aruba",
+   "package": "TA-aruba_networks",
+   "evidence": [
+    "default/props.conf:[aruba:syslog] in aruba-networks-add-on-for-splunk_112.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:asa:syslog",
+   "vendor": "cisco_asa",
+   "ta_candidate": "cisco:ftd:syslog",
+   "package": "CiscoSecurityCloud",
+   "evidence": [
+    "default/props.conf:[cisco:ftd:syslog] in cisco-security-cloud_373.tar.gz"
+   ]
+  },
+  {
+   "catalog": "cisco:catalyst:security:events",
+   "vendor": "cisco_catalyst",
+   "ta_candidate": "cisco:catalyst:securityadvisory",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:catalyst:securityadvisory] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:catalyst:security:rules",
+   "vendor": "cisco_catalyst",
+   "ta_candidate": "cisco:catalyst:securityadvisory",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:catalyst:securityadvisory] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:duo:auth",
+   "vendor": "cisco_duo",
+   "ta_candidate": "cisco:duo:account",
+   "package": "CiscoSecurityCloud",
+   "evidence": [
+    "default/props.conf:[cisco:duo:account] in cisco-security-cloud_373.tar.gz"
+   ]
+  },
+  {
+   "catalog": "cisco:ios:mdt",
+   "vendor": "cisco_ios",
+   "ta_candidate": "cisco:ios",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:ios] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:ios:syslog",
+   "vendor": "cisco_ios",
+   "ta_candidate": "cisco:ise:syslog",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:ise:syslog] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:nxos",
+   "vendor": "cisco_ios",
+   "ta_candidate": "cisco:ios",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:ios] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:nxos:syslog",
+   "vendor": "cisco_ios",
+   "ta_candidate": "cisco:ise:syslog",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:ise:syslog] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco:sdwan:sytem:logs",
+   "vendor": "cisco_sdwan",
+   "ta_candidate": "cisco:sdwan:system:logs",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:sdwan:sytem:logs] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "cisco_syslog",
+   "vendor": "cisco_ios",
+   "ta_candidate": "cisco:ise:syslog",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:ise:syslog] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "citrix:netscaler:web",
+   "vendor": "citrix_netscaler",
+   "ta_candidate": "citrix:netscaler:appfw",
+   "package": "Splunk_TA_citrix-netscaler",
+   "evidence": [
+    "default/props.conf:[citrix:netscaler:appfw] in splunk-add-on-for-citrix-netscaler_825.spl"
+   ]
+  },
+  {
+   "catalog": "cloudflare:r2:json",
+   "vendor": "cloudflare",
+   "ta_candidate": "cloudflare:json",
+   "package": "cloudflare",
+   "evidence": [
+    "default/props.conf:[cloudflare:json] in cloudflare-app-for-splunk_231.tar.gz"
+   ]
+  },
+  {
+   "catalog": "fgt_event",
+   "vendor": "fortinet",
+   "ta_candidate": "fortigate_event",
+   "package": "Splunk_TA_fortinet_fortigate",
+   "evidence": [
+    "default/props.conf:[fgt_event] in fortinet-fortigate-add-on-for-splunk_1610.tar.gz"
+   ]
+  },
+  {
+   "catalog": "fgt_traffic",
+   "vendor": "fortinet",
+   "ta_candidate": "fortigate_traffic",
+   "package": "Splunk_TA_fortinet_fortigate",
+   "evidence": [
+    "default/props.conf:[fgt_traffic] in fortinet-fortigate-add-on-for-splunk_1610.tar.gz"
+   ]
+  },
+  {
+   "catalog": "juniper:junos",
+   "vendor": "juniper_junos",
+   "ta_candidate": "juniper:junos:idp",
+   "package": "Splunk_TA_juniper",
+   "evidence": [
+    "default/props.conf:[juniper:junos:idp] in splunk-add-on-for-juniper_161.spl"
+   ]
+  },
+  {
+   "catalog": "netskope:alerts",
+   "vendor": "netskope",
+   "ta_candidate": "netskope:alert",
+   "package": "TA-NetSkopeAppForSplunk",
+   "evidence": [
+    "default/props.conf:[netskope:alert] in netskope-add-on-for-splunk_460.spl"
+   ]
+  },
+  {
+   "catalog": "netskope:events",
+   "vendor": "netskope",
+   "ta_candidate": "netskope:event:v2",
+   "package": "TA-NetSkopeAppForSplunk",
+   "evidence": [
+    "default/props.conf:[netskope:event:v2] in netskope-add-on-for-splunk_460.spl"
+   ]
+  },
+  {
+   "catalog": "zscaler:tunnel",
+   "vendor": "zscaler_zia",
+   "ta_candidate": "zscalernss-tunnel",
+   "package": "TA-Zscaler_CIM",
+   "evidence": [
+    "default/props.conf:[zscalernss-tunnel] in zscaler-technical-add-on-for-splunk_415.tar.gz"
+   ]
+  },
+  {
+   "catalog": "zscaler:web",
+   "vendor": "zscaler_zia",
+   "ta_candidate": "zscalernss-web",
+   "package": "TA-Zscaler_CIM",
+   "evidence": [
+    "default/props.conf:[zscalernss-web] in zscaler-technical-add-on-for-splunk_415.tar.gz"
+   ]
+  },
+  {
+   "catalog": "XmlWinEventLog:Security",
+   "vendor": "microsoft_windows",
+   "ta_candidate": "XmlWinEventLog",
+   "package": "Splunk_TA_windows",
+   "evidence": [
+    "default/props.conf:[XmlWinEventLog:Security] in splunk-add-on-for-microsoft-windows_1200.spl"
+   ]
+  },
+  {
+   "catalog": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "vendor": "microsoft_windows",
+   "ta_candidate": "XmlWinEventLog",
+   "package": "Splunk_TA_microsoft_sysmon",
+   "evidence": [
+    "default/props.conf:[XmlWinEventLog:Microsoft-Windows-Sysmon/Operational] in splunk-add-on-for-sysmon_501 (1).spl"
+   ]
+  },
+  {
+   "catalog": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "vendor": "microsoft_windows",
+   "ta_candidate": "XmlWinEventLog",
+   "package": "Splunk_TA_windows",
+   "evidence": [
+    "default/props.conf:[XmlWinEventLog:Microsoft-Windows-PowerShell/Operational] in splunk-add-on-for-microsoft-windows_1200.spl"
+   ]
+  },
+  {
+   "catalog": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "vendor": "microsoft_windows",
+   "ta_candidate": "XmlWinEventLog",
+   "package": "Splunk_TA_windows",
+   "evidence": [
+    "default/props.conf:[XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational] in splunk-add-on-for-microsoft-windows_1200.spl"
+   ]
+  },
+  {
+   "catalog": "cisco:sdwan:access",
+   "vendor": "cisco_sdwan",
+   "ta_candidate": "cisco:sdwan:access:logs",
+   "package": "TA_cisco_catalyst",
+   "evidence": [
+    "default/props.conf:[cisco:sdwan:access:logs] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "catalog": "XmlWinEventLog:System",
+   "vendor": "microsoft_windows",
+   "ta_candidate": "XmlWinEventLog",
+   "package": "Splunk_TA_windows",
+   "evidence": [
+    "default/props.conf:[XmlWinEventLog:System] in splunk-add-on-for-microsoft-windows_1200.spl"
+   ]
+  },
+  {
+   "catalog": "nginx:access",
+   "vendor": "nginx_f5",
+   "ta_candidate": "nginx:plus:access",
+   "package": "Splunk_TA_nginx",
+   "evidence": [
+    "default/props.conf:[nginx:plus:access] in splunk-add-on-for-nginx_332.spl"
+   ]
+  }
+ ],
+ "payload_format_conflicts": [
+  {
+   "catalog": "cisco:duo:authentication",
+   "package": "CiscoSecurityCloud",
+   "detail": [
+    "payload-format: rendered events are not the JSON object the add-on expects"
+   ],
+   "format": {
+    "events": 4,
+    "method": "json parse (add-on KV_MODE=json, no regex extractions; checks structure only, not field names)",
+    "passes": false
+   }
+  },
+  {
+   "catalog": "cisco:intersight:compute",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": null,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "cisco:nvm:flowdata",
+   "package": "TA-Cisco-NVM",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": null,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "cisco:sdwan:system:logs",
+   "package": "TA_cisco_catalyst",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": 4,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "f5:bigip:syslog",
+   "package": "Splunk_TA_f5-bigip",
+   "detail": [
+    "payload-format: events do not match the add-on's sourcetype-routing regex"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 4,
+    "partial_column_events": 0,
+    "force_sourcetype_match": 0,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "crowdstrike:events:sensor",
+   "package": "Splunk_TA_CrowdStrike_FDR",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": 4,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "suricata",
+   "package": "Splunk_TA_CCX_Suricata",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": null,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "osquery:results",
+   "package": "TA-OSqueryv1",
+   "detail": [
+    "payload-format: rendered events are not the JSON object the add-on expects"
+   ],
+   "format": {
+    "events": 4,
+    "method": "json parse (add-on KV_MODE=json, no regex extractions; checks structure only, not field names)",
+    "passes": false
+   }
+  },
+  {
+   "catalog": "SysdigSecureEvents",
+   "package": "TA-Sysdig",
+   "detail": [
+    "payload-format: none of the add-on's extractions match NetSpout's rendered events"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": null,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "tenable:io:audit_logs",
+   "package": "TA-tenable",
+   "detail": [
+    "payload-format: events do not match the add-on's sourcetype-routing regex"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": 0,
+    "passes": false
+   }
+  },
+  {
+   "catalog": "tanium:discover:managed",
+   "package": "TA-Tanium",
+   "detail": [
+    "payload-format: events do not match the add-on's sourcetype-routing regex"
+   ],
+   "format": {
+    "events": 4,
+    "method": "add-on extractions (REPORT/EXTRACT regexes, DELIMS/FIELDS) and sourcetype-routing regex applied to rendered events",
+    "regex_compile_errors": 0,
+    "events_with_any_extraction": 0,
+    "partial_column_events": 0,
+    "force_sourcetype_match": 0,
+    "passes": false
+   }
+  }
+ ],
+ "routing_conflicts": [
+  {
+   "catalog": "cisco:intersight:metrics",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "detail": [
+    "routing: catalog sends metric-index payloads; the add-on defines this as an event sourcetype"
+   ]
+  },
+  {
+   "catalog": "cisco:thousandeyes:metric",
+   "package": "ta_cisco_thousandeyes",
+   "detail": [
+    "routing: catalog sends metric-index payloads; the add-on defines this as an event sourcetype"
+   ]
+  }
+ ],
+ "unsupported_ingestion": [
+  {
+   "catalog": "cisco:catalyst:client",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:clienthealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:compliance",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:devicehealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:issue",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:networkhealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:catalyst:securityadvisory",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:dnac:audit:logs",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_audit_logs) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:client",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_client) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:clienthealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_clienthealth) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:compliance",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_compliance) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:devicehealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_devicehealth) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:issue",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_issue) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:networkhealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_networkhealth) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:securityadvisory",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_securityadvisory) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:dnac:site:topology",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (cisco_catalyst_dnac_site_topology) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:duo:account",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:activity",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:administrator",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:authentication",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:authentication_v2",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:endpoint",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:duo:user",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:advisories",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:alarms",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:auditrecords",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:compute",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:contracts",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:licenses",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:metrics",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:networkelements",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:networkobjects",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:profiles",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:intersight:targets",
+   "package": "Splunk_TA_Cisco_Intersight",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:ise:radius:authz:policy",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:ise:radius:policyset",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:ise:tacacs:authz:policy",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:ise:tacacs:policyset",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:sdwan:linkhealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:sdwan:sitehealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:sdwan:ssetunnels",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:sdwan:tunnelhealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:sdwan:utdhealth",
+   "package": "TA_cisco_catalyst",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:se",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (sbg_se_input) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:sfw:estreamer",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (sbg_fw_estreamer_input) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:sfw:policy",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (sbg_sfw_api_input) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:thousandeyes:event",
+   "package": "ta_cisco_thousandeyes",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (event) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cisco:thousandeyes:metric",
+   "package": "ta_cisco_thousandeyes",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:thousandeyes:path-vis",
+   "package": "ta_cisco_thousandeyes",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (test_metrics_stream) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "cloudflare:json",
+   "package": "cloudflare",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:accesspoints",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:airmarshal",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:appliancesdwanstatistics",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:appliancesdwanstatuses",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:assurancealerts",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:devices",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:devicesavailabilitieschangehistory",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:organizationsecurity",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:securityappliances",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:summarytopappliancesbyutilization",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:summarytopclientsbyusage",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:summarytopdevicesbyusage",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:switchportsbyswitch",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "meraki:switchportsoverview",
+   "package": "Splunk_TA_cisco_meraki",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "stream:netflow",
+   "package": "Splunk_TA_stream_wire_data",
+   "support": "NOT_EMULATED",
+   "why": "stream:* events are produced by Splunk Stream (streamfwd) from wire/flow data; NetSpout does not emulate the Stream collector"
+  },
+  {
+   "catalog": "crowdstrike:events:sensor",
+   "package": "Splunk_TA_CrowdStrike_FDR",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "aws:cloudtrail",
+   "package": "Splunk_TA_aws",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (aws_cloudtrail) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "o365:management:activity",
+   "package": "splunk_ta_o365",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (splunk_ta_o365_management_activity) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "azure:monitor:aad",
+   "package": "Splunk_TA_microsoft-cloudservices",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "auditd",
+   "package": "Splunk_TA_nix",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a host-agent/scripted input (script); NetSpout does not emulate it"
+  },
+  {
+   "catalog": "OktaIM2:log",
+   "package": "Splunk_TA_okta_identity_cloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "osquery:results",
+   "package": "TA-OSqueryv1",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "gws:reports:login",
+   "package": "Splunk_TA_Google_Workspace",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "azure:monitor:activity",
+   "package": "Splunk_TA_microsoft-cloudservices",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:nvm:flowdata:v2",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:isovalent",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:isovalent:processExec",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "cisco:isovalent:processConnect",
+   "package": "CiscoSecurityCloud",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "aws:cloudtrail:lake",
+   "package": "Splunk_TA_aws",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (aws_cloudtrail_lake) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "o365:reporting:messagetrace",
+   "package": "splunk_ta_o365",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "o365:graph:messagetrace",
+   "package": "splunk_ta_o365",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (splunk_ta_o365_message_trace) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "Confluence:audit log",
+   "package": "confluence_and_jira_audit_addon_for_splunk",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "sailpoint_identitynow",
+   "package": "TA-sailpoint-identitynow-auditevent-add-on",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  },
+  {
+   "catalog": "tenable:io:audit_logs",
+   "package": "TA-tenable",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (tenable_io_audit_logs) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "slack:audit",
+   "package": "TA-slack-add-on-for-splunk",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "inputs.conf declares a modular input (slack_audit_logs) that pulls from an API or service; NetSpout does not emulate it"
+  },
+  {
+   "catalog": "elasticsearch:json",
+   "package": "TA-elastic-search",
+   "support": "SUBSTITUTE_VIA_HEC",
+   "why": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+  }
+ ],
+ "catalog_without_package": [
+  {
+   "catalog": "a10:acos:cgnat",
+   "vendor": "a10_networks"
+  },
+  {
+   "catalog": "a10:acos:syslog",
+   "vendor": "a10_networks"
+  },
+  {
+   "catalog": "checkpoint:cef",
+   "vendor": "checkpoint"
+  },
+  {
+   "catalog": "checkpoint:firewall",
+   "vendor": "checkpoint"
+  },
+  {
+   "catalog": "checkpoint:threat",
+   "vendor": "checkpoint"
+  },
+  {
+   "catalog": "cisco:aci:fault",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:aci:syslog",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:dc:aci:class",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:dc:aci:events",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:dc:aci:health",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:dc:nexus9k",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:dc:nexus9k:syslog",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "cisco:nexus",
+   "vendor": "cisco_aci"
+  },
+  {
+   "catalog": "dell:os10:syslog",
+   "vendor": "dell_os10"
+  },
+  {
+   "catalog": "extreme:exos:syslog",
+   "vendor": "extreme_networks"
+  },
+  {
+   "catalog": "extreme:voss:syslog",
+   "vendor": "extreme_networks"
+  },
+  {
+   "catalog": "forcepoint:ngfw:alert",
+   "vendor": "forcepoint"
+  },
+  {
+   "catalog": "forcepoint:ngfw:traffic",
+   "vendor": "forcepoint"
+  },
+  {
+   "catalog": "huawei:vrp:syslog",
+   "vendor": "huawei_vrp"
+  },
+  {
+   "catalog": "huawei:vrp:traffic",
+   "vendor": "huawei_vrp"
+  },
+  {
+   "catalog": "kube:container:splunk-connect-for-snmp-traps",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "kube:container:splunk-connect-for-snmp-worker-sender",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "kube:container:splunk-connect-for-snmp-worker-trap",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "nokia:sr:syslog",
+   "vendor": "nokia_sr"
+  },
+  {
+   "catalog": "nokia:sros",
+   "vendor": "nokia_sr"
+  },
+  {
+   "catalog": "nokia:sros:syslog",
+   "vendor": "nokia_sr"
+  },
+  {
+   "catalog": "nutanixPC_disks",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc:syslog",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc:vms",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_alerts",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_cluster_performance",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_clusters",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_disk_performance",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_events",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_host_performance",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_hosts",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_prismCentrals",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_storage_containers",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_syslog",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_vm_performance",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_vms",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "nutanixpc_volume_groups",
+   "vendor": "nutanix"
+  },
+  {
+   "catalog": "radware:cwaf:waf",
+   "vendor": "radware"
+  },
+  {
+   "catalog": "radware:ddos",
+   "vendor": "radware"
+  },
+  {
+   "catalog": "radware:defensepro:attack",
+   "vendor": "radware"
+  },
+  {
+   "catalog": "radware:waf",
+   "vendor": "radware"
+  },
+  {
+   "catalog": "sc4snmp:event",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "sc4snmp:metric",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "snmp:trap",
+   "vendor": "sc4snmp"
+  },
+  {
+   "catalog": "watchguard:fireware:alarm",
+   "vendor": "watchguard"
+  },
+  {
+   "catalog": "watchguard:fireware:traffic",
+   "vendor": "watchguard"
+  },
+  {
+   "catalog": "ollama:server",
+   "vendor": "ollama"
+  },
+  {
+   "catalog": "mcp:jsonrpc",
+   "vendor": "model_context_protocol"
+  },
+  {
+   "catalog": "kube:audit",
+   "vendor": "kubernetes"
+  },
+  {
+   "catalog": "kube:container:falco",
+   "vendor": "kubernetes"
+  },
+  {
+   "catalog": "crushftp:sessionlogs",
+   "vendor": "crushftp"
+  },
+  {
+   "catalog": "bro:conn:json",
+   "vendor": "zeek"
+  },
+  {
+   "catalog": "wazuh:alerts",
+   "vendor": "wazuh"
+  },
+  {
+   "catalog": "nozomi:universal_alert",
+   "vendor": "nozomi_networks"
+  },
+  {
+   "catalog": "hashicorp_vault_audit_log",
+   "vendor": "hashicorp"
+  },
+  {
+   "catalog": "traefik:access:json",
+   "vendor": "traefik"
+  },
+  {
+   "catalog": "claroty:cef",
+   "vendor": "claroty"
+  },
+  {
+   "catalog": "mongodb:log",
+   "vendor": "mongodb"
+  },
+  {
+   "catalog": "veeam_vbr_syslog",
+   "vendor": "veeam"
+  },
+  {
+   "catalog": "mikrotik:routeros",
+   "vendor": "mikrotik"
+  },
+  {
+   "catalog": "pfsense:filterlog",
+   "vendor": "pfsense_netgate"
+  },
+  {
+   "catalog": "oracle:audit:text",
+   "vendor": "oracle"
+  },
+  {
+   "catalog": "darktrace",
+   "vendor": "darktrace"
+  },
+  {
+   "catalog": "ccx:beyondinsight:passwordsafe",
+   "vendor": "beyondtrust"
+  },
+  {
+   "catalog": "ibm:mq:errorlog",
+   "vendor": "ibm_mq"
+  },
+  {
+   "catalog": "github:enterprise:audit",
+   "vendor": "github"
+  },
+  {
+   "catalog": "cybereason:malops",
+   "vendor": "cybereason"
+  },
+  {
+   "catalog": "sentinelone:channel:threats",
+   "vendor": "sentinelone"
+  },
+  {
+   "catalog": "bitdefender:gz",
+   "vendor": "bitdefender"
+  },
+  {
+   "catalog": "ibm:qradar:offense",
+   "vendor": "ibm_qradar"
+  }
+ ],
+ "ta_sourcetypes_absent_from_netspout_count": 1499
+}

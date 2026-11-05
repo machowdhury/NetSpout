@@ -1,0 +1,7 @@
+upgraded app version: 2.0.1 (RC1 2.0.0 installed first, then RC3 2.0.1 over it with update=true)
+saved engine URL survived the upgrade (local/netspout_engine.conf): http://engine:8081
+engine url set to (empty)
+gateway /engine with no URL: {'configured': False, 'connected': False, 'url': '', 'message': 'Engine not configured.'}
+gateway /api/runs with no URL -> HTTP 503 b'{"detail": "Engine not configured.", "code": "ENGINE_NOT_CONFIGURED"}'
+engine url set to http://engine:8081
+restored: Engine connected.

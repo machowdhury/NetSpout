@@ -1,0 +1,422 @@
+{
+ "spec": "fortinet_fortigate.json",
+ "ta": {
+  "id": "Splunk_TA_fortinet_fortigate",
+  "package": "fortinet-fortigate-add-on-for-splunk_1610.tar.gz",
+  "version": "1.6.10"
+ },
+ "run_id": "tacompat-96a081d4bb",
+ "generated": "2026-11-03T16:50:33+00:00",
+ "checks": [
+  {
+   "check": "ta.version",
+   "status": "PASS",
+   "detail": "installed package 1.6.10, expected 1.6.10"
+  },
+  {
+   "check": "props.sourcetype_stanza",
+   "status": "PASS",
+   "detail": "[fortigate_traffic] in props.conf"
+  },
+  {
+   "check": "props.report_transforms_exist",
+   "status": "PASS",
+   "detail": "1 REPORT transforms, missing: []"
+  },
+  {
+   "check": "transforms.force_sourcetype_defined",
+   "status": "PASS",
+   "detail": "1 transform(s) can set sourcetype::fortigate_traffic"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'fortigate_traffic', expected 'fortigate_traffic'"
+  },
+  {
+   "check": "timestamp.format_parses[fgt-traffic-accept]",
+   "status": "NOT_RUN",
+   "detail": "the add-on sets no TIME_FORMAT for [fortigate_traffic] (Splunk auto-detects); verified live only"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.src_interface]",
+   "status": "PASS",
+   "detail": "field src_interface is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.dest_interface]",
+   "status": "PASS",
+   "detail": "field dest_interface is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.bytes_in]",
+   "status": "PASS",
+   "detail": "field bytes_in is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.bytes_out]",
+   "status": "PASS",
+   "detail": "field bytes_out is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.bytes]",
+   "status": "PASS",
+   "detail": "field bytes is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.duration]",
+   "status": "PASS",
+   "detail": "field duration is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-accept.dvc]",
+   "status": "PASS",
+   "detail": "field dvc is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "ftnt_fortigate_traffic (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[fgt-traffic-accept:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[fgt-traffic-accept:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "add-on lookup ftnt_action_info: ftnt_action=accept -> action='allowed' (expected 'allowed')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'fortigate_traffic', expected 'fortigate_traffic'"
+  },
+  {
+   "check": "timestamp.format_parses[fgt-traffic-deny]",
+   "status": "NOT_RUN",
+   "detail": "the add-on sets no TIME_FORMAT for [fortigate_traffic] (Splunk auto-detects); verified live only"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "ta_defines_field[fgt-traffic-deny.dvc]",
+   "status": "PASS",
+   "detail": "field dvc is defined by the add-on for [fortigate_traffic]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "ftnt_fortigate_traffic (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[fgt-traffic-deny:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[fgt-traffic-deny:communicate]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "add-on lookup ftnt_action_info: ftnt_action=deny -> action='blocked' (expected 'blocked')"
+  },
+  {
+   "check": "force_sourcetype.rejects[plain-text-no-keyvalue]",
+   "status": "PASS",
+   "detail": "negative payload must not be routed to fortigate_traffic (add-on assigns None)"
+  },
+  {
+   "check": "force_sourcetype.rejects[no-fortigate-devid]",
+   "status": "PASS",
+   "detail": "negative payload must not be routed to fortigate_traffic (add-on assigns None)"
+  },
+  {
+   "check": "lab.installed_version",
+   "status": "PASS",
+   "detail": "lab has Fortinet Fortigate Add-on for Splunk 1.6.10, package 1.6.10"
+  },
+  {
+   "check": "routing.index_datatype",
+   "status": "PASS",
+   "detail": "index ta_validation datatype=event, expected event"
+  },
+  {
+   "check": "hec.accepted",
+   "status": "PASS",
+   "detail": "4/4 accepted"
+  },
+  {
+   "check": "index.event_count",
+   "status": "PASS",
+   "detail": "indexed 4 of 4"
+  },
+  {
+   "check": "index.sourcetype",
+   "status": "PASS",
+   "detail": "sourcetypes seen: ['fortigate_traffic']"
+  },
+  {
+   "check": "field[fgt-traffic-accept.src_ip]",
+   "status": "PASS",
+   "detail": "expected '10.20.10.45', Splunk returned '10.20.10.45'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.src_port]",
+   "status": "PASS",
+   "detail": "expected '54210', Splunk returned '54210'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '198.51.100.80', Splunk returned '198.51.100.80'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.dest_port]",
+   "status": "PASS",
+   "detail": "expected '443', Splunk returned '443'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.src_interface]",
+   "status": "PASS",
+   "detail": "expected 'lan', Splunk returned 'lan'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.dest_interface]",
+   "status": "PASS",
+   "detail": "expected 'wan1', Splunk returned 'wan1'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.bytes_in]",
+   "status": "PASS",
+   "detail": "expected '89420', Splunk returned '89420'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.bytes_out]",
+   "status": "PASS",
+   "detail": "expected '2410', Splunk returned '2410'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.bytes]",
+   "status": "PASS",
+   "detail": "expected '91830', Splunk returned '91830'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.duration]",
+   "status": "PASS",
+   "detail": "expected '45', Splunk returned '45'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'accept', Splunk returned 'accept'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.action]",
+   "status": "PASS",
+   "detail": "expected 'allowed', Splunk returned 'allowed'"
+  },
+  {
+   "check": "field[fgt-traffic-accept.dvc]",
+   "status": "PASS",
+   "detail": "expected 'fg-branch-01', Splunk returned 'fg-branch-01'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "Splunk returned ['ftnt_fortigate', 'ftnt_fortigate_traffic']"
+  },
+  {
+   "check": "tags[fgt-traffic-accept]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "field[fgt-traffic-deny.src_ip]",
+   "status": "PASS",
+   "detail": "expected '203.0.113.88', Splunk returned '203.0.113.88'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.src_port]",
+   "status": "PASS",
+   "detail": "expected '48201', Splunk returned '48201'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.dest_ip]",
+   "status": "PASS",
+   "detail": "expected '10.20.10.5', Splunk returned '10.20.10.5'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.dest_port]",
+   "status": "PASS",
+   "detail": "expected '22', Splunk returned '22'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.vendor_action]",
+   "status": "PASS",
+   "detail": "expected 'deny', Splunk returned 'deny'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.action]",
+   "status": "PASS",
+   "detail": "expected 'blocked', Splunk returned 'blocked'"
+  },
+  {
+   "check": "field[fgt-traffic-deny.dvc]",
+   "status": "PASS",
+   "detail": "expected 'fg-branch-01', Splunk returned 'fg-branch-01'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['ftnt_fortigate', 'ftnt_fortigate_traffic']"
+  },
+  {
+   "check": "tags[fgt-traffic-deny]",
+   "status": "PASS",
+   "detail": "Splunk returned ['communicate', 'network']"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[plain-text-no-keyvalue]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[plain-text-no-keyvalue.srcip]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-keyvalue.dstip]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-keyvalue.ftnt_action]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-keyvalue.devid]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[no-fortigate-devid]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "search.by_run",
+   "status": "PASS",
+   "detail": "events searchable by run id and sourcetype"
+  },
+  {
+   "check": "timestamp.parsed_from_event_text",
+   "status": "PASS",
+   "detail": "_time 2026-11-03T13:50:29.000+00:00 vs text 13:50:29 (skew 0s)"
+  }
+ ],
+ "summary": {
+  "PASS": 79,
+  "FAIL": 0,
+  "NOT_RUN": 2
+ }
+}

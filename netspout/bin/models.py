@@ -506,6 +506,11 @@ class LogEntry(BaseModel):
     netspout_event_id: Optional[str] = None
     netspout_parent_event_id: Optional[str] = None
     netspout_ground_truth: Optional[str] = None
+    # Delivery shape chosen by the request (see ingestion_profiles.py); None = the historic behaviour for every sourcetype.
+    ingestion_profile: Optional[str] = None
+    hec_source: Optional[str] = None
+    hec_host: Optional[str] = None
+    metric_profile: Optional[str] = None
 
 
 class BGPSessionState(str, Enum):

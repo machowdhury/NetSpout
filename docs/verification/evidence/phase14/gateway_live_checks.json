@@ -1,0 +1,32 @@
+{
+ "no_fallback_in_source": {
+  "host.docker.internal": false,
+  "8081": true,
+  "environ": false
+ },
+ "empty_url": {
+  "GET /api/runs": 503,
+  "detail": "Engine not configured.",
+  "POST /api/runs": 503
+ },
+ "saved_through_gateway": {
+  "requests": 150,
+  "to_old_engine_or_failed": 0
+ },
+ "edited_directly_in_conf": {
+  "requests": 60,
+  "to_old_engine_or_failed": 0
+ },
+ "read_only_user": {
+  "GET /engine (url visible, documented)": [
+   200,
+   "http://engine:8081"
+  ],
+  "GET /api/runs": 200,
+  "POST /api/runs": 403,
+  "POST /api/runs/x/stop": 403,
+  "POST /engine": 403
+ },
+ "engine_url_after_ro_attempt": "http://engine:8081",
+ "admin_post_runs_reaches_engine(validation 422 or 4xx from engine, not 403)": 422
+}

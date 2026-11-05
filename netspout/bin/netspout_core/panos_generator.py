@@ -94,7 +94,8 @@ THREAT_SUBTYPES = (
     "file", "flood", "packet", "scan", "credential-violation",
 )
 THREAT_SEVERITIES = ("informational", "low", "medium", "high", "critical")
-THREAT_ACTIONS = ("alert", "drop", "reset-both", "reset-client", "reset-server", "blockip")
+# block-ip, not blockip: the name PAN-OS logs and the Splunk Add-on for Palo Alto Networks maps (pan_vendor_actions_300.csv); blockip resolved to action=unknown
+THREAT_ACTIONS = ("alert", "drop", "reset-both", "reset-client", "reset-server", "block-ip")
 DIRECTIONS = ("client-to-server", "server-to-client", "client-to-client", "unknown")
 PROTOCOLS = ("tcp", "udp")
 APPLICATIONS = (

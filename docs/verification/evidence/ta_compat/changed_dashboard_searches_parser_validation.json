@@ -1,0 +1,11 @@
+{
+ "validator": "Splunk /services/search/parser (isolated TA-validation lab, Splunk 10.2.7)",
+ "changed_searches": 447,
+ "views": 224,
+ "parser_errors": 0,
+ "errors": [],
+ "not_checked_here": [
+  "results from indexed data (checked for lateral_movement and normal_traffic in asa_contract_dashboards.json)",
+  "browser rendering"
+ ]
+}

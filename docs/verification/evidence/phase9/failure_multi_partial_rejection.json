@@ -1,0 +1,10 @@
+{
+ "run_id": "run-ea80edc8d5ff",
+ "rejected_sourcetype": "fortigate_traffic",
+ "indexed_by_sourcetype": {
+  "cisco:asa": 8,
+  "cisco:ios": 6,
+  "pan:traffic": 6
+ },
+ "ui": "Only 20 of 25 were accepted (5 rejected, 0 unconfirmed). HEC HTTP 400"
+}

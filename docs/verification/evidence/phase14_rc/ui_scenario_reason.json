@@ -1,0 +1,6 @@
+{
+ "scenario": "C100-CRI-001",
+ "reasons": [
+  "cisco:thousandeyes:metric: NetSpout would send this as a metric-index payload, but the matching add-on (ta_cisco_thousandeyes) defines it as an event sourcetype. Sending it as a metric would break the add-on's searches and turning it into a log would change what the data means, so generation is disabled until a verified implementation exists."
+ ]
+}

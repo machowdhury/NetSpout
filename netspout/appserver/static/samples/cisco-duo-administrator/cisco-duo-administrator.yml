@@ -9,10 +9,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -29,7 +29,7 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:administrator
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": $EPOCH$, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
 
   ### CISCO-DUO-ADMINISTRATOR - DEGRADED / WARNING ###
   - name: cisco-duo-administrator-degraded
@@ -41,10 +41,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -59,7 +59,7 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:administrator
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": $EPOCH$, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
 
   ### CISCO-DUO-ADMINISTRATOR - CRITICAL / FAILURE ###
   - name: cisco-duo-administrator-failure
@@ -71,10 +71,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -89,4 +89,4 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:administrator
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": $EPOCH$, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'

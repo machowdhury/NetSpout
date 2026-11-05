@@ -1,3 +1,7 @@
+# BUILD FIRST. This image copies the app folder and a locally built netspout.spl, which is NOT in Git (generated release packages are not tracked):
+#   python scripts/build_splunk_package.py        # writes ./netspout.spl (runs the core sync, frontend build and guardrails)
+#   docker compose -f docker-compose.standalone.yml build
+# Never reuse an older netspout.spl: check `tar -xzOf netspout.spl netspout/default/app.conf | grep ^version` against netspout/default/app.conf.
 # =========================================================================
 # NetSpout Standalone: All-In-One Docker Container (Splunk Enterprise + App)
 # Includes:

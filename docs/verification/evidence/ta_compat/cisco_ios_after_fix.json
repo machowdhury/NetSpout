@@ -1,0 +1,247 @@
+{
+ "spec": "cisco_ios_catalyst.json",
+ "ta": {
+  "id": "TA_cisco_catalyst",
+  "package": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+  "version": "4.0.60"
+ },
+ "run_id": "tacompat-35c25ea9dc",
+ "generated": "2026-11-03T16:56:32+00:00",
+ "checks": [
+  {
+   "check": "ta.version",
+   "status": "PASS",
+   "detail": "installed package 4.0.60, expected 4.0.60"
+  },
+  {
+   "check": "props.sourcetype_stanza",
+   "status": "PASS",
+   "detail": "[cisco:ios] in props.conf"
+  },
+  {
+   "check": "props.report_transforms_exist",
+   "status": "PASS",
+   "detail": "121 REPORT transforms, missing: []"
+  },
+  {
+   "check": "transforms.force_sourcetype_defined",
+   "status": "NOT_RUN",
+   "detail": "the add-on has no transform that assigns [cisco:ios]; the sourcetype must be set by the input (HEC sourcetype). Routing is not verified."
+  },
+  {
+   "check": "timestamp.format_parses[ios-icmpv6-nd_ra_log]",
+   "status": "NOT_RUN",
+   "detail": "the add-on sets no TIME_FORMAT for [cisco:ios] (Splunk auto-detects); verified live only"
+  },
+  {
+   "check": "ta_defines_field[ios-icmpv6-nd_ra_log.facility]",
+   "status": "PASS",
+   "detail": "field facility is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "ta_defines_field[ios-icmpv6-nd_ra_log.severity_id]",
+   "status": "PASS",
+   "detail": "field severity_id is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "ta_defines_field[ios-icmpv6-nd_ra_log.mnemonic]",
+   "status": "PASS",
+   "detail": "field mnemonic is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[ios-icmpv6-nd_ra_log]",
+   "status": "PASS",
+   "detail": "cisco_ios (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[ios-icmpv6-nd_ra_log:cisco]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[ios-icmpv6-nd_ra_log:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[ios-icmpv6-nd_ra_log:ios]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "timestamp.format_parses[ios-ospf-duprid]",
+   "status": "NOT_RUN",
+   "detail": "the add-on sets no TIME_FORMAT for [cisco:ios] (Splunk auto-detects); verified live only"
+  },
+  {
+   "check": "ta_defines_field[ios-ospf-duprid.facility]",
+   "status": "PASS",
+   "detail": "field facility is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "ta_defines_field[ios-ospf-duprid.severity_id]",
+   "status": "PASS",
+   "detail": "field severity_id is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "ta_defines_field[ios-ospf-duprid.mnemonic]",
+   "status": "PASS",
+   "detail": "field mnemonic is defined by the add-on for [cisco:ios]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[ios-ospf-duprid]",
+   "status": "PASS",
+   "detail": "cisco_ios (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[ios-ospf-duprid:cisco]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[ios-ospf-duprid:network]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[ios-ospf-duprid:ios]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lab.installed_version",
+   "status": "PASS",
+   "detail": "lab has Cisco Enterprise Networking Add-on for Splunk 4.0.60, package 4.0.60"
+  },
+  {
+   "check": "routing.index_datatype",
+   "status": "PASS",
+   "detail": "index ta_validation datatype=event, expected event"
+  },
+  {
+   "check": "hec.accepted",
+   "status": "PASS",
+   "detail": "4/4 accepted"
+  },
+  {
+   "check": "index.event_count",
+   "status": "PASS",
+   "detail": "indexed 4 of 4"
+  },
+  {
+   "check": "index.sourcetype",
+   "status": "PASS",
+   "detail": "sourcetypes seen: ['cisco:ios']"
+  },
+  {
+   "check": "field[ios-icmpv6-nd_ra_log.facility]",
+   "status": "PASS",
+   "detail": "expected 'ICMPV6', Splunk returned 'ICMPV6'"
+  },
+  {
+   "check": "field[ios-icmpv6-nd_ra_log.severity_id]",
+   "status": "PASS",
+   "detail": "expected '3', Splunk returned '3'"
+  },
+  {
+   "check": "field[ios-icmpv6-nd_ra_log.mnemonic]",
+   "status": "PASS",
+   "detail": "expected 'ND_RA_LOG', Splunk returned 'ND_RA_LOG'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[ios-icmpv6-nd_ra_log]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[ios-icmpv6-nd_ra_log]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco_ios', 'cisco_ios-ios']"
+  },
+  {
+   "check": "tags[ios-icmpv6-nd_ra_log]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco', 'ios', 'network']"
+  },
+  {
+   "check": "field[ios-ospf-duprid.facility]",
+   "status": "PASS",
+   "detail": "expected 'OSPF', Splunk returned 'OSPF'"
+  },
+  {
+   "check": "field[ios-ospf-duprid.severity_id]",
+   "status": "PASS",
+   "detail": "expected '4', Splunk returned '4'"
+  },
+  {
+   "check": "field[ios-ospf-duprid.mnemonic]",
+   "status": "PASS",
+   "detail": "expected 'DUPRID', Splunk returned 'DUPRID'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[ios-ospf-duprid]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "eventtype[ios-ospf-duprid]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco_ios', 'cisco_ios-ios', 'cisco_ios-routing', 'cisco_ios-routing-ospf']"
+  },
+  {
+   "check": "tags[ios-ospf-duprid]",
+   "status": "PASS",
+   "detail": "Splunk returned ['cisco', 'ios', 'network']"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[no-cisco-mnemonic]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[no-cisco-mnemonic.facility]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[no-cisco-mnemonic.severity_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[no-cisco-mnemonic.mnemonic]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[asa-message-is-not-ios]",
+   "status": "PASS",
+   "detail": "NetSpout test values found in vendor/CIM fields: none"
+  },
+  {
+   "check": "absent[asa-message-is-not-ios.facility]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[asa-message-is-not-ios.mnemonic]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "search.by_run",
+   "status": "PASS",
+   "detail": "events searchable by run id and sourcetype"
+  },
+  {
+   "check": "timestamp.parsed_from_event_text",
+   "status": "PASS",
+   "detail": "_time 2026-11-03T13:56:29.000+00:00 vs text 13:56:29 (skew 0s)"
+  }
+ ],
+ "summary": {
+  "PASS": 43,
+  "FAIL": 0,
+  "NOT_RUN": 3
+ }
+}

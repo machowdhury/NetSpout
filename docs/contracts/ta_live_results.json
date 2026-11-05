@@ -1,0 +1,102 @@
+{
+ "cisco:asa": {
+  "passed": true,
+  "package": "splunk-add-on-for-cisco-asa_612.spl",
+  "version": "6.1.2",
+  "spec": "tests/ta_specs/cisco_asa.json",
+  "evidence": "docs/verification/evidence/ta_compat/cisco_asa_ta_compat_phase4_revalidation.json",
+  "run_id": "tacompat-78f448facf",
+  "summary": {
+   "PASS": 131,
+   "FAIL": 0,
+   "NOT_RUN": 0
+  },
+  "not_run": [],
+  "generated": "2026-11-03T16:56:53+00:00"
+ },
+ "fortigate_traffic": {
+  "passed": true,
+  "package": "fortinet-fortigate-add-on-for-splunk_1610.tar.gz",
+  "version": "1.6.10",
+  "spec": "tests/ta_specs/fortinet_fortigate.json",
+  "evidence": "docs/verification/evidence/ta_compat/fortigate_traffic_after_fix.json",
+  "run_id": "tacompat-96a081d4bb",
+  "summary": {
+   "PASS": 79,
+   "FAIL": 0,
+   "NOT_RUN": 2
+  },
+  "not_run": [
+   "timestamp.format_parses[fgt-traffic-accept]",
+   "timestamp.format_parses[fgt-traffic-deny]"
+  ],
+  "generated": "2026-11-03T16:50:33+00:00"
+ },
+ "pan:traffic": {
+  "passed": true,
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0",
+  "spec": "tests/ta_specs/palo_alto_traffic.json",
+  "evidence": "docs/verification/evidence/ta_compat/pan_traffic_after_fix.json",
+  "run_id": "tacompat-be7e9f87b1",
+  "summary": {
+   "PASS": 96,
+   "FAIL": 0,
+   "NOT_RUN": 0
+  },
+  "not_run": [],
+  "generated": "2026-11-03T16:52:12+00:00"
+ },
+ "cisco:ios": {
+  "passed": true,
+  "package": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+  "version": "4.0.60",
+  "spec": "tests/ta_specs/cisco_ios_catalyst.json",
+  "evidence": "docs/verification/evidence/ta_compat/cisco_ios_after_fix.json",
+  "run_id": "tacompat-35c25ea9dc",
+  "summary": {
+   "PASS": 43,
+   "FAIL": 0,
+   "NOT_RUN": 3
+  },
+  "not_run": [
+   "transforms.force_sourcetype_defined",
+   "timestamp.format_parses[ios-icmpv6-nd_ra_log]",
+   "timestamp.format_parses[ios-ospf-duprid]"
+  ],
+  "generated": "2026-11-03T16:56:32+00:00"
+ },
+ "pan:threat": {
+  "passed": true,
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0",
+  "spec": "tests/ta_specs/palo_alto_threat.json",
+  "evidence": "docs/verification/evidence/phase10/pan_threat_after_fix.json",
+  "run_id": "tacompat-71511e0842",
+  "summary": {
+   "PASS": 152,
+   "FAIL": 0,
+   "NOT_RUN": 0
+  },
+  "not_run": [],
+  "generated": "2026-11-03T21:51:34+00:00"
+ },
+ "pan:system": {
+  "passed": true,
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0",
+  "spec": "tests/ta_specs/palo_alto_system.json",
+  "evidence": "docs/verification/evidence/phase10/pan_system_after_fix.json",
+  "run_id": "tacompat-49a9f42776",
+  "summary": {
+   "PASS": 61,
+   "FAIL": 0,
+   "NOT_RUN": 2
+  },
+  "not_run": [
+   "timestamp.format_parses[pan-system-globalprotect]",
+   "timestamp.format_parses[pan-system-vpn-critical]"
+  ],
+  "generated": "2026-11-03T21:51:42+00:00"
+ }
+}

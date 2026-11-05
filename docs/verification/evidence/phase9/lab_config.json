@@ -1,0 +1,117 @@
+{
+ "container": "netspout_tavalidation_splunk",
+ "mgmt": "127.0.0.1:19191",
+ "hec": "127.0.0.1:19088",
+ "web": "127.0.0.1:19000",
+ "splunk_version": "10.2.7",
+ "server_name": "netspout-tavalidation",
+ "indexes": [
+  [
+   "cisco_duo",
+   "event",
+   0
+  ],
+  [
+   "cisco_mdt_metrics",
+   "metric",
+   2650
+  ],
+  [
+   "cisco_metrics",
+   "metric",
+   140
+  ],
+  [
+   "dev_test_replay",
+   "event",
+   47040
+  ],
+  [
+   "dev_test_replay_metrics",
+   "metric",
+   552
+  ],
+  [
+   "history",
+   "event",
+   0
+  ],
+  [
+   "idx_network_ops",
+   "event",
+   599751
+  ],
+  [
+   "idx_performance_metrics",
+   "metric",
+   0
+  ],
+  [
+   "idx_security_fw",
+   "event",
+   0
+  ],
+  [
+   "idx_wireless_ops",
+   "event",
+   0
+  ],
+  [
+   "main",
+   "event",
+   0
+  ],
+  [
+   "netops_logs",
+   "event",
+   0
+  ],
+  [
+   "splunklogger",
+   "event",
+   0
+  ],
+  [
+   "summary",
+   "event",
+   0
+  ],
+  [
+   "ta_validation",
+   "event",
+   797
+  ]
+ ],
+ "addons_installed": [
+  [
+   "SplunkDeploymentServerConfig",
+   null
+  ],
+  [
+   "Splunk_TA_cisco-asa",
+   "6.1.2"
+  ],
+  [
+   "Splunk_TA_microsoft_sysmon",
+   "5.0.1"
+  ],
+  [
+   "Splunk_TA_windows",
+   "10.0.1"
+  ],
+  [
+   "netspout",
+   "2.0.0"
+  ]
+ ],
+ "hec_tokens": [
+  {
+   "name": "http://splunk_hec_token",
+   "enabled": true,
+   "allowed_indexes": "all",
+   "useACK": null
+  }
+ ],
+ "cisco_metrics": "metric index created in this lab during Phase 8 (datatype=metric)",
+ "note": "credentials only in git-ignored tests/lab/ta_validation/.env.lab; never recorded here"
+}

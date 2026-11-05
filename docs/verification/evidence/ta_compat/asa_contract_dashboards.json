@@ -1,0 +1,499 @@
+{
+ "lateral_movement": {
+  "streams": [
+   "cisco:asa",
+   "cisco:ios:syslog",
+   "postgresql:audit"
+  ],
+  "arm_A_current": {
+   "run_id": "p4-ta-e6f8a483",
+   "generated": 57,
+   "hec_accepted": 57,
+   "indexed": 57
+  },
+  "arm_B_legacy_fields": {
+   "run_id": "p4-legacy-03cc524a",
+   "generated": 57,
+   "hec_accepted": 57,
+   "indexed": 57
+  },
+  "changed_searches": [
+   "ds_11",
+   "ds_12"
+  ],
+  "searches": 16,
+  "rows_new_searches_on_TA_owned_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 14,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 5,
+    "error": null
+   }
+  },
+  "rows_new_searches_on_legacy_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 9,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 5,
+    "error": null
+   }
+  },
+  "rows_old_searches_on_TA_owned_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 9,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 57,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 5,
+    "error": null
+   }
+  },
+  "asa_events_seen_by_new_phase_panels": [
+   {
+    "s": "blocked",
+    "a": "blocked",
+    "count": "18"
+   },
+   {
+    "s": "normal",
+    "a": "allowed",
+    "count": "6"
+   },
+   {
+    "s": "restored",
+    "a": "allowed",
+    "count": "6"
+   }
+  ],
+  "asa_events_seen_by_old_phase_panels (status, action, signature)": [],
+  "errors": []
+ },
+ "normal_traffic": {
+  "streams": [
+   "cisco:asa",
+   "f5:bigip:ltm",
+   "nginx:plus:kv",
+   "pan:traffic",
+   "postgresql:audit"
+  ],
+  "arm_A_current": {
+   "run_id": "p4-ta-b3a22eb8",
+   "generated": 55,
+   "hec_accepted": 55,
+   "indexed": 55
+  },
+  "arm_B_legacy_fields": {
+   "run_id": "p4-legacy-d46d8b8b",
+   "generated": 55,
+   "hec_accepted": 55,
+   "indexed": 55
+  },
+  "changed_searches": [
+   "ds_14"
+  ],
+  "searches": 18,
+  "rows_new_searches_on_TA_owned_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 15,
+    "error": null
+   },
+   "ds_15": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_16": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 3,
+    "error": null
+   }
+  },
+  "rows_new_searches_on_legacy_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 12,
+    "error": null
+   },
+   "ds_15": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_16": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 3,
+    "error": null
+   }
+  },
+  "rows_old_searches_on_TA_owned_data": {
+   "ds_1": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_2": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_3": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_4": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_5": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_6": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_7": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_8": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_9": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_10": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_11": {
+    "rows": 1,
+    "error": null
+   },
+   "ds_12": {
+    "rows": 5,
+    "error": null
+   },
+   "ds_13": {
+    "rows": 3,
+    "error": null
+   },
+   "ds_14": {
+    "rows": 12,
+    "error": null
+   },
+   "ds_15": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_16": {
+    "rows": 55,
+    "error": null
+   },
+   "ds_runs": {
+    "rows": 4,
+    "error": null
+   },
+   "ds_phase_list": {
+    "rows": 3,
+    "error": null
+   }
+  },
+  "asa_events_seen_by_new_phase_panels": [
+   {
+    "s": "normal",
+    "a": "allowed",
+    "count": "11"
+   }
+  ],
+  "asa_events_seen_by_old_phase_panels (status, action, signature)": [],
+  "errors": []
+ }
+}

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-02",
+ "generated": "2026-11-03",
  "rows": [
   {
    "vendor_id": "a10_networks",
@@ -6382,7 +6382,7 @@
    "product": "Vmware Esx Perf",
    "sourcetype": "vmware:perf:cpu",
    "category": "vmware-esx-perf",
-   "data_kind": "metric",
+   "data_kind": "event",
    "protocol": "hec",
    "native_generator": false,
    "generator_tier": "SAMPLE_REPLAY",

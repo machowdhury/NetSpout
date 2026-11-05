@@ -1,0 +1,205 @@
+{
+ "scenario": "paloalto_threat_investigation",
+ "run_id": "NS-20261104-bf0b3e2a",
+ "required": [
+  {
+   "sourcetype": "pan:traffic",
+   "status": "VERIFIED",
+   "status_label": "Verified in Splunk",
+   "block": null
+  },
+  {
+   "sourcetype": "pan:threat",
+   "status": "VERIFIED",
+   "status_label": "Verified in Splunk",
+   "block": null
+  },
+  {
+   "sourcetype": "pan:system",
+   "status": "VERIFIED",
+   "status_label": "Verified in Splunk",
+   "block": null
+  }
+ ],
+ "state_label": "Verified in Splunk",
+ "ta_parsing": {
+  "pan:traffic": {
+   "events": 25,
+   "fields_extracted_on_every_event": [
+    "src_ip",
+    "dest_ip",
+    "src_port",
+    "dest_port",
+    "transport",
+    "rule",
+    "app",
+    "vendor_action",
+    "action",
+    "session_id"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 24.237273,
+   "actions": [
+    "allow->allowed",
+    "deny->blocked",
+    "drop->blocked",
+    "reset-both->blocked"
+   ]
+  },
+  "pan:threat": {
+   "events": 13,
+   "fields_extracted_on_every_event": [
+    "src_ip",
+    "dest_ip",
+    "rule",
+    "app",
+    "vendor_action",
+    "action",
+    "raw_category",
+    "severity",
+    "direction",
+    "threat_name",
+    "threat_id",
+    "log_subtype"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 19.430104,
+   "actions": [
+    "alert->allowed",
+    "block-ip->blocked",
+    "drop->blocked",
+    "reset-both->blocked",
+    "reset-client->blocked",
+    "reset-server->blocked"
+   ]
+  },
+  "pan:system": {
+   "events": 9,
+   "fields_extracted_on_every_event": [
+    "log_subtype",
+    "event_id",
+    "module",
+    "severity",
+    "description",
+    "sequence_number",
+    "signature",
+    "result"
+   ],
+   "max_seconds_between_event_time_and_stored_time": 5.359275,
+   "actions": []
+  }
+ },
+ "ui_outcome": "Verified: found 47 of 47 events in index idx_network_ops that this run sent.",
+ "sent": {
+  "events": 47,
+  "by_sourcetype": {
+   "pan:system": 9,
+   "pan:threat": 13,
+   "pan:traffic": 25
+  },
+  "phases": [
+   "BASELINE",
+   "DEGRADE",
+   "FAULT",
+   "FAILOVER",
+   "RECOVER"
+  ]
+ },
+ "indexed": {
+  "total": 47,
+  "by_phase": [
+   {
+    "phase": "BASELINE",
+    "count": 6,
+    "first": 1793818525.3314478,
+    "last": 1793818525.4043603
+   },
+   {
+    "phase": "DEGRADE",
+    "count": 11,
+    "first": 1793818525.4114337,
+    "last": 1793818525.503988
+   },
+   {
+    "phase": "FAULT",
+    "count": 13,
+    "first": 1793818525.5120056,
+    "last": 1793818525.6213481
+   },
+   {
+    "phase": "FAILOVER",
+    "count": 11,
+    "first": 1793818525.6309156,
+    "last": 1793818525.7627265
+   },
+   {
+    "phase": "RECOVER",
+    "count": 6,
+    "first": 1793818525.7691092,
+    "last": 1793818525.7999117
+   }
+  ],
+  "by_sourcetype": {
+   "pan:system": 9,
+   "pan:threat": 13,
+   "pan:traffic": 25
+  }
+ },
+ "dashboard": "pf_paloalto_threat_investigation",
+ "dashboard_searches_run": [
+  {
+   "source": "ds_1",
+   "rows": 1
+  },
+  {
+   "source": "ds_2",
+   "rows": 1
+  },
+  {
+   "source": "ds_3",
+   "rows": 1
+  },
+  {
+   "source": "ds_4",
+   "rows": 1
+  },
+  {
+   "source": "ds_5",
+   "rows": 1
+  },
+  {
+   "source": "ds_6",
+   "rows": 1
+  },
+  {
+   "source": "ds_7",
+   "rows": 1
+  },
+  {
+   "source": "ds_8",
+   "rows": 5
+  },
+  {
+   "source": "ds_9",
+   "rows": 1
+  },
+  {
+   "source": "ds_10",
+   "rows": 5
+  },
+  {
+   "source": "ds_11",
+   "rows": 47
+  },
+  {
+   "source": "ds_12",
+   "rows": 47
+  },
+  {
+   "source": "ds_runs",
+   "rows": 2
+  },
+  {
+   "source": "ds_phase_list",
+   "rows": 5
+  }
+ ]
+}

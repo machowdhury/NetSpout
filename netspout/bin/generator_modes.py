@@ -23,7 +23,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.log_engine import SplunkLogEngine
+from netspout_core.yaml_sample_replay import SampleError, SampleSet, load_sample_set
+from netspout_core.asa_generator import SOURCETYPE as ASA_SOURCETYPE, generate_asa_entries
 from netspout_core.vendor_catalog import get_vendor_by_id
+from netspout_core import ingestion_profiles
+from netspout_core.real_format_generators import (PAN_SYSTEM_SOURCETYPE, PAN_THREAT_SOURCETYPE, PAN_TRAFFIC_SOURCETYPE, VMWARE_CPU_SOURCETYPE, family_violations, iosxr_metric_entries, pan_system_entries,
+                                                  pan_threat_entries, pan_traffic_entries, refresh_event_time, vmware_perf_cpu_entries)
 from netspout_core.models import (
     EcosystemMode,
     LogEntry,
@@ -33,7 +38,7 @@ from netspout_core.models import (
     ScenarioType,
     TelemetryTransportConfig,
 )
-from netspout_core.telemetry_dispatcher import dispatcher
+from netspout_core.telemetry_dispatcher import dispatcher, is_metric_sourcetype
 
 logger = logging.getLogger("netspout.generator_modes")
 
@@ -50,6 +55,25 @@ def _find_samples_dirs() -> List[str]:
         "/opt/splunk/etc/apps/netspout/appserver/static/samples"
     ]
     return [c for c in candidates if os.path.isdir(c)]
+
+
+def _has_measurements(raw: str, sourcetype: str) -> bool:
+    e = LogEntry(timestamp="", device_id="d", src_ip="0.0.0.0", dest_ip="0.0.0.0", protocol="n/a", duration="0ms", action="streamed", signature="x",
+                 status="normal", raw_log=raw, node_type="router", node_id="d", vendor="v", sourcetype=sourcetype)
+    return any(k.startswith("metric_name:") for k in dispatcher.extract_metric_fields(e))
+
+
+MDT_METRIC_SOURCETYPE = "cisco:ios:mdt:metric"
+
+
+def _mdt_metric_entries(count: int) -> List[LogEntry]:
+    """Cisco IOS XR interface and CPU series in the schema observed on a real cisco_metrics index (real_format_generators.iosxr_metric_entries); delivered as HEC metrics.
+    The OpenConfig-shaped records used by the gNMI and scenario paths (SplunkLogEngine.format_mdt_stream) are unchanged."""
+    return iosxr_metric_entries(count)
+
+
+_NATIVE = {ASA_SOURCETYPE: generate_asa_entries, MDT_METRIC_SOURCETYPE: _mdt_metric_entries, VMWARE_CPU_SOURCETYPE: vmware_perf_cpu_entries,
+           PAN_TRAFFIC_SOURCETYPE: pan_traffic_entries, PAN_THREAT_SOURCETYPE: pan_threat_entries, PAN_SYSTEM_SOURCETYPE: pan_system_entries}
 
 
 class TelemetryGeneratorService:
@@ -73,12 +97,24 @@ class TelemetryGeneratorService:
         If not grounded, returns:
             ([], 'UNSUPPORTED_TELEMETRY', reason)
         """
-        if sourcetype in self._parsed_samples_cache:
-            return self._parsed_samples_cache[sourcetype]
+        cached = self._parsed_samples_cache.get(sourcetype)
+        if cached is None:
+            cached = self._resolve_samples(sourcetype, vendor_id)
+            self._parsed_samples_cache[sourcetype] = cached
+        source, prov_class, source_ref = cached
+        if isinstance(source, SampleSet):
+            # templates are cached; tokens (timestamps, hosts, ids) are rendered fresh on every call
+            try:
+                return source.render_all(), prov_class, source_ref
+            except SampleError as exc:
+                return [], "SAMPLE_INVALID", "sample invalid: %s" % exc
+        return list(source), prov_class, source_ref
 
-        events: List[str] = []
+    def _resolve_samples(self, sourcetype: str, vendor_id: Optional[str]):
+        events: Any = []
         prov_class = "UNSUPPORTED_TELEMETRY"
         source_ref: Optional[str] = None
+        invalid: Optional[str] = None
 
         # 1. Check samples registered in catalog._samples
         for sm in self.catalog._samples:
@@ -87,7 +123,11 @@ class TelemetryGeneratorService:
                 roots = [self._repo_root, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))]
                 cand_path = next((c for c in (os.path.join(r, sm.get("sample_path", "")) for r in roots) if os.path.isfile(c)), "")
                 if cand_path and os.path.isfile(cand_path):
-                    parsed = self._parse_sample_file(cand_path)
+                    try:
+                        parsed = self._load_sample_events(cand_path, sourcetype)
+                    except SampleError as exc:
+                        invalid = "%s: %s" % (os.path.basename(cand_path), exc)
+                        continue
                     if parsed:
                         events = parsed
                         prov_class = "VERIFIED_PUBLIC_SAMPLE"
@@ -111,7 +151,11 @@ class TelemetryGeneratorService:
                     ]
                     for c in candidates:
                         if c and os.path.isfile(c):
-                            parsed = self._parse_sample_file(c)
+                            try:
+                                parsed = self._load_sample_events(c, sourcetype)
+                            except SampleError as exc:
+                                invalid = "%s: %s" % (os.path.basename(c), exc)
+                                continue
                             if parsed:
                                 events = parsed
                                 prov_class = "VERIFIED_PUBLIC_SAMPLE"
@@ -136,32 +180,38 @@ class TelemetryGeneratorService:
                                 prov_class = "VENDOR_DOCUMENTED"
                                 source_ref = f"vendor_catalog:{vid}"
 
-        if not events:
-            prov_class = "UNSUPPORTED_TELEMETRY"
-            source_ref = f"No verified public sample or documented vendor contract exists for sourcetype '{sourcetype}'"
+        if events and is_metric_sourcetype(sourcetype):
+            # a Splunk metric-index stream is never produced by replaying log text: every replayed event must carry numeric measurements
+            sample = events.render_all() if isinstance(events, SampleSet) else list(events)
+            if not sample or not all(_has_measurements(e, sourcetype) for e in sample):
+                events, prov_class = [], "METRIC_REPLAY_UNSUPPORTED"
+                source_ref = "%s is a metric-index sourcetype; its sample events carry no numeric measurements, so replay would not produce metrics" % sourcetype
 
-        result = (events, prov_class, source_ref)
-        self._parsed_samples_cache[sourcetype] = result
-        return result
+        if events and not isinstance(events, SampleSet):
+            bad = family_violations(sourcetype, events)
+            if bad:
+                invalid = "event-family contract violated for %s: %s" % (sourcetype, "; ".join(bad[:3]))
+                events, prov_class = [], "SAMPLE_INVALID"
+
+        if not events:
+            if prov_class != "METRIC_REPLAY_UNSUPPORTED":
+                prov_class = "SAMPLE_INVALID" if invalid else "UNSUPPORTED_TELEMETRY"
+                source_ref = ("sample invalid: " + invalid) if invalid else f"No verified public sample or documented vendor contract exists for sourcetype '{sourcetype}'"
+        return events, prov_class, source_ref
+
+    @staticmethod
+    def _load_sample_events(file_path: str, sourcetype: str):
+        """YAML samples go through the structured parser (only lines/_raw, fromRaw, fromSample are telemetry). Other files are plain one-event-per-line text."""
+        if file_path.lower().endswith((".yml", ".yaml")):
+            ss = load_sample_set(file_path)
+            return ss.restrict_to(sourcetype) if sourcetype else ss
+        with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+            return [ln.rstrip("\r\n") for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
 
     def _parse_sample_file(self, file_path: str) -> List[str]:
-        events = []
-        try:
-            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-                for line in f:
-                    line_str = line.strip()
-                    if "_raw:" in line_str:
-                        parts = line_str.split("_raw:", 1)
-                        val = parts[1].strip()
-                        if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
-                            val = val[1:-1]
-                        if val:
-                            events.append(val)
-                    elif not line_str.startswith("#") and not line_str.startswith("-") and not line_str.endswith(":") and len(line_str) > 20:
-                        events.append(line_str)
-        except Exception as e:
-            logger.debug(f"Failed parsing sample file {file_path}: {e}")
-        return events
+        """Rendered events of one sample file (kept for callers that want text); YAML is parsed structurally and invalid files raise SampleError."""
+        events = self._load_sample_events(file_path, "")
+        return events.render_all() if isinstance(events, SampleSet) else events
 
     def _universe_source(self, sourcetype):
         from netspout_core.universe_batch7_engine import batch_registry as batch7_registry
@@ -290,6 +340,13 @@ class TelemetryGeneratorService:
                         index=index or 'idx_network_ops', host=entry.device_id, raw=entry.raw_log,
                         provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
                         dispatched=dispatch, dispatch_result=result)
+        if sourcetype in _NATIVE:
+            e = _NATIVE[sourcetype](1)[0]
+            target_index = index or "idx_network_ops"
+            res = dispatcher.dispatch_log(e, transport_config or TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_index=target_index)) if dispatch else None
+            return {"mode": "SINGLE_EVENT", "status": "GROUNDED", "event_id": e.netspout_event_id, "vendor_id": vendor_id, "sourcetype": sourcetype, "event_name": event_name or "Event",
+                    "index": target_index, "host": e.device_id, "raw": e.raw_log, "provenance": self._NATIVE_PROVENANCE[sourcetype], "dispatched": dispatch, "dispatch_result": res}
+        self._reject_non_ta_name(sourcetype)
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -298,12 +355,12 @@ class TelemetryGeneratorService:
                 "error": "UNSUPPORTED_TELEMETRY",
                 "vendor_id": vendor_id,
                 "sourcetype": sourcetype,
-                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "reason": source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
                 "provenance_status": prov_class,
                 "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
             }
 
-        raw_event = random.choice(samples)
+        raw_event = refresh_event_time(sourcetype, random.choice(samples))
         event_id = str(uuid.uuid4())
         target_index = index or "idx_network_ops"
         target_host = "sim-device-01"
@@ -385,6 +442,9 @@ class TelemetryGeneratorService:
                         rate_eps=rate_eps, index=index or 'idx_network_ops', event_families=families,
                         provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
                         sample_preview=[entry.raw_log for entry in entries[:3]])
+        if sourcetype in _NATIVE:
+            return self._native_batch(vendor_id, sourcetype, count, rate_eps, dispatch, transport_config, index)
+        self._reject_non_ta_name(sourcetype)
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -393,7 +453,7 @@ class TelemetryGeneratorService:
                 "error": "UNSUPPORTED_TELEMETRY",
                 "vendor_id": vendor_id,
                 "sourcetype": sourcetype,
-                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "reason": source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
                 "provenance_status": prov_class,
                 "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
             }
@@ -409,7 +469,7 @@ class TelemetryGeneratorService:
         )
 
         for i in range(count):
-            base_sample = random.choice(samples)
+            base_sample = refresh_event_time(sourcetype, random.choice(samples))
             ev_id = str(uuid.uuid4())
             events_generated.append(base_sample)
             total_generated += 1
@@ -456,13 +516,42 @@ class TelemetryGeneratorService:
             "sample_preview": events_generated[:3]
         }
 
+    _NATIVE_PROVENANCE = {
+        ASA_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/asa_generator.py; message formats per Cisco ASA syslog guide (302013-302016, 106023); sourcetype declared by Splunk Add-on for Cisco ASA (Splunkbase 1620); TA parsing NOT verified"},
+        MDT_METRIC_SOURCETYPE: {"classification": "REAL_TELEMETRY_OBSERVED", "source": "docs/contracts/phase7/real_metric_inventory.json and phase8_metric_evidence.json (cisco_metrics series: interface_generic_counters.* and the native wdsysmon CPU names); delivered as Splunk HEC metrics; mstats-verified in the isolated lab"},
+        PAN_TRAFFIC_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS traffic log columns, the layout the paloalto scenarios use); live-verified against the Splunk Add-on for Palo Alto Networks 4.0.0 (docs/contracts/ta_live_results.json)"},
+        PAN_THREAT_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS threat log columns, the layout the paloalto scenarios use); checked against the Splunk Add-on for Palo Alto Networks 4.0.0 field list in the isolated lab"},
+        PAN_SYSTEM_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/panos_generator.py (PAN-OS system log columns, the layout the paloalto scenarios use); checked against the Splunk Add-on for Palo Alto Networks 4.0.0 field list in the isolated lab"},
+        VMWARE_CPU_SOURCETYPE: {"classification": "REAL_TELEMETRY_OBSERVED", "source": "tests/fixtures/phase7_real_samples (vmware:perf:cpu TSV row) and the Splunk_TA_vmware 4.2.1 collector layout; column semantics and value ranges not evidenced"},
+    }
+
+    @staticmethod
+    def _reject_non_ta_name(sourcetype: str):
+        if sourcetype == "cisco:asa:syslog":
+            raise ValueError("NON_CANONICAL_SOURCETYPE: 'cisco:asa:syslog' is not a Splunk Add-on for Cisco ASA sourcetype; use 'cisco:asa'")
+
+    def _native_batch(self, vendor_id, sourcetype, count, rate_eps, dispatch, transport_config, index):
+        target_index = index or "idx_network_ops"
+        entries = _NATIVE[sourcetype](count)
+        cfg = transport_config or TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_index=target_index)
+        sent = 0
+        for e in entries:
+            e.netspout_event_id = e.netspout_event_id or str(uuid.uuid4())
+            e.netspout_ground_truth = "true"
+            if dispatch:
+                res = dispatcher.dispatch_log(e, cfg)
+                sent += bool(res.get("hec", {}).get("success") or res.get("syslog", {}).get("success"))
+        return {"mode": "SOURCETYPE_BATCH", "status": "GROUNDED", "vendor_id": vendor_id, "sourcetype": sourcetype, "count_requested": count, "count_generated": len(entries),
+                "count_dispatched": sent, "rate_eps": rate_eps, "index": target_index, "provenance": self._NATIVE_PROVENANCE[sourcetype], "sample_preview": [e.raw_log for e in entries[:3]]}
+
     def prepare_sourcetype_entries(self, vendor_id: str, sourcetype: str, count: int, event_families: Optional[List[str]] = None,
-                                   run_id: Optional[str] = None):
+                                   run_id: Optional[str] = None, ingestion_profile: Optional[str] = None):
         """Build (not send) the LogEntry list for one sourcetype so a monitored run can deliver them with exact per-event accounting.
         Same grounding rules as generate_sourcetype_batch: native registries first, then verified samples; never a fabricated payload.
         Returns (entries, provenance) or raises ValueError('TELEMETRY_NOT_GROUNDED: ...')."""
         if not 1 <= count <= 1000:
             raise ValueError("count must be between 1 and 1000")
+        profile = ingestion_profiles.validate(sourcetype, ingestion_profile)
         source, reference = self._universe_source(sourcetype)
         if source:
             families = event_families or source["event_families"]
@@ -470,10 +559,21 @@ class TelemetryGeneratorService:
                 raise ValueError("Unsupported native event family")
             entries = [self._universe_entry(source, vendor_id, families[i % len(families)]) for i in range(count)]
             prov = dict(classification=source.get("evidence_level", "VENDOR_DOCUMENTED"), source=reference, mode="native")
+        elif sourcetype in _NATIVE:
+            entries = _NATIVE[sourcetype](count)
+            for e in entries:
+                e.netspout_event_id = e.netspout_event_id or str(uuid.uuid4())
+                e.netspout_ground_truth = "true"
+            prov = dict(self._NATIVE_PROVENANCE[sourcetype], mode="native")
         else:
+            self._reject_non_ta_name(sourcetype)
             samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
             if not samples:
-                raise ValueError("TELEMETRY_NOT_GROUNDED: no authoritative vendor log schema or verified sample exists for " + sourcetype)
+                raise ValueError("TELEMETRY_NOT_GROUNDED: " + (source_ref if prov_class in ("SAMPLE_INVALID", "METRIC_REPLAY_UNSUPPORTED") else "no authoritative vendor log schema or verified sample exists for " + sourcetype))
+            samples = ingestion_profiles.expressible(sourcetype, profile, samples)
+            if not samples:
+                raise ValueError("TELEMETRY_NOT_GROUNDED: no sample for %s can be expressed in the %s ingestion profile" % (sourcetype, profile))
+            samples = [refresh_event_time(sourcetype, x) for x in samples]
             entries = []
             for i in range(count):
                 dev = f"device-{(i % 3) + 1:02d}"
@@ -483,6 +583,8 @@ class TelemetryGeneratorService:
                                         sourcetype=sourcetype, raw_log=random.choice(samples), status="normal", action="streamed", netspout_event_id=ev_id,
                                         netspout_ground_truth="true"))
             prov = dict(classification=prov_class, source=source_ref, mode="grounded_sample")
+        entries = ingestion_profiles.apply_to_entries(sourcetype, profile, entries)
+        prov["ingestion_profile"] = profile
         if run_id:
             for e in entries:
                 e.netspout_run_id = run_id

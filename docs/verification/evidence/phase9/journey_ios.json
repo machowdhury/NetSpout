@@ -1,0 +1,78 @@
+{
+ "sourcetype": "cisco:ios",
+ "vendor": "cisco_ios",
+ "run_id": "run-13be6fc46d68",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "cisco:ios",
+  "preview_info": "Sourcetype that will be sent: cisco:ios · index ta_validation · generator: grounded_sample",
+  "preview_first_event": "Nov 04 17:37:55 10.0.0.253 : 2026 Nov 04 17:37:55 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped",
+  "outcome": "Verified: found 20 of 20 events in index ta_validation that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "cisco:ios"
+  ],
+  "indexes": [
+   "ta_validation"
+  ],
+  "hosts": [
+   "device-01",
+   "device-02",
+   "device-03"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "cisco:ios",
+  "index": "ta_validation",
+  "hosts": [
+   "device-01",
+   "device-02",
+   "device-03"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793813875.922627,
+  "time_last": 1793813879.8143191,
+  "send_time_first": 1793813875.922627,
+  "send_time_last": 1793813879.8143191
+ },
+ "ta_fields_extracted_counts": {
+  "facility": 20,
+  "severity_id": 20,
+  "mnemonic": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-04 17:37:59.814 GMT",
+   "host": "device-02",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:ios",
+   "index": "ta_validation",
+   "_raw": "Nov 04 17:37:55 10.0.0.253 : 2026 Nov 04 17:37:55 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped"
+  },
+  {
+   "_time": "2026-11-04 17:37:59.612 GMT",
+   "host": "device-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:ios",
+   "index": "ta_validation",
+   "_raw": "Nov 04 17:37:55 10.0.0.253 : 2026 Nov 04 17:37:55 UTC: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped"
+  }
+ ]
+}

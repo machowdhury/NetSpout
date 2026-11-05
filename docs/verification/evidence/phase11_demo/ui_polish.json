@@ -1,0 +1,13 @@
+{
+ "vendor_names_cisco": [],
+ "products_before_search": 41,
+ "products_after_search_link_health": [
+  "No product matches “link health”"
+ ],
+ "status_words": [
+  "Verified in Splunk",
+  "Checked offline only, not tested in Splunk",
+  "Can send data, not tested in Splunk",
+  "Cannot send data"
+ ]
+}

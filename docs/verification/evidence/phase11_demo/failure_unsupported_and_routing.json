@@ -1,0 +1,11 @@
+{
+ "unsupported_example": "cisco:asa:syslog",
+ "unsupported_block": {
+  "code": "NO_GENERATOR",
+  "message": "NetSpout has no verified generator or sample for this sourcetype, so it cannot produce realistic events for it (NON_CANONICAL_SOURCETYPE: 'cisco:asa:syslog' is not a Splunk Add-on for Cisco ASA sourcetype; use 'cisco:asa')."
+ },
+ "run_http_status": 409,
+ "routing_conflict": "cisco:thousandeyes:metric",
+ "routing_run_http_status": 409,
+ "routing_preview_http_status": 409
+}

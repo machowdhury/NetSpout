@@ -93,6 +93,13 @@ def test_preview_sends_nothing_and_describes_the_run(cid):
 def test_scenario_runs_through_the_monitored_run_path(cid, env):
     expected = sc.generate(cid, "x")
     r = client.post("/api/runs", json={"kind": "scenario", "target": cid, "eps": 2000})
+    from netspout_core import capability
+    conflicted = sorted({e.sourcetype for e in expected if capability.routing_block(e.sourcetype)})
+    if conflicted:
+        # Phase 6: a scenario that emits a sourcetype whose metric/event routing conflicts with its add-on is refused, never sent as a metric or turned into logs
+        assert r.status_code == 409 and "not runnable" in r.json()["detail"] and conflicted[0] in r.json()["detail"], r.text
+        assert not env
+        return
     assert r.status_code == 200, r.text
     s = wait_done(r.json()["run_id"])
     assert s["state"] == "COMPLETED" and s["counters"]["generated"] == s["counters"]["accepted"] == len(expected) and s["counters"]["indexed"] is None

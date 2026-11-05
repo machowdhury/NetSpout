@@ -1,6 +1,6 @@
 {
   "name": "netspout-frontend",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Mahamudul Chowdhury",
   "description": "NetSpout Dark NOC React Canvas UI for Splunk Enterprise and Splunk Cloud",
   "private": true,

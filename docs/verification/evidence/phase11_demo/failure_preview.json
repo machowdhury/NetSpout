@@ -1,0 +1,4 @@
+{
+ "injected": "HTTP 500 from /api/generate/preview via browser route interception",
+ "generate_disabled": true
+}

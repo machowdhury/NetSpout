@@ -1,0 +1,5 @@
+{
+ "ui_connection": "Not working: Splunk HEC could not be used. [Errno 111] Connection refused",
+ "ui_run": "Splunk did not receive this data. HEC endpoint unreachable",
+ "splunk_events_for_run": 0
+}

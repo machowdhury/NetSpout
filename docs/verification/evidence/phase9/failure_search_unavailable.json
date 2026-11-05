@@ -1,0 +1,5 @@
+{
+ "ui_run": "Splunk accepted 10, but this app could not check whether it is searchable: URLError. Accepted by Splunk is not the same as searchable, so this is not verified.",
+ "note": "the events really were indexed (checked by this test directly); the app still did not claim Verified because its own search could not run",
+ "splunk_events_for_run": 10
+}

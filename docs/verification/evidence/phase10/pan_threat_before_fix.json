@@ -1,0 +1,777 @@
+{
+ "spec": "palo_alto_threat.json",
+ "ta": {
+  "id": "Splunk_TA_paloalto_networks",
+  "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "version": "4.0.0"
+ },
+ "run_id": "tacompat-304ddfe12f",
+ "generated": "2026-11-03T21:50:43+00:00",
+ "checks": [
+  {
+   "check": "ta.version",
+   "status": "PASS",
+   "detail": "installed package 4.0.0, expected 4.0.0"
+  },
+  {
+   "check": "props.sourcetype_stanza",
+   "status": "PASS",
+   "detail": "[pan:threat] in props.conf"
+  },
+  {
+   "check": "props.report_transforms_exist",
+   "status": "PASS",
+   "detail": "9 REPORT transforms, missing: []"
+  },
+  {
+   "check": "transforms.force_sourcetype_defined",
+   "status": "PASS",
+   "detail": "1 transform(s) can set sourcetype::pan:threat"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'pan:threat', expected 'pan:threat'"
+  },
+  {
+   "check": "timestamp.format_parses[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^(?:[^,]*,){6}' TIME_FORMAT='%Y/%m/%d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.app]",
+   "status": "PASS",
+   "detail": "field app is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.src_zone]",
+   "status": "PASS",
+   "detail": "field src_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.dest_zone]",
+   "status": "PASS",
+   "detail": "field dest_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.log_subtype]",
+   "status": "PASS",
+   "detail": "field log_subtype is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.raw_category]",
+   "status": "PASS",
+   "detail": "field raw_category is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.severity]",
+   "status": "PASS",
+   "detail": "field severity is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.direction]",
+   "status": "PASS",
+   "detail": "field direction is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.threat_name]",
+   "status": "PASS",
+   "detail": "field threat_name is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-vuln-critical.threat_id]",
+   "status": "PASS",
+   "detail": "field threat_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "pan_threat (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[pan-threat-vuln-critical:ids]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[pan-threat-vuln-critical:attack]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "add-on lookup pan_vendor_actions: vendor_action=reset-both -> action='blocked' (expected 'blocked')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'pan:threat', expected 'pan:threat'"
+  },
+  {
+   "check": "timestamp.format_parses[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^(?:[^,]*,){6}' TIME_FORMAT='%Y/%m/%d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.app]",
+   "status": "PASS",
+   "detail": "field app is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.src_zone]",
+   "status": "PASS",
+   "detail": "field src_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.dest_zone]",
+   "status": "PASS",
+   "detail": "field dest_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.log_subtype]",
+   "status": "PASS",
+   "detail": "field log_subtype is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.raw_category]",
+   "status": "PASS",
+   "detail": "field raw_category is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.severity]",
+   "status": "PASS",
+   "detail": "field severity is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.direction]",
+   "status": "PASS",
+   "detail": "field direction is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.threat_name]",
+   "status": "PASS",
+   "detail": "field threat_name is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-spyware-high-blockip.threat_id]",
+   "status": "PASS",
+   "detail": "field threat_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "pan_threat (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[pan-threat-spyware-high-blockip:ids]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[pan-threat-spyware-high-blockip:attack]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "add-on lookup pan_vendor_actions: vendor_action=block-ip -> action='blocked' (expected 'blocked')"
+  },
+  {
+   "check": "force_sourcetype.assigns_expected[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "add-on routing assigns 'pan:threat', expected 'pan:threat'"
+  },
+  {
+   "check": "timestamp.format_parses[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "TIME_PREFIX='^(?:[^,]*,){6}' TIME_FORMAT='%Y/%m/%d %H:%M:%S'"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.src_ip]",
+   "status": "PASS",
+   "detail": "field src_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.dest_ip]",
+   "status": "PASS",
+   "detail": "field dest_ip is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.src_port]",
+   "status": "PASS",
+   "detail": "field src_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.dest_port]",
+   "status": "PASS",
+   "detail": "field dest_port is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.transport]",
+   "status": "PASS",
+   "detail": "field transport is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.rule]",
+   "status": "PASS",
+   "detail": "field rule is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.app]",
+   "status": "PASS",
+   "detail": "field app is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.src_zone]",
+   "status": "PASS",
+   "detail": "field src_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.dest_zone]",
+   "status": "PASS",
+   "detail": "field dest_zone is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.session_id]",
+   "status": "PASS",
+   "detail": "field session_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.log_subtype]",
+   "status": "PASS",
+   "detail": "field log_subtype is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.raw_category]",
+   "status": "PASS",
+   "detail": "field raw_category is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.severity]",
+   "status": "PASS",
+   "detail": "field severity is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.direction]",
+   "status": "PASS",
+   "detail": "field direction is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.vendor_action]",
+   "status": "PASS",
+   "detail": "field vendor_action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.action]",
+   "status": "PASS",
+   "detail": "field action is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.threat_name]",
+   "status": "PASS",
+   "detail": "field threat_name is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "ta_defines_field[pan-threat-scan-low-alert.threat_id]",
+   "status": "PASS",
+   "detail": "field threat_id is defined by the add-on for [pan:threat]"
+  },
+  {
+   "check": "eventtype.defined_and_covers[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "pan_threat (defined; no message id to cover)"
+  },
+  {
+   "check": "tags.defined[pan-threat-scan-low-alert:ids]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "tags.defined[pan-threat-scan-low-alert:attack]",
+   "status": "PASS",
+   "detail": ""
+  },
+  {
+   "check": "lookup[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "add-on lookup pan_vendor_actions: vendor_action=alert -> action='allowed' (expected 'allowed')"
+  },
+  {
+   "check": "lab.installed_version",
+   "status": "PASS",
+   "detail": "lab has Splunk Add-on for Palo Alto Networks 4.0.0, package 4.0.0"
+  },
+  {
+   "check": "routing.index_datatype",
+   "status": "PASS",
+   "detail": "index ta_validation datatype=event, expected event"
+  },
+  {
+   "check": "hec.accepted",
+   "status": "PASS",
+   "detail": "4/4 accepted"
+  },
+  {
+   "check": "index.event_count",
+   "status": "PASS",
+   "detail": "indexed 4 of 4"
+  },
+  {
+   "check": "index.sourcetype",
+   "status": "PASS",
+   "detail": "sourcetypes seen: ['pan:threat']"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.src_ip]",
+   "status": "FAIL",
+   "detail": "expected '203.0.113.9', Splunk returned '192.0.2.1'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.dest_ip]",
+   "status": "FAIL",
+   "detail": "expected '10.0.10.80', Splunk returned '192.0.2.2'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.src_port]",
+   "status": "PASS",
+   "detail": "expected '49500', Splunk returned '49500'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.dest_port]",
+   "status": "PASS",
+   "detail": "expected '80', Splunk returned '80'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.rule]",
+   "status": "PASS",
+   "detail": "expected 'Perimeter-Inspection', Splunk returned 'Perimeter-Inspection'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.app]",
+   "status": "PASS",
+   "detail": "expected 'web-browsing', Splunk returned 'web-browsing'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.src_zone]",
+   "status": "PASS",
+   "detail": "expected 'untrust', Splunk returned 'untrust'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.dest_zone]",
+   "status": "PASS",
+   "detail": "expected 'trust', Splunk returned 'trust'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.session_id]",
+   "status": "PASS",
+   "detail": "expected '98425', Splunk returned '98425'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.log_subtype]",
+   "status": "PASS",
+   "detail": "expected 'vulnerability', Splunk returned 'vulnerability'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.raw_category]",
+   "status": "PASS",
+   "detail": "expected 'any', Splunk returned 'any'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.severity]",
+   "status": "PASS",
+   "detail": "expected 'critical', Splunk returned 'critical'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.direction]",
+   "status": "PASS",
+   "detail": "expected 'client-to-server', Splunk returned 'client-to-server'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.vendor_action]",
+   "status": "FAIL",
+   "detail": "expected 'reset-both', Splunk returned 'streamed'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.action]",
+   "status": "FAIL",
+   "detail": "expected 'blocked', Splunk returned 'unknown'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.threat_name]",
+   "status": "PASS",
+   "detail": "expected 'Apache Log4j Remote Code Execution', Splunk returned 'Apache Log4j Remote Code Execution'"
+  },
+  {
+   "check": "field[pan-threat-vuln-critical.threat_id]",
+   "status": "PASS",
+   "detail": "expected '30845', Splunk returned '30845'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[pan-threat-vuln-critical]",
+   "status": "FAIL",
+   "detail": "NetSpout test values found in vendor/CIM fields: {'src_ip': '192.0.2.1', 'dest_ip': '192.0.2.2'}"
+  },
+  {
+   "check": "eventtype[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "Splunk returned ['pan', 'pan_firewall', 'pan_threat']"
+  },
+  {
+   "check": "tags[pan-threat-vuln-critical]",
+   "status": "PASS",
+   "detail": "Splunk returned ['attack', 'ids']"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.src_ip]",
+   "status": "FAIL",
+   "detail": "expected '10.0.10.99', Splunk returned '192.0.2.1'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.dest_ip]",
+   "status": "FAIL",
+   "detail": "expected '198.51.100.44', Splunk returned '192.0.2.2'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.src_port]",
+   "status": "PASS",
+   "detail": "expected '54921', Splunk returned '54921'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.dest_port]",
+   "status": "PASS",
+   "detail": "expected '53', Splunk returned '53'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.transport]",
+   "status": "PASS",
+   "detail": "expected 'udp', Splunk returned 'udp'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.rule]",
+   "status": "PASS",
+   "detail": "expected 'Outbound-C2-Block', Splunk returned 'Outbound-C2-Block'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.app]",
+   "status": "PASS",
+   "detail": "expected 'dns', Splunk returned 'dns'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.src_zone]",
+   "status": "PASS",
+   "detail": "expected 'trust', Splunk returned 'trust'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.dest_zone]",
+   "status": "PASS",
+   "detail": "expected 'untrust', Splunk returned 'untrust'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.session_id]",
+   "status": "PASS",
+   "detail": "expected '98428', Splunk returned '98428'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.log_subtype]",
+   "status": "PASS",
+   "detail": "expected 'spyware', Splunk returned 'spyware'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.raw_category]",
+   "status": "PASS",
+   "detail": "expected 'any', Splunk returned 'any'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.severity]",
+   "status": "PASS",
+   "detail": "expected 'high', Splunk returned 'high'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.direction]",
+   "status": "PASS",
+   "detail": "expected 'client-to-server', Splunk returned 'client-to-server'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.vendor_action]",
+   "status": "FAIL",
+   "detail": "expected 'block-ip', Splunk returned 'streamed'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.action]",
+   "status": "FAIL",
+   "detail": "expected 'blocked', Splunk returned 'unknown'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.threat_name]",
+   "status": "PASS",
+   "detail": "expected 'ET TROJAN Possible C2 Beacon', Splunk returned 'ET TROJAN Possible C2 Beacon'"
+  },
+  {
+   "check": "field[pan-threat-spyware-high-blockip.threat_id]",
+   "status": "PASS",
+   "detail": "expected '58232', Splunk returned '58232'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[pan-threat-spyware-high-blockip]",
+   "status": "FAIL",
+   "detail": "NetSpout test values found in vendor/CIM fields: {'src_ip': '192.0.2.1', 'dest_ip': '192.0.2.2'}"
+  },
+  {
+   "check": "eventtype[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "Splunk returned ['pan', 'pan_firewall', 'pan_spyware', 'pan_threat']"
+  },
+  {
+   "check": "tags[pan-threat-spyware-high-blockip]",
+   "status": "PASS",
+   "detail": "Splunk returned ['attack', 'ids']"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.src_ip]",
+   "status": "FAIL",
+   "detail": "expected '192.0.2.77', Splunk returned '192.0.2.1'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.dest_ip]",
+   "status": "FAIL",
+   "detail": "expected '10.0.10.20', Splunk returned '192.0.2.2'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.src_port]",
+   "status": "PASS",
+   "detail": "expected '50111', Splunk returned '50111'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.dest_port]",
+   "status": "PASS",
+   "detail": "expected '443', Splunk returned '443'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.transport]",
+   "status": "PASS",
+   "detail": "expected 'tcp', Splunk returned 'tcp'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.rule]",
+   "status": "PASS",
+   "detail": "expected 'Perimeter-Inspection', Splunk returned 'Perimeter-Inspection'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.app]",
+   "status": "PASS",
+   "detail": "expected 'ssl', Splunk returned 'ssl'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.src_zone]",
+   "status": "PASS",
+   "detail": "expected 'untrust', Splunk returned 'untrust'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.dest_zone]",
+   "status": "PASS",
+   "detail": "expected 'trust', Splunk returned 'trust'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.session_id]",
+   "status": "PASS",
+   "detail": "expected '98430', Splunk returned '98430'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.log_subtype]",
+   "status": "PASS",
+   "detail": "expected 'scan', Splunk returned 'scan'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.raw_category]",
+   "status": "PASS",
+   "detail": "expected 'any', Splunk returned 'any'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.severity]",
+   "status": "PASS",
+   "detail": "expected 'low', Splunk returned 'low'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.direction]",
+   "status": "PASS",
+   "detail": "expected 'server-to-client', Splunk returned 'server-to-client'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.vendor_action]",
+   "status": "FAIL",
+   "detail": "expected 'alert', Splunk returned 'streamed'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.action]",
+   "status": "FAIL",
+   "detail": "expected 'allowed', Splunk returned 'unknown'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.threat_name]",
+   "status": "PASS",
+   "detail": "expected 'Phishing known-bad URL', Splunk returned 'Phishing known-bad URL'"
+  },
+  {
+   "check": "field[pan-threat-scan-low-alert.threat_id]",
+   "status": "PASS",
+   "detail": "expected '46009', Splunk returned '46009'"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[pan-threat-scan-low-alert]",
+   "status": "FAIL",
+   "detail": "NetSpout test values found in vendor/CIM fields: {'src_ip': '192.0.2.1', 'dest_ip': '192.0.2.2'}"
+  },
+  {
+   "check": "eventtype[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "Splunk returned ['pan', 'pan_firewall', 'pan_threat']"
+  },
+  {
+   "check": "tags[pan-threat-scan-low-alert]",
+   "status": "PASS",
+   "detail": "Splunk returned ['attack', 'ids']"
+  },
+  {
+   "check": "ownership.no_netspout_values_in_vendor_fields[plain-text-no-csv]",
+   "status": "FAIL",
+   "detail": "NetSpout test values found in vendor/CIM fields: {'src_ip': '192.0.2.1', 'dest_ip': '192.0.2.2', 'protocol': 'TCP'}"
+  },
+  {
+   "check": "absent[plain-text-no-csv.src_ip]",
+   "status": "FAIL",
+   "detail": "Splunk returned '192.0.2.1'"
+  },
+  {
+   "check": "absent[plain-text-no-csv.dest_ip]",
+   "status": "FAIL",
+   "detail": "Splunk returned '192.0.2.2'"
+  },
+  {
+   "check": "absent[plain-text-no-csv.session_id]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-csv.rule]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "absent[plain-text-no-csv.severity]",
+   "status": "PASS",
+   "detail": "Splunk returned None"
+  },
+  {
+   "check": "search.by_run",
+   "status": "PASS",
+   "detail": "events searchable by run id and sourcetype"
+  },
+  {
+   "check": "timestamp.parsed_from_event_text",
+   "status": "PASS",
+   "detail": "_time 2026-11-03T18:50:40.000+00:00 vs text 18:50:40 (skew 0s)"
+  }
+ ],
+ "summary": {
+  "PASS": 134,
+  "FAIL": 18,
+  "NOT_RUN": 0
+ }
+}

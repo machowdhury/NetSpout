@@ -36,4 +36,4 @@ Events go to an event index through HEC; gauge metrics go to a metric index (`ms
 | **B. Splunk Enterprise on a VM or server** | Same package and procedure; the gateway defaults to `127.0.0.1:8081`. **Not tested on a VM** (no authorized VM available) |
 | **C. Splunk Cloud** | Dashboards-only **Cloud edition** (`netspout_cloud.spl`) passes AppInspect cloud rules with 0 failures; the engine must stay outside Splunk. **User validation pending** ([04](04_SPLUNK_CLOUD_GUIDE.md)) |
 
-Docker is a way to host Splunk or the engine, not a dependency of the app: nothing in `netspout.spl` calls Docker (the gateway only picks `host.docker.internal` as its default when it detects a container).
+Docker is a way to host Splunk or the engine, not a dependency of the app: nothing in `netspout.spl` calls Docker (the gateway has no default engine address: the customer saves one under Connections > PulseForge Engine).

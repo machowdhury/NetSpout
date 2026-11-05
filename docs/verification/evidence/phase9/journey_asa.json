@@ -1,0 +1,76 @@
+{
+ "sourcetype": "cisco:asa",
+ "vendor": "cisco_asa",
+ "run_id": "run-a85c35502578",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "cisco:asa",
+  "preview_info": "Sourcetype that will be sent: cisco:asa · index ta_validation · generator: native",
+  "preview_first_event": "Nov  4 17:34:51 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 583092 for outside:192.0.2.14/80 (192.0.2.14/80) to inside:10.20.10.71/34007 (10.20.10.71/34007)",
+  "outcome": "Verified: found 20 of 20 events in index ta_validation that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "cisco:asa"
+  ],
+  "indexes": [
+   "ta_validation"
+  ],
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "cisco:asa",
+  "index": "ta_validation",
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793813691.9445481,
+  "time_last": 1793813695.7916338,
+  "send_time_first": 1793813691.9445481,
+  "send_time_last": 1793813695.7916338
+ },
+ "ta_fields_extracted_counts": {
+  "message_id": 20,
+  "vendor_action": 20,
+  "action": 20,
+  "src_ip": 20,
+  "dest_ip": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-04 17:34:55.791 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "ta_validation",
+   "_raw": "Nov  4 17:34:51 asa-fw-01 %ASA-6-302016: Teardown UDP connection 832131 for outside:198.51.100.80/53 to inside:10.20.10.71/56303 duration 0:04:30 bytes 1576702"
+  },
+  {
+   "_time": "2026-11-04 17:34:55.589 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "ta_validation",
+   "_raw": "Nov  4 17:34:51 asa-fw-01 %ASA-6-302015: Built outbound UDP connection 832131 for outside:198.51.100.80/53 (198.51.100.80/53) to inside:10.20.10.71/56303 (10.20.10.71/56303)"
+  }
+ ]
+}

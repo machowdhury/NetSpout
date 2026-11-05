@@ -1,0 +1,42 @@
+.sx { max-width: 880px; margin: 0 auto; padding: 8px 4px 40px; display: grid; gap: 18px; color: var(--ns-text); }
+.sx h2 { font-size: 20px; margin: 0; }
+.sx p { margin: 0; }
+.sx-muted { color: var(--ns-text-muted); font-size: 13px; }
+.sx-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.sx label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; color: var(--ns-text-muted); min-width: 150px; flex: 1; }
+.sx label { min-width: 0; }
+.sx select { width: 100%; min-width: 0; text-overflow: ellipsis; }
+.sx select, .sx input[type=number], .sx input[type=text] { font: inherit; font-size: 14px; padding: 7px 8px; border: 1px solid var(--ns-border-strong); border-radius: var(--ns-radius-sm); background: var(--ns-surface); color: var(--ns-text); }
+.sx button { font: inherit; font-size: 14px; padding: 8px 16px; border-radius: var(--ns-radius-sm); border: 1px solid var(--ns-border-strong); background: var(--ns-surface); cursor: pointer; }
+.sx button.sx-primary { background: var(--ns-accent); border-color: var(--ns-accent-strong); color: #fff; font-weight: 600; }
+.sx button:disabled { opacity: .5; cursor: not-allowed; }
+.sx-status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--ns-border); width: fit-content; }
+.sx-status--VERIFIED { color: var(--ns-success); border-color: var(--ns-success); }
+.sx-status--FORMAT_CHECKED { color: var(--ns-info); border-color: var(--ns-info); }
+.sx-status--GENERATOR_UNVERIFIED { color: var(--ns-warning); border-color: var(--ns-warning); }
+.sx-status--UNSUPPORTED { color: var(--ns-danger); border-color: var(--ns-danger); }
+.sx-box { border: 1px solid var(--ns-border); border-radius: var(--ns-radius-md); background: var(--ns-surface); padding: 14px; display: grid; gap: 10px; }
+.sx-blocked { border-color: var(--ns-danger); background: #fdf3f2; }
+.sx-pre { font-family: var(--ns-font-mono); font-size: 12px; background: var(--ns-surface-subtle); border: 1px solid var(--ns-border); border-radius: var(--ns-radius-sm); padding: 8px; margin: 0; white-space: pre-wrap; word-break: break-all; }
+.sx-step { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ns-text-faint); }
+.sx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sx-list li { display: grid; gap: 4px; border: 1px solid var(--ns-border); border-radius: var(--ns-radius-sm); padding: 10px; background: var(--ns-surface); }
+.sx label.sx-check { display: flex; gap: 6px; align-items: center; font-size: 13px; font-weight: 400; color: var(--ns-text); min-width: 0; flex: 0 0 auto; }
+.sx details summary { cursor: pointer; font-size: 13px; color: var(--ns-text-muted); }
+.sx-ok { color: var(--ns-success); font-weight: 600; }
+.sx-bad { color: var(--ns-danger); font-weight: 600; }
+
+/* Connections reuses the Connection Center form, whose original styles assumed a dark theme: neutralised here so it reads like the other two sections. */
+.sx.setup-wizard, .sx.setup-wizard * { opacity: 1 !important; animation: none !important; }
+.sx.setup-wizard .setup-form fieldset, .sx.setup-wizard .setup-security-note, .sx.setup-wizard .setup-check { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 14px; border: 1px solid var(--ns-border); border-radius: var(--ns-radius-md); background: var(--ns-surface-subtle) !important; color: var(--ns-text); }
+.sx.setup-wizard .setup-form legend { color: var(--ns-text); font-weight: 700; padding: 0 6px; }
+.sx.setup-wizard .setup-form label { color: var(--ns-text-muted); }
+.sx.setup-wizard .setup-form small { color: var(--ns-text-muted); font-weight: 400; }
+.sx.setup-wizard .setup-form input, .sx.setup-wizard .setup-form select { background: var(--ns-surface); color: var(--ns-text); border: 1px solid var(--ns-border-strong); min-height: 36px; padding: 6px 8px; }
+.sx.setup-wizard .setup-check { display: flex; gap: 10px; align-items: flex-start; }
+.sx.setup-wizard .setup-check span, .sx.setup-wizard .setup-check strong { color: var(--ns-text); }
+.sx.setup-wizard .setup-checkbox { display: flex; grid-column: 1 / -1; align-items: center; flex-direction: row; }
+.sx .setup-advanced { border: 1px dashed var(--ns-border-strong); border-radius: var(--ns-radius-md); padding: 10px; display: grid; gap: 10px; }
+.sx .setup-advanced fieldset { margin-top: 8px; }
+
+.setup-gate { border: 0; padding: 0; margin: 0; min-width: 0; display: contents; }

@@ -1,0 +1,106 @@
+{
+ "release_candidate": "rc5-654762b",
+ "checks": [
+  {
+   "check": "app.installed_and_enabled",
+   "status": "PASS",
+   "detail": "NetSpout PulseForge 2.0.1"
+  },
+  {
+   "check": "versions.match",
+   "status": "PASS",
+   "detail": "{'app.conf': '2.0.1', 'app.manifest': '2.0.1', 'frontend/package.json': '2.0.1', 'engine(openapi)': '2.0.1', 'installed app': '2.0.1'}"
+  },
+  {
+   "check": "installed_file_equals_archive[index.html]",
+   "status": "PASS",
+   "detail": "netspout/appserver/static/dist/index.html"
+  },
+  {
+   "check": "installed_file_equals_archive[netspout_gateway.py]",
+   "status": "PASS",
+   "detail": "netspout/bin/netspout_gateway.py"
+  },
+  {
+   "check": "installed_file_equals_archive[indexes.conf]",
+   "status": "PASS",
+   "detail": "netspout/default/indexes.conf"
+  },
+  {
+   "check": "installed_file_equals_archive[capability_status.json]",
+   "status": "PASS",
+   "detail": "netspout/bin/netspout_core/catalog_data/capability_status.json"
+  },
+  {
+   "check": "installed_file_equals_archive[real_format_generators.py]",
+   "status": "PASS",
+   "detail": "netspout/bin/netspout_core/real_format_generators.py"
+  },
+  {
+   "check": "ui.bundle_present_and_referenced",
+   "status": "PASS",
+   "detail": "['index-QqTTVOCi.js']"
+  },
+  {
+   "check": "capability.verified_set",
+   "status": "PASS",
+   "detail": "['cisco:asa', 'cisco:ios', 'fortigate_traffic', 'pan:system', 'pan:threat', 'pan:traffic']"
+  },
+  {
+   "check": "capability.verified_equals_live_evidence",
+   "status": "PASS",
+   "detail": "evidence file docs/contracts/ta_live_results.json"
+  },
+  {
+   "check": "indexes.defined_by_the_app[idx_network_ops]",
+   "status": "PASS",
+   "detail": "event"
+  },
+  {
+   "check": "indexes.defined_by_the_app[idx_security_fw]",
+   "status": "PASS",
+   "detail": "event"
+  },
+  {
+   "check": "indexes.defined_by_the_app[idx_wireless_ops]",
+   "status": "PASS",
+   "detail": "event"
+  },
+  {
+   "check": "indexes.defined_by_the_app[cisco_mdt_metrics]",
+   "status": "PASS",
+   "detail": "metric"
+  },
+  {
+   "check": "dashboards.installed",
+   "status": "PASS",
+   "detail": "432 views"
+  },
+  {
+   "check": "engine.reachable_from_splunk_over_the_private_network",
+   "status": "PASS",
+   "detail": "{\"status\":\"ok\",\"service\":\"netspout-simulation-engine\"}"
+  },
+  {
+   "check": "gateway.forwards_to_the_engine",
+   "status": "PASS",
+   "detail": "{\"status\":\"ok\",\"service\":\"netspout-simulation-engine\"}"
+  },
+  {
+   "check": "gateway.routes_reach_this_engine_build",
+   "status": "PASS",
+   "detail": "{'/api/runs': '200', '/api/replay/sources': '200', '/api/compat/catalog': '200', '/api/compat/scenarios': '200', '/api/catalog/sourcetypes': '200'}"
+  },
+  {
+   "check": "engine.url_is_the_configured_setting_not_a_default",
+   "status": "PASS",
+   "detail": "http://engine:8081"
+  },
+  {
+   "check": "no_development_services_required",
+   "status": "PASS",
+   "detail": "gateway uses the engine container; no Vite server is listening on 5173"
+  }
+ ],
+ "passed": true
+}

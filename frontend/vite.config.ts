@@ -22,11 +22,11 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: "http://localhost:8081",
+        target: process.env.NETSPOUT_DEV_BACKEND ?? "http://localhost:8081",   // set NETSPOUT_DEV_BACKEND to an isolated engine when running browser tests; the default is the usual local engine
         changeOrigin: true
       },
       "/ws": {
-        target: "ws://localhost:8081",
+        target: (process.env.NETSPOUT_DEV_BACKEND ?? "http://localhost:8081").replace(/^http/, "ws"),
         ws: true
       }
     }

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Build pulseforge-engine.tar.gz: the customer-hosted engine as a self-contained package (no repository checkout needed on the engine host).
 Layout keeps the repository-relative paths the code resolves (backend/, src/netspout_core/, catalog/, selected docs/verification/evidence), plus deploy/engine (launcher, units, env example).
-Run scripts/sync_core.py first. Usage: python scripts/build_engine_package.py"""
+Refuses to build while the mirrored copies differ from src/netspout_core (run scripts/sync_core.py). Usage: python scripts/build_engine_package.py"""
 import hashlib
 import json
+import subprocess
+import sys
 import tarfile
 from pathlib import Path
 
@@ -16,6 +18,8 @@ SKIP = ("__pycache__", ".pyc", ".DS_Store")
 
 
 def main():
+    if subprocess.run([sys.executable, str(ROOT / "scripts/verify_sources.py")], cwd=ROOT, capture_output=True).returncode:
+        sys.exit("the mirrored core copies differ from src/netspout_core (python scripts/verify_sources.py shows which); run scripts/sync_core.py first")
     n = 0
     with tarfile.open(OUT, "w:gz") as tar:
         for rel in INCLUDE:

@@ -1,0 +1,142 @@
+{
+ "_note": "Sanitized from real events. Users, hostnames, serials, MACs, org/network ids and private/public IPs replaced with placeholders (RFC 5737/ example.invalid). Structure and message families preserved. Not production telemetry.",
+ "samples": [
+  {
+   "real_sourcetype": "cisco:ios",
+   "index": "netops",
+   "source": "sc4s",
+   "host": "192.0.2.10",
+   "raw": "%SSH-5-SSH2_CLOSE: SSH2 Session from 192.0.2.50 (tty = 1) for user '' using crypto cipher 'aes128-ctr', hmac 'hmac-sha2-256-etm@openssh.com' closed",
+   "family": "IOS %FAC-SEV-MNEM without syslog header (SC4S-stripped)",
+   "indexed_extractions_seen": "sc4s_* fields, vendor, product, facility, mnemonic, severity_id, dvc, src_ip, user"
+  },
+  {
+   "real_sourcetype": "cisco:ios",
+   "index": "netops",
+   "source": "sc4s",
+   "host": "192.0.2.10",
+   "raw": "%IP_SNMP-4-NOTRAPIPV6: SNMP trap source GigabitEthernet0/0 has no ipv6 address",
+   "family": "IOS plain message"
+  },
+  {
+   "real_sourcetype": "cisco:ios",
+   "index": "netops",
+   "source": "sc4s",
+   "host": "192.0.2.10",
+   "raw": "%PARSER-5-CFGLOG_LOGGEDCMD: User:vty0  logged command:<?xml version=\"1.0\" encoding=\"UTF-8\"?><configLoggerMsg version=\"1.0\"><configChanged><changeInfo><sessionId>0</sessionId><user>vty0</user><telnet><srcIP>192.0.2.5</srcIP><vtyName>vty0</vtyName></telnet><when><absoluteTime>2026-03-20T09:59:14.887Z</absoluteTime></when></changeInfo><changeItem><context></context><enteredCommand><cli>!exec: enable</cli></enteredCommand></changeItem></configChanged></configLoggerMsg>",
+   "family": "IOS XML config-log message"
+  },
+  {
+   "real_sourcetype": "cisco:ftd:syslog",
+   "index": "cisco_sfw_ftd_syslog",
+   "source": "udp:5516",
+   "host": "192.0.2.11",
+   "raw": "Mar 26 04:25:00 192.0.2.11 :Mar 26 08:25:00 UTC: %FTD--6-805002: TCP Flow is no longer offloaded for connection 100000001 from INSIDE:198.51.100.11/60460 (203.0.113.80/60460) to INTERNET:203.0.113.60/443 (203.0.113.60/443)",
+   "family": "FTD 805002 offload (only family observed in window; other families such as 106100/302013 not seen)"
+  },
+  {
+   "real_sourcetype": "cisco:ise:syslog",
+   "index": "main",
+   "source": "udp:5517",
+   "host": "192.0.2.12",
+   "raw": "Mar 20 00:09:58 192.0.2.12 Mar 20 04:09:58 ise-node CISE_Passed_Authentications 0017503823 1 0 2026-03-20 04:09:58.335 +00:00 0284789690 5202 NOTICE Device-Administration: Command Authorization succeeded, ConfigVersionId=96, Device IP Address=192.0.2.2, DestinationIPAddress=192.0.2.12, DestinationPort=49, UserName=user1, CmdSet=[ CmdAV=show CmdArgAV=port-channel CmdArgAV=summary CmdArgAV=<cr> ], Protocol=Tacacs, MatchedCommandSet=PermitAll, NetworkDeviceName=CORE01, Type=Authorization, Privilege-Level=1, Authen-Type=PAP, Service=None, User",
+   "family": "ISE TACACS command authorization (message truncated in sample at 600 chars; first segment only). Note: no <PRI> prefix."
+  },
+  {
+   "real_sourcetype": "cisco:dc:nexus9k",
+   "index": "main",
+   "source": "cisco_nexus_9k://nxversion2",
+   "host": "fwd01",
+   "raw": "{\"timestamp\": \"2026-03-20 00:09:46\", \"component\": \"nxversion\", \"device\": \"192.0.2.253:443\", \"Row_info\": {\"package_id\": null}}",
+   "family": "modular-input JSON: timestamp/component/device/Row_info"
+  },
+  {
+   "real_sourcetype": "meraki:securityappliances",
+   "index": "main",
+   "source": "cisco_meraki_securityappliances::Security_Appliances",
+   "host": "n151.dashboard.meraki.com",
+   "raw": "{\"occurredAt\": \"2026-03-21T03:58:06.022279Z\", \"networkId\": \"L_000000000000000001\", \"type\": \"dhcp_problem\", \"description\": \"DHCP problem\", \"clientId\": \"client01\", \"clientDescription\": null, \"clientMac\": null, \"category\": \"dhcp\", \"deviceSerial\": \"XXXX-XXXX-XXXX\", \"deviceName\": \"MX-DEVICE\", \"eventData\": {\"extra\": \"no_offers_received\", \"vap\": \"0\", \"vlan\": \"110\"}, \"organizationId\": \"000001\"}",
+   "family": "Meraki network event (occurredAt/type/category/eventData); no eventType/ts keys"
+  },
+  {
+   "real_sourcetype": "stream:netflow",
+   "index": "netflow",
+   "source": "stream:netflow",
+   "host": "stream-fwd",
+   "raw": "{\"endtime\":\"2026-03-20T04:04:48Z\",\"timestamp\":\"2026-03-20T04:04:48Z\",\"app\":\"h323 rtp data\\u0000\\u0000...\",\"app_tag\":\"\\u0000\\u0000\\u0000B\",\"event_name\":\"netFlowData\",\"exporter_ip\":\"198.51.100.85\",\"exporter_time\":\"2026-Mar-20 04:04:48\",\"exporter_uptime\":3161674091,\"netflow_version\":9,\"observation_domain_id\":300,\"seqnumber\":434793}",
+   "family": "Splunk Stream NetFlow v9 decoded event (sample truncated at 700 chars)"
+  },
+  {
+   "real_sourcetype": "cisco:sfw:estreamer",
+   "index": "cisco_secure_fw",
+   "source": "sbg_fw_estreamer_input://FMC",
+   "host": "fwd01",
+   "raw": "{\"EventType\":\"ConnectionEvent\", \"FirstPacketSecond\":1770267719, \"LastPacketSecond\":1770271338, \"ConnectionDuration\":3619, \"DeviceUUID\":\"00000000-0000-0000-0000-000000000001\", \"InstanceID\":1, \"ConnectionID\":36636, \"AC_RuleAction\":\"Allow\", \"InitiatorIP\":\"198.51.100.102\", \"ResponderIP\":\"203.0.113.181\", \"InitiatorPort\":58287, \"ResponderPort\":49153, \"Protocol\":\"tcp\", \"IngressInterface\":\"one-arm\", \"EgressInterface\":\"one-arm\", \"IngressZone\":\"ZONE-A\", \"EgressZone\":\"ZONE-A\", \"IngressVRF\":\"Global\", \"EgressVRF\":\"Global\", \"FirewallPolicy\":\"POLICY-A\", \"FirewallRule\":\"ALLOW_ANY\", \"PrefilterPolicy\":\"Default Prefilter Policy\", \"InitiatorPackets\":8, \"ResponderPackets\":2, \"InitiatorBytes\":150, \"ResponderBytes\":0, \"NAP_Policy\":\"Balanced Security and Connectivity\", \"ClientAppDetector\":\"AppID\", \"InspectedPacketCount\":10, \"InspectionMicroseconds\":380}",
+   "family": "eStreamer ConnectionEvent; compact JSON with ',' + space and no space after ':'; present only 2026-02-01..02-09"
+  },
+  {
+   "real_sourcetype": "cisco:dnac:devicehealth",
+   "index": "catalyst",
+   "source": "cisco_dnac_devicehealth://INPUT",
+   "host": "fwd01",
+   "raw": "{\"DeviceName\": \"wlc01.example.invalid\", \"IpAddress\": \"192.0.2.8\", \"DeviceFamily\": \"Wireless Controller\", \"Reachability\": \"Reachable\", \"ReachabilityFailureReason\": \"\", \"ManageErrors\": \"\", \"Manageability\": \"Managed\", \"MACAddress\": \"00:00:5e:00:53:01\", \"DeviceRole\": \"ACCESS\", \"ImageVersion\": \"17.10.1\", \"Uptime\": \"11 days, 10:34:30.88\", \"UptimeSeconds\": 1069001, \"LastUpdated\": \"2026-03-19 06:37:02\", \"LastUpdateTime\": 1773902222750, \"SerialNumber\": \"SERIAL0001\", \"DeviceSeries\": \"Cisco Catalyst 9800 Wireless Controllers for Cloud\", \"Platform\": \"C9800-CL-K9\", \"SupportType\": \"Supported\", \"AssociatedWLCIP\": \"\", \"cisco_dnac_host\": \"https://192.0.2.16\"}",
+   "family": "DNAC device health (wireless controller); other device families add CPUHealth, ClientCount*, AirQuality* fields"
+  },
+  {
+   "real_sourcetype": "cisco:sdwan:linkhealth",
+   "index": "sdwan",
+   "source": "cisco_catalyst_sdwan_health:linkhealth:secops",
+   "host": "https://192.0.2.17",
+   "raw": "{\"vdevice-name\": \"192.0.2.40\", \"rx-errors\": 0, \"tx-kbps\": 0, \"if-admin-status\": \"if-state-up\", \"ipv6-tcp-adjust-mss\": \"0\", \"tx-pps\": 0, \"tx-errors\": 0, \"ifname\": \"vmanage_system\", \"interface-type\": \"iana-iftype-sw-loopback\", \"rx-pps\": 0, \"bw-down-util\": \"0.00\", \"if-oper-status\": \"if-oper-state-ready\", \"ifindex\": \"26\", \"num-flaps\": \"0\", \"ipv4-tcp-adjust-mss\": \"0\", \"rx-packets\": 0, \"bia-address\": \"00:00:00:00:00:00\", \"vpn-id\": \"0\", \"vdevice-host-name\": \"edge01\"}",
+   "family": "SD-WAN link health (truncated at 500 chars in sample)"
+  },
+  {
+   "real_sourcetype": "cisco:sdwan:system:logs (index-time name cisco:sdwan:sytem:logs)",
+   "index": "sdwan",
+   "source": "udp:514",
+   "host": "192.0.2.1",
+   "raw": "Feb  2 17:59:59 192.0.2.1 1 1770055199.814640758 MX_DEVICE ip_flow_start src=192.0.2.102 dst=198.51.100.94 protocol=tcp sport=49052 dport=443 translated_src_ip=192.0.2.66 translated_port=49052",
+   "family": "Meraki MX syslog (ip_flow_start/ip_flow_end/urls/firewall) ingested under the SD-WAN system-logs sourcetype; day is space-padded ('Feb  2')"
+  },
+  {
+   "real_sourcetype": "cisco:sdwan:utd:logs",
+   "index": "sdwan",
+   "source": "udp:514",
+   "host": "192.0.2.19",
+   "raw": "Mar 21 04:00:59 192.0.2.19 2026/03/21-03:59:59.616913 UTC [**] [Hostname: edge-gw1] [**] [System_IP: 192.0.2.5] [**] [Instance_ID: 1] [**] Drop [**] UTD WebFilter Category/Reputation [**] [URL: example.invalid/test] ** [Category: Malware Sites] ** [Reputation: 10] [POLICY: POLICY-A] {TCP} 198.51.100.13:60440 -> 203.0.113.72:80",
+   "family": "UTD WebFilter drop"
+  },
+  {
+   "real_sourcetype": "cisco:sdwan:SYS-6-LOGOUT",
+   "index": "catalyst",
+   "source": "udp:5514",
+   "host": "192.0.2.18",
+   "raw": "Mar 20 23:58:59 192.0.2.18 3499: *Mar 21 03:58:48.542: %SYS-6-LOGOUT: User user1 has exited tty session 1(192.0.2.15)",
+   "family": "per-mnemonic sourcetype: sourcetype name = cisco:sdwan:<FACILITY-SEV-MNEMONIC>"
+  },
+  {
+   "real_sourcetype": "cisco:duo:authentication_v2",
+   "index": "cisco_duo",
+   "source": "sbg_duo_input://INPUT",
+   "host": "splunk-host",
+   "raw": "{\"ctime\": \"Tue Nov  3 10:33:44 2026\", \"access_device\": {\"browser\": null, \"...\": \"(truncated)\"}}",
+   "family": "Duo auth v2 JSON; ctime is C-asctime style, day space-padded, correct weekday"
+  },
+  {
+   "real_sourcetype": "vmware:perf:cpu",
+   "index": "vmware-perf",
+   "source": "VMPerf:HostSystem",
+   "host": "vcenter.example.invalid",
+   "raw": "host-83\t00000000-0000-0000-0000-000000000001\taggregated\t20\t0.21\t0\t0.07\t0\t39933\t0\t0\t319723\t0.0\t243\t35\t0.14\t0.0\t0\t0",
+   "family": "TSV event in an EVENT index (not a metric index); outside primary window (2025-05-02..2025-08-22)"
+  },
+  {
+   "real_sourcetype": "cisco:thousandeyes:metric",
+   "index": "thousandeyes_logs",
+   "source": "cisco:thousandeyes:stream",
+   "host": "unknown",
+   "raw": "metric",
+   "family": "literal 6-byte string 'metric' in an EVENT index; 12,189 events 2025-08-13..08-22; not a usable payload reference"
+  }
+ ]
+}

@@ -1,0 +1,89 @@
+vendor_id,vendor,products,catalog_sourcetypes,downloaded_matching_addons,exact_canonical_matches,naming_conflicts,payload_or_routing_conflicts,valid_generators,sample_backed,live_verified,specialized_ingestion_required,main_blockers
+a10_networks,A10 Networks,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+amazon_aws,Amazon Web Services,4,4,2,4,0,0,0,4,0,2,no exact match live-verified; 4 sourcetypes have no working generator
+arista_eos,Arista Networks,4,4,1,0,0,0,3,3,0,0,covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator
+aruba_cx,Aruba / HPE,6,6,1,3,1,0,4,4,0,0,1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator
+atlassian,Atlassian,1,1,2,1,0,0,1,0,0,1,no exact match live-verified
+barracuda,Barracuda Networks,1,1,1,0,0,0,1,0,0,0,covering add-on defines none of the catalog's sourcetype names
+beyondtrust,BeyondTrust,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+bitdefender,Bitdefender,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+checkpoint,Check Point Software,3,3,0,0,0,0,1,1,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+cisco_duo,Cisco Duo,10,10,1,7,1,1,8,9,0,10,1 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 2 sourcetypes have no working generator
+cisco_meraki,Cisco Meraki,17,17,1,14,0,0,14,14,0,17,no exact match live-verified; 3 sourcetypes have no working generator
+cisco_aci,Cisco Systems,8,8,0,0,0,0,6,6,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+cisco_asa,Cisco Systems,6,6,2,5,1,0,2,3,1,1,1 naming conflicts; 4 sourcetypes have no working generator
+cisco_catalyst,Cisco Systems,34,34,1,17,2,0,32,32,0,33,2 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator
+cisco_intersight,Cisco Systems,11,11,1,11,0,2,10,11,0,11,2 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator
+cisco_ios,Cisco Systems,26,26,1,13,5,2,14,18,1,23,5 naming conflicts; 2 exact matches with payload/routing conflicts; 12 sourcetypes have no working generator
+cisco_ise,Cisco Systems,7,7,2,5,0,0,6,7,0,4,no exact match live-verified; 1 sourcetypes have no working generator
+cisco_sdwan,Cisco Systems,41,41,1,8,2,1,40,40,0,37,2 naming conflicts; 1 exact matches with payload/routing conflicts; no exact match live-verified; 1 sourcetypes have no working generator
+citrix_netscaler,Citrix / Cloud Software Group,2,2,1,1,1,0,0,0,0,1,1 naming conflicts; no exact match live-verified; 2 sourcetypes have no working generator
+claroty,Claroty,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+cloudflare,Cloudflare,3,3,2,1,1,0,2,2,0,3,1 naming conflicts; no exact match live-verified; 1 sourcetypes have no working generator
+crowdstrike,CrowdStrike,1,1,4,1,0,1,1,1,0,1,1 exact matches with payload/routing conflicts; no exact match live-verified
+crushftp,CrushFTP,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+cybereason,Cybereason,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+darktrace,Darktrace,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+dell_os10,Dell Technologies,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+docker,Docker,1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
+elastic,Elastic,1,1,1,1,0,0,1,0,0,1,no exact match live-verified
+extrahop,ExtraHop Networks,2,2,1,0,0,0,2,2,0,2,covering add-on defines none of the catalog's sourcetype names
+extreme_networks,Extreme Networks,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+f5_bigip,F5 Networks,2,2,1,1,0,1,2,2,0,1,1 exact matches with payload/routing conflicts; no exact match live-verified
+forcepoint,Forcepoint,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+fortinet,Fortinet,7,8,1,2,2,0,5,5,1,0,2 naming conflicts; 3 sourcetypes have no working generator
+github,GitHub,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+gitlab,GitLab,1,1,3,1,0,0,1,0,0,0,no exact match live-verified
+google_cloud,Google Cloud,1,1,1,0,0,0,0,0,0,1,covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator
+google_workspace,Google Workspace,2,2,1,1,0,0,0,0,0,2,no exact match live-verified; 2 sourcetypes have no working generator
+hashicorp,HashiCorp,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+huawei_vrp,Huawei Technologies,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+ibm_qradar,IBM,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+ibm_mq,IBM MQ,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+imperva,Imperva,1,1,1,0,0,0,1,0,0,0,covering add-on defines none of the catalog's sourcetype names
+juniper_junos,Juniper Networks,3,3,1,0,1,0,3,3,0,0,covering add-on defines none of the catalog's sourcetype names; 1 naming conflicts
+kubernetes,Kubernetes & Falco (CNCF),2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+linux_infrastructure,Linux Infrastructure,4,4,1,3,0,0,0,3,0,2,no exact match live-verified; 4 sourcetypes have no working generator
+microsoft_365,Microsoft 365,4,4,3,3,0,0,0,2,0,4,no exact match live-verified; 4 sourcetypes have no working generator
+microsoft_azure,Microsoft Azure Monitor,2,2,2,2,0,0,0,1,0,2,no exact match live-verified; 2 sourcetypes have no working generator
+microsoft_windows,Microsoft Windows,8,8,3,0,5,0,0,2,0,3,covering add-on defines none of the catalog's sourcetype names; 5 naming conflicts; 8 sourcetypes have no working generator
+mikrotik,MikroTik,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+model_context_protocol,Model Context Protocol (agentic AI),1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+mongodb,MongoDB,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+netscout,NetScout Systems,1,1,1,0,0,0,1,1,0,0,covering add-on defines none of the catalog's sourcetype names
+netskope,Netskope,4,4,1,0,2,0,2,2,0,4,covering add-on defines none of the catalog's sourcetype names; 2 naming conflicts; 2 sourcetypes have no working generator
+nginx_f5,NGINX (F5),2,2,1,1,1,0,2,1,0,1,1 naming conflicts; no exact match live-verified
+nokia_sr,Nokia,3,3,0,0,0,0,2,2,0,0,no downloaded add-on covers this vendor; 1 sourcetypes have no working generator
+nozomi_networks,Nozomi Networks,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+nutanix,Nutanix,16,16,0,0,0,0,10,14,0,0,no downloaded add-on covers this vendor; 6 sourcetypes have no working generator
+okta,Okta,1,1,1,1,0,0,1,1,0,1,no exact match live-verified
+ollama,Ollama (local LLM runtime),1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+opentelemetry,OpenTelemetry,1,1,1,0,0,0,0,0,0,1,covering add-on defines none of the catalog's sourcetype names; 1 sourcetypes have no working generator
+oracle,Oracle,1,1,0,0,0,0,1,1,0,0,no downloaded add-on covers this vendor
+osquery,osquery,1,1,1,1,0,1,1,1,0,1,1 exact matches with payload/routing conflicts; no exact match live-verified
+palo_alto,Palo Alto Networks,5,5,1,4,0,0,3,3,3,1,2 sourcetypes have no working generator
+pfsense_netgate,pfSense (Netgate),1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+proofpoint,Proofpoint,1,1,4,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
+qualys,Qualys,1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
+radware,Radware,3,4,0,0,0,0,2,2,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+rapid7,Rapid7,1,1,2,1,0,0,1,0,0,0,no exact match live-verified
+sailpoint,SailPoint,1,1,1,1,0,0,1,0,0,1,no exact match live-verified
+sentinelone,SentinelOne,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+slack,Slack,1,1,1,1,0,0,1,1,0,1,no exact match live-verified
+sonicwall,SonicWall,1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
+sophos,Sophos,2,2,3,1,0,0,1,1,0,0,no exact match live-verified; 1 sourcetypes have no working generator
+splunk,Splunk / Native,21,21,3,2,0,0,16,18,0,1,no exact match live-verified; 5 sourcetypes have no working generator
+sc4snmp,Splunk Community / SC4SNMP,6,6,0,0,0,0,5,5,0,0,no downloaded add-on covers this vendor; 1 sourcetypes have no working generator
+suricata_oisf,Suricata (OISF),1,1,1,1,0,1,1,1,0,0,1 exact matches with payload/routing conflicts; no exact match live-verified
+broadcom_symantec,"Symantec (Broadcom), Web & Network Security",1,1,3,1,0,0,1,0,0,0,no exact match live-verified
+sysdig,Sysdig,1,1,1,1,0,1,1,0,0,0,1 exact matches with payload/routing conflicts; no exact match live-verified
+tanium,Tanium,1,1,1,1,0,1,1,0,0,0,1 exact matches with payload/routing conflicts; no exact match live-verified
+tenable,Tenable,1,1,1,1,0,1,1,0,0,1,1 exact matches with payload/routing conflicts; no exact match live-verified
+traefik,Traefik Labs,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+trellix_mcafee,Trellix (formerly McAfee),1,1,1,0,0,0,1,0,0,1,covering add-on defines none of the catalog's sourcetype names
+veeam,Veeam,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+vmware_nsx,VMware by Broadcom,4,4,5,2,0,0,1,1,0,0,no exact match live-verified; 3 sourcetypes have no working generator
+watchguard,WatchGuard,2,2,0,0,0,0,0,0,0,0,no downloaded add-on covers this vendor; 2 sourcetypes have no working generator
+wazuh,Wazuh,1,1,0,0,0,0,1,0,0,0,no downloaded add-on covers this vendor
+zeek,Zeek (Bro),1,1,0,0,0,0,0,1,0,0,no downloaded add-on covers this vendor; 1 sourcetypes have no working generator
+zscaler_zia,Zscaler,6,6,1,1,2,0,3,4,0,5,2 naming conflicts; no exact match live-verified; 3 sourcetypes have no working generator

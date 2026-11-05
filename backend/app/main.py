@@ -104,7 +104,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="NetSpout Telemetry & Simulation API",
-    version="2.0.0",
+    version="2.0.1",
     lifespan=lifespan,
 )
 
@@ -440,7 +440,7 @@ async def health_check():
     """Enhanced health check with destination status."""
     return {
         "status": "healthy",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "simulation_running": simulation_running,
         "active_scenario": active_scenario.value if active_scenario else None,
         "destination_count": len(destination_manager.destinations),
@@ -2084,6 +2084,54 @@ def _generator_transport(index=None, explicit=None, needs_metric_index=False):
     return None
 
 
+@app.get("/api/compat/catalog")
+def compat_catalog(verified_only: bool = False):
+    """Vendor -> product -> sourcetype tree with the honest capability status of every entry (evidence-derived; see netspout_core/capability.py)."""
+    from netspout_core import capability
+    return {"labels": capability.data()["labels"], "vendors": capability.tree(verified_only)}
+
+
+@app.get("/api/compat/scenarios")
+def compat_scenarios():
+    from netspout_core import capability
+    return {"labels": capability.data()["labels"], "scenarios": capability.scenarios()}
+
+
+@app.post("/api/generate/preview")
+def generate_preview(payload: Dict[str, Any]):
+    """Preview = the real thing minus the send: same prepare_sourcetype_entries and same HEC payload builder as a monitored run. Nothing is sent and no value is hard-coded."""
+    from netspout_core import capability
+    from netspout_core.models import TelemetryTransportConfig
+    from netspout_core.telemetry_dispatcher import dispatcher as _disp
+    from app.generator_modes import generator_service
+    vendor, st = str(payload.get("vendor_id") or ""), str(payload.get("sourcetype") or "")
+    count = int(payload.get("count", 3))
+    if not st or not 1 <= count <= 5:
+        raise HTTPException(status_code=422, detail="sourcetype is required and count must be between 1 and 5")
+    b = capability.block(st)
+    if b:
+        raise HTTPException(status_code=409, detail=b["message"])
+    try:
+        entries, prov = generator_service.prepare_sourcetype_entries(vendor, st, count, None, "preview", payload.get("ingestion_profile"))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    cfg = TelemetryTransportConfig(hec_enabled=True, hec_url="https://preview.invalid/services/collector", hec_token="preview", hec_index=str(payload.get("index") or getattr(gt, "hec_index", None) or "idx_network_ops"),
+                                   hec_metric_index=getattr(gt, "hec_metric_index", None) or "cisco_mdt_metrics")
+    events = []
+    for e in entries:
+        cap: list = []
+        _disp._dispatch_log(e, cfg, capture=cap)
+        pl = cap[0]
+        is_metric = pl.get("event") == "metric"
+        events.append({"raw": None if is_metric else e.raw_log, "sourcetype": pl["sourcetype"], "index": pl["index"], "host": pl["host"], "source": pl["source"], "kind": "metric" if is_metric else "event",
+                       "metrics": {k[len("metric_name:"):]: v for k, v in pl["fields"].items() if k.startswith("metric_name:")} if is_metric else None})
+    rec = capability.get(st)
+    return {"sourcetype": st, "vendor_id": vendor, "generator_mode": prov.get("mode"), "provenance": prov.get("source"), "status": rec["status"] if rec else None, "status_label": rec["status_label"] if rec else None,
+            "notes": rec["notes"] if rec else [], "events": events,
+            "disclaimer": "This is a sample of what the next run would send, produced by the same generator and payload builder. Values differ between runs. It does not prove an add-on parses the data; only the status above says what has been tested."}
+
+
 @app.post("/api/generate/single-event")
 def post_generate_single_event(payload: Dict[str, Any]):
     from app.generator_modes import generator_service
@@ -2313,16 +2361,171 @@ def _hec_item(dispatch_fn, sourcetype, phase, datapoints=0):
     return Item(sourcetype, phase, send, datapoints)
 
 
+def _metric_datapoints(entry) -> int:
+    """Datapoints one metric entry will carry (an mstats search counts these, not HEC events); 0 for a log event."""
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher, is_metric_sourcetype
+    if not is_metric_sourcetype(entry.sourcetype):
+        return 0
+    return sum(1 for k in TelemetryDispatcher.extract_metric_fields(entry) if k.startswith("metric_name:"))
+
+
+def _sourcetype_metric_index(target: str, cfg):
+    """A metric sourcetype run delivers to the saved metric index, which must be authorized by the Connection Center; None for log sourcetypes."""
+    from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+    if not is_metric_sourcetype(target):
+        return None
+    m = cfg.hec_metric_index
+    if m not in release_candidate_configuration.load().get("indexes", []):
+        raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+    return m
+
+
 def _monitor_links(target: str):
     views = _replay_dashboards()
     return {"dashboard_view": ("pf_" + target) if target in views else None}
 
 
+@app.post("/api/scenarios/preview")
+def scenarios_preview(payload: Dict[str, Any]):
+    """What running a scenario would send, produced by the scenario's own generator without sending anything: counts per sourcetype and phase, a representative event per sourcetype, a rough duration."""
+    from netspout_core import capability, scenario_contracts
+    from netspout_core.models import TelemetryTransportConfig
+    from netspout_core.telemetry_dispatcher import dispatcher as _disp
+    sid = str(payload.get("scenario_id") or "")
+    sc = next((x for x in capability.scenarios() if x["id"] == sid), None)
+    if not sc:
+        raise HTTPException(status_code=404, detail="Unknown scenario")
+    if not sc["runnable"]:
+        raise HTTPException(status_code=409, detail="Scenario is not runnable: " + " ".join(sc["reasons"]))
+    if sid in SUPPORTED_SCENARIO_IDS:
+        res = scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=sid, seed=payload.get("seed", 1), time_mode="TEST", dispatch_telemetry=False))
+        logs = scenario_runner.run_logs.pop(res.run_id, [])
+    elif sid in scenario_contracts.ids():
+        logs = scenario_contracts.generate(sid, "preview", seed=payload.get("seed"), scale=1.0)
+    else:
+        return {"scenario_id": sid, "available": False, "note": "A preview is not available for this kind of scenario; it can still be run."}
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    cfg = TelemetryTransportConfig(hec_enabled=True, hec_url="https://preview.invalid/services/collector", hec_token="preview", hec_index=str(payload.get("index") or getattr(gt, "hec_index", None) or "preview"),
+                                   hec_metric_index=getattr(gt, "hec_metric_index", None) or "cisco_mdt_metrics")
+    by_st, phases, samples, seen = {}, {}, [], set()
+    for e in logs:
+        by_st[e.sourcetype] = by_st.get(e.sourcetype, 0) + 1
+        phases[e.netspout_phase or "-"] = phases.get(e.netspout_phase or "-", 0) + 1
+        if e.sourcetype not in seen:
+            seen.add(e.sourcetype)
+            cap: list = []
+            _disp._dispatch_log(e, cfg, capture=cap)
+            pl = cap[0] if cap else {}
+            samples.append({"sourcetype": e.sourcetype, "phase": e.netspout_phase, "index": pl.get("index"), "host": pl.get("host"), "kind": "metric" if pl.get("event") == "metric" else "event",
+                            "raw": None if pl.get("event") == "metric" else e.raw_log, "metrics": {k[len("metric_name:"):]: v for k, v in (pl.get("fields") or {}).items() if k.startswith("metric_name:")} if pl.get("event") == "metric" else None})
+    total = len(logs)
+    return {"scenario_id": sid, "available": True, "total_events": total, "by_sourcetype": by_st, "phases": [{"phase": k, "events": v} for k, v in phases.items()], "samples": samples,
+            "estimated_seconds": max(1, round(total * 0.1)), "estimate_note": "A rough estimate: events are delivered one at a time, so the real time depends on how quickly Splunk answers."}
+
+
+MULTI_MAX_SOURCES = 20
+
+
+def _multi_sources(payload: Dict[str, Any]):
+    """Validate the sources of a multi-sourcetype run. Nothing is skipped silently: any problem rejects the whole request and names the sourcetype."""
+    from netspout_core import capability
+    raw = payload.get("sources")
+    if not isinstance(raw, list) or not 1 <= len(raw) <= MULTI_MAX_SOURCES:
+        raise HTTPException(status_code=422, detail="sources must list between 1 and %d sourcetypes" % MULTI_MAX_SOURCES)
+    out, seen, blocked = [], set(), []
+    for r in raw:
+        st, vendor = (r or {}).get("sourcetype"), (r or {}).get("vendor_id") or ""
+        if not st or not isinstance(st, str):
+            raise HTTPException(status_code=422, detail="every source needs a sourcetype")
+        if st in seen:
+            raise HTTPException(status_code=422, detail="sourcetype %s is selected more than once" % st)
+        seen.add(st)
+        count = r.get("count", 10)
+        if not isinstance(count, int) or isinstance(count, bool) or not 1 <= count <= 1000:
+            raise HTTPException(status_code=422, detail="count for %s must be a whole number between 1 and 1000" % st)
+        b = capability.block(st)
+        if b:
+            blocked.append("%s: %s" % (st, b["message"]))
+        out.append({"vendor_id": vendor, "sourcetype": st, "count": count})
+    if blocked:
+        raise HTTPException(status_code=409, detail="These sourcetypes cannot send data, so nothing was started: " + " | ".join(blocked))
+    return out
+
+
+def _start_multi(payload: Dict[str, Any], cfg, index: str, name: str, run_id: str, eps):
+    """One monitored run over several sourcetypes: the same generators and dispatcher as a single-sourcetype run, one Item per event carrying its own sourcetype,
+    so accepted/rejected are counted per sourcetype. Events go to the event index, metric sourcetypes to the saved metric index."""
+    from app.generator_modes import generator_service
+    from netspout_core.delivery_monitor import ContinuousRun
+    sources = _multi_sources(payload)
+    mode = payload.get("mode", "finite")
+    if mode not in ("finite", "continuous", "duration"):
+        raise ValueError("mode must be finite, continuous or duration")
+    metric_index = None
+    for src in sources:
+        mi = _sourcetype_metric_index(src["sourcetype"], cfg)
+        metric_index = metric_index or mi
+    families, profiles = payload.get("event_families"), payload.get("ingestion_profiles") or {}
+    meta = {"sources": [{"sourcetype": x["sourcetype"], "vendor_id": x["vendor_id"], "count": x["count"], "index": metric_index if _sourcetype_metric_index(x["sourcetype"], cfg) else index} for x in sources]}
+
+    def build(src, n):
+        es, _p = generator_service.prepare_sourcetype_entries(src["vendor_id"], src["sourcetype"], n, families, run_id, profiles.get(src["sourcetype"]))
+        return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), src["sourcetype"], None, _metric_datapoints(e)) for e in es]
+    if mode == "finite":
+        per = [build(src, src["count"]) for src in sources]
+        items = [it for group in zip_longest_flat(per) for it in group]    # interleaved, so every source progresses together and a stop leaves each partly sent
+        run = DeliveryRun("multi", "multi", "%d sourcetypes" % len(sources), name, index, items, eps_limit=eps, run_id=run_id, links={}, metric_index=metric_index)
+        run.extra = meta
+        return run_monitor.start(run).snapshot()
+    duration = float(payload["duration_s"]) if mode == "duration" else None
+    if mode == "duration" and (not duration or not 1 <= duration <= 86400):
+        raise ValueError("duration_s must be between 1 and 86400")
+    for src in sources:
+        build(src, 1)    # grounding is checked once, up front, for every source
+    eps = eps if eps is not None else 5
+    cursor = {"i": 0}
+
+    def produce(n):
+        counts = [0] * len(sources)
+        for _ in range(n):
+            counts[cursor["i"] % len(sources)] += 1
+            cursor["i"] += 1
+        per = [build(src, c) for src, c in zip(sources, counts) if c]
+        return [it for group in zip_longest_flat(per) for it in group]
+    crun = ContinuousRun("multi", "multi", "%d sourcetypes" % len(sources), name, index, [], eps_limit=eps, run_id=run_id, links={}, produce=produce, duration_s=duration, metric_index=metric_index,
+                         max_events=int(payload["count"]) if payload.get("count") and mode == "continuous" else None)
+    crun.extra = meta
+    return run_monitor.start(crun).snapshot()
+
+
+def zip_longest_flat(groups):
+    """Round-robin over lists of different lengths: a[0], b[0], c[0], a[1], b[1], ..."""
+    for i in range(max((len(g) for g in groups), default=0)):
+        yield [g[i] for g in groups if i < len(g)]
+
+
 @app.post("/api/runs")
 def runs_start(payload: Dict[str, Any]):
     kind, target = payload.get("kind"), payload.get("target")
-    if kind not in ("scenario", "sourcetype") or not target:
-        raise HTTPException(status_code=422, detail="kind must be scenario or sourcetype and target is required")
+    if kind == "multi":
+        target = "multi"
+        _multi_sources(payload)          # refuse an unusable selection before anything else happens
+    if kind not in ("scenario", "sourcetype", "multi") or not target:
+        raise HTTPException(status_code=422, detail="kind must be scenario, sourcetype or multi and target is required")
+    from netspout_core import capability
+    if kind == "sourcetype" and capability.block(target):
+        raise HTTPException(status_code=409, detail=capability.block(target)["message"])
+    if kind == "scenario":
+        sc = next((x for x in capability.scenarios() if x["id"] == target), None)
+        if sc and not sc["runnable"]:
+            raise HTTPException(status_code=409, detail="Scenario is not runnable: " + " ".join(sc["reasons"]))
+    if not payload.get("index"):
+        # no index named: use the saved destination's first event index. The old fixed default (dev_test_replay) is kept only where that index is actually configured, so a real
+        # destination no longer answers 403 to a run that simply did not say where to write (found by the Phase 9 browser acceptance: metric runs and scenarios from the UI)
+        configured_indexes = release_candidate_configuration.load().get("indexes", [])
+        first = next((i for i in configured_indexes if "metric" not in i.lower()), None)
+        if first and REPLAY_INDEX not in configured_indexes:
+            payload = dict(payload, index=first)
     gt, index, host = _replay_destination(payload)
     name = _destination_name(gt)
     from netspout_core import replay_packs, incident_packs, netflow_solution, netflow_wire
@@ -2340,6 +2543,8 @@ def runs_start(payload: Dict[str, Any]):
         eps = payload.get("eps")
         if eps is not None and not (isinstance(eps, (int, float)) and 0.1 <= eps <= 2000):
             raise ValueError("eps must be between 0.1 and 2000")
+        if kind == "multi":
+            return _start_multi(payload, cfg, index, name, run_id, eps)
         if kind == "scenario" and target in SCENARIO_PACK_IDS:
             items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in run_scenario_pack(target, run_id)]
             title, metric_index = target, None
@@ -2387,7 +2592,7 @@ def runs_start(payload: Dict[str, Any]):
             # ScenarioRunner and unified-generation families: the runner owns the loop, so it runs on a worker and the monitor reads the delivery boundary
             from netspout_core.delivery_monitor import ObservedRun
             if target in SUPPORTED_SCENARIO_IDS:
-                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**cfg.model_dump())))
+                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**{**cfg.model_dump(), "hec_token": cfg.hec_token})))   # model_dump() alone drops the HEC token (excluded from dumps), and the run would then send nothing
                 run_id = scenario_runner.generate_run_id()
             else:
                 run_id = str(__import__("uuid").uuid4())
@@ -2406,22 +2611,23 @@ def runs_start(payload: Dict[str, Any]):
                 raise ValueError("mode must be finite, continuous or duration")
             vendor = payload.get("vendor_id") or ""
             if mode == "finite":
-                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
-                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
-                title, metric_index = target, None
+                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id, payload.get("ingestion_profile"))
+                metric_index = _sourcetype_metric_index(target, cfg)
+                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None, _metric_datapoints(e)) for e in entries]
+                title = target
             else:
                 # continuous / timed streaming of ONE sourcetype; grounding is checked once up front, then events are produced just before each send
                 duration = float(payload["duration_s"]) if mode == "duration" else None
                 if mode == "duration" and not duration or (duration is not None and not 1 <= duration <= 86400):
                     raise ValueError("duration_s must be between 1 and 86400")
-                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id)
+                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
                 eps = eps if eps is not None else 5
 
                 def produce(n, vendor=vendor, run_id=run_id):
-                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id)
-                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in es]
+                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
+                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None, _metric_datapoints(e)) for e in es]
                 from netspout_core.delivery_monitor import ContinuousRun
-                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration,
+                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration, metric_index=_sourcetype_metric_index(target, cfg),
                                      max_events=int(payload["count"]) if payload.get("count") and mode == "continuous" else None)
                 crun.source_mode = prov.get("mode")
                 return run_monitor.start(crun).snapshot()
@@ -2475,22 +2681,45 @@ def runs_verify(run_id: str):
         raise HTTPException(status_code=404, detail="Unknown run")
     run = run_monitor.get(run_id)
     idx = snap["destination"]["index"]
-    rows, error = release_candidate_configuration.execute_read_only_search('search index="%s" netspout_run_id="%s" earliest=-30d latest=+1d | stats count as indexed' % (idx, run_id))
-    metric = None
+    rows, error = release_candidate_configuration.execute_read_only_search('search index="%s" netspout_run_id="%s" earliest=-30d latest=+1d | stats count as indexed values(host) as hosts by sourcetype' % (idx, run_id))
+    metric, metric_by_st = None, {}
     if snap["destination"].get("metric_index") and not error:
-        m, merr = release_candidate_configuration.execute_read_only_search('| mstats count(_value) as n WHERE index="%s" AND metric_name=* AND netspout_run_id="%s" earliest=-30d latest=+1d' % (snap["destination"]["metric_index"], run_id))
+        mi = snap["destination"]["metric_index"]
+        m, merr = release_candidate_configuration.execute_read_only_search('| mstats count(_value) as n WHERE index="%s" AND metric_name=* AND netspout_run_id="%s" earliest=-30d latest=+1d' % (mi, run_id))
         metric = None if merr else int((m[0].get("n") if m else 0) or 0)
+        if not merr:   # per-sourcetype split is best effort: if the split search fails the total still decides
+            ms, serr = release_candidate_configuration.execute_read_only_search('| mstats count(_value) as n WHERE index="%s" AND metric_name=* AND netspout_run_id="%s" earliest=-30d latest=+1d BY sourcetype' % (mi, run_id))
+            metric_by_st = {} if serr else {r.get("sourcetype") or "": int(float(r.get("n") or 0)) for r in ms}
     if error:
         rec = {"status": "ERROR", "error": clean_error(error), "at": now}
     else:
-        indexed = int(float((rows[0].get("indexed") if rows else 0) or 0))
+        from netspout_core.telemetry_dispatcher import is_metric_sourcetype
+        found = {}
+        for r in rows:
+            found[r.get("sourcetype") or ""] = (int(float(r.get("indexed") or 0)), r.get("hosts") if isinstance(r.get("hosts"), list) else ([r["hosts"]] if r.get("hosts") else []))
+        indexed = sum(n for n, _h in found.values())
         accepted = snap["counters"]["accepted"]
         macc = snap.get("metric_accepted") or {"events": 0, "datapoints": 0}
         logs_expected = accepted - macc["events"]
         metric_ok = macc["datapoints"] == 0 or metric == macc["datapoints"]
         done = snap["state"] in ("COMPLETED", "STOPPED")
-        rec = {"status": "VERIFIED" if (done and indexed == logs_expected and metric_ok) else "INCOMPLETE",
-               "indexed": indexed, "accepted": accepted, "expected_log_events": logs_expected, "at": now,
+        by_st = {}
+        for st, c in (snap.get("by_sourcetype") or {}).items():
+            is_m = is_metric_sourcetype(st)
+            exp = c.get("datapoints", 0) if is_m else c.get("accepted", 0)
+            only_metric = sum(1 for k in snap["by_sourcetype"] if is_metric_sourcetype(k)) == 1   # one metric sourcetype in the run: the total is its count
+            got = (metric_by_st.get(st) if metric_by_st.get(st) is not None else (metric if only_metric else None)) if is_m else found.get(st, (0, []))[0]
+            by_st[st] = {"kind": "metric" if is_m else "event", "index": snap["destination"].get("metric_index") if is_m else idx, "accepted": c.get("accepted", 0), "rejected": c.get("rejected", 0), "unknown": c.get("unknown", 0),
+                         "expected": exp, "indexed": got, "hosts": [] if is_m else sorted(found.get(st, (0, []))[1])[:5]}
+        aligned = sum(v["indexed"] or 0 for v in by_st.values() if v["kind"] == "event") == sum(n for n, _h in found.values())   # a TA that rewrites sourcetype breaks name matching; then only totals decide
+        for st, v in by_st.items():
+            v["status"] = ("NOT_SENT" if not v["accepted"] else "UNKNOWN" if v["indexed"] is None else "VERIFIED" if v["indexed"] == v["expected"] else "INCOMPLETE") if (aligned or v["kind"] == "metric") else "UNMATCHED"
+        sources_ok = all(v["status"] in ("VERIFIED", "NOT_SENT", "UNMATCHED") for v in by_st.values())
+        everything_found = done and indexed == logs_expected and metric_ok and sources_ok
+        not_sent = snap["counters"]["rejected"] + snap["counters"]["unknown"]
+        # PARTIAL: every accepted event is searchable, but some were rejected or unconfirmed, so the run as a whole is never reported as Verified
+        rec = {"status": ("PARTIAL" if not_sent else "VERIFIED") if everything_found else "INCOMPLETE",
+               "indexed": indexed, "accepted": accepted, "expected_log_events": logs_expected, "at": now, "by_sourcetype": by_st,
                "note": "indexed is counted by an independent search; it can trail accepted briefly"}
         if macc["datapoints"]:
             rec.update({"metric_datapoints_indexed": metric, "metric_datapoints_expected": macc["datapoints"], "metric_events_accepted": macc["events"]})

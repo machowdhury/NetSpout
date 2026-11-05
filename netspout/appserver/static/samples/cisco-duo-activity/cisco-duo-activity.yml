@@ -9,10 +9,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -29,7 +29,7 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:activity
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": 1789752192, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": $EPOCH$, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'
 
   ### CISCO-DUO-ACTIVITY - DEGRADED / WARNING ###
   - name: cisco-duo-activity-degraded
@@ -41,10 +41,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -59,7 +59,7 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:activity
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": 1789752192, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": $EPOCH$, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'
 
   ### CISCO-DUO-ACTIVITY - CRITICAL / FAILURE ###
   - name: cisco-duo-activity-failure
@@ -71,10 +71,10 @@ samples:
         format: template
         type: timestamp
         replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
+      - name: DUO_CTIME
         format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
+        type: gotimestamp
+        replacement: "Mon Jan _2 15:04:05 2006"
       - name: EPOCH
         format: template
         type: epochtimestamp
@@ -89,4 +89,4 @@ samples:
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:activity
         host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": 1789752192, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'
+        _raw: '{"ctime": "$DUO_CTIME$", "access_device": null, "action": {"details": "{\"sync_ref_code\": \"951940ce7e0bcc4150b1fde70fd0988c\", \"duration\": \"0:00:07\", \"selected_groups\": [\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_rdp_dng,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\", \"cn=cisco_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\"]}", "name": "ad_sync_finish"}, "activity_id": "384adfdb-96ab-46c6-9745-b86407048ab7", "actor": {"details": "{\"created\": null, \"last_login\": null, \"email\": null, \"status\": null, \"groups\": null, \"role\": null}", "key": null, "name": "Active Directory User Sync: AD MAPLE", "type": "ldap_sync"}, "akey": "DAOSZ4YYK0VOGIA1JIYJ", "application": null, "old_target": null, "outcome": {"result": "SUCCESS"}, "target": {"details": "{\"ldname\": \"AD MAPLE\", \"sync_phones\": true, \"send_enrollment\": false, \"username_attribute\": \"samaccountname\", \"realname_attribute\": \"displayname\", \"phone1_attribute\": \"telephonenumber\", \"phone2_attribute\": \"mobile\", \"email_attribute\": \"mail\", \"notes_attribute\": null, \"directory_type\": \"activedirectory\", \"connection\": {\"ldap_conn_name\": null, \"ldap_conn_key\": null, \"base_dn\": null, \"ntlm_domain\": null, \"ntlm_workstation\": null, \"ssl_verify_hostname\": null, \"used_by_user_syncs\": null, \"used_by_admin_syncs\": null}, \"group_change_desc\": null, \"groups\": null, \"authproxy_identifiers\": null}", "key": "DS2ACAGGQBNC95H3U4QS", "name": "AD MAPLE", "type": "ldap_directory"}, "ts": "$ISO_TIMESTAMP$", "timestamp": $EPOCH$, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "activity"}'

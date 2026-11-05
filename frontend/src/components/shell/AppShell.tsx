@@ -87,12 +87,12 @@ export function AppShell({
   const navigation = (
     <nav className="app-nav" aria-label="Primary navigation">
       {NAVIGATION.map((group) => {
-        const items = group.items.filter((item) => mode === 'advanced' || !item.advancedOnly);
+        const items = group.items.filter((item) => mode === 'advanced' || item.primary);
         if (items.length === 0) return null;
 
         return (
           <div className="app-nav__group" key={group.label}>
-            <div className="app-nav__group-label">{group.label}</div>
+            {mode === 'advanced' && <div className="app-nav__group-label">{group.label}</div>}
             {items.map((item) => {
               const Icon = iconMap[item.icon] ?? Activity;
               const selected = item.route === route;
@@ -131,13 +131,13 @@ export function AppShell({
           </div>
         </div>
         {navigation}
-        <div className="product-sidebar__footer">
+        {mode === 'advanced' && <div className="product-sidebar__footer">
           <span className={`runtime-dot ${liveFeedConnected ? 'runtime-dot--active' : ''}`} />
           <div>
             <strong>{liveFeedConnected ? 'Live feed connected' : 'Live feed unavailable'}</strong>
             <span>Runtime evidence only</span>
           </div>
-        </div>
+        </div>}
       </aside>
 
       {mobileNavOpen && (
@@ -185,7 +185,7 @@ export function AppShell({
               <Menu />
             </button>
             <div>
-              <div className="product-header__eyebrow">{activeDomain.label}</div>
+              {mode === 'advanced' && <div className="product-header__eyebrow">{activeDomain.label}</div>}
               <h1>{ROUTE_TITLES[route]}</h1>
             </div>
           </div>
@@ -209,13 +209,13 @@ export function AppShell({
                 Advanced
               </button>
             </div>
-            <div className="product-header__runtime">
+            {mode === 'advanced' && <div className="product-header__runtime">
               <StatusBadge status={liveFeedConnected ? 'STREAMING' : 'NOT AVAILABLE'} />
-            </div>
+            </div>}
           </div>
         </header>
 
-        <section className="domain-selector" aria-label="Operational domain">
+        {mode === 'advanced' && <section className="domain-selector" aria-label="Operational domain">
           <div className="domain-selector__scroll">
             {DOMAINS.map((item) => (
               <button
@@ -232,18 +232,18 @@ export function AppShell({
               </button>
             ))}
           </div>
-        </section>
+        </section>}
 
         <main className="product-workspace" id="main-content">
           {children}
         </main>
 
-        <footer className="product-footer">
+        {mode === 'advanced' && <footer className="product-footer">
           <span>Simulate enterprise incidents. Generate authentic telemetry.</span>
           <span className="product-footer__flow">
             Choose <b>→</b> Run <b>→</b> Observe <b>→</b> Correlate <b>→</b> Investigate
           </span>
-        </footer>
+        </footer>}
       </div>
     </div>
   );

@@ -1,0 +1,83 @@
+{
+ "sourcetype": "fortigate_traffic",
+ "vendor": "fortinet",
+ "run_id": "run-e08e0d9941de",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "fortigate_traffic",
+  "preview_info": "Sourcetype that will be sent: fortigate_traffic · index idx_network_ops · generator: grounded_sample",
+  "preview_first_event": "date=2026-09-20 time=14:00:18 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000014\" type=\"traffic\" subtype=\"forward\" level=\"warning\" srcip=203.0.113.88 srcport=48201 srcintf=\"wan1\" dstip=10.20.10.5 dstport=22 dstintf=\"lan\" polid=99 proto=6 action=\"deny\" duration=0",
+  "outcome": "Verified: found 20 of 20 events in index idx_network_ops that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "fortigate_traffic"
+  ],
+  "indexes": [
+   "idx_network_ops"
+  ],
+  "hosts": [
+   "device-01",
+   "device-02",
+   "device-03"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "fortigate_traffic",
+  "index": "idx_network_ops",
+  "hosts": [
+   "device-01",
+   "device-02",
+   "device-03"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793802067.0404003,
+  "time_last": 1793802070.893523,
+  "send_time_first": 1793802067.0404003,
+  "send_time_last": 1793802070.893523
+ },
+ "ta_fields_extracted_counts": {
+  "src_ip": 20,
+  "dest_ip": 20,
+  "src_port": 20,
+  "dest_port": 20,
+  "transport": 20,
+  "vendor_action": 20,
+  "action": 20,
+  "dvc": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-04 14:21:10.893 GMT",
+   "host": "device-02",
+   "source": "network-topology-simulator",
+   "sourcetype": "fortigate_traffic",
+   "index": "idx_network_ops",
+   "_raw": "date=2026-09-20 time=14:00:17 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000013\" type=\"traffic\" subtype=\"forward\" level=\"notice\" srcip=10.20.10.45 srcport=54210 srcintf=\"lan\" dstip=198.51.100.80 dstport=443 dstintf=\"wan1\" polid=1 proto=6 action=\"accept\" duration=45 sentbyte=2410 rcvdbyte=89420"
+  },
+  {
+   "_time": "2026-11-04 14:21:10.692 GMT",
+   "host": "device-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "fortigate_traffic",
+   "index": "idx_network_ops",
+   "_raw": "date=2026-09-20 time=14:00:17 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000013\" type=\"traffic\" subtype=\"forward\" level=\"notice\" srcip=10.20.10.45 srcport=54210 srcintf=\"lan\" dstip=198.51.100.80 dstport=443 dstintf=\"wan1\" polid=1 proto=6 action=\"accept\" duration=45 sentbyte=2410 rcvdbyte=89420"
+  }
+ ]
+}

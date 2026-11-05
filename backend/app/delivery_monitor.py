@@ -71,6 +71,9 @@ def _current_eps(samples, horizon=5.0):
     return round((c_end - start[1]) / max(t_end - start[0], 1e-6), 2) if t_end > start[0] else 0.0
 
 
+NO_TELEMETRY = "No telemetry was sent: the run finished without delivering a single event to the destination."
+
+
 class StreamAbort(RuntimeError):
     """A stream ended deliberately with a user-facing reason."""
 
@@ -172,6 +175,8 @@ class DeliveryRun:
                 self.samples.append((time.time(), self.counts["attempts"]))
                 if self.state != "FAILED":
                     self.state = "STOPPED" if self._cancel.is_set() and (self.counts["attempts"] < self.counts["generated"] or getattr(self, "unbounded", False)) else "COMPLETED"
+                if self.state == "COMPLETED" and self.counts["attempts"] == 0:
+                    self.state, self.error = "FAILED", NO_TELEMETRY
                 self.ended = _now()
             if self._persist:
                 self._persist()
@@ -190,6 +195,7 @@ class DeliveryRun:
             if key == "accepted" and datapoints:
                 self.metric["events"] += 1
                 self.metric["datapoints"] += datapoints
+                self.by_st.setdefault(sourcetype, Counter())["datapoints"] += datapoints   # what an mstats search will count for this sourcetype
             self.by_st.setdefault(sourcetype, Counter())[key] += 1
             if phase:
                 self.by_phase.setdefault(phase, Counter())[key] += 1
@@ -233,6 +239,7 @@ class ContinuousRun(DeliveryRun):
     just before it is sent and carries a current timestamp. Failures back off, and a destination that rejects FAIL_LIMIT events in a row ends the run
     as FAILED instead of hammering it."""
     CHUNK, FAIL_LIMIT, BACKOFF_MAX = 25, 50, 5.0
+    FAIL_LIMIT_NEVER_ACCEPTED = 10      # a destination that has not accepted a single event is misconfigured (wrong token or address); do not retry it for minutes (Phase 10)
 
     def __init__(self, *a, produce, max_events: Optional[int] = None, duration_s: Optional[float] = None, **kw):
         super().__init__(*a, **kw)
@@ -259,8 +266,9 @@ class ContinuousRun(DeliveryRun):
 
     def _after(self, state):
         self._fails = 0 if state == "accepted" else self._fails + 1
-        if self._fails >= self.FAIL_LIMIT:
-            raise StreamAbort("destination rejected %d events in a row" % self._fails)
+        never = self.counts.get("accepted", 0) == 0
+        if self._fails >= (self.FAIL_LIMIT_NEVER_ACCEPTED if never else self.FAIL_LIMIT):
+            raise StreamAbort("destination rejected %d events in a row%s" % (self._fails, " and has not accepted any" if never else ""))
         if self._fails:
             self._cancel.wait(min(self.BACKOFF_MAX, 0.2 * 2 ** min(self._fails, 5)))
 
@@ -329,6 +337,8 @@ class ObservedRun(DeliveryRun):
             self.samples.append((time.time(), self.counts["attempts"]))
             self.error = clean_error(error) if error else None
             self.state = "FAILED" if error else "COMPLETED"
+            if self.state == "COMPLETED" and self.counts["attempts"] == 0:
+                self.state, self.error = "FAILED", NO_TELEMETRY
             self.ended = _now()
         if self._persist:
             self._persist()

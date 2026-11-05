@@ -1,0 +1,7 @@
+{
+ "ui_run": "Splunk did not receive this data. HEC HTTP 403",
+ "hec_status_seen_by_tap": [
+  403
+ ],
+ "splunk_events_for_run": 0
+}

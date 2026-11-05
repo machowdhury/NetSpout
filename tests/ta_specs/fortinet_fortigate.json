@@ -1,0 +1,94 @@
+{
+ "_about": "Spec for scripts/ta_compat.py. Raw events are NetSpout's shipped FortiGate sample lines (netspout/appserver/static/samples/fortigate-traffic/fortigate-traffic.yml). Expected action values come from the add-on lookup ftnt_action_info.csv (accept->allowed, deny->blocked); the other values are the key=value text of the event.",
+ "ta": {
+  "id": "Splunk_TA_fortinet_fortigate",
+  "package_glob": "fortinet-fortigate-add-on-for-splunk_*",
+  "expected_version": "1.6.10"
+ },
+ "sourcetype": "fortigate_traffic",
+ "index": "ta_validation",
+ "kind": "event",
+ "vendor": "fortinet",
+ "events": [
+  {
+   "id": "fgt-traffic-accept",
+   "raw": "date={DATE} time={TIME} devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000013\" type=\"traffic\" subtype=\"forward\" level=\"notice\" srcip=10.20.10.45 srcport=54210 srcintf=\"lan\" dstip=198.51.100.80 dstport=443 dstintf=\"wan1\" polid=1 proto=6 action=\"accept\" duration=45 sentbyte=2410 rcvdbyte=89420",
+   "expect": {
+    "src_ip": "10.20.10.45",
+    "src_port": "54210",
+    "dest_ip": "198.51.100.80",
+    "dest_port": "443",
+    "src_interface": "lan",
+    "dest_interface": "wan1",
+    "transport": "tcp",
+    "bytes_in": "89420",
+    "bytes_out": "2410",
+    "bytes": "91830",
+    "duration": "45",
+    "vendor_action": "accept",
+    "action": "allowed",
+    "dvc": "fg-branch-01"
+   },
+   "eventtype": "ftnt_fortigate_traffic",
+   "tags": [
+    "network",
+    "communicate"
+   ],
+   "lookup": {
+    "file_contains": "ftnt_action_info",
+    "key": "ftnt_action",
+    "value": "action",
+    "input": "accept",
+    "expect": "allowed"
+   }
+  },
+  {
+   "id": "fgt-traffic-deny",
+   "raw": "date={DATE} time={TIME} devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000014\" type=\"traffic\" subtype=\"forward\" level=\"warning\" srcip=203.0.113.88 srcport=48201 srcintf=\"wan1\" dstip=10.20.10.5 dstport=22 dstintf=\"lan\" polid=99 proto=6 action=\"deny\" duration=0",
+   "expect": {
+    "src_ip": "203.0.113.88",
+    "src_port": "48201",
+    "dest_ip": "10.20.10.5",
+    "dest_port": "22",
+    "transport": "tcp",
+    "vendor_action": "deny",
+    "action": "blocked",
+    "dvc": "fg-branch-01"
+   },
+   "eventtype": "ftnt_fortigate_traffic",
+   "tags": [
+    "network",
+    "communicate"
+   ],
+   "lookup": {
+    "file_contains": "ftnt_action_info",
+    "key": "ftnt_action",
+    "value": "action",
+    "input": "deny",
+    "expect": "blocked"
+   }
+  }
+ ],
+ "negative": [
+  {
+   "id": "plain-text-no-keyvalue",
+   "raw": "{TS} {HOST} sshd[411]: Accepted password for admin from 10.20.10.45 port 52140 ssh2",
+   "expect_absent": [
+    "srcip",
+    "dstip",
+    "ftnt_action",
+    "devid"
+   ],
+   "expect_no_force_match": true
+  },
+  {
+   "id": "no-fortigate-devid",
+   "raw": "date={DATE} time={TIME} type=\"traffic\" srcip=10.1.1.1 dstip=10.2.2.2 action=\"accept\"",
+   "expect_no_force_match": true
+  }
+ ],
+ "timestamp": {
+  "raw_endpoint_check": true,
+  "max_skew_seconds": 5
+ }
+}

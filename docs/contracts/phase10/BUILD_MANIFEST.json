@@ -1,0 +1,26 @@
+{
+ "release_candidate": "rc2-3f6cc0f",
+ "built_from_commit": "3f6cc0f7794d99f8262be1f9ac229f98a9dfe326",
+ "build": "clean git worktree of that commit (frontend/node_modules symlinked); scripts/build_frontend.py, build_splunk_package.py, build_splunk_cloud_package.py, build_engine_package.py with the repo test venv python",
+ "built_at": "2026-11-04T09:36:02-0500",
+ "version": "2.0.0 (app.conf, app.manifest, frontend/package.json, engine openapi \u2014 all equal; identical to the released 2.0.0)",
+ "artifacts": {
+  "netspout.spl": {
+   "bytes": 7524302,
+   "sha256": "86724bdf653d1bd538145bab7212e5b333c7f4fb3d21e954bffd080917178838"
+  },
+  "netspout_cloud.spl": {
+   "bytes": 709795,
+   "sha256": "b3184d28c83ec9a97e6d17bbdfbed0a07b545aff307da21b8cffa0f919588f51"
+  },
+  "pulseforge-engine.tar.gz": {
+   "bytes": 10541209,
+   "sha256": "cbb187769693ac7593b28954e1bdd61eba7eba80654a2899cc194630a07af10c"
+  }
+ },
+ "released_artifacts_unchanged": "verified: existing-released-artifacts.sha256 re-checked against the repository-root files after the build (all OK)",
+ "notes": [
+  "builds are not byte-reproducible (archive timestamps): netspout_cloud.spl differed between two builds of the same commit",
+  "commits after 3f6cc0f touch only tests, lab scripts, evidence and scripts/build_splunk_package.py's printed size line; no packaged path"
+ ]
+}

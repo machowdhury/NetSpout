@@ -218,33 +218,27 @@ test.beforeEach(async ({ page }) => {
   }
 });
 
-test('supports navigation, domains, and experience modes', async ({ page }) => {
+test('simple mode shows three places; advanced mode restores the full navigation, domains and tools', async ({ page }) => {
   await page.goto('/#/');
+  await expect(page).toHaveURL(/#\/generate\/quick$/);
+  await expect(page.locator('.app-nav').getByRole('button')).toHaveText(['Generate Data', 'Scenarios', 'Connections']);
+  await expect(page.locator('.domain-selector')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Scenario Builder' })).toHaveCount(0);
 
+  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
+  await page.locator('.app-nav').getByRole('button', { name: 'Overview', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();
   await expect(page.getByText('Unified Enterprise Telemetry Lab').first()).toBeVisible();
-
-  for (const domain of [
-    'NetOps',
-    'SecOps',
-    'ITOps',
-    'Observability',
-    'Agentic AI',
-    'Supply Chain',
-  ]) {
+  for (const domain of ['NetOps', 'SecOps', 'ITOps', 'Observability', 'Agentic AI', 'Supply Chain']) {
     await expect(page.getByRole('button', { name: new RegExp(domain) })).toBeVisible();
   }
-
   await page.getByRole('button', { name: /SecOps/ }).click();
   await expect(page.getByText('Current perspective').locator('..')).toContainText('SecOps');
-
-  await expect(page.getByRole('button', { name: 'Scenario Builder' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Scenario Builder' })).toBeVisible();
 
-  await page.locator('.app-nav').getByRole('button', { name: 'Quick Generate', exact: true }).click();
+  await page.locator('.app-nav').getByRole('button', { name: 'Generate Data', exact: true }).click();
   await expect(page).toHaveURL(/#\/generate\/quick$/);
-  await expect(page.getByRole('heading', { name: 'Quick Generate', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Generate Data', exact: true, level: 1 })).toBeVisible();
 
   await page.getByRole('button', { name: /Telemetry Explorer/ }).click();
   await expect(page).toHaveURL(/#\/observe\/telemetry$/);
@@ -252,7 +246,7 @@ test('supports navigation, domains, and experience modes', async ({ page }) => {
 });
 
 test('renders responsive navigation without replacing Phase 1 evidence', async ({ page }) => {
-  await page.goto('/#/');
+  await page.goto('/#/generate/quick');
   await page.setViewportSize({ width: 1440, height: 1000 });
 
   const phaseOneEvidence = artifactPath(
@@ -266,9 +260,9 @@ test('renders responsive navigation without replacing Phase 1 evidence', async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Open navigation' }).click();
   await expect(page.getByRole('dialog', { name: 'Navigation' })).toBeVisible();
-  await page.getByRole('button', { name: 'Pipeline Health' }).click();
-  await expect(page).toHaveURL(/#\/observe\/pipeline-health$/);
-  await expect(page.locator('h1', { hasText: 'Pipeline Health' })).toBeVisible();
+  await page.getByRole('dialog', { name: 'Navigation' }).getByRole('button', { name: 'Scenarios' }).click();
+  await expect(page).toHaveURL(/#\/generate\/scenarios$/);
+  await expect(page.locator('h1', { hasText: 'Scenarios' })).toBeVisible();
 });
 
 test('renders Provenance in simple and advanced modes from catalog APIs', async ({ page }) => {

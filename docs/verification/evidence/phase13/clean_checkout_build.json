@@ -1,0 +1,87 @@
+{
+ "what": "Policy A migration check: fresh 'git clone' of the branch at the migration commit, no root packages and no sample folders present before the build, npm ci, venv with only backend/requirements.txt (Python 3.15.0)",
+ "commit": "df5dd81820d09f68924f49478e3ed9f85aa0e8d5",
+ "root_packages_before_build": 0,
+ "sample_folders_present": 0,
+ "steps_succeeded": [
+  "build_frontend",
+  "build_splunk_package (mirror sync + verify_sources)",
+  "build_splunk_cloud_package",
+  "build_engine_package (guardrail)",
+  "verify_sources"
+ ],
+ "git_status_after_build_lines": 0,
+ "artifacts": {
+  "netspout.spl": {
+   "bytes": 7529621,
+   "sha256": "0d46ca40ef77560dea9bccd7b6c50d6edb25de75cf967c2649aa51ba915b08f6"
+  },
+  "netspout_cloud.spl": {
+   "bytes": 709799,
+   "sha256": "b969b1e22e11c21239e0ed35f416aefebc41e69506a2d9f492ca5d4709767e9b"
+  },
+  "pulseforge-engine.tar.gz": {
+   "bytes": 10544275,
+   "sha256": "e5998c545f823570523f84dba58f52f4ac844651a5a398b2b144b0719147e26f"
+  }
+ },
+ "vs_rc5_654762b": {
+  "netspout.spl": {
+   "rc5_members": 1393,
+   "clone_members": 1393,
+   "identical": 1393,
+   "differing": [],
+   "only_rc5": [],
+   "only_clone": []
+  },
+  "netspout_cloud.spl": {
+   "rc5_members": 383,
+   "clone_members": 383,
+   "identical": 383,
+   "differing": [],
+   "only_rc5": [],
+   "only_clone": []
+  },
+  "pulseforge-engine.tar.gz": {
+   "rc5_members": 1198,
+   "clone_members": 1198,
+   "identical": 1198,
+   "differing": [],
+   "only_rc5": [],
+   "only_clone": []
+  }
+ },
+ "package_audit": [
+  {
+   "archive": "netspout.spl",
+   "members": 1393,
+   "clean": true,
+   "findings": {},
+   "reviewed": {
+    "secret-looking-text:password-assignment": 2,
+    "developer-absolute-path": 2
+   }
+  },
+  {
+   "archive": "netspout_cloud.spl",
+   "members": 383,
+   "clean": true,
+   "findings": {},
+   "reviewed": {
+    "not-tracked-in-repository": 1
+   }
+  },
+  {
+   "archive": "pulseforge-engine.tar.gz",
+   "members": 1198,
+   "clean": true,
+   "findings": {},
+   "reviewed": {
+    "secret-looking-text:password-assignment": 5,
+    "developer-absolute-path": 23
+   }
+  }
+ ],
+ "strict_release_tests_in_clean_build": "39 passed (test_phase12_release_consistency, test_phase5_inventory, test_gate2_canonical, test_phase13_release_candidate) with NETSPOUT_STRICT_BINARIES=1",
+ "stale_binary_guard": "phase10_rc_install.py install refuses a netspout.spl whose version differs from the source (shown with the archived 2.0.0 copy)"
+}

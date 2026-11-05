@@ -1,0 +1,8 @@
+{
+ "scenario": "C100-SEC-001",
+ "dashboard_id": "scenario-c100-sec-001",
+ "run_id": "2d85c63b-f240-42f6-b1c1-93a61f355e9d",
+ "link_href": "?dashboard=scenario-c100-sec-001&run=2d85c63b-f240-42f6-b1c1-93a61f355e9d#/observe/dashboards",
+ "events_indexed": 11,
+ "note": "sourcetype netspout:cisco:asa:syslog is a NetSpout-defined source, not a TA sourcetype: delivery and indexing are checked, TA parsing is not claimed"
+}

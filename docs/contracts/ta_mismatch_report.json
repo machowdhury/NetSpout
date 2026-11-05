@@ -1,0 +1,890 @@
+{
+ "summary": {
+  "mismatches": 80,
+  "by_priority": {
+   "P1": 5,
+   "P2": 75
+  },
+  "by_kind": {
+   "payload-format": 3,
+   "routing": 2,
+   "advertised-without-generator": 3,
+   "naming": 72
+  },
+  "exact_name_matches_with_generator_not_yet_live_verified": 73,
+  "live_verified_sourcetypes": [
+   "cisco:asa",
+   "cisco:ios",
+   "fortigate_traffic",
+   "pan:traffic"
+  ],
+  "namespaced_netspout_fields": [
+   "action",
+   "signature",
+   "status",
+   "src_ip",
+   "dest_ip",
+   "protocol",
+   "vendor",
+   "node_type"
+  ]
+ },
+ "systemic": {
+  "field_shadowing": {
+   "description": "For every sourcetype outside TA_PARSED_SOURCETYPES the dispatcher still sends the bare NetSpout fields next to the netspout_* copies. Shadowing is add-on specific (ASA, FortiGate and Palo Alto were proven; IOS showed NetSpout values in CIM fields), so each of these needs its own live check before the bare names are removed.",
+   "sourcetypes": [
+    "cisco:catalyst:client",
+    "cisco:catalyst:clienthealth",
+    "cisco:catalyst:compliance",
+    "cisco:catalyst:devicehealth",
+    "cisco:catalyst:issue",
+    "cisco:catalyst:networkhealth",
+    "cisco:catalyst:securityadvisory",
+    "cisco:dnac:audit:logs",
+    "cisco:dnac:client",
+    "cisco:dnac:clienthealth",
+    "cisco:dnac:compliance",
+    "cisco:dnac:devicehealth",
+    "cisco:dnac:issue",
+    "cisco:dnac:networkhealth",
+    "cisco:dnac:securityadvisory",
+    "cisco:dnac:site:topology",
+    "cisco:duo:account",
+    "cisco:duo:activity",
+    "cisco:duo:administrator",
+    "cisco:duo:authentication",
+    "cisco:duo:authentication_v2",
+    "cisco:duo:endpoint",
+    "cisco:duo:user",
+    "cisco:ftd:syslog",
+    "cisco:intersight:advisories",
+    "cisco:intersight:alarms",
+    "cisco:intersight:auditrecords",
+    "cisco:intersight:compute",
+    "cisco:intersight:contracts",
+    "cisco:intersight:licenses",
+    "cisco:intersight:networkelements",
+    "cisco:intersight:networkobjects",
+    "cisco:intersight:profiles",
+    "cisco:intersight:targets",
+    "cisco:ise:radius:authz:policy",
+    "cisco:ise:radius:policyset",
+    "cisco:ise:syslog",
+    "cisco:ise:tacacs:authz:policy",
+    "cisco:ise:tacacs:policyset",
+    "cisco:sdwan:linkhealth",
+    "cisco:sdwan:sitehealth",
+    "cisco:sdwan:ssetunnels",
+    "cisco:sdwan:syslog",
+    "cisco:sdwan:system:logs",
+    "cisco:sdwan:sytem:logs",
+    "cisco:sdwan:tunnelhealth",
+    "cisco:sdwan:utd:logs",
+    "cisco:sdwan:utdhealth",
+    "cisco:se",
+    "cisco:sfw:estreamer",
+    "cisco:sfw:policy",
+    "cisco:thousandeyes:event",
+    "cisco:thousandeyes:path-vis",
+    "fgt_event",
+    "fgt_traffic",
+    "fortigate_event",
+    "meraki:accesspoints",
+    "meraki:airmarshal",
+    "meraki:appliancesdwanstatistics",
+    "meraki:appliancesdwanstatuses",
+    "meraki:assurancealerts",
+    "meraki:devices",
+    "meraki:devicesavailabilitieschangehistory",
+    "meraki:organizationsecurity",
+    "meraki:securityappliances",
+    "meraki:summarytopappliancesbyutilization",
+    "meraki:summarytopclientsbyusage",
+    "meraki:summarytopdevicesbyusage",
+    "meraki:switchportsbyswitch",
+    "meraki:switchportsoverview",
+    "pan:system",
+    "pan:threat",
+    "stream:netflow"
+   ]
+  }
+ },
+ "protocol_gaps": [
+  {
+   "package": "arista-networks-telemetry-for-splunk_202.tgz",
+   "package_id": "aristanetworks",
+   "expected_ingestion": "syslog (arista_switch_log), sFlow collector (arista_switch_sflow) and interface counters (arista_switch_ifcounter) via saved searches/scripts",
+   "netspout_gap": "NetSpout's arista:* sourcetypes use different names; sFlow is a UDP protocol NetSpout does not send into this add-on."
+  },
+  {
+   "package": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+   "package_id": "TA_cisco_catalyst",
+   "expected_ingestion": "syslog plus REST modular inputs (Catalyst Center, Cyber Vision, SD-WAN, ISE)",
+   "netspout_gap": "syslog sourcetypes are testable (cisco:ios verified); modular-input sourcetypes are not."
+  },
+  {
+   "package": "cisco-enterprise-networking-netflow-add-on-for-splunk_400.tgz",
+   "package_id": "splunk_app_stream_ipfix_cisco_hsl",
+   "expected_ingestion": "Splunk App for Stream IPFIX template (cisco.hsl.json/xml, ipfixmap.conf); no props/inputs/sourcetypes",
+   "netspout_gap": "needs an IPFIX collector (Stream forwarder). It is not a Technology Add-on: NetSpout's flow engine and the add-on were not tested together."
+  },
+  {
+   "package": "cisco-intersight-add-on-for-splunk_322.spl",
+   "package_id": "Splunk_TA_Cisco_Intersight",
+   "expected_ingestion": "REST API modular inputs (audit_alarms, inventory, metrics, custom_input)",
+   "netspout_gap": "NetSpout has no REST-API collector emulation; it can only POST JSON to HEC. Whether the JSON equals the Intersight API response is unverified."
+  },
+  {
+   "package": "cisco-meraki-add-on-for-splunk_350.tgz",
+   "package_id": "Splunk_TA_cisco_meraki",
+   "expected_ingestion": "REST API modular inputs (cisco_meraki_*)",
+   "netspout_gap": "same: HEC delivery of Meraki API-shaped JSON; equivalence to the TA's modular-input output is unverified."
+  },
+  {
+   "package": "cisco-secure-access-add-on-for-splunk_1057.tar.gz",
+   "package_id": "TA-cisco-cloud-security-addon",
+   "expected_ingestion": "modular inputs (S3, API)",
+   "netspout_gap": "not emulated."
+  },
+  {
+   "package": "cisco-security-cloud_373.tar.gz",
+   "package_id": "CiscoSecurityCloud",
+   "expected_ingestion": "modular inputs (Duo, Secure Endpoint, Firepower, AI Defense, ...)",
+   "netspout_gap": "not emulated except where the sourcetype is a plain syslog stream (cisco:asa)."
+  },
+  {
+   "package": "cisco-thousandeyes-app-for-splunk_090.tar.gz",
+   "package_id": "ta_cisco_thousandeyes",
+   "expected_ingestion": "ThousandEyes streams delivered to a HEC target (test_metrics_stream, alerts_stream, event, activity_logs_stream) plus API inputs",
+   "netspout_gap": "NetSpout does not emulate the ThousandEyes stream (OpenTelemetry/webhook payloads); its metric label conflicts with the add-on's event definition."
+  },
+  {
+   "package": "splunk-add-on-for-palo-alto-networks_400.spl",
+   "package_id": "Splunk_TA_paloalto_networks",
+   "expected_ingestion": "syslog CSV (pan:log routed to pan:*) plus modular inputs (Cortex XDR, data security, IoT)",
+   "netspout_gap": "syslog log types are testable (pan:traffic verified); modular inputs are not."
+  }
+ ],
+ "mismatches": [
+  {
+   "priority": "P1",
+   "kind": "payload-format",
+   "subject": "cisco:intersight:compute (Splunk_TA_Cisco_Intersight)",
+   "detail": "payload-format: none of the add-on's extractions match NetSpout's rendered events",
+   "evidence": [
+    "default/props.conf:[cisco:intersight:compute] in cisco-intersight-add-on-for-splunk_322.spl"
+   ]
+  },
+  {
+   "priority": "P1",
+   "kind": "payload-format",
+   "subject": "cisco:sdwan:system:logs (TA_cisco_catalyst)",
+   "detail": "payload-format: none of the add-on's extractions match NetSpout's rendered events",
+   "evidence": [
+    "default/props.conf:[cisco:sdwan:sytem:logs] rename in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "priority": "P1",
+   "kind": "payload-format",
+   "subject": "stream:netflow (TA_cisco_catalyst)",
+   "detail": "payload-format: none of the add-on's extractions match NetSpout's rendered events",
+   "evidence": [
+    "default/props.conf:[stream:netflow] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "priority": "P1",
+   "kind": "routing",
+   "subject": "cisco:intersight:metrics (Splunk_TA_Cisco_Intersight)",
+   "detail": "routing: NetSpout sends this as a metric-index payload; the add-on defines it as an event sourcetype (no metric schema)",
+   "evidence": [
+    "default/props.conf:[cisco:intersight:metrics] in cisco-intersight-add-on-for-splunk_322.spl"
+   ]
+  },
+  {
+   "priority": "P1",
+   "kind": "routing",
+   "subject": "cisco:thousandeyes:metric (ta_cisco_thousandeyes)",
+   "detail": "routing: NetSpout sends this as a metric-index payload; the add-on defines it as an event sourcetype (no metric schema)",
+   "evidence": [
+    "default/props.conf:[cisco:thousandeyes:metric] in cisco-thousandeyes-app-for-splunk_090.tar.gz"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "advertised-without-generator",
+   "subject": "cisco:catalyst:syslog (TA_cisco_catalyst)",
+   "detail": "advertised-without-generator: catalog lists the sourcetype but no generator or sample exists",
+   "evidence": [
+    "default/props.conf:[cisco:catalyst:syslog] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "advertised-without-generator",
+   "subject": "meraki:securityappliances (Splunk_TA_cisco_meraki)",
+   "detail": "advertised-without-generator: catalog lists the sourcetype but no generator or sample exists",
+   "evidence": [
+    "default/props.conf:[meraki:securityappliances] in cisco-meraki-add-on-for-splunk_350.tgz"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "advertised-without-generator",
+   "subject": "pan:config (Splunk_TA_paloalto_networks)",
+   "detail": "advertised-without-generator: catalog lists the sourcetype but no generator or sample exists",
+   "evidence": [
+    "default/props.conf:[pan_config] rename in splunk-add-on-for-palo-alto-networks_400.spl"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "arista:eos (catalog)",
+   "detail": "catalog sourcetype of vendor arista_eos is not defined by aristanetworks; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "arista:eos:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor arista_eos is not defined by aristanetworks; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "arista:flow:ipfix (catalog)",
+   "detail": "catalog sourcetype of vendor arista_eos is not defined by aristanetworks; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "arista:telemetry:json (catalog)",
+   "detail": "catalog sourcetype of vendor arista_eos is not defined by aristanetworks; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:asa:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_asa is not defined by CiscoSecurityCloud; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:asa:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_asa is not defined by Splunk_TA_cisco-asa; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:allowed (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:counts (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:threat_details (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:verbose (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:verbose:legacy (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:rogue:wired (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:script:heartbeat (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:security:awips_signatures (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:security:events (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:security:profile (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:security:profile_signatures (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:security:rules (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:threat:list (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:threat:signatures (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:threat:summary (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:catalyst:threat:summary:legacy (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_catalyst is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:duo:remote:vpn (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_duo is not defined by CiscoSecurityCloud; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:ios:mdt (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:ios:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:meraki:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_meraki is not defined by Splunk_TA_cisco_meraki; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:nvm:flowdata (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:nxos (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:nxos:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:AAA-6-METHOD_LIST_STATE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:BGP-5-ADJCHANGE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:BGP-5-NBR_RESET (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:BGP-6-NEXTHOP (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:DMI-5-AUTH_PASSED (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:DMI-5-CONFIG_I (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:DMI-5-SYNC_COMPLETE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:DMI-5-SYNC_NEEDED (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:DMI-5-SYNC_START (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:ENVIRONMENTAL-1-ALERT (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:EVENTLIB-3-CPUHOG (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:IOSXE-3-PLATFORM (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:LINEPROTO-5-UPDOWN (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:LINK-5-CHANGED (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:LINK-5-UPDOWN (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:MSDP-5-PEER_UPDOWN (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:NDBMAN-5-CONFIG_I (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:OSPF-5-ADJCHG (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:SYS-5-CONFIG_P (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco:sdwan:access (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_sdwan is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "cisco_syslog (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "datablaster:preflight (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "datablaster:probe (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "fortinet:fortigate (catalog)",
+   "detail": "catalog sourcetype of vendor fortinet is not defined by Splunk_TA_fortinet_fortigate; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "fortinet:fortigate:utm (catalog)",
+   "detail": "catalog sourcetype of vendor fortinet is not defined by Splunk_TA_fortinet_fortigate; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "juniper:junos (catalog)",
+   "detail": "catalog sourcetype of vendor juniper_junos is not defined by Splunk_TA_juniper; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "juniper:junos:idp (Splunk_TA_juniper)",
+   "detail": "naming: NetSpout uses 'juniper:junos', the add-on defines 'juniper:junos:idp' (candidate only)",
+   "evidence": [
+    "default/props.conf:[juniper:junos:idp] in splunk-add-on-for-juniper_161.spl"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "juniper:junos:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor juniper_junos is not defined by Splunk_TA_juniper; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "juniper:syslog (catalog)",
+   "detail": "catalog sourcetype of vendor juniper_junos is not defined by Splunk_TA_juniper; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "netspout:snmp:poll (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  },
+  {
+   "priority": "P2",
+   "kind": "naming",
+   "subject": "netspout:snmp:trap (catalog)",
+   "detail": "catalog sourcetype of vendor cisco_ios is not defined by TA_cisco_catalyst; NetSpout would emit a name the add-on does not parse",
+   "evidence": [
+    "docs/reference/sourcetype_coverage.json"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,140 @@
+{
+ "addon": null,
+ "run_id": "p8m-7dc8250e",
+ "outgoing_payload_sample": [
+  {
+   "time": 1793737547.463267,
+   "event": "metric",
+   "host": "xr-edge-01",
+   "source": "192.0.2.171",
+   "sourcetype": "cisco:ios:mdt:metric",
+   "index": "cisco_metrics",
+   "fields": {
+    "interface_name": "FortyGigE0/0/1/0",
+    "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+    "metric_name:interface_generic_counters.packets_received": 99522448.0,
+    "metric_name:interface_generic_counters.packets_sent": 90330502.0,
+    "metric_name:interface_generic_counters.bytes_received": 96406132589.0,
+    "metric_name:interface_generic_counters.bytes_sent": 46934708005.0,
+    "metric_name:interface_generic_counters.input_drops": 0.0,
+    "metric_name:interface_generic_counters.output_drops": 0.0,
+    "metric_name:interface_generic_counters.input_errors": 0.0,
+    "metric_name:interface_generic_counters.output_errors": 0.0,
+    "netspout_run_id": "p8m-7dc8250e",
+    "netspout_event_id": "87d22323-5190-4d10-9aab-deeceed61dfc",
+    "netspout_ground_truth": "true"
+   }
+  },
+  {
+   "time": 1793737547.473387,
+   "event": "metric",
+   "host": "xr-edge-01",
+   "source": "192.0.2.171",
+   "sourcetype": "cisco:ios:mdt:metric",
+   "index": "cisco_metrics",
+   "fields": {
+    "interface_name": "FortyGigE0/0/1/0",
+    "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/data-rate",
+    "metric_name:interface_generic_counters.bandwidth": 40000000.0,
+    "metric_name:interface_generic_counters.input_load": 3.0,
+    "metric_name:interface_generic_counters.output_load": 0.0,
+    "netspout_run_id": "p8m-7dc8250e",
+    "netspout_event_id": "a921d1f5-0928-4522-b003-c4305c843d1f",
+    "netspout_ground_truth": "true"
+   }
+  },
+  {
+   "time": 1793737547.480327,
+   "event": "metric",
+   "host": "xr-edge-01",
+   "source": "192.0.2.171",
+   "sourcetype": "cisco:ios:mdt:metric",
+   "index": "cisco_metrics",
+   "fields": {
+    "interface_name": "FortyGigE0/0/1/1",
+    "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters",
+    "metric_name:interface_generic_counters.packets_received": 26241109.0,
+    "metric_name:interface_generic_counters.packets_sent": 22413135.0,
+    "metric_name:interface_generic_counters.bytes_received": 28748866533.0,
+    "metric_name:interface_generic_counters.bytes_sent": 48973515176.0,
+    "metric_name:interface_generic_counters.input_drops": 0.0,
+    "metric_name:interface_generic_counters.output_drops": 0.0,
+    "metric_name:interface_generic_counters.input_errors": 0.0,
+    "metric_name:interface_generic_counters.output_errors": 0.0,
+    "netspout_run_id": "p8m-7dc8250e",
+    "netspout_event_id": "dec1aba4-0a88-4824-8bd6-bf56f83f0fbd",
+    "netspout_ground_truth": "true"
+   }
+  }
+ ],
+ "status": "SPLUNK_VERIFIED (metric index, names, values, dimensions, time via mstats/mcatalog; mpreview not used)",
+ "section": "metrics",
+ "generated": "2026-11-03T20:25:48.468208+00:00",
+ "checks": [
+  {
+   "check": "lab.index_datatype[cisco_metrics]",
+   "status": "PASS",
+   "detail": "datatype=metric"
+  },
+  {
+   "check": "hec.accepted[iosxr metrics]",
+   "status": "PASS",
+   "detail": "28 of 28 accepted by HEC"
+  },
+  {
+   "check": "payload.all_metric_events_target_the_metric_index",
+   "status": "PASS",
+   "detail": "28 payloads"
+  },
+  {
+   "check": "payload.metric_names_observed_on_reference",
+   "status": "PASS",
+   "detail": "14 names sent, 14 documented"
+  },
+  {
+   "check": "splunk.metric_names",
+   "status": "PASS",
+   "detail": "14 of 14 names found by mstats"
+  },
+  {
+   "check": "splunk.datapoint_counts_and_value_sums_equal_sent",
+   "status": "PASS",
+   "detail": "mismatch: []"
+  },
+  {
+   "check": "splunk.dimensions_equal_documented",
+   "status": "PASS",
+   "detail": "14 metrics checked; wrong: []"
+  },
+  {
+   "check": "splunk.path_dimension_equals_documented",
+   "status": "PASS",
+   "detail": "14 (metric,path) pairs"
+  },
+  {
+   "check": "splunk.values_inside_observed_ranges",
+   "status": "PASS",
+   "detail": "out of range: []"
+  },
+  {
+   "check": "splunk.metric_time_equals_send_time",
+   "status": "PASS",
+   "detail": "splunk 1793737547..1793737547 sent 1793737547..1793737548"
+  },
+  {
+   "check": "splunk.source_is_the_device_address",
+   "status": "PASS",
+   "detail": "['192.0.2.171', '192.0.2.172']"
+  },
+  {
+   "check": "splunk.per_interface_counter_series_equal_sent",
+   "status": "PASS",
+   "detail": "4 interfaces; sent series strictly increasing: True"
+  }
+ ],
+ "passed": true,
+ "summary": {
+  "PASS": 12,
+  "FAIL": 0
+ }
+}

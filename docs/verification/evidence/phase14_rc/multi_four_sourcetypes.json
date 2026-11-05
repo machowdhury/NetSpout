@@ -1,0 +1,69 @@
+{
+ "run_id": "run-b652a6c2028d",
+ "requested": {
+  "cisco:asa": 8,
+  "cisco:ios": 6,
+  "fortigate_traffic": 5,
+  "pan:traffic": 6
+ },
+ "outgoing_by_tap": {
+  "cisco:asa": 8,
+  "cisco:ios": 6,
+  "fortigate_traffic": 5,
+  "pan:traffic": 6
+ },
+ "indexes": [
+  "idx_network_ops"
+ ],
+ "splunk": [
+  {
+   "sourcetype": "cisco:asa",
+   "count": 8,
+   "index": "idx_network_ops",
+   "hosts": "asa-fw-01"
+  },
+  {
+   "sourcetype": "cisco:ios",
+   "count": 6,
+   "index": "idx_network_ops",
+   "hosts": [
+    "device-01",
+    "device-02",
+    "device-03"
+   ]
+  },
+  {
+   "sourcetype": "fortigate_traffic",
+   "count": 5,
+   "index": "idx_network_ops",
+   "hosts": [
+    "device-01",
+    "device-02",
+    "device-03"
+   ]
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "count": 6,
+   "index": "idx_network_ops",
+   "hosts": [
+    "pa-3260-01.lab.example",
+    "pa-5250-01.lab.example"
+   ]
+  }
+ ],
+ "aggregate": {
+  "sent": 25,
+  "indexed": 25
+ },
+ "ui_outcome": "Verified: found 25 of 25 events in index idx_network_ops that this run sent.",
+ "dashboard": {
+  "href": "/en-US/app/netspout/netspout_run_investigation?form.run_tok=run-b652a6c2028d&form.index_tok=idx_network_ops&form.global_time.earliest=1793830448&form.global_time.latest=1793831056",
+  "rows": [
+   "idx_network_ops\tcisco:asa\t8\t1\tasa-fw-01\t11/04/2026 22:19:08.3307940\t11/04/2026 22:19:13.1997360",
+   "idx_network_ops\tcisco:ios\t6\t3\t\ndevice-01\ndevice-02\ndevice-03\n\t11/04/2026 22:19:08.5343780\t11/04/2026 22:19:12.5840850",
+   "idx_network_ops\tpan:traffic\t6\t2\t\npa-3260-01.lab.example\npa-5250-01.lab.example\n\t11/04/2026 22:19:08.9415320\t11/04/2026 22:19:12.7942930",
+   "idx_network_ops\tfortigate_traffic\t5\t3\t\ndevice-01\ndevice-02\ndevice-03\n\t11/04/2026 22:19:08.7373740\t11/04/2026 22:19:11.9768110"
+  ]
+ }
+}

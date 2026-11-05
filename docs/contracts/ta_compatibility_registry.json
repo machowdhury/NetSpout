@@ -1,0 +1,164 @@
+{
+ "_about": "Compatibility registry. status values: VERIFIED (checked against an authoritative source named in evidence), UNVERIFIED (not checked), BLOCKED (needs a manual step), NON_CANONICAL. Nothing here claims TA field extraction unless status is VERIFIED. SUPERSEDED for coverage by docs/contracts/ta_backed_registry.json (all 14 add-on packages, derived from the packages); this file keeps the Cisco ASA narrative entry.",
+ "generated": "2026-11-03",
+ "entries": [
+  {
+   "vendor": "cisco_asa",
+   "product": "Cisco ASA firewall",
+   "canonical_sourcetype": "cisco:asa",
+   "ta": {
+    "name": "Splunk Add-on for Cisco ASA",
+    "splunkbase_app": 1620,
+    "latest_version": "6.1.2",
+    "published": "2026-07-29",
+    "cim": "5.x",
+    "evidence": "Splunkbase public API https://splunkbase.splunk.com/api/v1/app/1620/release/ (metadata only; package not downloaded)",
+    "installed_in_lab": "Splunk Add-on for Cisco ASA 6.1.2 in the isolated TA-validation lab (Splunk 10.2.7); package sha256 prefix dbe93977b84b05c6, 71,033 bytes (matches Splunkbase metadata)"
+   },
+   "sample_file": "netspout/appserver/static/samples/cisco-asa/cisco-asa.yml",
+   "generator": "netspout_core.asa_generator.generate_asa_entries (native; replay sample as secondary)",
+   "expected_event_format": "BSD syslog: '<Mon dd HH:MM:SS> <host> %ASA-<sev>-<id>: <message>'; 302013/302015 Built, 302014/302016 Teardown, 106023 Deny (Cisco ASA syslog guide)",
+   "expected_extracted_fields": {
+    "status": "VERIFIED",
+    "scope": "message ids 302013, 302014, 302015, 302016, 106023 (all fields below) and 111008 (user, action); message_id and log_level only for 305011, 500003, 605005, 710003",
+    "fields": [
+     "message_id",
+     "log_level",
+     "session_id",
+     "src_interface",
+     "dest_interface",
+     "src_ip",
+     "src_port",
+     "dest_ip",
+     "dest_port",
+     "transport",
+     "direction",
+     "bytes",
+     "duration",
+     "vendor_action",
+     "action",
+     "rule",
+     "user"
+    ],
+    "source": "Splunk_TA_cisco-asa 6.1.2 props.conf [cisco:asa] REPORT-cisco_asa_field_extractions and transforms.conf; expected values come from the Cisco message text and the add-on lookup cisco_asa_action_lookup_600.csv"
+   },
+   "verification": {
+    "sourcetype_name": {
+     "status": "VERIFIED",
+     "evidence": "Splunk docs 'Integrated Enterprise Value for Cisco data' (help.splunk.com, Splunk Enterprise 10.6): add-on to source type table"
+    },
+    "ta_identity_and_version": {
+     "status": "VERIFIED",
+     "evidence": "Splunkbase public API https://splunkbase.splunk.com/api/v1/app/1620/release/ (metadata only; package not downloaded)"
+    },
+    "event_format": {
+     "status": "VERIFIED",
+     "evidence": "tests/test_cisco_asa_ta_contract.py and tests/test_yaml_sample_replay.py against tests/fixtures/cisco_asa/message_formats.json (shape fixtures from Cisco ASA syslog guide, not captures)"
+    },
+    "ta_parsing_in_splunk": {
+     "status": "VERIFIED",
+     "scope": "the message ids listed in expected_extracted_fields; other ASA message ids (about 180 REPORT transforms) are NOT verified",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_ta_compat_after_fix.json (85 of 85 checks) and docs/verification/evidence/ta_compat/cisco_asa_generated_run.json (54 events, 461 field comparisons, 0 mismatches)"
+    },
+    "field_extractions": {
+     "status": "VERIFIED",
+     "scope": "as above",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_generated_run.json"
+    },
+    "timestamp": {
+     "status": "VERIFIED",
+     "scope": "HEC raw endpoint only (applies props.conf TIME_FORMAT). The product's HEC event endpoint sets _time from the send time, so the add-on's timestamp parsing is not exercised on the product path",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_ta_compat_after_fix.json timestamp.parsed_from_event_text"
+    },
+    "event_types_and_tags": {
+     "status": "VERIFIED",
+     "scope": "cisco_connection (network, communicate) and cisco_authentication observed",
+     "evidence": "docs/verification/evidence/ta_compat/cisco_asa_generated_run.json"
+    },
+    "cim_data_model": {
+     "status": "UNVERIFIED",
+     "evidence": "Splunk Common Information Model add-on is not installed in the lab; only CIM field names and tags were observed, no data model search was run"
+    },
+    "ingestion_metadata": {
+     "status": "VERIFIED",
+     "evidence": "Before the fix NetSpout's indexed action/src_ip/dest_ip/signature/protocol shadowed the add-on's fields (16 of 85 checks failed: docs/verification/evidence/ta_compat/cisco_asa_ta_compat_before_fix.json). They are now sent as netspout_<name> for sourcetypes in TA_PARSED_SOURCETYPES"
+    }
+   }
+  },
+  {
+   "vendor": "cisco_asa",
+   "product": "Cisco ASA syslog message stream (catalog entry)",
+   "canonical_sourcetype": "cisco:asa:syslog",
+   "status": "NON_CANONICAL",
+   "ta": {
+    "name": "Splunk Add-on for Cisco ASA",
+    "splunkbase_app": 1620
+   },
+   "sample_file": "netspout/appserver/static/samples/cisco-asa-syslog/cisco-asa-syslog.yml",
+   "generator": "sample replay (generation by this name is refused: NON_CANONICAL_SOURCETYPE)",
+   "verification": {
+    "sourcetype_name": {
+     "status": "NON_CANONICAL",
+     "evidence": "not listed for the add-on in Splunk docs 'Integrated Enterprise Value for Cisco data' (help.splunk.com, Splunk Enterprise 10.6): add-on to source type table; the add-on's source type is cisco:asa"
+    }
+   }
+  },
+  {
+   "vendor": "cisco_ise",
+   "product": "Cisco Identity Services Engine",
+   "canonical_sourcetype": "cisco:ise:syslog",
+   "ta": {
+    "name": "Splunk Add-on for Cisco ISE (also listed under Cisco Catalyst Add-on for Splunk)",
+    "splunkbase_app": null,
+    "latest_version": null,
+    "evidence": "app id and version not looked up in this phase"
+   },
+   "sample_file": "netspout/appserver/static/samples/cisco-ise-syslog/cisco-ise-syslog.yml",
+   "generator": "sample replay (structured parser)",
+   "verification": {
+    "sourcetype_name": {
+     "status": "VERIFIED",
+     "evidence": "Splunk docs 'Integrated Enterprise Value for Cisco data' (help.splunk.com, Splunk Enterprise 10.6): add-on to source type table"
+    },
+    "event_format": {
+     "status": "UNVERIFIED",
+     "evidence": "not checked"
+    },
+    "ta_parsing_in_splunk": {
+     "status": "BLOCKED",
+     "evidence": "package not available"
+    }
+   }
+  },
+  {
+   "vendor": "cisco_ios",
+   "product": "Cisco IOS / IOS-XE",
+   "canonical_sourcetype": "cisco:ios",
+   "ta": {
+    "name": "Cisco Catalyst Add-on for Splunk",
+    "splunkbase_app": null,
+    "latest_version": null,
+    "evidence": "app id and version not looked up in this phase"
+   },
+   "sample_file": "netspout/appserver/static/samples/cisco-ios/cisco-ios.yml",
+   "generator": "native engine plus sample replay",
+   "verification": {
+    "sourcetype_name": {
+     "status": "VERIFIED",
+     "evidence": "Splunk docs 'Integrated Enterprise Value for Cisco data' (help.splunk.com, Splunk Enterprise 10.6): add-on to source type table"
+    },
+    "event_format": {
+     "status": "UNVERIFIED",
+     "evidence": "not checked"
+    },
+    "ta_parsing_in_splunk": {
+     "status": "BLOCKED",
+     "evidence": "package not available"
+    }
+   }
+  }
+ ],
+ "not_verified_by_this_source": [
+  "cisco:ios:mdt (the product's MDT sourcetype names do not appear in the Splunk documentation table used here)"
+ ]
+}

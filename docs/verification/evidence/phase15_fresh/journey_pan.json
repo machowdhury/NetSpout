@@ -1,0 +1,81 @@
+{
+ "sourcetype": "pan:traffic",
+ "vendor": "palo_alto",
+ "run_id": "run-a37adc7cd343",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "pan:traffic",
+  "preview_info": "Sourcetype that will be sent: pan:traffic · index idx_network_ops · generator: native",
+  "preview_first_event": "1,2026/11/05 21:16:13,001801000001,TRAFFIC,deny,2304,2026/11/05 21:16:13,198.51.100.150,10.0.10.81,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,,,ms-update,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/05 21:16:13,98422,1,54907,443,0,0,0x0,tcp,drop,2642,1321,1321,6,2026/11/05 21:16:13,0,any,0,12345679,0x0,10.0.0.0-10.255.255.255,NL,0,14,7,fin-reset,0,0,0,0,,PA-3260,from-policy",
+  "outcome": "Verified: found 20 of 20 events in index idx_network_ops that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "pan:traffic"
+  ],
+  "indexes": [
+   "idx_network_ops"
+  ],
+  "hosts": [
+   "pa-3260-01.lab.example",
+   "pa-5250-01.lab.example"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "pan:traffic",
+  "index": "idx_network_ops",
+  "hosts": [
+   "pa-3260-01.lab.example",
+   "pa-5250-01.lab.example"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793913377.0873835,
+  "time_last": 1793913380.9238272,
+  "send_time_first": 1793913377.0873835,
+  "send_time_last": 1793913380.9238272
+ },
+ "ta_fields_extracted_counts": {
+  "src_ip": 20,
+  "dest_ip": 20,
+  "rule": 20,
+  "src_zone": 20,
+  "dest_zone": 20,
+  "app": 20,
+  "vendor_action": 20,
+  "action": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-05 21:16:20.923 GMT",
+   "host": "pa-5250-01.lab.example",
+   "source": "network-topology-simulator",
+   "sourcetype": "pan:traffic",
+   "index": "idx_network_ops",
+   "_raw": "1,2026/11/05 21:16:16,001801000003,TRAFFIC,drop,2304,2026/11/05 21:16:16,198.51.100.201,10.0.30.11,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,svc-update,,dns-base,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/05 21:16:16,98441,1,56102,80,0,0,0x0,tcp,deny,649,324,325,11,2026/11/05 21:16:16,0,any,0,12345698,0x0,10.0.0.0-10.255.255.255,NL,0,18,10,policy-deny,0,0,0,0,,PA-3260,from-policy"
+  },
+  {
+   "_time": "2026-11-05 21:16:20.719 GMT",
+   "host": "pa-5250-01.lab.example",
+   "source": "network-topology-simulator",
+   "sourcetype": "pan:traffic",
+   "index": "idx_network_ops",
+   "_raw": "1,2026/11/05 21:16:15,001801000003,TRAFFIC,drop,2304,2026/11/05 21:16:15,203.0.113.44,172.16.4.9,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,klee,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/11/05 21:16:15,98440,1,60818,80,0,0,0x0,tcp,drop,3755,1877,1878,17,2026/11/05 21:16:15,0,any,0,12345697,0x0,10.0.0.0-10.255.255.255,NL,0,10,16,fin-reset,0,0,0,0,,PA-3260,from-policy"
+  }
+ ]
+}

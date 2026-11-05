@@ -54,9 +54,12 @@ def run_group(g):
     env = dict(os.environ, PHASE9_ONLY=g, PHASE9_API_BASE="http://127.0.0.1:18681", PHASE9_TAP="http://127.0.0.1:19990", PHASE9_LAB_ENV=str(ROOT / "tests/lab/ta_validation/.env.lab"),
                PLAYWRIGHT_BASE_URL="http://127.0.0.1:14273", PLAYWRIGHT_CHROMIUM_PATH=CHROMIUM)
     if RC:
-        env.update(PHASE9_SPLUNK_WEB="http://127.0.0.1:39000", PHASE9_API_BASE="http://127.0.0.1:39000/en-US/splunkd/__raw/services/netspout_gateway", PHASE9_TAP="http://127.0.0.1:39990",
-                   PHASE9_ENGINE_TAP="http://127.0.0.1:39990", PHASE9_ENGINE_SEARCH_URL="https://127.0.0.1:8089/services/search/jobs/export", PHASE9_LAB_ENV=str(ROOT / "tests/lab/rc_install/.env.lab"),
-                   PHASE9_EVENT_INDEX="idx_network_ops", PHASE9_METRIC_INDEX="cisco_mdt_metrics", PHASE9_OUT=os.environ.get("PHASE9_OUT", "phase101_rc"), PHASE9_ENGINE_URL="http://engine:8081", PLAYWRIGHT_BASE_URL="http://127.0.0.1:39000")
+        lab = os.environ.get("NS_LAB", "")   # Phase 15: NS_LAB=nsp15 runs the same suite against that Docker lab (ports from its env file); the tap stays on 39990 inside the engine container
+        le = dict(l.split("=", 1) for l in (ROOT / ("tests/lab/phase15_docker/.env." + lab if lab else "tests/lab/rc_install/.env.lab")).read_text().split())
+        web, tap = le.get("LAB_WEB_PORT", "39000"), le.get("LAB_TAP_PORT", "39990")
+        env.update(PHASE9_SPLUNK_WEB="http://127.0.0.1:" + web, PHASE9_API_BASE="http://127.0.0.1:%s/en-US/splunkd/__raw/services/netspout_gateway" % web, PHASE9_TAP="http://127.0.0.1:" + tap,
+                   PHASE9_ENGINE_TAP="http://127.0.0.1:39990", PHASE9_ENGINE_SEARCH_URL="https://127.0.0.1:8089/services/search/jobs/export", PHASE9_LAB_ENV=str(ROOT / ("tests/lab/phase15_docker/.env." + lab if lab else "tests/lab/rc_install/.env.lab")),
+                   PHASE9_EVENT_INDEX="idx_network_ops", PHASE9_METRIC_INDEX="cisco_mdt_metrics", PHASE9_OUT=os.environ.get("PHASE9_OUT", "phase101_rc"), PHASE9_ENGINE_URL="http://engine:8081", PLAYWRIGHT_BASE_URL="http://127.0.0.1:" + web)
     return subprocess.run(["npx", "playwright", "test", "tests/phase9-acceptance.spec.ts", "--workers=1", "--trace", "off", "--reporter=list"], cwd=ROOT / "frontend", env=env).returncode
 
 

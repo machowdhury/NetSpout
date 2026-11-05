@@ -1,0 +1,36 @@
+{
+ "app_version": "2.0.1",
+ "events_ns15_upgrade": 120,
+ "events_ns15_keep": 40,
+ "metric_datapoints": 30,
+ "indexes": {
+  "cisco_mdt_metrics": {
+   "datatype": "metric",
+   "totalEventCount": 149
+  },
+  "idx_network_ops": {
+   "datatype": "event",
+   "totalEventCount": 2536
+  },
+  "idx_security_fw": {
+   "datatype": "event",
+   "totalEventCount": 0
+  },
+  "idx_wireless_ops": {
+   "datatype": "event",
+   "totalEventCount": 0
+  },
+  "ns15_keep": {
+   "datatype": "event",
+   "totalEventCount": 40
+  }
+ },
+ "app_local_files_sha256": [],
+ "ns15_custom_view_present": true,
+ "saved_search": "index=idx_network_ops sourcetype=ns15:upgrade | stats count",
+ "custom_conf": {
+  "owner_note": "kept across upgrade",
+  "retention_days": "7"
+ },
+ "dashboards_installed": 433
+}

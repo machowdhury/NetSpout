@@ -1,0 +1,52 @@
+{
+ "first_and_last": [
+  {
+   "index": "idx_network_ops",
+   "first": "2026-11-05 21:08:41",
+   "last": "2026-11-05 21:35:40",
+   "count": "2601"
+  }
+ ],
+ "by_sourcetype": [
+  {
+   "sourcetype": "arista:eos:syslog",
+   "count": "289"
+  },
+  {
+   "sourcetype": "cisco:duo:auth",
+   "count": "289"
+  },
+  {
+   "sourcetype": "cisco:ios:syslog",
+   "count": "578"
+  },
+  {
+   "sourcetype": "cisco:ise:syslog",
+   "count": "289"
+  },
+  {
+   "sourcetype": "fortinet:fortigate:utm",
+   "count": "289"
+  },
+  {
+   "sourcetype": "juniper:junos:syslog",
+   "count": "289"
+  },
+  {
+   "sourcetype": "pan:threat",
+   "count": "289"
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "count": "289"
+  }
+ ],
+ "rate_last_10m": [
+  {
+   "count": "783"
+  }
+ ],
+ "stanza_in_shipped_default": "disabled = 1",
+ "process": "netspout_streamer.py running under splunkd (observed with ps inside the container)",
+ "cause_in_source": "netspout/bin/netspout_streamer.py run_input(): when no input XML arrives on stdin, parse_input_config returns defaults and the loop generates and emits events forever; Splunk launches the script although the only stanza is disabled=1"
+}

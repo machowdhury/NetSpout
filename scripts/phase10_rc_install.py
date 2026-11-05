@@ -23,13 +23,17 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ENV = ROOT / "tests/lab/rc_install/.env.lab"
-SPLUNK, ENGINE = "netspout_rc_splunk", "netspout_rc_engine"
+import os
+# default: the RC install lab. NS_LAB=<name> (nsp15, nsp15u, nsp15r) selects a Phase 15 lab instead (tests/lab/phase15_docker/.env.<name>).
+LAB = os.environ.get("NS_LAB", "")
+ENV = ROOT / ("tests/lab/phase15_docker/.env." + LAB if LAB else "tests/lab/rc_install/.env.lab")
+SPLUNK, ENGINE = (LAB + "_splunk", LAB + "_engine") if LAB else ("netspout_rc_splunk", "netspout_rc_engine")
 CTX = ssl._create_unverified_context()
 e = dict(l.strip().split("=", 1) for l in ENV.read_text().splitlines() if "=" in l)
 MGMT = "https://127.0.0.1:%s" % e["LAB_MGMT_PORT"]
 AUTH = "Basic " + base64.b64encode(("admin:" + e["LAB_SPLUNK_PASSWORD"]).encode()).decode()
-assert e["LAB_MGMT_PORT"] == "39191" and e["LAB_WEB_PORT"] == "39000", "this script only talks to the RC install lab (mgmt 39191, web 39000)"
+assert (e["LAB_MGMT_PORT"], e["LAB_WEB_PORT"]) in (("39191", "39000"), ("45191", "45000"), ("46191", "46000"), ("47191", "47000")), "this script only talks to the isolated RC / Phase 15 labs"
+ENGINE_PORT, TAP_PORT = e.get("RC_ENGINE_PORT", "38081"), e.get("LAB_TAP_PORT", "39990")
 
 
 def rest(path, data=None, method=None):
@@ -59,7 +63,7 @@ def package_version(pkg):
         return next(l.split("=")[1].strip() for l in tf.extractfile(conf).read().decode().splitlines() if l.startswith("version"))
 
 
-def install(rc, allow_other_version=False):
+def install(rc, allow_other_version=False, configure_engine=True):
     pkg = Path(rc) / "netspout.spl"
     built, want = package_version(pkg), json.loads((ROOT / "frontend/package.json").read_text())["version"]
     if built != want and not allow_other_version:   # a stale build (for example the 2.0.0 binary in the repository root) must not be installed by mistake
@@ -75,7 +79,8 @@ def install(rc, allow_other_version=False):
         pass
     time.sleep(25)
     wait()
-    set_engine("http://engine:8081")
+    if configure_engine:   # Phase 15 fresh-install test leaves it unset and configures it in the UI
+        set_engine("http://engine:8081")
 
 
 def set_engine(url):
@@ -104,7 +109,7 @@ def check(rc, out_path):
         conf_ver = [l.split("=")[1].strip() for l in tf.extractfile(members["netspout/default/app.conf"]).read().decode().splitlines() if l.startswith("version")][0]
         manifest = json.loads(tf.extractfile(members["netspout/app.manifest"]).read())
         pkg = json.loads((ROOT / "frontend/package.json").read_text())
-        eng = json.loads(urllib.request.urlopen("http://127.0.0.1:38081/openapi.json", timeout=10).read())["info"]["version"]
+        eng = json.loads(urllib.request.urlopen("http://127.0.0.1:%s/openapi.json" % ENGINE_PORT, timeout=10).read())["info"]["version"]
         versions = {"app.conf": conf_ver, "app.manifest": manifest["info"]["id"]["version"] if "id" in manifest.get("info", {}) else manifest["schemaVersion"], "frontend/package.json": pkg["version"], "engine(openapi)": eng, "installed app": app.get("version")}
         add("versions.match", len(set(versions.values())) == 1, versions)
         for n in ("netspout/appserver/static/dist/index.html", "netspout/bin/netspout_gateway.py", "netspout/default/indexes.conf", "netspout/bin/netspout_core/catalog_data/capability_status.json", "netspout/bin/netspout_core/real_format_generators.py"):
@@ -160,7 +165,7 @@ def start_tap():
     dexec(ENGINE, "pkill", "-f", "/tmp/fwd.py")
     subprocess.run(["docker", "exec", "-d", ENGINE, "/opt/pulseforge-engine/venv/bin/python", "/tmp/fwd.py", "8089", "splunk", "8089"], check=True)
     time.sleep(2)
-    print(urllib.request.urlopen("http://127.0.0.1:39990/_payloads", timeout=10).read()[:60])
+    print(urllib.request.urlopen("http://127.0.0.1:%s/_payloads" % TAP_PORT, timeout=10).read()[:60])
 
 
 def apps():
@@ -172,7 +177,7 @@ if __name__ == "__main__":
     if a[:1] == ["wait"]:
         wait(); print("ready")
     elif a[:1] == ["install"]:
-        install(a[1])
+        install(a[1], configure_engine="--no-engine" not in a, allow_other_version="--allow-other-version" in a)
     elif a[:1] == ["install-ta"]:
         install_ta(a[1])
     elif a[:1] == ["remove-ta"]:

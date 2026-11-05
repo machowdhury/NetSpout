@@ -1,0 +1,18 @@
+{
+ "run_id": "run-1c35a5fd638f",
+ "counts_first_look": {
+  "cisco:asa": 7,
+  "cisco:ios:mdt:metric": 6
+ },
+ "counts_later": {
+  "cisco:asa": 13,
+  "cisco:ios:mdt:metric": 12
+ },
+ "counts_at_stop": {
+  "cisco:asa": 13,
+  "cisco:ios:mdt:metric": 12
+ },
+ "events_found": 13,
+ "metric_datapoints_found": 61,
+ "ui": "Verified: found 13 of 13 events in index idx_network_ops and 61 of 61 metric datapoints in metric index cisco_mdt_metrics (mstats search) that this run sent."
+}

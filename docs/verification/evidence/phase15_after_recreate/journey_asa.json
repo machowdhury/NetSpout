@@ -1,0 +1,76 @@
+{
+ "sourcetype": "cisco:asa",
+ "vendor": "cisco_asa",
+ "run_id": "run-8ef99a5af9b5",
+ "ui": {
+  "status_badge": "Verified in Splunk",
+  "preview_sourcetype": "cisco:asa",
+  "preview_info": "Sourcetype that will be sent: cisco:asa · index idx_network_ops · generator: native",
+  "preview_first_event": "Nov  5 21:36:02 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 833718 for outside:192.0.2.14/80 (192.0.2.14/80) to inside:10.20.10.60/19490 (10.20.10.60/19490)",
+  "outcome": "Verified: found 20 of 20 events in index idx_network_ops that this run sent."
+ },
+ "outgoing_by_tap": {
+  "count": 20,
+  "sourcetypes": [
+   "cisco:asa"
+  ],
+  "indexes": [
+   "idx_network_ops"
+  ],
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "hec_status": [
+   200
+  ]
+ },
+ "splunk": {
+  "count": 20,
+  "sourcetype": "cisco:asa",
+  "index": "idx_network_ops",
+  "hosts": [
+   "asa-fw-01"
+  ],
+  "sources": "network-topology-simulator",
+  "time_first": 1793914562.1838856,
+  "time_last": 1793914566.0275006,
+  "send_time_first": 1793914562.1838856,
+  "send_time_last": 1793914566.0275006
+ },
+ "ta_fields_extracted_counts": {
+  "message_id": 20,
+  "vendor_action": 20,
+  "action": 20,
+  "src_ip": 20,
+  "dest_ip": 20
+ },
+ "indexed_bare_vendor_fields_in_splunk": {
+  "action": 0,
+  "signature": 0,
+  "status": 0,
+  "src_ip": 0,
+  "dest_ip": 0,
+  "protocol": 0,
+  "vendor": 0,
+  "node_type": 0
+ },
+ "bare_vendor_fields_in_outgoing_payload": [],
+ "sample_events": [
+  {
+   "_time": "2026-11-05 21:36:06.027 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "idx_network_ops",
+   "_raw": "Nov  5 21:36:02 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 300998 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10.60/14012 (10.20.10.60/14012)"
+  },
+  {
+   "_time": "2026-11-05 21:36:05.827 GMT",
+   "host": "asa-fw-01",
+   "source": "network-topology-simulator",
+   "sourcetype": "cisco:asa",
+   "index": "idx_network_ops",
+   "_raw": "Nov  5 21:36:02 asa-fw-01 %ASA-6-302014: Teardown TCP connection 300961 for outside:198.51.100.81/22 to inside:10.20.10.45/59302 duration 0:08:06 bytes 1998563 TCP FINs"
+  }
+ ]
+}

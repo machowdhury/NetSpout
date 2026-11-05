@@ -1,0 +1,57 @@
+# Phase 15 Docker release-validation lab. One template, several disposable instances (LAB_NAME = nsp15 | nsp15u | nsp15r), each with its own compose project, network, volumes, container names and loopback-only ports.
+# Nothing here is shared with the protected demo or with the RC labs (netspout_rc*, 19xxx, 18xxx, 28xxx, 39xxx). Credentials come from the git-ignored .env.<LAB_NAME> file written by lab.sh.
+# The engine address is NOT configured here: it is set in the app (Connections > PulseForge Engine) to http://engine:8081, the service name on the private network.
+name: ${LAB_NAME:?use lab.sh}
+services:
+  engine:
+    build:
+      context: ${RC_DIR:?use lab.sh up}
+      dockerfile_inline: |
+        FROM python:3.13-slim
+        COPY pulseforge-engine.tar.gz /tmp/
+        RUN mkdir -p /opt && tar xzf /tmp/pulseforge-engine.tar.gz -C /opt && rm /tmp/pulseforge-engine.tar.gz \
+         && python -m venv /opt/pulseforge-engine/venv && /opt/pulseforge-engine/venv/bin/pip install -q --no-cache-dir -r /opt/pulseforge-engine/backend/requirements.txt
+        ENV PULSEFORGE_ENGINE_HOST=0.0.0.0 PULSEFORGE_ENGINE_PORT=8081 PULSEFORGE_STATE_DIR=/var/lib/pulseforge
+        CMD ["/opt/pulseforge-engine/deploy/engine/pulseforge-engine"]
+    image: ${LAB_NAME}-engine:local
+    container_name: ${LAB_NAME}_engine
+    ports:
+      - "127.0.0.1:${RC_ENGINE_PORT}:8081"
+      - "127.0.0.1:${LAB_TAP_PORT}:39990"   # recording tap (test scaffolding) started INSIDE the engine container, so the engine reaches it on its own loopback
+    volumes:
+      - engine_state:/var/lib/pulseforge
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8081/health',timeout=4).status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks: [net]
+  splunk:
+    image: splunk/splunk:10.2
+    platform: linux/amd64
+    container_name: ${LAB_NAME}_splunk
+    hostname: ${LAB_NAME}
+    environment:
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_GENERAL_TERMS: --accept-sgt-current-at-splunk-com
+      SPLUNK_PASSWORD: ${LAB_SPLUNK_PASSWORD:?use lab.sh}
+      SPLUNK_HEC_TOKEN: ${LAB_HEC_TOKEN:?use lab.sh}
+    ports:
+      - "127.0.0.1:${LAB_WEB_PORT}:8000"
+      - "127.0.0.1:${LAB_MGMT_PORT}:8089"
+      - "127.0.0.1:${LAB_HEC_PORT}:8088"
+    volumes:
+      - splunk_var:/opt/splunk/var
+      - splunk_etc:/opt/splunk/etc
+    depends_on: [engine]
+    networks: [net]
+networks:
+  net:
+    name: ${LAB_NAME}_net
+volumes:
+  engine_state:
+    name: ${LAB_NAME}_engine_state
+  splunk_var:
+    name: ${LAB_NAME}_splunk_var
+  splunk_etc:
+    name: ${LAB_NAME}_splunk_etc

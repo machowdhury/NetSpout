@@ -11,7 +11,7 @@ For Splunk Cloud, read the [Cloud guide](guides/04_SPLUNK_CLOUD_GUIDE.md) instea
 
 ## A. Docker
 
-> **Status:** the Compose file validates and the same stack was exercised in earlier lab runs. A clean-checkout `docker compose up -d` for this exact release has **not** been repeated yet.
+> **Status:** from a clean checkout (no prior build, new volumes), `docker compose up -d --build` starts all services healthy, the app and `admin` login work, an idle stack writes no synthetic events, `restart` and recreate (volumes kept) both come back healthy with the same password, and a Palo Alto investigation scenario run was verified by an independent Splunk search (47 of 47). Tested on one Apple-silicon host (amd64 emulated, Docker 29.7.2). Not tested: native amd64 Linux, Windows.
 
 **Prerequisites:** Docker with Compose v2; about 8 GB of free memory and 20 GB of disk (recommended, not measured); free port 8000. The image is `linux/amd64`, so Apple Silicon runs it under emulation and is slower.
 

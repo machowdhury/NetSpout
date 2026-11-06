@@ -1,0 +1,164 @@
+{
+ "label": "FINAL: after the full 29-test packaged acceptance (user-initiated runs), idle 3 min",
+ "window_minutes": 3.0,
+ "start": {
+  "label": "start",
+  "time_utc": "2026-11-06T01:42:14Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 270,
+  "attributed_by_index_source_sourcetype": [
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:asa",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:ios",
+    "count": "52"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "fortigate_traffic",
+    "count": "25"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "netspout:cisco:asa:syslog",
+    "count": "11"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:system",
+    "count": "9"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:threat",
+    "count": "13"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:traffic",
+    "count": "57"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "pulseforge:connection-test",
+    "sourcetype": "netspout:connection_test",
+    "count": "5"
+   },
+   {
+    "index": "main",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:asa",
+    "count": "10"
+   }
+  ],
+  "events_in_app_indexes": {
+   "idx_network_ops": 260,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [],
+  "splunkd_log_generator_launches": 312
+ },
+ "end": {
+  "label": "end",
+  "time_utc": "2026-11-06T01:45:14Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 270,
+  "attributed_by_index_source_sourcetype": [
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:asa",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:ios",
+    "count": "52"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "fortigate_traffic",
+    "count": "25"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "netspout:cisco:asa:syslog",
+    "count": "11"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:system",
+    "count": "9"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:threat",
+    "count": "13"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "network-topology-simulator",
+    "sourcetype": "pan:traffic",
+    "count": "57"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "pulseforge:connection-test",
+    "sourcetype": "netspout:connection_test",
+    "count": "5"
+   },
+   {
+    "index": "main",
+    "source": "network-topology-simulator",
+    "sourcetype": "cisco:asa",
+    "count": "10"
+   }
+  ],
+  "events_in_app_indexes": {
+   "idx_network_ops": 260,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [],
+  "splunkd_log_generator_launches": 312
+ },
+ "new_netspout_events_in_window": 0,
+ "new_events_in_app_indexes": {
+  "idx_network_ops": 0,
+  "idx_security_fw": 0,
+  "idx_wireless_ops": 0
+ }
+}

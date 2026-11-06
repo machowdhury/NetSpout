@@ -1,0 +1,156 @@
+{
+ "label": "FINAL 2.0.1, legacy streamer explicitly enabled in local/inputs.conf, 3 min",
+ "window_minutes": 3.0,
+ "start": {
+  "label": "start",
+  "time_utc": "2026-11-06T01:21:18Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 459,
+  "attributed_by_index_source_sourcetype": [
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "arista:eos:syslog",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:duo:auth",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:ios:syslog",
+    "count": "102"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:ise:syslog",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "fortinet:fortigate:utm",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "juniper:junos:syslog",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "pan:threat",
+    "count": "51"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "pan:traffic",
+    "count": "51"
+   }
+  ],
+  "events_in_app_indexes": {
+   "idx_network_ops": 579,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [
+   "1893 /run/rosetta/rosetta /opt/splunk/bin/python3.9 /opt/splunk/bin/python3.9 /opt/splunk/etc/apps/netspout/bin/netspout_streamer.py"
+  ],
+  "splunkd_log_generator_launches": 71
+ },
+ "end": {
+  "label": "end",
+  "time_utc": "2026-11-06T01:24:19Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 792,
+  "attributed_by_index_source_sourcetype": [
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "arista:eos:syslog",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:duo:auth",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:ios:syslog",
+    "count": "176"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "cisco:ise:syslog",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "fortinet:fortigate:utm",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "juniper:junos:syslog",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "pan:threat",
+    "count": "88"
+   },
+   {
+    "index": "idx_network_ops",
+    "source": "netspout:streamer",
+    "sourcetype": "pan:traffic",
+    "count": "88"
+   }
+  ],
+  "events_in_app_indexes": {
+   "idx_network_ops": 912,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [
+   "1893 /run/rosetta/rosetta /opt/splunk/bin/python3.9 /opt/splunk/bin/python3.9 /opt/splunk/etc/apps/netspout/bin/netspout_streamer.py"
+  ],
+  "splunkd_log_generator_launches": 71
+ },
+ "new_netspout_events_in_window": 333,
+ "new_events_in_app_indexes": {
+  "idx_network_ops": 333,
+  "idx_security_fw": 0,
+  "idx_wireless_ops": 0
+ }
+}

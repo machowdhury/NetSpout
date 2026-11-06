@@ -95,8 +95,10 @@ def validate_arguments():
     sys.exit(0)
 
 
-def parse_input_config(xml_str: str) -> dict:
-    """Parses Splunk input XML configuration passed on stdin."""
+def parse_input_config(xml_str: str):
+    """Parses the input XML Splunk writes on stdin. Returns the settings of the enabled
+    netspout_streamer stanza(s), or None when there is no such stanza: a missing, empty or
+    unparsable document is never an authorization to generate (Splunk passes only enabled stanzas)."""
     config = {
         "ecosystem_mode": "mixed_vendor",
         "scenario": "mixed_edge_breach",
@@ -106,11 +108,18 @@ def parse_input_config(xml_str: str) -> dict:
         "interval": 5.0
     }
     if not xml_str or not xml_str.strip():
-        return config
+        return None
 
     try:
         root = ET.fromstring(xml_str)
-        for param in root.findall(".//param"):
+    except Exception as e:
+        sys.stderr.write(f"Warning: Failed to parse input config XML: {e}\n")
+        return None
+    stanzas = [st for st in root.iter("stanza") if (st.get("name") or "").startswith("netspout_streamer://")]
+    if not stanzas:
+        return None
+    for st in stanzas:
+        for param in st.findall("param"):
             name = param.get("name")
             text = param.text
             if name in config and text:
@@ -121,8 +130,6 @@ def parse_input_config(xml_str: str) -> dict:
                         pass
                 else:
                     config[name] = text.strip()
-    except Exception as e:
-        sys.stderr.write(f"Warning: Failed to parse input config XML: {e}\n")
 
     return config
 
@@ -285,16 +292,31 @@ def emit_xml_events(events: list):
     sys.stdout.flush()
 
 
-def run_input(single_cycle: bool = False):
-    """Main continuous loop for Splunk modular input."""
-    xml_input = ""
+def read_input_xml(wait: float = 30.0) -> str:
+    """Reads the <input> document Splunk writes on stdin (up to its closing tag, EOF or `wait` seconds)."""
+    buf, end = "", time.time() + wait
     try:
-        if select.select([sys.stdin], [], [], 0.2)[0]:
-            xml_input = sys.stdin.read()
+        while "</input>" not in buf and time.time() < end:
+            if select.select([sys.stdin], [], [], 0.5)[0]:
+                chunk = os.read(sys.stdin.fileno(), 65536).decode("utf-8", "replace")
+                if not chunk:
+                    break
+                buf += chunk
     except Exception:
         pass
+    return buf
 
-    config = parse_input_config(xml_input)
+
+def run_input(single_cycle: bool = False):
+    """Main continuous loop for Splunk modular input.
+
+    Generates only when Splunk passed an enabled netspout_streamer stanza (or the operator ran
+    `--test` / `--dry-run`, an explicit one-cycle request). Otherwise it exits without emitting."""
+    config = parse_input_config(read_input_xml(0.2 if single_cycle else 30.0))
+    if config is None:
+        if not single_cycle:
+            return   # silent: anything written to stderr is logged by splunkd at ERROR on every restart
+        config = parse_input_config('<input><configuration><stanza name="netspout_streamer://test"/></configuration></input>')
     interval = config.get("interval", 5.0)
 
     while True:

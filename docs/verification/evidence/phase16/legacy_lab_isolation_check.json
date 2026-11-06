@@ -1,0 +1,28 @@
+{
+ "purpose": "Phase 16 process-incident follow-up: a lab that runs the legacy 2.0.0 package must not be able to reach host loopback services (the protected demo engine listens on the host's port 8081).",
+ "method": "A decoy HTTP listener on host 127.0.0.1:18999 (a port nothing else uses) stands in for the demo; the protected demo's own port was never probed. The same probes ran from a lab container WITHOUT isolation and from one WITH it.",
+ "mechanism": "docker-compose.yml extra_hosts maps host.docker.internal and gateway.docker.internal to 192.0.2.1 (RFC 5737 TEST-NET-1, never routed) in the lab's Splunk container.",
+ "without_isolation (nsp16u_splunk)": {
+  "host.docker.internal resolves to": "192.168.65.254",
+  "GET decoy via host.docker.internal:18999": 200,
+  "decoy hits caused": 3,
+  "conclusion": "a lab container reaches host loopback services by that name, which is how Phase 15 reached port 8081"
+ },
+ "with_isolation (nsp16l_splunk)": {
+  "/etc/hosts": [
+   "192.0.2.1 host.docker.internal",
+   "192.0.2.1 gateway.docker.internal"
+  ],
+  "getent ahosts host.docker.internal": [
+   "192.0.2.1"
+  ],
+  "GET decoy via host.docker.internal:18999": "000 (unreachable)",
+  "GET decoy via gateway.docker.internal:18999": "000",
+  "GET decoy via the Docker Desktop IPv6 address": "000",
+  "decoy hits caused": 0,
+  "2.0.0 gateway /health with no engine configured (fallback target host.docker.internal:8081)": "no answer within 60 s (HTTP 000): the request went to the blackhole, nothing answered"
+ },
+ "decoy_hits_total": 3,
+ "decoy_hits_from_isolated_lab": 0,
+ "note": "No credentials appear here. The protected demo and the remote reference Splunk were not contacted in this phase."
+}

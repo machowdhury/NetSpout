@@ -1,0 +1,54 @@
+{
+ "label": "FINAL: after container RECREATION with persisted volumes, 3 min",
+ "window_minutes": 3.0,
+ "start": {
+  "label": "start",
+  "time_utc": "2026-11-06T01:15:57Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 0,
+  "attributed_by_index_source_sourcetype": [],
+  "events_in_app_indexes": {
+   "idx_network_ops": 0,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [],
+  "splunkd_log_generator_launches": 38
+ },
+ "end": {
+  "label": "end",
+  "time_utc": "2026-11-06T01:18:58Z",
+  "app_version": "2.0.1",
+  "app_indexes_defined": [
+   "cisco_mdt_metrics",
+   "idx_network_ops",
+   "idx_security_fw",
+   "idx_wireless_ops"
+  ],
+  "netspout_attributed_events": 0,
+  "attributed_by_index_source_sourcetype": [],
+  "events_in_app_indexes": {
+   "idx_network_ops": 0,
+   "idx_security_fw": 0,
+   "idx_wireless_ops": 0
+  },
+  "metric_datapoints_in_metric_index": 0,
+  "control_index_events": 5,
+  "generator_processes_running": [],
+  "splunkd_log_generator_launches": 38
+ },
+ "new_netspout_events_in_window": 0,
+ "new_events_in_app_indexes": {
+  "idx_network_ops": 0,
+  "idx_security_fw": 0,
+  "idx_wireless_ops": 0
+ }
+}

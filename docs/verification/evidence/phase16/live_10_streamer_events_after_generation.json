@@ -1,0 +1,9 @@
+{
+ "streamer_sourced_events": 0,
+ "events_by_source_prefix": [
+  {
+   "source": "network-topology-simulator",
+   "count": "265"
+  }
+ ]
+}

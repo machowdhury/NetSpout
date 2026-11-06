@@ -46,17 +46,13 @@ LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Netw
 USER root
 
 # Install Python packages for standalone fast simulation engine and gNMI
+# the engine's own pinned requirements (the former hand-written list had drifted: httpx, PyYAML and pygnmi were missing and the engine did not start)
+COPY backend/requirements.txt /tmp/pulseforge-requirements.txt
 RUN microdnf update -y && \
     microdnf install -y gcc net-snmp net-snmp-utils && \
     python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir \
-        fastapi==0.143.0 \
-        uvicorn==0.54.0 \
-        pydantic==2.14.0 \
-        websockets==17.2 \
-        grpcio==1.84.0 \
-        protobuf==7.36.2 \
-        cryptography==50.0.2 && \
+    python3 -m pip install --no-cache-dir -r /tmp/pulseforge-requirements.txt && \
+    rm -f /tmp/pulseforge-requirements.txt && \
     microdnf clean all
 
 # Synchronize default Splunk apps from /opt/splunk-etc into /opt/splunk/etc

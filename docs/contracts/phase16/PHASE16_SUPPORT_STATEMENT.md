@@ -10,9 +10,11 @@ Source commit: `5f172042d6b359572868195f5862ded02194b3ab` (merge of PR #8, main)
 | netspout_cloud.spl | 709,799 | `876b7d5cd68a2903a33abb420408e89a1f17b4e9a4c18c7b84edfff48f83ead1` |
 | pulseforge-engine.tar.gz | 10,544,275 | `d8d515a6abe1fb80b8b525948d3084e13077b2943268fdbfc9063b056cb7ba94` |
 
-`netspout.spl` is byte-identical to the build that passed the Phase 16 live tests (`v2.0.1-fix-b1-97006de`). The Cloud package and engine archive have the same file contents as that build and as the Phase 15 candidate; only archive bytes (build timestamps) differ, so their checksums differ. `netspout.spl` and `netspout_cloud.spl` share app id `netspout` and must not be installed together.
+`netspout.spl` is byte-identical to the build that passed the Phase 16 live tests (`v2.0.1-fix-b1-97006de`). The Cloud package and engine archive have the same file contents as that build and as the Phase 15 candidate; only archive bytes (build timestamps) differ, so their checksums differ. **Release assets are `netspout.spl` and `pulseforge-engine.tar.gz` only.** `netspout_cloud.spl` is built for completeness but is NOT a supported release asset and is not validated on Splunk Cloud; the two `.spl` files share app id `netspout` and must not be installed together.
 
 ## Tested
+
+This release is not Splunk Cloud compatible and makes no such claim.
 
 - Splunk Enterprise 10.2.7, single instance, in Docker (amd64 image emulated on an arm64 host).
 - The PulseForge engine run by the customer in Docker (Python 3.13 image) next to Splunk.

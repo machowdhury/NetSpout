@@ -18,10 +18,11 @@ For Splunk Cloud, read the [Cloud guide](guides/04_SPLUNK_CLOUD_GUIDE.md) instea
 **Install**
 1. `git clone https://github.com/machowdhury/NetSpout.git && cd NetSpout`
 2. `cp .env.example .env`, then edit `.env` and set:
-   - `SPLUNK_PASSWORD`: the Splunk `admin` password **you choose** (at least 8 characters).
+   - `SPLUNK_PASSWORD`: the Splunk `admin` password **you choose**: at least 8 characters, letters and digits only (`$ # " '` and spaces break Docker Compose). For example `python3 -c "import secrets; print('Ns' + secrets.token_hex(12))"`.
    - `SPLUNK_HEC_TOKEN`: any new GUID, for example `python3 -c "import uuid; print(uuid.uuid4())"`.
-   `.env` is git-ignored. Never commit it or share it.
-3. `docker compose up -d` (the first start builds the image and takes several minutes).
+   Both are required; Compose refuses to start with either empty. `.env` is git-ignored. Never commit it or share it.
+   **Splunk stores the password the first time it starts with a new data volume, and the value in `.env` must match it from then on.** Do not edit it between starts without also changing it in Splunk (see below).
+3. `docker compose up -d` (the first start builds the image and takes several minutes). **Let the first start finish: do not stop, restart or interrupt it until step 4 shows healthy.**
 4. `docker compose ps` until `splunk-netspout` shows **healthy**.
 
 **Log in and open PulseForge**
@@ -36,7 +37,7 @@ Use PulseForge through Splunk Web. The file also publishes the engine's own API 
 **Upgrade:** `git pull && docker compose up -d --build`. Data volumes are kept.
 **Uninstall:** `docker compose down` keeps your data; `docker compose down -v` deletes it.
 
-**Troubleshooting:** if Splunk never turns healthy, run `docker compose logs splunk-netspout` (a short or missing password is the usual cause). More in [Troubleshooting](TROUBLESHOOTING.md).
+**Troubleshooting:** if Splunk never turns healthy, run `docker compose logs splunk-netspout`. `401 Unauthorized` and a container that keeps restarting mean `.env` no longer matches the password Splunk stored (or the first start was interrupted): fix `.env` to the right password, or, on a new install with nothing to keep, run `docker compose down -v`, edit `.env` and `docker compose up -d`. A short password is the other usual cause. More in [Troubleshooting](TROUBLESHOOTING.md).
 
 ---
 

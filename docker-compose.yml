@@ -42,8 +42,8 @@ services:
       test: ["CMD-SHELL", "curl -fkSs https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"' && curl -fSs http://localhost:8081/health >/dev/null"]
       interval: 15s
       timeout: 10s
-      retries: 10
-      start_period: 45s
+      retries: 20
+      start_period: 900s   # failures during start_period do not count; the first Splunk start can take many minutes (emulated amd64)
     restart: unless-stopped
     networks:
       - netspout-net

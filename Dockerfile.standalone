@@ -64,6 +64,8 @@ RUN microdnf update -y && \
 
 # Synchronize default Splunk apps from /opt/splunk-etc into /opt/splunk/etc
 RUN cp -rn /opt/splunk-etc/* /opt/splunk/etc/ || true
+# the cp above runs as root and creates root-owned directories (system/, system/local); a fresh etc volume inherits that and Splunk's first-start setup then fails with "not writable" / "Invalid cross-device link"
+RUN chown -R splunk:splunk /opt/splunk/etc
 
 # Copy NetSpout Splunk App into both /opt/splunk-etc/apps and /opt/splunk/etc/apps
 COPY --chown=splunk:splunk netspout /opt/splunk-etc/apps/netspout

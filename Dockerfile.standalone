@@ -1,7 +1,4 @@
-# BUILD FIRST. This image copies the app folder and a locally built netspout.spl, which is NOT in Git (generated release packages are not tracked):
-#   python scripts/build_splunk_package.py        # writes ./netspout.spl (runs the core sync, frontend build and guardrails)
-#   docker compose -f docker-compose.standalone.yml build
-# Never reuse an older netspout.spl: check `tar -xzOf netspout.spl netspout/default/app.conf | grep ^version` against netspout/default/app.conf.
+# The image is built from the repository checkout alone (the app folder is copied directly); no locally built netspout.spl is needed.
 # =========================================================================
 # NetSpout Standalone: All-In-One Docker Container (Splunk Enterprise + App)
 # Includes:
@@ -69,9 +66,7 @@ RUN chown -R splunk:splunk /opt/splunk/etc
 
 # Copy NetSpout Splunk App into both /opt/splunk-etc/apps and /opt/splunk/etc/apps
 COPY --chown=splunk:splunk netspout /opt/splunk-etc/apps/netspout
-COPY --chown=splunk:splunk netspout.spl /opt/splunk-etc/apps/netspout.spl
 COPY --chown=splunk:splunk netspout /opt/splunk/etc/apps/netspout
-COPY --chown=splunk:splunk netspout.spl /opt/splunk/etc/apps/netspout.spl
 
 # Copy Companion Fast Simulation Engine and Core Libraries
 COPY --chown=splunk:splunk backend /opt/netspout-backend

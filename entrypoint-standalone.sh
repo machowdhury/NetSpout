@@ -12,6 +12,7 @@ umask 077
 if [ ! -d "/opt/splunk/etc/apps/splunk_httpinput" ] && [ -d "/opt/splunk-etc/apps" ]; then
     echo ">> Synchronizing default Splunk apps from /opt/splunk-etc to /opt/splunk/etc..."
     sudo cp -rn /opt/splunk-etc/* /opt/splunk/etc/ 2>/dev/null || true
+    sudo chown -R splunk:splunk /opt/splunk/etc   # the copy above runs as root; Splunk's first-start setup must be able to write system/local
 fi
 
 # Render lab-only HEC configuration from the runtime secret. The secret is
@@ -59,7 +60,8 @@ start_backend() {
     if [ ! -d "/opt/netspout-backend" ]; then
         return
     fi
-    for _ in $(seq 1 180); do
+    # up to 20 minutes: the first Splunk start is slow, especially amd64 emulated on Apple Silicon
+    for _ in $(seq 1 1200); do
         # An unauthenticated management request returns HTTP 401 when the TLS
         # listener is ready; curl without --fail still proves reachability.
         if curl -kSs https://127.0.0.1:8089/services/server/info >/dev/null 2>&1; then
@@ -73,7 +75,7 @@ start_backend() {
         fi
         sleep 1
     done
-    echo ">> NetSpout engine did not start: Splunk management readiness timed out." >&2
+    echo ">> NetSpout engine did not start: Splunk management readiness timed out after 20 minutes." >&2
 }
 start_backend &
 

@@ -17,7 +17,7 @@ You sign in with your normal **Splunk** login. PulseForge has no accounts of its
 | Best for | Trying it quickly: includes an evaluation Splunk | Adding PulseForge to a Splunk you already run |
 | You install | Docker | `netspout.spl` (a versioned release artifact, not stored in Git: [how to get it](docs/RELEASE_ARTIFACTS.md)) from Splunk Web, **plus** the PulseForge engine on a host Splunk can reach |
 | Open | `http://localhost:8000` | Apps → NetSpout PulseForge |
-| Status | Compose file validated; a one-command clean-checkout run is **not yet repeated** for this release | Verified end to end on Splunk Enterprise 10.2.7 in an isolated Docker lab |
+| Status | Clean-checkout `docker compose up -d --build` verified on one Apple-silicon host (emulated amd64); other hosts untested | Verified end to end on Splunk Enterprise 10.2.7 in an isolated Docker lab |
 
 Steps are in **[docs/INSTALL.md](docs/INSTALL.md)**. First run: **[docs/QUICKSTART.md](docs/QUICKSTART.md)**.
 

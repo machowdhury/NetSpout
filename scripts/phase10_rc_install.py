@@ -32,7 +32,7 @@ CTX = ssl._create_unverified_context()
 e = dict(l.strip().split("=", 1) for l in ENV.read_text().splitlines() if "=" in l)
 MGMT = "https://127.0.0.1:%s" % e["LAB_MGMT_PORT"]
 AUTH = "Basic " + base64.b64encode(("admin:" + e["LAB_SPLUNK_PASSWORD"]).encode()).decode()
-assert (e["LAB_MGMT_PORT"], e["LAB_WEB_PORT"]) in (("39191", "39000"), ("45191", "45000"), ("46191", "46000"), ("47191", "47000")), "this script only talks to the isolated RC / Phase 15 labs"
+assert (e["LAB_MGMT_PORT"], e["LAB_WEB_PORT"]) in (("39191", "39000"),) + tuple((str(b + 191), str(b)) for b in range(45000, 52000, 1000)), "this script only talks to the isolated RC / Phase 15 labs"
 ENGINE_PORT, TAP_PORT = e.get("RC_ENGINE_PORT", "38081"), e.get("LAB_TAP_PORT", "39990")
 
 

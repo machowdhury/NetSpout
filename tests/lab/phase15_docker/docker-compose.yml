@@ -43,6 +43,11 @@ services:
     volumes:
       - splunk_var:/opt/splunk/var
       - splunk_etc:/opt/splunk/etc
+    # Phase 16 isolation: the 2.0.0 gateway falls back to host.docker.internal:8081 when no engine is configured. That name reaches the HOST's loopback services
+    # (the protected demo engine listens there). Blackhole it (RFC 5737 TEST-NET-1, never routed) so no request from a lab can reach the host at all.
+    extra_hosts:
+      - "host.docker.internal:192.0.2.1"
+      - "gateway.docker.internal:192.0.2.1"
     depends_on: [engine]
     networks: [net]
 networks:

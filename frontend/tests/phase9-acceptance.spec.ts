@@ -27,7 +27,7 @@ mkdirSync(SHOTS, { recursive: true });
 mkdirSync(EVID, { recursive: true });
 
 const lab: Record<string, string> = LAB_ENV ? Object.fromEntries(readFileSync(LAB_ENV, 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')).trim(), l.slice(l.indexOf('=') + 1).trim()])) : {};
-if (LAB_ENV) { const ok = (lab.LAB_MGMT_PORT === '19191' && lab.LAB_HEC_PORT === '19088') || (lab.LAB_MGMT_PORT === '39191' && lab.LAB_HEC_PORT === '39088') || [['45191', '45088'], ['46191', '46088'], ['47191', '47088']].some(([m, h]) => lab.LAB_MGMT_PORT === m && lab.LAB_HEC_PORT === h); if (!ok) throw new Error('this suite only runs against the isolated labs (TA-validation 19191/19088, release-candidate install 39191/39088, Phase 15 labs 45xxx-47xxx)'); }
+if (LAB_ENV) { const ok = (lab.LAB_MGMT_PORT === '19191' && lab.LAB_HEC_PORT === '19088') || (lab.LAB_MGMT_PORT === '39191' && lab.LAB_HEC_PORT === '39088') || Array.from({ length: 7 }, (_, i) => 45000 + i * 1000).some((b) => lab.LAB_MGMT_PORT === String(b + 191) && lab.LAB_HEC_PORT === String(b + 88)); if (!ok) throw new Error('this suite only runs against the isolated labs (TA-validation 19191/19088, release-candidate install 39191/39088, Phase 15/16 labs 45xxx-51xxx)'); }
 const TAP_HEC = `${ENGINE_TAP || TAP}/services/collector`;
 const SEARCH_URL = ENGINE_SEARCH;
 const EVENT_INDEX = process.env.PHASE9_EVENT_INDEX ?? 'ta_validation';

@@ -1,0 +1,30 @@
+{
+ "before_fix (origin/main)": {
+  "no_stanza_on_stdin": {
+   "still_running_after_8s": true,
+   "bytes_emitted": 10034
+  },
+  "input_without_stanza": {
+   "still_running_after_8s": true,
+   "bytes_emitted": 10035
+  },
+  "explicitly_enabled_stanza": {
+   "still_running_after_8s": true,
+   "bytes_emitted": 40140
+  }
+ },
+ "after_fix (branch)": {
+  "no_stanza_on_stdin": {
+   "still_running_after_8s": false,
+   "bytes_emitted": 0
+  },
+  "input_without_stanza": {
+   "still_running_after_8s": false,
+   "bytes_emitted": 0
+  },
+  "explicitly_enabled_stanza": {
+   "still_running_after_8s": true,
+   "bytes_emitted": 40137
+  }
+ }
+}

@@ -1,0 +1,73 @@
+{
+ "label": "2.0.0 installed (still has the defect), before the upgrade",
+ "time_utc": "2026-11-06T01:02:32Z",
+ "app_version": "2.0.0",
+ "app_indexes_defined": [
+  "cisco_mdt_metrics",
+  "idx_network_ops",
+  "idx_security_fw",
+  "idx_wireless_ops"
+ ],
+ "netspout_attributed_events": 342,
+ "attributed_by_index_source_sourcetype": [
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "arista:eos:syslog",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "cisco:duo:auth",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "cisco:ios:syslog",
+   "count": "76"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "cisco:ise:syslog",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "fortinet:fortigate:utm",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "juniper:junos:syslog",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "pan:threat",
+   "count": "38"
+  },
+  {
+   "index": "idx_network_ops",
+   "source": "netspout:streamer",
+   "sourcetype": "pan:traffic",
+   "count": "38"
+  }
+ ],
+ "events_in_app_indexes": {
+  "idx_network_ops": 462,
+  "idx_security_fw": 0,
+  "idx_wireless_ops": 0
+ },
+ "metric_datapoints_in_metric_index": 0,
+ "control_index_events": 5,
+ "generator_processes_running": [
+  "3262 /run/rosetta/rosetta /opt/splunk/bin/python3.9 /opt/splunk/bin/python3.9 /opt/splunk/etc/apps/netspout/bin/netspout_streamer.py"
+ ],
+ "splunkd_log_generator_launches": 35
+}

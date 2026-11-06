@@ -1,0 +1,17 @@
+{
+ "run_id": "run-b3a5d77b002b",
+ "events": {
+  "sourcetype": "cisco:asa",
+  "index": "idx_network_ops",
+  "sent": 9,
+  "found_by_search": 9
+ },
+ "metrics": {
+  "sourcetype": "cisco:ios:mdt:metric",
+  "index": "cisco_mdt_metrics",
+  "events_sent": 6,
+  "datapoints_sent": 33,
+  "datapoints_found_by_mstats": 33
+ },
+ "ui_outcome": "Verified: found 9 of 9 events in index idx_network_ops and 33 of 33 metric datapoints in metric index cisco_mdt_metrics (mstats search) that this run sent."
+}

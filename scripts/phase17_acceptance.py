@@ -263,15 +263,17 @@ def authz():
 
 
 def idle(minutes=3):
-    """Zero synthetic telemetry while the app is installed and nothing was requested: compare counts across ALL indexes over a window."""
-    def snapshot():
-        return {r["index"]: int(r["count"]) for r in search("| eventcount summarize=false index=* | table index count", "0")}
-    a = snapshot()
+    """Zero synthetic telemetry while the app is installed and nothing was requested: count events INDEXED during the window (_index_earliest/_index_latest) in every
+    non-internal index. This is exact; comparing `eventcount` before and after is not (hot-bucket counts update lazily, which showed up as a false +98)."""
+    now = lambda: int(float(search("| makeresults | eval t=now() | table t", "-1m")[0]["t"]))
+    time.sleep(45)   # grace: events accepted just before this call can still be indexed; the window starts after it
+    t0 = now()
     time.sleep(minutes * 60)
-    b = snapshot()
-    delta = {k: b.get(k, 0) - a.get(k, 0) for k in set(a) | set(b) if not k.startswith("_") and b.get(k, 0) != a.get(k, 0)}
-    synthetic = search('index=* (source="netspout:*" OR source="pulseforge*") earliest=-%dm | stats count by index, source' % (minutes + 1))
-    return save("idle_%dmin_%s" % (minutes, os.environ.get("P17_LABEL", "run")), {"results": [{"name": "no_events_in_any_index", "window_min": minutes, "before": a, "after": b, "delta_non_internal": delta, "synthetic_by_index_source": synthetic, "ok": not delta and not synthetic}]})
+    t1 = now()
+    indexed = search("index=* _index_earliest=%d _index_latest=%d earliest=0 | stats count by index, sourcetype, source" % (t0, t1), "0")
+    nothing_during_window = not indexed
+    return save("idle_%dmin_%s" % (minutes, os.environ.get("P17_LABEL", "run")), {"results": [{"name": "no_events_indexed_in_any_index", "window_start": t0, "window_end": t1, "window_min": minutes,
+                "events_indexed_in_window_by_index_sourcetype_source": indexed, "ok": nothing_during_window}]})
 
 
 if __name__ == "__main__":

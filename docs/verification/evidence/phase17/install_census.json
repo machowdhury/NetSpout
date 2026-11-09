@@ -2,22 +2,23 @@
  "results": [
   {
    "name": "single_package_install_census",
+   "artifact_sha256": "3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b",
    "install_method": "Splunk Web > Apps > Manage Apps > Install app from file (Playwright upload), then Splunk restart",
-   "installed_apps_with_engine_in_name": [],
+   "installed_apps_with_engine_or_pulse_in_name": [],
    "netspout_app_present": true,
    "launcher_and_engine_processes": [
-    "4156    3709 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_launcher.py",
-    "   4196    4156 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_main.py --uds /opt/splunk/var/lib/netspout/engine.sock"
+    "30381   28422 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_launcher.py",
+    "  30385   30381 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_main.py --uds /opt/splunk/var/lib/netspout/engine.sock"
    ],
    "engine_state_dir_listing": [
     "total 12",
-    "drwx--x--- 3 splunk splunk 4096 Nov  9 18:53 config",
-    "-rw------- 1 splunk splunk  167 Nov  9 18:53 engine.json",
-    "-rw------- 1 splunk splunk   43 Nov  9 18:53 engine.key",
-    "srw------- 1 splunk splunk    0 Nov  9 18:53 engine.sock",
-    "-rw------- 1 splunk splunk    0 Nov  9 18:53 launcher.lock"
+    "drwx--x--- 3 splunk splunk 4096 Nov  9 19:51 config",
+    "-rw------- 1 splunk splunk  168 Nov  9 19:51 engine.json",
+    "-rw------- 1 splunk splunk   43 Nov  9 19:44 engine.key",
+    "srw------- 1 splunk splunk    0 Nov  9 19:50 engine.sock",
+    "-rw------- 1 splunk splunk    0 Nov  9 19:50 launcher.lock"
    ],
-   "listening_tcp_ports_below_32000_before": [
+   "listening_tcp_ports_below_32000_before_install": [
     5432,
     5435,
     8000,
@@ -28,7 +29,7 @@
     8194,
     9997
    ],
-   "listening_tcp_ports_below_32000_after": [
+   "listening_tcp_ports_below_32000_after_install": [
     5432,
     5435,
     8000,
@@ -39,6 +40,7 @@
     8194,
     9997
    ],
+   "note": "the Docker host also runs an unrelated evaluation container with its own engine on host port 8081; this package never uses a TCP engine URL (MANAGED_ENGINE marker), and the run ids in the evidence were served by the in-container engine pid above",
    "ok": true
   }
  ]

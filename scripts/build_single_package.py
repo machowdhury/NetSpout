@@ -93,6 +93,10 @@ def build(variants):
     (app / "bin" / "MANAGED_ENGINE").write_text("This build runs the engine under splunkd; the gateway never falls back to a TCP engine.\n")
     conf = app / "default" / "app.conf"  # the single package is a new version line; v2.0.1 is a published pre-release and stays as it is
     conf.write_text(conf.read_text().replace("version = 2.0.1", "version = 2.1.0").replace("with an external engine", "with a Splunk-managed engine"))
+    manifest_file = app / "app.manifest"  # AppInspect requires every version in the app to match
+    mf = json.loads(manifest_file.read_text())
+    mf["info"]["id"]["version"] = "2.1.0"
+    manifest_file.write_text(json.dumps(mf, indent=2) + "\n")
     inputs = app / "default" / "inputs.conf"
     inputs.write_text(inputs.read_text() + LAUNCHER_STANZA)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -115,6 +119,10 @@ def verify(spl):
             "netspout/default/authorize.conf", "netspout/default/data/ui/nav/default.xml", "netspout/app.manifest"]
     res["required_files_missing"] = [n for n in need if n not in names]
     res["launcher_stanza_enabled"] = "[pulseforge_engine_launcher://default]" in inputs and "disabled = 0" in inputs and "python.required = 3.13" in inputs
+    with tarfile.open(spl, "r:gz") as t:
+        import re as _re
+        conf_v = _re.search(r"^version = (\S+)", t.extractfile("netspout/default/app.conf").read().decode(), _re.M).group(1)
+        res["version_consistent"] = conf_v == json.loads(t.extractfile("netspout/app.manifest").read())["info"]["id"]["version"]
     res["variants"] = {k: v["status"] for k, v in manifest["variants"].items()}
     work = Path(tempfile.mkdtemp(prefix="pfv"))
     with tarfile.open(spl, "r:gz") as t:

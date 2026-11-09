@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { compatApi, type CompatCatalog, type Preview, type SourcetypeEntry } from '../../lib/compatApi';
 import { explorerApi } from '../../lib/explorerApi';
 import { startRun } from '../../lib/runsApi';
+import { AuthorizeDestination, useDestinationAuthorization } from '../../lib/authorize';
 import { Outcome } from './Outcome';
 import { EngineNotice } from './EngineNotice';
 import { useEngineStatus } from '../../lib/engineApi';
@@ -33,6 +34,7 @@ export function GenerateData() {
   const [mode, setMode] = useState<Mode>('finite');
   const [eps, setEps] = useState(5);
   const [indexes, setIndexes] = useState<string[]>([]);
+  const auth = useDestinationAuthorization();
   const [configured, setConfigured] = useState<boolean | null>(null);
   const [index, setIndex] = useState('');
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -234,7 +236,8 @@ export function GenerateData() {
           </div>
         </details>
         <div className="sx-row">
-          <button type="button" className="sx-primary" data-testid="generate" disabled={several ? !!multiReason : (!!blockedReason || !entry)} onClick={() => void generate()}>Generate and send to Splunk</button>
+          <AuthorizeDestination auth={auth} index={index} />
+          <button type="button" className="sx-primary" data-testid="generate" disabled={auth.blocked || (several ? !!multiReason : (!!blockedReason || !entry))} onClick={() => void generate()}>Generate and send to Splunk</button>
           {configured === false && <a href="#/system/connections">Set up Connections</a>}
         </div>
         {several ? (multiReason && <p className="sx-bad" data-testid="cannot-run">{multiReason}</p>) : (blockedReason && !entry?.block && <p className="sx-bad" data-testid="cannot-run">{blockedReason}</p>)}

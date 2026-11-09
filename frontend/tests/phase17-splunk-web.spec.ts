@@ -9,6 +9,7 @@ const pw = enabled ? fs.readFileSync(process.env.P17_PASSWORD_FILE!, 'utf8').tri
 const APP = '/en-US/static/app/netspout/dist/index.html';
 
 test.describe.configure({ mode: 'serial' });
+test.setTimeout(300_000);
 test.skip(!enabled, 'needs a disposable Splunk Web');
 
 async function login(page: Page, user = 'admin', password = pw) {
@@ -47,9 +48,9 @@ test('first-run configuration entirely in Splunk Web, then a tested connection',
   await expect(page.getByTestId('setup-wizard')).toBeVisible();
   await expect(page.locator('form.setup-form')).toHaveAttribute('data-loaded', 'true', { timeout: 60_000 });
   const form = page.locator('form.setup-form');
-  await form.getByLabel('Search username').fill('admin');
-  await form.getByLabel('HEC token').fill(process.env.P17_HEC_TOKEN!);
-  await form.getByLabel('Search credential').fill(pw);
+  await form.getByLabel('Search username', { exact: true }).fill('admin');
+  await form.getByLabel('HEC token', { exact: true }).fill(process.env.P17_HEC_TOKEN!);
+  await form.getByLabel('Search credential', { exact: true }).fill(pw);
   await form.getByTestId('event-index').fill('dev_test_replay');
   await form.getByTestId('metric-index').fill('dev_test_replay_metrics');
   await form.getByLabel(/loopback-only lab certificate exception/).check();
@@ -70,9 +71,11 @@ test('Generate Data from the UI is indexed and verified by an independent search
   await login(page);
   await page.goto(APP);
   await page.getByText('Generate Data', { exact: true }).first().click();
-  await page.getByTestId('vendor').selectOption({ label: 'Palo Alto Networks' });
-  await page.getByTestId('sourcetype').selectOption('pan:traffic');
+  await page.getByTestId('vendor').selectOption({ label: 'Fortinet' });
+  await page.getByTestId('sourcetype').selectOption('fortigate_traffic');
   await page.getByTestId('count').fill('10');
+  await expect(page.getByTestId('generate')).toBeDisabled();            // nothing starts until the destination is authorized
+  await page.getByTestId('authorize-destination').check();
   await page.getByTestId('generate').click();
   await expect(page.getByTestId('outcome')).toHaveAttribute('data-verification', 'VERIFIED', { timeout: 240_000 });
   await expect(page.getByTestId('totals')).toContainText('10 accepted');
@@ -86,8 +89,9 @@ test('a viewer sees the app but is refused when starting a run', async ({ browse
   await login(page, 'p17_viewer', process.env.P17_VIEWER_PASSWORD!);
   await page.goto(APP);
   await page.getByText('Generate Data', { exact: true }).first().click();
-  await page.getByTestId('vendor').selectOption({ label: 'Palo Alto Networks' });
-  await page.getByTestId('sourcetype').selectOption('pan:traffic');
+  await page.getByTestId('vendor').selectOption({ label: 'Fortinet' });
+  await page.getByTestId('sourcetype').selectOption('fortigate_traffic');
+  await page.getByTestId('authorize-destination').check();
   await page.getByTestId('generate').click();
   await expect(page.locator('body')).toContainText(/netspout_admin|capability|403|not allowed|forbidden/i, { timeout: 60_000 });
   await ctx.close();

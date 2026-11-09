@@ -68,7 +68,7 @@ Added by the single package: `check_aarch64_compatibility` (3 x86_64 `.so` files
 
 ## Regression
 
-Phase 16 selection (39 files) plus the 9 files added or touched here: **9 failed, 4110 passed, 5 skipped**. The 9 failures are the same nine documented for v2.0.1 (`test_gate6_integrity::test_07_successful_hec`; `test_gate9_5_telemetry_semantics::test_01` with its seven sub-failures; `test_phase12_agentic_supply_chain::…test_dashboard_recipe_families_integrate_without_regression`); no new failures. 38 new tests (launcher, IPC, key, capabilities, secrets, limits). Not re-run: the whole `tests/` tree outside that selection, and the Playwright suites other than the new Splunk Web spec.
+Phase 16 selection (39 files) plus the 9 files added or touched here: **9 failed, 4110 passed, 5 skipped**. The 9 failures are the same nine documented for v2.0.1 (`test_gate6_integrity::test_07_successful_hec`; `test_gate9_5_telemetry_semantics::test_01` with its seven sub-failures; `test_phase12_agentic_supply_chain::…test_dashboard_recipe_families_integrate_without_regression`); no new failures. 4110 passed here against 4072 for v2.0.1 (+38, from the launcher, IPC, key, capability, secret and limit tests). Not re-run: the whole `tests/` tree outside that selection, and the Playwright suites other than the new Splunk Web spec.
 
 ## Limitations and what was not verified
 

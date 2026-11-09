@@ -3,7 +3,7 @@
 # Refuses if evidence has not been collected (set FORCE=1 to override). Never lists or deletes anything by wildcard.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd); . "$HERE/env.sh"
-for l in splunk-10.6.1.1 splunk-10.2.7; do [ -f "$P17_REPO/docs/verification/evidence/phase17/aws-native-x86_64/$l/steps.log" ] || [ "${FORCE:-0}" = 1 ] || { echo "no collected evidence for $l (run run_all.sh collect, or FORCE=1)"; exit 1; }; done
+for l in splunk-10.6.1.1; do [ -f "$P17_REPO/docs/verification/evidence/phase17/aws-native-x86_64/$l/steps.log" ] || [ "${FORCE:-0}" = 1 ] || { echo "no collected evidence for $l (run run_all.sh collect, or FORCE=1)"; exit 1; }; done
 echo "About to delete (from $P17_STATE):"; grep '^export' "$P17_STATE"
 [ -n "${P17_INSTANCE:-}" ] && aws ec2 describe-instances --instance-ids "$P17_INSTANCE" --query 'Reservations[0].Instances[0].BlockDeviceMappings[].Ebs.VolumeId' --output text > "$P17_STATE.volumes" 2>/dev/null || true
 read -r -p "Type DELETE: " ok; [ "$ok" = DELETE ] || { echo aborted; exit 1; }

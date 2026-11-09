@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Orchestrates the validation from your laptop through Session Manager. Run the stages in order, or re-run one:
-#   run_all.sh stage | bootstrap | build | primary | compat | collect
+#   run_all.sh stage | bootstrap | build | checks | primary | collect
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd); . "$HERE/env.sh"; . "$HERE/ssm.sh"
 : "${P17_INSTANCE:?run 01_create.sh first}"
 W=/opt/p17
-LBL_PRIMARY=splunk-10.6.1.1; LBL_COMPAT=splunk-10.2.7
+LBL_PRIMARY=splunk-10.6.1.1
 
 stage() {
   cd "$P17_REPO"
@@ -23,9 +23,9 @@ stage() {
   rm -rf "$T"
   ssm_run "set -e; snap install aws-cli --classic >/dev/null 2>&1 || true; mkdir -p $W; export AWS_DEFAULT_REGION=$AWS_REGION; for f in approved-src.tar.gz harness.tar.gz baseline_netspout.spl; do aws s3 cp s3://$P17_BUCKET/stage/\$f $W/\$f --only-show-errors; done; echo '$P17_BASELINE_SHA  $W/baseline_netspout.spl' | sha256sum -c -" 900
 }
-bootstrap() { ssm_bg bootstrap "set -e; mkdir -p $W/harness; tar -xzf $W/harness.tar.gz -C $W/harness scripts/aws/remote_bootstrap.sh && bash $W/harness/scripts/aws/remote_bootstrap.sh $P17_DEADMAN_MIN $P17_IMG_PRIMARY $P17_IMG_COMPAT"; ssm_wait bootstrap || { ssm_tail bootstrap 60; exit 1; }; }
+bootstrap() { ssm_bg bootstrap "set -e; mkdir -p $W/harness; tar -xzf $W/harness.tar.gz -C $W/harness scripts/aws/remote_bootstrap.sh && bash $W/harness/scripts/aws/remote_bootstrap.sh $P17_DEADMAN_MIN $P17_IMG_PRIMARY"; ssm_wait bootstrap || { ssm_tail bootstrap 60; exit 1; }; }
 build() { ssm_bg build "bash $W/harness/scripts/aws/remote_build.sh $P17_APPROVED_COMMIT $P17_EXPECTED_GZ $P17_EXPECTED_TAR"; ssm_wait build || true; ssm_tail build 40; }
 primary() { ssm_bg run_primary "bash $W/harness/scripts/aws/remote_run_version.sh $LBL_PRIMARY $P17_IMG_PRIMARY $P17_SUSTAIN_PRIMARY"; ssm_wait run_primary || true; ssm_run "tail -n 60 $W/harness/docs/verification/evidence/phase17/aws-native-x86_64/$LBL_PRIMARY/steps.log" 60; collect; }
-compat() { ssm_bg run_compat "bash $W/harness/scripts/aws/remote_run_version.sh $LBL_COMPAT $P17_IMG_COMPAT $P17_SUSTAIN_COMPAT"; ssm_wait run_compat || true; ssm_run "tail -n 60 $W/harness/docs/verification/evidence/phase17/aws-native-x86_64/$LBL_COMPAT/steps.log" 60; collect; }
+checks() { ssm_bg checks "bash $W/harness/scripts/aws/remote_appinspect.sh && bash $W/harness/scripts/aws/remote_regression.sh"; ssm_wait checks || true; ssm_tail checks 30; collect; }
 collect() { bash "$HERE/05_collect.sh"; }
-"${1:?stage|bootstrap|build|primary|compat|collect}"
+"${1:?stage|bootstrap|build|checks|primary|collect}"

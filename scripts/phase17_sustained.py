@@ -71,6 +71,7 @@ def server_now():
     return int(float(a.search("| makeresults | eval t=now() | table t", "-1m")[0]["t"]))
 
 
+eng_before = a.gw("GET", "/engine")[1]
 before = a.count('index=%s sourcetype="%s"' % (a.IDX, ST[0]))
 sample_procs()
 idle_baseline = sample_procs()
@@ -132,5 +133,21 @@ res = {"name": "sustained_200_eps", "host": host, "native": NATIVE, "run_id": ri
        "ok": final["state"] == "COMPLETED" and c["accepted"] == c["attempts"] and c["rejected"] == 0 and v.get("status") == "VERIFIED" and indexed_delta == c["accepted"]}
 res["note"] = "cpu_pct is psutil's per-process CPU over each ~15 s interval (100 = one core)" if NATIVE else "cpu_pct is ps's lifetime average under emulation: relative only"
 res["reached_ceiling"] = bool(res["mean_attempts_per_s"] >= 190)
+eng_after = a.gw("GET", "/engine")[1]
+rq = [x["engine_rss_kb"] for x in samples if x.get("engine_rss_kb")]
+n4 = max(1, len(rq) // 4)
+rss_growth = (statistics.mean(rq[-n4:]) / statistics.mean(rq[n4:2 * n4]) - 1) if len(rq) >= 8 else None   # last quarter vs the second quarter (the first is warm-up)
+sd = [x["splunkd_rss_kb"] for x in samples if x.get("splunkd_rss_kb")]
+sd_growth = (statistics.mean(sd[-n4:]) / statistics.mean(sd[n4:2 * n4]) - 1) if len(sd) >= 8 else None
+total_eps = indexed_delta / max(1, final.get("elapsed_s") or samples[-1]["t"])
+res["criteria"] = {   # declared before the run (AWS_NATIVE_VALIDATION_PLAN.md)
+    "avg_indexed_eps_at_least_190": {"value": round(total_eps, 1), "pass": total_eps >= 190},
+    "zero_rejected_or_dropped": {"rejected": c["rejected"], "unknown": c["unknown"], "dropped": c["accepted"] - indexed_delta, "pass": c["rejected"] == 0 and c["unknown"] == 0 and c["accepted"] == indexed_delta},
+    "no_unresolved_indexing_backlog": {"seconds_to_all_indexed": settle, "blocked_queues": blocked, "pass": settle is not None and settle <= 60 and not blocked},
+    "no_uncontrolled_worker_restarts": {"restarts_before": eng_before.get("restarts"), "restarts_after": eng_after.get("restarts"), "pass": eng_after.get("restarts") == eng_before.get("restarts") and eng_after.get("state") == "healthy"},
+    "no_significant_resource_instability": {"engine_rss_growth_last_vs_second_quarter": None if rss_growth is None else round(rss_growth, 3), "splunkd_rss_growth": None if sd_growth is None else round(sd_growth, 3),
+                                            "rule": "growth <= 15% (engine) and <= 25% (splunkd), no process restarts", "pass": rss_growth is not None and rss_growth <= 0.15 and (sd_growth is None or sd_growth <= 0.25)}}
+res["criteria_all_pass"] = all(v["pass"] for v in res["criteria"].values())
 a.save("sustained_200eps", {"results": [res]})
-print(json.dumps({k: res[k] for k in ("final_state", "counters", "mean_attempts_per_s", "indexed_eps_per_full_minute", "indexing_lag_vs_event_time_s", "seconds_from_last_event_sent_to_all_indexed", "dropped_events_accepted_minus_indexed", "engine_rss_kb", "ok", "reached_ceiling")}))
+print(json.dumps({k: res[k] for k in ("final_state", "counters", "mean_attempts_per_s", "indexed_eps_per_full_minute", "indexing_lag_vs_event_time_s", "seconds_from_last_event_sent_to_all_indexed", "dropped_events_accepted_minus_indexed", "engine_rss_kb", "ok", "reached_ceiling", "criteria_all_pass")}))
+print(json.dumps({k: v["pass"] for k, v in res["criteria"].items()}))

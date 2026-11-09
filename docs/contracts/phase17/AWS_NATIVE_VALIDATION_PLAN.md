@@ -4,6 +4,10 @@ Authorized by the user for **one** disposable run. Region **ca-central-1 only**;
 
 Note on the region: the authorization text named `ca-central-2` in places. That region does not exist for this account (`ec2.ca-central-2.amazonaws.com` does not resolve; the account's Canadian regions are `ca-central-1`, enabled, and `ca-west-1`, not opted in), so the run uses `ca-central-1`, the region named in the request's first instruction and the account's CLI default. If `ca-central-1` was not what was meant, say so and nothing will have been run elsewhere.
 
+## Outcome of the launch attempt (2026-11-09): BLOCKED, nothing was run
+
+`ec2:RunInstances` in ca-central-1 was refused with an **explicit deny in an AWS Organizations service control policy** (`p-6a2kjycb`, organization `o-i9m79xugh0`) for IAM user `mchowdhury`. No instance, volume or Splunk test was started. The bucket, role, instance profile and security group created just before the call were deleted and the deletion verified (0 instances, 0 volumes, 0 tagged security groups, no `p17-` role or bucket remain). No other region or workaround was tried. Charges: none material. Resuming needs the organization administrator to permit this action (or an approved different account/region); then re-run from `01_create.sh`.
+
 ## Preflight (read-only, done before provisioning)
 
 | Check | Result |

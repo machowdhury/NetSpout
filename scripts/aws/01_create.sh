@@ -13,10 +13,10 @@ BUCKET=$(echo "$P17_RUN-$ACCOUNT" | tr 'A-Z_' 'a-z-'); save P17_BUCKET "$BUCKET"
 if [ "$AWS_REGION" = us-east-1 ]; then aws s3api create-bucket --bucket "$BUCKET" >/dev/null
 else aws s3api create-bucket --bucket "$BUCKET" --create-bucket-configuration LocationConstraint="$AWS_REGION" >/dev/null; fi
 aws s3api put-public-access-block --bucket "$BUCKET" --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
-aws s3api put-bucket-tagging --bucket "$BUCKET" --tagging 'TagSet=[{Key=Project,Value=netspout-phase17},{Key=Disposable,Value=true}]'
+aws s3api put-bucket-tagging --bucket "$BUCKET" --tagging 'TagSet=[{Key=Project,Value=netspout-phase17},{Key=Disposable,Value=true},{Key=splunkit_data_classification,Value=private},{Key=splunkit_environment_type,Value=non-prd}]'
 
 ROLE=$P17_RUN-role; save P17_ROLE "$ROLE"
-aws iam create-role --role-name "$ROLE" --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}' --tags Key=Project,Value=netspout-phase17 >/dev/null
+aws iam create-role --role-name "$ROLE" --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}' --tags Key=Project,Value=netspout-phase17 Key=splunkit_data_classification,Value=private Key=splunkit_environment_type,Value=non-prd >/dev/null
 aws iam attach-role-policy --role-name "$ROLE" --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
 aws iam put-role-policy --role-name "$ROLE" --policy-name bucket --policy-document "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Resource\":\"arn:aws:s3:::$BUCKET/*\"},{\"Effect\":\"Allow\",\"Action\":\"s3:ListBucket\",\"Resource\":\"arn:aws:s3:::$BUCKET\"}]}"
 aws iam create-instance-profile --instance-profile-name "$ROLE" >/dev/null; save P17_PROFILE "$ROLE"

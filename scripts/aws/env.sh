@@ -17,4 +17,4 @@ export P17_IMG_PRIMARY=${P17_IMG_PRIMARY:-splunk/splunk:10.6.1@sha256:2a7cf9d2e8
 export P17_SUSTAIN_PRIMARY=${P17_SUSTAIN_PRIMARY:-3600}
 mkdir -p "$(dirname "$P17_STATE")"; touch "$P17_STATE"
 [ -f "$P17_STATE" ] && . "$P17_STATE"
-tag() { echo "ResourceType=$1,Tags=[{Key=Name,Value=$P17_RUN},{Key=Project,Value=netspout-phase17},{Key=Disposable,Value=true}]"; }
+tag() { echo "ResourceType=$1,Tags=[{Key=Name,Value=$P17_RUN},{Key=Project,Value=netspout-phase17},{Key=Disposable,Value=true},{Key=splunkit_data_classification,Value=private},{Key=splunkit_environment_type,Value=non-prd}]"; }   # the two splunkit_* tags are required by the organization policy

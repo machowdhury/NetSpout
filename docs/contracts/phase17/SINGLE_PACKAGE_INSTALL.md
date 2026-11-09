@@ -23,14 +23,14 @@ No SSH, shell, Docker, Python install or separate engine package is needed.
 
 ## What Splunk starts for you
 
-A modular input `pulseforge_engine_launcher` starts one engine process (as the Splunk OS user, on Splunk's bundled Python 3.13, at lower priority) and restarts it if it dies. It listens on a Unix socket (mode 0600) inside `$SPLUNK_HOME/var/lib/netspout`, not on a network port; every request needs a per-install key that only the Splunk gateway holds. The launcher and the idle engine write no events. Streaming is bounded: at most 200 events/s and 3,600 s per stream (an open-ended request gets the 3,600 s limit), at most 4 runs at once.
+A modular input `pulseforge_engine_launcher` starts one engine process (as the Splunk OS user, on Splunk's bundled Python 3.13, at lower priority) and restarts it if it dies. It listens on a Unix socket (mode 0600) inside `$SPLUNK_HOME/var/lib/netspout`, not on a network port; every request needs a per-install key that only the Splunk gateway holds. The launcher and the idle engine write no events. Streaming is bounded: at most 200 events/s and 3,600 s per stream (an open-ended request gets the 3,600 s limit; the ceiling itself has not been reached in testing, see the validation matrix), at most 4 runs at once.
 
 If the engine is down, Connections says so and offers **Restart engine** (admin).
 
 ## Supported and not supported
 
-Supported (tested): Splunk Enterprise 10.2.7, Linux x86_64 (amd64), single instance, Python 3.13.
-Not supported: **Splunk Cloud**, distributed deployments (the launcher would start on every instance that has the app), Windows, macOS, aarch64 hosts, other Splunk versions (untested), native gNMI/SNMP/syslog/IPFIX listeners (not part of this promise).
+Supported (tested): Splunk Enterprise **10.6.1** (primary) and 10.2.7, Linux x86_64 image (tested under emulation on an arm64 host), single instance, Python 3.13.
+Not supported: **Splunk Cloud**, distributed deployments (the launcher would start on every instance that has the app), Windows, macOS, aarch64 hosts, other Splunk versions (untested), native-hardware performance (untested), native gNMI/SNMP/syslog/IPFIX listeners (not part of this promise).
 
 ## Uninstall
 

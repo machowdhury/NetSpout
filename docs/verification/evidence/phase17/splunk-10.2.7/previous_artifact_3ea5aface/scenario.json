@@ -1,0 +1,55 @@
+{
+ "results": [
+  {
+   "name": "run",
+   "http": 200,
+   "run_id": "NS-20261109-56f03b49",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 47,
+    "attempts": 47,
+    "accepted": 47,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_by_sourcetype": [
+    {
+     "sourcetype": "pan:system",
+     "count": "9"
+    },
+    {
+     "sourcetype": "pan:threat",
+     "count": "13"
+    },
+    {
+     "sourcetype": "pan:traffic",
+     "count": "25"
+    }
+   ],
+   "ok": true
+  },
+  {
+   "name": "dashboard_panels_return_rows_for_this_run",
+   "view": "pf_paloalto_threat_investigation",
+   "rows_per_panel": {
+    "ds_1": 1,
+    "ds_2": 1,
+    "ds_3": 1,
+    "ds_4": 1,
+    "ds_5": 1,
+    "ds_6": 1,
+    "ds_7": 1,
+    "ds_8": 5,
+    "ds_9": 1,
+    "ds_10": 5,
+    "ds_11": 47,
+    "ds_12": 47
+   },
+   "ok": true,
+   "note": "panels that legitimately return no rows for a phase are tolerated up to 3"
+  }
+ ]
+}

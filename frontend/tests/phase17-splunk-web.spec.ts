@@ -25,6 +25,7 @@ test('install netspout.spl through Splunk Web (Install app from file)', async ({
   await login(page);
   await page.goto('/en-US/manager/appinstall/_upload');
   await page.setInputFiles('input[type=file]', process.env.P17_UPLOAD!);
+  if (process.env.P17_UPGRADE) await page.getByLabel(/upgrade app/i).check();   // Splunk Web's "Upgrade app. Checking this will overwrite the app if it already exists"
   await page.getByRole('button', { name: /^upload$/i }).click();
   await expect(page.locator('body')).toContainText(/restart|netspout|installed/i, { timeout: 180_000 });
   await page.screenshot({ path: 'test-results/phase17-upload.png' });

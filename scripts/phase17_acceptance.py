@@ -102,7 +102,7 @@ def start(body):
 
 def save(section, data):
     EV.mkdir(parents=True, exist_ok=True)
-    (EV / (section + ".json")).write_text(json.dumps(data, indent=1, default=str))
+    (EV / (section + os.environ.get("P17_SUFFIX", "") + ".json")).write_text(json.dumps(data, indent=1, default=str))
     bad = [r for r in data["results"] if not r.get("ok")]
     print("%s: %d/%d ok%s" % (section, len(data["results"]) - len(bad), len(data["results"]), "" if not bad else "  FAILED: " + ", ".join(r["name"] for r in bad)))
     return not bad

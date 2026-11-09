@@ -2,14 +2,18 @@
 
 Branch `feature/single-package-enterprise` (draft PR). Base: `main` at `269c4ee` (v2.0.1 pre-release, **unchanged**: no tag moved, no asset replaced). Architecture: approach B of `PHASE17_SINGLE_PACKAGE_FEASIBILITY.md` (Splunk-managed engine worker bundled in the app), approved.
 
+## Update 2 (Splunk target change)
+
+Primary validation target is now **Splunk Enterprise 10.6.1 (10.6.1.1) on Linux x86_64**; 10.2.7 is the backward-compatibility target. The earlier results below were for artifact `3ea5aface7db…` on 10.2.7 only and are kept under `evidence/phase17/splunk-10.2.7/previous_artifact_3ea5aface/`. The artifact was rebuilt (reproducible tar metadata; the earlier build embedded file times, so it was *not* byte-reproducible across checkouts, contrary to what Update 1 said) and the full suite was re-run for it on both versions. **Results, scope and limits: `PHASE17_VALIDATION_MATRIX.md`.** Everything below describing evidence applies to the earlier artifact unless it says otherwise.
+
 ## Artifact
 
 | | |
 |---|---|
-| File | `build/single_package/netspout.spl` (git-ignored; rebuilt by `python scripts/build_single_package.py --verify`, byte-identical on rebuild) |
-| sha256 | `3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b` |
-| Bytes | 16,315,740 |
-| Source commit | `35cef617d9fce69807af99453ea8682af6592f75`; `netspout/`, `backend/`, `src/` and the build script are identical at the branch head |
+| File | `build/single_package/netspout.spl` (git-ignored; `python scripts/build_single_package.py --verify`; **reproducible**: tar metadata is normalized, so the same sources give the same bytes) |
+| sha256 | `4bf1d21469f5e699069797d654f7ccc57e00fbcade9b9304dcccdab2bd33be40` |
+| Bytes | 15,972,349 |
+| Source commit | `91af353d1e9897e587e819002de65310de3b1640`; `netspout/`, `backend/` and `src/` are unchanged between that commit and the branch head |
 | App version | 2.1.0 (`app.conf` and `app.manifest` agree) |
 | Bundled | the engine (`bin/engine/app`), wheels for Python 3.13 / Linux x86_64 (fastapi, uvicorn, pydantic, pydantic_core, websockets, httpx, PyYAML and dependencies); grpc, protobuf and cryptography come from Splunk's own Python |
 
@@ -37,7 +41,7 @@ Branch `feature/single-package-enterprise` (draft PR). Base: `main` at `269c4ee`
 | `app.manifest` still said 2.0.1 beside `app.conf` 2.1.0 (new AppInspect failure) | the build rewrites it and verifies consistency |
 | Idle check by `eventcount` before/after reported a false +98 events (lazy hot-bucket counts) | idle is now measured by events *indexed* inside a time window (`_index_earliest/_index_latest`); the old-method files were removed |
 
-## Acceptance evidence (`docs/verification/evidence/phase17/splunk-10.2.7/`)
+## Acceptance evidence for the earlier artifact (`docs/verification/evidence/phase17/splunk-10.2.7/previous_artifact_3ea5aface/`)
 
 Only `netspout.spl` was installed; no engine anywhere in the Splunk container; installed through Splunk Web (Playwright upload), Splunk restarted, no shell commands for setup.
 
@@ -84,4 +88,4 @@ Phase 16 selection (39 files) plus the 9 files added or touched here: **9 failed
 
 ## GO / NO-GO for merging
 
-**NO-GO for merging to `main` or releasing now**; GO for review of this draft PR. Reasons: AppInspect failures and the x86_64-only binaries make it a self-distributed candidate, nothing but 10.2.7 was tested, emulated hardware only, and the untested items above. If review accepts the support boundary (Linux x86_64, Splunk 10.2.7, single instance, no Splunk Cloud) and the listed AppInspect failures, the remaining gating work is: repeat the acceptance on native amd64, test the 2.0.1 → 2.1.0 upgrade, and measure sustained streaming resource use.
+**NO-GO for merging to `main` or releasing now**; GO for review of the draft PR. The remaining gates (native x86_64 run, sustained load that actually reaches 200 events/s, AppInspect failures) are listed in `PHASE17_VALIDATION_MATRIX.md`.

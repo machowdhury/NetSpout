@@ -1,0 +1,42 @@
+{
+ "results": [
+  {
+   "name": "engine_process_killed",
+   "observed": "launcher restarted the engine (restarts=1, 'engine exited with code -9'); credentials reloaded from storage/passwords (secrets=loaded); six event sourcetypes verified afterwards",
+   "evidence": "events_after_engine_kill.json",
+   "ok": true
+  },
+  {
+   "name": "launcher_killed",
+   "observed": "engine exited by itself (0 processes); status reported the launcher stopped; POST /engine/restart recovered it to healthy; six sourcetypes verified afterwards",
+   "evidence": "events_after_launcher_recovery.json",
+   "ok": true
+  },
+  {
+   "name": "splunk_stop_then_start",
+   "observed": "`splunk stop`: 0 launcher/engine processes, no socket; after start the engine was healthy (restarts=0) and events + IOS XR metrics verified",
+   "evidence": "events_after_stop_start.json",
+   "ok": true
+  },
+  {
+   "name": "splunk_restart",
+   "observed": "engine healthy, restarts=0, secrets=loaded; six sourcetypes verified",
+   "evidence": "events_after_restart.json",
+   "ok": true
+  },
+  {
+   "name": "uninstall",
+   "observed": "see uninstall.json: 0 processes, app directory gone, indexed events unchanged, var/lib/netspout left behind",
+   "evidence": "uninstall.json",
+   "ok": true,
+   "note": "measured on the container that had been upgraded from v2.0.1"
+  },
+  {
+   "name": "upgrade_from_released_v2.0.1",
+   "observed": "released v2.0.1 netspout.spl (sha256 53f09e5f\u2026ff17, same as the GitHub pre-release asset) installed through Splunk Web with a legacy Engine URL and a customer macro; upgraded through Splunk Web 'Upgrade app'; local/ files byte-identical (the Engine URL setting is kept but ignored), managed engine healthy, 0 events indexed in a 3-minute idle window, then first-run UI and events/metrics/scenario passed",
+   "evidence": "upgrade_from_2.0.1/",
+   "ok": true,
+   "note": "amd64 image emulated on an arm64 Mac; the Docker host was also running an unrelated Splunk evaluation container"
+  }
+ ]
+}

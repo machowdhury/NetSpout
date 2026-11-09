@@ -14,6 +14,15 @@ export function EngineConnection() {
     setBusy(true); setError('');
     try { const s = await saveEngine(url.trim()); setStatus(s); setUrl(s.url); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); }
   };
+  if (status?.managed) return (
+    <section className="sx-box" data-testid="engine-connection" aria-label="PulseForge Engine">
+      <span className="sx-step">PulseForge Engine</span>
+      <p data-testid="engine-status" data-state={status.connected ? 'connected' : 'not-connected'} className={status.connected ? 'sx-ok' : 'sx-bad'}>
+        {status.message}{status.restarts ? ` Restarts: ${status.restarts}.` : ''}{status.last_error ? ` Last error: ${status.last_error}.` : ''}
+      </p>
+      <p className="sx-muted" data-testid="engine-managed-note">Splunk starts and supervises the engine; there is nothing to install or configure. It listens on a private socket, not a network port.</p>
+    </section>
+  );
   return (
     <section className="sx-box" data-testid="engine-connection" aria-label="PulseForge Engine">
       <span className="sx-step">PulseForge Engine</span>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiUrl } from './api';
 
-export interface EngineStatus { configured: boolean; connected: boolean; url: string; message: string; version?: string | null }
+export interface EngineStatus { configured: boolean; connected: boolean; url: string; message: string; version?: string | null; managed?: boolean; state?: string; restarts?: number; last_error?: string | null }
 
 // The engine setting exists only where the app runs inside Splunk (the gateway owns it); in a plain browser the page talks to the engine directly.
 export const insideSplunk = () => typeof window !== 'undefined' && /^\/[a-zA-Z]{2}-[a-zA-Z]{2}\/static\/app\/netspout\//.test(window.location.pathname);

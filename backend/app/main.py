@@ -100,6 +100,12 @@ async def lifespan(_: FastAPI):
     finally:
         if simulation_task:
             simulation_task.cancel()
+        # Graceful stop: finish in-flight deliveries and persist final counters. Nothing is resumed or re-sent on the next start.
+        for stop_all in (lambda: run_monitor.stop_all(5), replay_service.stop_all):
+            try:
+                stop_all()
+            except Exception:
+                pass
 
 
 app = FastAPI(
@@ -117,6 +123,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from app.gateway_auth import GatewayKeyMiddleware
+app.add_middleware(GatewayKeyMiddleware)   # outermost: unauthenticated connections never reach CORS or a route
+
 
 # Include destination router
 app.include_router(destination_router)

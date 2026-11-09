@@ -1,0 +1,30 @@
+{
+ "results": [
+  {
+   "name": "embedded_python_runtime_probe",
+   "note": "run with the image's own python3.13 and LD_LIBRARY_PATH=/opt/splunk/lib, amd64 image emulated on arm64",
+   "splunk_10.2.7": {
+    "image": "splunk/splunk:10.2@sha256:da47bf2f183fc815f9e36dff3202dd1232bf475c44b2f71b958c54a9a004d6d7",
+    "splunk": "10.2.7",
+    "python": "3.13.11",
+    "openssl": "3.0.21",
+    "grpc": "1.74.0",
+    "protobuf": "6.32.0",
+    "cryptography": "44.0.2",
+    "pyyaml": "6.0.2"
+   },
+   "splunk_10.6.1": {
+    "image": "splunk/splunk:10.6.1@sha256:2a7cf9d2e8a2226773a9fac95b5e0e2cc8752496abfb134a21bdf8f67c9ee44d",
+    "splunk": "10.6.1.1 (build b2ae2962645c)",
+    "python": "3.13.11 (also 3.9.25 present)",
+    "openssl": "3.5.9",
+    "grpc": "1.74.0",
+    "protobuf": "6.33.6",
+    "cryptography": "44.0.2",
+    "pyyaml": "6.0.2"
+   },
+   "differences": "same Python patch version; OpenSSL 3.0.21 vs 3.5.9 and protobuf 6.32.0 vs 6.33.6 differ, so 10.6.1 is tested in full rather than assumed from 10.2.7",
+   "ok": true
+  }
+ ]
+}

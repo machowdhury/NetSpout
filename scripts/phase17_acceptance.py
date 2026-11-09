@@ -7,7 +7,7 @@ independent Splunk search, not only by the engine's own counters.
 
   P17_MGMT=https://127.0.0.1:18089 P17_PASSWORD_FILE=<0600 file> python scripts/phase17_acceptance.py <section> [...]
 sections: events metrics scenario stream authz idle
-Evidence (no secrets) is written to docs/verification/evidence/phase17/<section>.json
+Evidence (no secrets) is written to docs/verification/evidence/phase17/$P17_TARGET/<section>.json (default splunk-10.6.1)
 """
 import base64
 import json
@@ -24,7 +24,7 @@ from pathlib import Path
 
 MGMT = os.environ.get("P17_MGMT", "https://127.0.0.1:18089")
 PW = Path(os.environ["P17_PASSWORD_FILE"]).read_text().strip()
-EV = Path(__file__).resolve().parents[1] / "docs" / "verification" / "evidence" / "phase17"
+EV = Path(__file__).resolve().parents[1] / "docs" / "verification" / "evidence" / "phase17" / os.environ.get("P17_TARGET", "splunk-10.6.1")  # one directory per tested Splunk version
 CTX = ssl.create_default_context()
 CTX.check_hostname, CTX.verify_mode = False, ssl.CERT_NONE
 IDX, MIDX = "dev_test_replay", "dev_test_replay_metrics"

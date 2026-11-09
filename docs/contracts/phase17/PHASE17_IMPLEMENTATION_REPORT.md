@@ -37,7 +37,7 @@ Branch `feature/single-package-enterprise` (draft PR). Base: `main` at `269c4ee`
 | `app.manifest` still said 2.0.1 beside `app.conf` 2.1.0 (new AppInspect failure) | the build rewrites it and verifies consistency |
 | Idle check by `eventcount` before/after reported a false +98 events (lazy hot-bucket counts) | idle is now measured by events *indexed* inside a time window (`_index_earliest/_index_latest`); the old-method files were removed |
 
-## Acceptance evidence (`docs/verification/evidence/phase17/`)
+## Acceptance evidence (`docs/verification/evidence/phase17/splunk-10.2.7/`)
 
 Only `netspout.spl` was installed; no engine anywhere in the Splunk container; installed through Splunk Web (Playwright upload), Splunk restarted, no shell commands for setup.
 

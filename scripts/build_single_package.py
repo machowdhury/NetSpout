@@ -102,7 +102,12 @@ def build(variants):
     OUT.mkdir(parents=True, exist_ok=True)
     spl = OUT / "netspout.spl"
     with open(spl, "wb") as raw, gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as gz, tarfile.open(fileobj=gz, mode="w") as tar:
-        tar.add(app, arcname="netspout")
+        def norm(ti):  # reproducible bytes: no file times, owners or modes that depend on the checkout
+            ti.mtime, ti.uid, ti.gid, ti.uname, ti.gname = 0, 0, 0, "", ""
+            ti.mode = 0o755 if ti.isdir() or ti.mode & 0o111 else 0o644
+            return ti
+        for path in sorted([app, *app.rglob("*")], key=lambda x: str(x.relative_to(stage))):
+            tar.add(path, arcname=str(path.relative_to(stage)), recursive=False, filter=norm)
     shutil.rmtree(stage)
     return spl
 

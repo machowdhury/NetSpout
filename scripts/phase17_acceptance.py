@@ -271,11 +271,12 @@ def idle(minutes=3):
     b = snapshot()
     delta = {k: b.get(k, 0) - a.get(k, 0) for k in set(a) | set(b) if not k.startswith("_") and b.get(k, 0) != a.get(k, 0)}
     synthetic = search('index=* (source="netspout:*" OR source="pulseforge*") earliest=-%dm | stats count by index, source' % (minutes + 1))
-    return save("idle_%dmin" % minutes, {"results": [{"name": "no_events_in_any_index", "window_min": minutes, "before": a, "after": b, "delta_non_internal": delta, "synthetic_by_index_source": synthetic, "ok": not delta and not synthetic}]})
+    return save("idle_%dmin_%s" % (minutes, os.environ.get("P17_LABEL", "run")), {"results": [{"name": "no_events_in_any_index", "window_min": minutes, "before": a, "after": b, "delta_non_internal": delta, "synthetic_by_index_source": synthetic, "ok": not delta and not synthetic}]})
 
 
 if __name__ == "__main__":
     ok = True
     for sec in sys.argv[1:] or ["events", "metrics", "scenario", "stream", "authz"]:
-        ok = globals()[sec]() and ok
+        name, _, arg = sec.partition(":")
+        ok = (globals()[name](int(arg)) if arg else globals()[name]()) and ok
     sys.exit(0 if ok else 1)

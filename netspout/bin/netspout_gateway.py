@@ -88,9 +88,14 @@ NOT_CONNECTED = {"detail": "Engine not connected.", "code": "ENGINE_NOT_CONNECTE
 def engine_status(session_key):
     if MANAGED_PACKAGE:
         info = ipc.engine_info() or {}
-        return {"configured": True, "managed": True, "connected": info.get("state") == "healthy", "url": "", "state": info.get("state", "not started"),
-                "restarts": info.get("restarts", 0), "last_error": info.get("last_error"),
-                "message": "PulseForge engine is managed by Splunk (%s)." % info.get("state", "not started")}
+        try:  # the status file can be stale (a killed launcher cannot update it), so ask the engine itself
+            status, _ = ipc.request("GET", "/api/health", timeout=3)
+            alive = status == 200
+        except Exception:
+            alive = False
+        state = info.get("state", "not started") if alive else ("stopped (launcher not running; use Restart engine or restart Splunk)" if info else "not started")
+        return {"configured": True, "managed": True, "connected": alive, "url": "", "state": state, "restarts": info.get("restarts", 0), "last_error": info.get("last_error"),
+                "message": "PulseForge engine is managed by Splunk (%s)." % state}
     url = configured_engine(session_key)
     if not url:
         return {"configured": False, "connected": False, "url": "", "message": "Engine not configured."}
@@ -132,6 +137,23 @@ def _authorized(session_key, method):
         return (ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY) in _capabilities(session_key)
     except Exception:
         return False
+
+
+LAUNCHER_INPUT = "https://127.0.0.1:8089/servicesNS/nobody/netspout/data/inputs/pulseforge_engine_launcher/default/"
+
+
+def restart_managed_engine(session_key):
+    """Disable then enable the launcher input: splunkd stops the launcher (and with it the engine) and starts a fresh one. Needs the caller to be allowed to edit inputs."""
+    if not MANAGED_PACKAGE:
+        return 409, {"detail": "This install has no Splunk-managed engine"}
+    try:
+        _splunk(LAUNCHER_INPUT + "disable", session_key, {})
+        import time
+        time.sleep(3)
+        _splunk(LAUNCHER_INPUT + "enable", session_key, {})
+    except urllib.error.HTTPError as e:
+        return 403, {"detail": "Splunk refused to restart the engine input (HTTP %s); an administrator can enable it in Settings > Data inputs > PulseForge engine" % e.code}
+    return 202, {"detail": "Engine restart requested; check Connections in about 30 seconds"}
 
 
 PASSWORDS = "https://127.0.0.1:8089/servicesNS/nobody/netspout/storage/passwords"
@@ -179,7 +201,7 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             request = json.loads(in_string)
             method = request.get("method", "GET").upper()
             sub = "/" + (request.get("path_info") or "").lstrip("/")
-            if method not in ("GET", "POST") or not (sub.startswith("/api/") or sub in ("/health", "/engine")) or ".." in sub:
+            if method not in ("GET", "POST") or not (sub.startswith("/api/") or sub in ("/health", "/engine", "/engine/restart")) or ".." in sub:
                 return _reply(404, {"detail": "Not a gateway route"})
             session_key = request.get("session", {}).get("authtoken", "")
             if not session_key:
@@ -189,6 +211,8 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             if not _authorized(session_key, method):
                 return _reply(403, {"detail": "The Splunk capability %s is required%s (admin or power role required to change NetSpout state)" % (
                     ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY, " to change PulseForge state" if method == "POST" else " to use PulseForge")})
+            if sub == "/engine/restart":
+                return _reply(*restart_managed_engine(session_key))
             if sub == "/engine" and MANAGED_PACKAGE:
                 return _reply(409, {"detail": "The engine is managed by Splunk in this package; there is no engine URL to set"})
             if sub == "/engine":

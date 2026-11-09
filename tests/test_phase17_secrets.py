@@ -22,7 +22,9 @@ def test_storage_passwords_values_become_engine_env_only(tmp_path):
     s = _sup(tmp_path, lambda: {"hec_token": "T0K", "search_secret": "S3C"})
     env = s._env()
     assert env["NETSPOUT_HEC_TOKEN"] == "T0K" and env["NETSPOUT_SPLUNK_PASSWORD"] == "S3C"
-    (tmp_path / "config" / "connection.json").write_text('{"auth_method": "token"}')
+    (tmp_path / "config" / "connection.json").write_text('{"auth_method": "HEC_TOKEN_AND_BASIC_SEARCH"}')
+    assert "NETSPOUT_SPLUNK_PASSWORD" in s._env()   # "BASIC_SEARCH" contains the word TOKEN; only the exact SPLUNK_TOKEN method selects the token variable
+    (tmp_path / "config" / "connection.json").write_text('{"auth_method": "HEC_TOKEN_AND_SPLUNK_TOKEN"}')
     assert "NETSPOUT_SPLUNK_TOKEN" in s._env() and "NETSPOUT_SPLUNK_PASSWORD" not in s._env()
     s._write_info(state="healthy")
     assert "T0K" not in (tmp_path / "engine.json").read_text() and "S3C" not in (tmp_path / "engine.json").read_text()
@@ -63,3 +65,27 @@ def test_launcher_emits_nothing_to_stdout_when_idle(tmp_path, capsys):
     s.prepare()
     s._write_info(state="healthy")
     assert capsys.readouterr().out == ""
+
+
+def test_managed_status_probes_the_engine_instead_of_trusting_a_stale_file(monkeypatch):
+    monkeypatch.setattr(g, "MANAGED_PACKAGE", True)
+    monkeypatch.setattr(g.ipc, "engine_info", lambda *a, **k: {"state": "healthy", "restarts": 0})
+    monkeypatch.setattr(g.ipc, "request", lambda *a, **k: (_ for _ in ()).throw(ConnectionRefusedError()))
+    s = g.engine_status("k")
+    assert s["connected"] is False and "launcher not running" in s["state"]
+    monkeypatch.setattr(g.ipc, "request", lambda *a, **k: (200, b"{}"))
+    assert g.engine_status("k")["connected"] is True
+
+
+def test_restart_route_needs_the_admin_capability_and_reports_a_refusal(monkeypatch):
+    monkeypatch.setattr(g, "MANAGED_PACKAGE", True)
+    calls = []
+    monkeypatch.setattr(g, "_splunk", lambda url, key, data=None: calls.append(url.rsplit("/", 1)[1]))
+    monkeypatch.setattr("time.sleep", lambda *_: None)
+    post = lambda caps: (monkeypatch.setattr(g, "_capabilities", lambda _k: caps), g.NetSpoutGateway().handle(json.dumps({"method": "POST", "path_info": "/engine/restart", "session": {"authtoken": "s"}})))[1]["status"]
+    assert post({"netspout_view"}) == 403 and calls == []
+    assert post({"netspout_admin"}) == 202 and calls == ["disable", "enable"]
+    def refuse(*a, **k):
+        raise urllib.error.HTTPError("u", 403, "no", {}, io.BytesIO())
+    monkeypatch.setattr(g, "_splunk", refuse)
+    assert post({"netspout_admin"}) == 403

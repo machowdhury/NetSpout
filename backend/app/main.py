@@ -2493,6 +2493,7 @@ def _start_multi(payload: Dict[str, Any], cfg, index: str, name: str, run_id: st
     for src in sources:
         build(src, 1)    # grounding is checked once, up front, for every source
     eps = eps if eps is not None else 5
+    duration = _stream_limits(duration, eps)
     cursor = {"i": 0}
 
     def produce(n):
@@ -2512,6 +2513,18 @@ def zip_longest_flat(groups):
     """Round-robin over lists of different lengths: a[0], b[0], c[0], a[1], b[1], ..."""
     for i in range(max((len(g) for g in groups), default=0)):
         yield [g[i] for g in groups if i < len(g)]
+
+
+def _stream_limits(duration, eps):
+    """Install-level streaming bounds (set by the Splunk-managed launcher; unset elsewhere = no extra bound). A stream never runs unbounded and never exceeds the rate cap."""
+    cap_s, cap_eps = os.environ.get("NETSPOUT_MAX_STREAM_SECONDS"), os.environ.get("NETSPOUT_MAX_STREAM_EPS")
+    if cap_eps and eps is not None and eps > float(cap_eps):
+        raise ValueError("eps must be at most %s on this install" % cap_eps)
+    if cap_s:
+        if duration is not None and duration > float(cap_s):
+            raise ValueError("duration_s must be at most %s on this install" % cap_s)
+        duration = duration or float(cap_s)   # an open-ended stream gets the cap as its duration; Stop ends it sooner
+    return duration
 
 
 @app.post("/api/runs")
@@ -2632,6 +2645,7 @@ def runs_start(payload: Dict[str, Any]):
                     raise ValueError("duration_s must be between 1 and 86400")
                 _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id, payload.get("ingestion_profile"))
                 eps = eps if eps is not None else 5
+                duration = _stream_limits(duration, eps)
 
                 def produce(n, vendor=vendor, run_id=run_id):
                     es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id, payload.get("ingestion_profile"))

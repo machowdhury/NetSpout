@@ -167,6 +167,7 @@ class Supervisor:
     def _env(self):
         env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
         env.update(PULSEFORGE_GATEWAY_KEY=self.key, PULSEFORGE_REQUIRE_GATEWAY_KEY="1", PYTHONUNBUFFERED="1",
+                   NETSPOUT_MAX_STREAM_SECONDS=os.environ.get("NETSPOUT_MAX_STREAM_SECONDS", "3600"), NETSPOUT_MAX_STREAM_EPS=os.environ.get("NETSPOUT_MAX_STREAM_EPS", "200"),
                    NETSPOUT_CONFIG_DIR=str(self.dir / "config"), NETSPOUT_REPLAY_STATE=str(self.dir / "config" / "replay_sessions.json"),
                    NETSPOUT_RUNS_STATE=str(self.dir / "config" / "runs.json"))
         env.update(self._secret_env())
@@ -188,14 +189,14 @@ class Supervisor:
                 auth = json.loads((self.dir / "config" / "connection.json").read_text()).get("auth_method", "")
             except (OSError, ValueError):
                 pass
-            out["NETSPOUT_SPLUNK_TOKEN" if "token" in str(auth).lower() else "NETSPOUT_SPLUNK_PASSWORD"] = self._secrets["search_secret"]
+            out["NETSPOUT_SPLUNK_TOKEN" if str(auth).upper().endswith("SPLUNK_TOKEN") else "NETSPOUT_SPLUNK_PASSWORD"] = self._secrets["search_secret"]
         return out
 
     # child -------------------------------------------------------------------------------------------------------------------
     def _spawn(self):
         if self.sock.exists():
             self.sock.unlink()
-        self.proc = subprocess.Popen(self.command, env=self._env(), stdin=subprocess.DEVNULL)
+        self.proc = subprocess.Popen(self.command, env=self._env(), stdin=subprocess.DEVNULL, preexec_fn=lambda: os.nice(5))  # lower priority: splunkd comes first
         self._write_info(state="starting", pid=self.proc.pid)
 
     def healthy(self):

@@ -28,3 +28,11 @@ export function useEngineStatus(): EngineStatus | null {
   }, []);
   return s;
 }
+
+/** Managed install only: ask Splunk to stop and start the engine input again (admin). */
+export async function restartEngine(): Promise<string> {
+  const r = await fetch(apiUrl('/engine/restart'), { method: 'POST', headers: { Accept: 'application/json' } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof j?.detail === 'string' ? j.detail : `HTTP ${r.status}`);
+  return String(j.detail ?? 'Restart requested');
+}

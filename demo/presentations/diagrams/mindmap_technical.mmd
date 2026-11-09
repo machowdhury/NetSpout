@@ -1,0 +1,23 @@
+flowchart LR
+  R(("NetSpout<br/>PulseForge"))
+  R --> B1["<b>User experience</b>"]
+  R --> B2["<b>Telemetry catalog</b>"]
+  R --> B3["<b>Scenario orchestration</b>"]
+  R --> B4["<b>Generation engine</b>"]
+  R --> B5["<b>Delivery and ingestion</b>"]
+  R --> B6["<b>Splunk integration</b>"]
+  R --> B7["<b>Installation and operations</b>"]
+  B1 --> D1["• Splunk Web app, React UI in an iframe, Simple and Advanced modes<br/>• Command Center and Use Case Explorer<br/>• Generate: Quick Generate, Scenarios, Scenario Studio, Industry Studio<br/>• Observe: Live Runs, Dashboard Studio, Pipeline Health<br/>• Catalog views: Cisco 100, Cisco Coverage, Security Sources, Provenance<br/>• System: Connections, Destination Manager"]
+  B2 --> D2["• 349 sourcetypes from 88 vendors<br/>• Generator tier: 159 native engine, 143 recorded sample replay, 47 no generator yet<br/>• Provenance labels: native contract, Splunk contract, NetSpout schema<br/>• 33 replay packs"]
+  B3 --> D3["• 372 scenarios defined, 372 runnable on main (the released app: 148)<br/>• Incident packs, replay packs, NetFlow solution (10 NF scenarios), Cisco 100, industry packs<br/>• 224 declarative contracts: shared nodes, ordered phases, streams<br/>• Fidelity of the 224: 10 vendor-native, 30 mixed, 184 modeled"]
+  B4 --> D4["• SplunkLogEngine vendor log formatters<br/>• Native protocol engines: SNMP v2c, gNMI, NetFlow v9 and IPFIX encoders<br/>• Recorded sample replay<br/>• Modeled state events: netspout:scenario:state, labeled MODELED_NETSPOUT_SCHEMA<br/>• Fault injection and topology graph"]
+  B5 --> D5["• HEC: logs to the event index, metrics to a metric index<br/>• Native listeners: syslog, SNMP, gNMI<br/>• IPFIX over UDP to the GoFlow2 collector, then a forwarder to HEC<br/>• Delivery monitor: generated, attempts, accepted, rejected, indexed (verified)"]
+  B6 --> D6["• netspout_gateway: persistconn REST handler in the app<br/>• Dashboard Studio pf_* views, bound to a run ID<br/>• Verification search by run ID is the only source of indexed<br/>• Connection Center authorizes indexes before a run"]
+  B7 --> D7["• Released: netspout.spl app plus pulseforge-engine.tar.gz, Docker evaluation stack, netspout_cloud.spl (Splunk Cloud dashboards only, Splunk Cloud not validated)<br/>• Experimental, not released: single-package installer<br/>• Loopback-only listeners by default; engine health endpoint"]
+  classDef root fill:#0b3b4f,stroke:#0b3b4f,color:#fff,font-size:26px
+  classDef br fill:#1c7293,stroke:#1c7293,color:#fff,font-size:22px
+  classDef d fill:#eef6f8,stroke:#9cc3cf,color:#0b2e3b,font-size:17px
+  classDef x fill:#fff1e6,stroke:#d9480f,color:#5a1d00,font-size:17px
+  class R root
+  class B1,B2,B3,B4,B5,B6,B7 br
+  class D1,D2,D3,D4,D5,D6,D7 d

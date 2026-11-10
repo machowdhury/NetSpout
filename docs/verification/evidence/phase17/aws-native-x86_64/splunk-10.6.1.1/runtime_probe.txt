@@ -1,0 +1,6 @@
+3.13.11 OpenSSL 3.5.9 29 Sep 2026 x86_64
+grpc 1.74.0
+google.protobuf 6.33.6
+cryptography 44.0.2
+yaml 6.0.2
+pydantic_core MISSING ModuleNotFoundError

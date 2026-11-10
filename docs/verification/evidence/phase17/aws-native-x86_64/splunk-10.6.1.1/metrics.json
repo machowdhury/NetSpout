@@ -1,0 +1,30 @@
+{
+ "results": [
+  {
+   "name": "cisco:ios:mdt:metric",
+   "http": 200,
+   "run_id": "run-ab923142b02e",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 20,
+    "attempts": 20,
+    "accepted": 20,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "mstats_datapoints_before": 100,
+   "mstats_datapoints_after": 200,
+   "sample_metric_names": [
+    "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_fifteen_minute",
+    "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute",
+    "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
+    "interface_generic_counters.bandwidth",
+    "interface_generic_counters.bytes_received"
+   ],
+   "ok": true
+  }
+ ]
+}

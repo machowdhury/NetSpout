@@ -1,0 +1,42 @@
+Stopping splunkd...
+Shutting down.  Please wait, as this may take a few minutes.
+...
+Stopping splunk helpers...
+
+Done.
+procs after stop: 0
+
+Splunk> 4TW
+
+Checking prerequisites...
+	Checking http port [8000]: open
+	Checking mgmt port [8089]: open
+	Checking appserver port [127.0.0.1:8065]: open
+	Checking kvstore port [8191]: open
+	Checking configuration... Done.
+New certs have been generated in '/opt/splunk/etc/auth'.
+	Checking critical directories...	Done
+	Checking indexes...
+		Validated: _audit _configtracker _dm_summary _dsappevent _dsclient _dsphonehome _internal _introspection _metrics _metrics_rollup _telemetry _thefishbucket cisco_duo cisco_mdt_metrics dev_test_replay dev_test_replay_metrics history idx_network_ops idx_performance_metrics idx_security_fw idx_wireless_ops main netops_logs summary
+	Done
+	Checking filesystem compatibility...  Done
+	Checking conf files for problems...
+	Done
+	Checking default conf files for edits...
+	Validating installed files against hashes from '/opt/splunk/splunk-10.6.1.1-b2ae2962645c-linux-amd64-manifest'
+	All installed files intact.
+	Done
+All preliminary checks passed.
+
+Starting splunk server daemon (splunkd)...  
+Done
+
+
+Waiting for web server at http://127.0.0.1:8000 to be available......... Done
+
+
+If you get stuck, we're here to help.  
+Look for answers here: http://docs.splunk.com
+
+The Splunk web interface is at http://f6561114cd43:8000
+

@@ -1,0 +1,9 @@
+{
+ "baseline_main_269c4ee_summary": "= 30 failed, 5342 passed, 23 skipped, 28995 warnings, 33 errors, 2110 subtests passed in 292.03s (0:04:52) =",
+ "failing_on_baseline": 56,
+ "failing_on_pr": 57,
+ "only_failing_on_pr": [
+  "tests/test_no_secret_in_get_responses.py::test_get_routes_never_return_configured_secrets"
+ ],
+ "only_failing_on_baseline": []
+}

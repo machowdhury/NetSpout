@@ -29,11 +29,13 @@ The bundled wheels (cp313, manylinux x86_64) loaded and ran on both. The differe
 | Uninstall | 0 processes, data kept, state directory left | same |
 | Browser (headless Chromium) | 4 passed | 4 passed |
 | **Sustained at the 200 events/s ceiling** | 15 min requested: 132,350 events, **147 events/s achieved (ceiling not reached)**, 0 rejected, all indexed and verified; engine RSS 216 → 287 MB then flat from minute 8; splunkd ≤ 503 MB; search latency 0.03–0.37 s | 5 min requested: 16,975 events, **57 events/s achieved**, 0 rejected, all verified; engine RSS 217 → 242 MB |
+| **AWS native x86_64, Splunk 10.6.1.1** (m6i.2xlarge, ca-central-1, Docker 29.1.3, tested package gzip `d28719f3…`, tar content identical to approved `99c23bbb…`) | install via Splunk Web, restart, census, 0 idle events (fresh / after runs / after upgrade), browser 4/4, events/metrics/scenario/stream/authz, engine kill, launcher recovery, Splunk stop/start, restart, upgrade from v2.0.1 (local config identical), uninstall (0 processes, state dir left): **all pass** | |
+| **Sustained at the 200 events/s ceiling, native, 3,600 s** | 448,075 events, **124.5 events/s achieved (ceiling NOT reached; criterion ≥190 FAILED)**; 0 rejected, 0 dropped, all indexed within 0.1 s of the last send; engine at ~92% of one core (the engine is single-process and CPU-bound); engine RSS growth 0.3%, splunkd 4.1%; 0 restarts; search latency 0.03-0.15 s; 6 HttpListener WARNs in the window | |
 
 ## Not met / open
 
-- **200 events/s was never reached**; both runs were limited by emulation and by the competing container. They show no loss, no leak plateau problem within 15 minutes and Splunk staying responsive, but they do **not** validate the 200 events/s ceiling or the 3,600 s cap. This gate needs a native Linux x86_64 host with nothing else running.
-- No native x86_64 run. No distributed Splunk, Windows, macOS, aarch64, Splunk Cloud, Python 3.9.
+- **200 events/s was not reached on native hardware either**: 124.5 events/s over the full 3,600 s on an m6i.2xlarge, with the engine saturating one core. The supported ceiling must be stated as ~120 events/s per engine, or the engine must be made faster, before any release. (Earlier emulated runs: were limited by emulation and by the competing container. They show no loss, no leak plateau problem within 15 minutes and Splunk staying responsive, but they do **not** validate the 200 events/s ceiling or the 3,600 s cap. This gate needs a native host.)  The 3,600 s run itself was loss-free and stable.
+- Native x86_64 ran once, on one instance. No distributed Splunk, Windows, macOS, aarch64, Splunk Cloud, Python 3.9.
 - AppInspect 4.4.0 (artifact `4bf1d214…`): baseline v2.0.1 **8** failures, new package **9** (same 8 plus `check_aarch64_compatibility`: three x86_64 `.so` files). Cloud tag: 8 and 8. The package is not suitable for Splunkbase or Splunk Cloud.
 - Regression: 9 failed / 4110 passed / 5 skipped on the Phase 16 selection plus the files touched here; the 9 are the known v2.0.1 failures.
 - The 10.2.7 upgrade and 10.6.1 stop/start/uninstall each ran once, on one container.
@@ -41,6 +43,13 @@ The bundled wheels (cp313, manylinux x86_64) loaded and ran on both. The differe
 
 ## Gates before any merge or release
 
-1. Native Linux x86_64, Splunk 10.6.1 (and 10.2.7): rerun the suite and the 200 events/s test for the full 3,600 s cap on an otherwise idle host.
+1. Either raise engine throughput to ≥190 events/s (it is CPU-bound at ~125) or lower the documented and enforced ceiling to what was measured; native 10.2.7 is still untested.
 2. Review of the AppInspect failures and the self-distribution decision.
 3. Review of the support statement and release notes drafts (`SUPPORT_STATEMENT.md`, `RELEASE_NOTES_DRAFT.md`).
+
+## AWS run deviations (recorded, not hidden)
+- First launch blocked by an organization SCP until the `splunkit_data_classification=private` and `splunkit_environment_type=non-prd` tags were added; partial resources were cleaned.
+- Census step printed FAILED once because Splunk's own listeners (5433/5434/6432) appeared after the "before" snapshot; a direct socket listing shows the engine only on its Unix socket.
+- Regression: harness needed `git init` (2 tests need a repo). Selection: 9 failed / 4108 passed (the known 9). Full tree excluding live-lab tests: 33 failed vs 30 on main; the one PR-only failure, `test_get_routes_never_return_configured_secrets`, fails only under the 30 s timeout cap and passes alone with a 600 s timeout.
+- Tested gzip differs from the approved one (zlib build difference); tar contents are identical.
+- Cleanup initially read a new, empty state file because the date rolled over at 00:00 UTC; it deleted nothing, I re-ran with the original run name and verified instance, volume, security group, role, profile and bucket are gone and 0 tagged instances remain.

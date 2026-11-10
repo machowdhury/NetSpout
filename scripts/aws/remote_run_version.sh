@@ -6,13 +6,13 @@ set -u
 LABEL=$1; IMAGE=$2; SUSTAIN=${3:-3600}
 W=/opt/p17; H=$W/harness; PY=$W/venv/bin/python; PKG=$W/build/netspout.spl; BASE=$W/baseline_netspout.spl
 SEC=$W/secrets/$LABEL; mkdir -p "$SEC"; chmod 700 "$W/secrets" "$SEC"
-OUTREL=docs/verification/evidence/phase17/aws-native-x86_64/run2-1d60daa/$LABEL; OUT=$H/$OUTREL; mkdir -p "$OUT"
+OUTREL=docs/verification/evidence/phase17/aws-native-x86_64/run2-bdc4084/$LABEL; OUT=$H/$OUTREL; mkdir -p "$OUT"
 C=p17n-${LABEL//[^a-zA-Z0-9]/-}; M=https://127.0.0.1:18089; BASEURL=http://127.0.0.1:18000
 RES=$OUT/steps.log; : > "$RES"
 umask 077
 python3 -c "import secrets;print(secrets.token_urlsafe(18)+'Aa1')" > $SEC/pw; python3 -c "import secrets;print(secrets.token_urlsafe(14)+'Aa1')" > $SEC/viewer
 PW=$(cat $SEC/pw)
-export P17_MGMT=$M P17_PASSWORD_FILE=$SEC/pw P17_TARGET=aws-native-x86_64/run2-1d60daa/$LABEL P17_NATIVE=1 PLAYWRIGHT_BASE_URL=$BASEURL
+export P17_MGMT=$M P17_PASSWORD_FILE=$SEC/pw P17_TARGET=aws-native-x86_64/run2-bdc4084/$LABEL P17_NATIVE=1 PLAYWRIGHT_BASE_URL=$BASEURL
 HOSTLABEL="AWS EC2 $(curl -s -m 3 -H "X-aws-ec2-metadata-token: $(curl -s -m 3 -X PUT http://169.254.169.254/latest/api/token -H 'X-aws-ec2-metadata-token-ttl-seconds: 60')" http://169.254.169.254/latest/meta-data/instance-type) $(uname -m) native, Docker $(docker --version | cut -d' ' -f3 | tr -d ,)"
 
 step() { local n=$1; shift; local t=$(date -u +%FT%TZ); if "$@" >> $OUT/step_$n.log 2>&1; then echo "$t PASS $n" | tee -a $RES; else echo "$t FAIL $n (rc=$?)" | tee -a $RES; fi; }
@@ -39,7 +39,7 @@ step users_and_indexes bash -c "$(declare -f sget); PW='$PW'; M=$M; sget /servic
 # 2. install through Splunk Web, restart, census, idle ------------------------------------------------------------------
 step install_via_splunk_web bash -c "cd $H/frontend && P17_PASSWORD_FILE=$SEC/pw P17_UPLOAD=$PKG npx playwright test tests/phase17-splunk-web.spec.ts -g 'install netspout.spl' --reporter=line && cp test-results/phase17-upload.png $OUT/splunk_web_install_app_from_file.png"
 step restart_after_install bash -c "$(declare -f sget wait_splunk); PW='$PW'; M=$M; sget /services/server/control/restart -X POST -o /dev/null; wait_splunk; curl -sk -u admin:$PW $M/services/netspout_gateway/engine"
-step census bash -c "cd $H && $PY scripts/phase17_census.py $C aws-native-x86_64/run2-1d60daa/$LABEL $W/ports_before_$LABEL.fmt $(sha256sum $PKG | cut -d' ' -f1) '$HOSTLABEL'"
+step census bash -c "cd $H && $PY scripts/phase17_census.py $C aws-native-x86_64/run2-bdc4084/$LABEL $W/ports_before_$LABEL.fmt $(sha256sum $PKG | cut -d' ' -f1) '$HOSTLABEL'"
 P17_LABEL=fresh_install_unconfigured step idle_fresh acc idle:3
 
 # 3. UI and API acceptance ----------------------------------------------------------------------------------------------
@@ -80,11 +80,11 @@ restart_splunk
 docker exec -u root $C sh -c 'cd /opt/splunk/etc/apps/netspout/local && ls && md5sum * | sort' > $UP/after_upgrade_state.txt
 diff $UP/before_upgrade_state.txt $UP/after_upgrade_state.txt > $UP/local_diff.txt && echo "LOCAL_CONFIG_IDENTICAL" >> $UP/local_diff.txt
 { echo "version now: $(sget '/servicesNS/nobody/system/apps/local/netspout?output_mode=json' | python3 -c "import sys,json;print(json.load(sys.stdin)['entry'][0]['content']['version'])")"; gw /engine; } > $UP/after_upgrade_engine.txt
-step census_after_upgrade bash -c "cd $H && $PY scripts/phase17_census.py $C aws-native-x86_64/run2-1d60daa/$LABEL/upgrade_from_2.0.1 $W/ports_before_$LABEL.fmt $(sha256sum $PKG | cut -d' ' -f1) '$HOSTLABEL'"
-P17_TARGET=aws-native-x86_64/run2-1d60daa/$LABEL/upgrade_from_2.0.1 P17_LABEL=after_upgrade_unconfigured step idle_after_upgrade acc idle:3
+step census_after_upgrade bash -c "cd $H && $PY scripts/phase17_census.py $C aws-native-x86_64/run2-bdc4084/$LABEL/upgrade_from_2.0.1 $W/ports_before_$LABEL.fmt $(sha256sum $PKG | cut -d' ' -f1) '$HOSTLABEL'"
+P17_TARGET=aws-native-x86_64/run2-bdc4084/$LABEL/upgrade_from_2.0.1 P17_LABEL=after_upgrade_unconfigured step idle_after_upgrade acc idle:3
 step browser_spec_after_upgrade pw_ui -g "Connections|first-run|Generate Data"
 cp $H/frontend/test-results/*.png $H/frontend/test-results/*.txt $UP/ 2>/dev/null
-P17_TARGET=aws-native-x86_64/run2-1d60daa/$LABEL/upgrade_from_2.0.1 step acceptance_after_upgrade acc events metrics scenario
+P17_TARGET=aws-native-x86_64/run2-bdc4084/$LABEL/upgrade_from_2.0.1 step acceptance_after_upgrade acc events metrics scenario
 
 # 7. wrap up (the container and its volumes are disposable) -------------------------------------------------------------
 docker stop $C >/dev/null 2>&1; docker rm $C >/dev/null 2>&1; docker volume rm p17n_${C}_etc p17n_${C}_var >/dev/null 2>&1

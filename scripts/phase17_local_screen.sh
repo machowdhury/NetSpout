@@ -16,8 +16,11 @@ step container_start bash -c "docker rm -f $C 2>/dev/null; docker volume rm ${C}
 step users_and_indexes bash -c "$(declare -f sget); PW='$PW'; M=$M; sget /services/authentication/users -d name=p17_viewer -d password=\$(cat $SEC/viewer) -d roles=user -o /dev/null; sget /services/data/indexes -d name=dev_test_replay -d datatype=event -o /dev/null; sget /services/data/indexes -d name=dev_test_replay_metrics -d datatype=metric -o /dev/null"
 step install_via_splunk_web bash -c "cd $ROOT/frontend && P17_PASSWORD_FILE=$SEC/pw P17_UPLOAD=$PKG npx playwright test tests/phase17-splunk-web.spec.ts -g 'install netspout.spl' --reporter=line"
 step restart bash -c "$(declare -f sget); PW='$PW'; M=$M; sget /services/server/control/restart -X POST -o /dev/null; sleep 30; until [ \"\$(curl -sk -o /dev/null -w '%{http_code}' -u admin:$PW $M/services/server/info)\" = 200 ]; do sleep 10; done; sleep 90; curl -sk -u admin:$PW $M/services/netspout_gateway/engine"
+step idle_fresh bash -c "cd $ROOT && P17_LABEL=fresh_install_unconfigured $PY scripts/phase17_acceptance.py idle:2"
 step browser_spec_configure bash -c "cd $ROOT/frontend && rm -rf test-results && P17_PASSWORD_FILE=$SEC/pw P17_VIEWER_PASSWORD=\$(cat $SEC/viewer) P17_HEC_TOKEN=$HECTOK npx playwright test tests/phase17-splunk-web.spec.ts --reporter=list"
+step acceptance_focused bash -c "cd $ROOT && $PY scripts/phase17_acceptance.py events metrics authz"
 step sustained bash -c "cd $ROOT && $PY scripts/phase17_sustained.py $C $SUS 'local arm64 Mac, emulated amd64 Splunk (screening: $LABEL)'"
+step idle_after_load bash -c "cd $ROOT && P17_LABEL=after_sustained $PY scripts/phase17_acceptance.py idle:2"
 cp $ROOT/docs/verification/evidence/phase17/screening/$LABEL/sustained_200eps.json $OUT/ 2>/dev/null
 step container_stop bash -c "docker rm -f $C; docker volume rm ${C}_etc ${C}_var"
 echo "$(date -u +%FT%TZ) DONE $LABEL" | tee -a $LOG

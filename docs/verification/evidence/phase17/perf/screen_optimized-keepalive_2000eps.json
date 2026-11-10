@@ -1,0 +1,28 @@
+{
+ "label": "optimized-keepalive",
+ "requested_eps": 2000.0,
+ "seconds": 30.0,
+ "attempts": 50775,
+ "accepted": 50775,
+ "rejected": 0,
+ "unknown": 0,
+ "achieved_eps": 1692.1,
+ "cpu_pct_of_one_core": 28.2,
+ "cpu_ms_per_event": 0.167,
+ "peak_rss_mb": 183.2,
+ "final_state": "COMPLETED",
+ "received": {
+  "events": 50775,
+  "distinct_raw_events": 50775,
+  "distinct_ratio": 1.0,
+  "all_have_sourcetype_index_host": true,
+  "run_id_on_every_event": true,
+  "send_to_receive_lag_s": {
+   "min": 0.0002,
+   "p50": 0.0003,
+   "p99": 0.0007,
+   "max": 0.0141
+  },
+  "event_time_monotonic_non_decreasing": true
+ }
+}

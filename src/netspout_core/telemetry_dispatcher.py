@@ -9,6 +9,9 @@ Implements concurrent routing and export to:
 
 import socket
 import json
+import http.client
+import threading
+import urllib.parse
 import time
 import urllib.request
 import urllib.error
@@ -233,6 +236,50 @@ def _http_summary(pipeline: str, status) -> str:
     return f"{pipeline} HTTP response"
 
 
+_HEC_CTX = {}
+
+
+def _hec_ssl_context(insecure: bool):
+    """One shared TLS context per verification mode. Building one loads the whole CA store, which cost more than the request itself (profiled: ~50% of a 200 events/s stream);
+    a context is thread-safe and holds no per-request state, so verification behaviour is unchanged."""
+    ctx = _HEC_CTX.get(insecure)
+    if ctx is None:
+        ctx = ssl.create_default_context()
+        if insecure:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+        ctx = _HEC_CTX.setdefault(insecure, ctx)
+    return ctx
+
+
+_pool = threading.local()
+_KEEPALIVE_IDLE_S = 5.0   # a connection idle longer than this is replaced before use, so a collector-side idle close is never mistaken for a lost event
+
+
+class hec_keepalive:
+    """Streaming scope: inside it, HEC events from this thread reuse one connection per destination instead of a TCP+TLS handshake each (profiled: ~40% of a stream).
+    Nothing else changes: same payload, token, TLS policy and outcome classes. A failure on a reused connection is UNKNOWN and never re-sent. Proxied destinations keep the urllib path."""
+    def __enter__(self):
+        _pool.on, _pool.conns = True, {}
+        return self
+
+    def __exit__(self, *exc):
+        for conn, _t, _p in _pool.conns.values():
+            try:
+                conn.close()
+            except Exception:
+                pass
+        _pool.on, _pool.conns = False, {}
+
+
+def _proxied(url):
+    u = urllib.parse.urlsplit(url)
+    try:
+        return bool(urllib.request.getproxies().get(u.scheme)) and not urllib.request.proxy_bypass(u.hostname or "")
+    except Exception:
+        return True
+
+
 class TelemetryDispatcher:
     """
     High-throughput universal telemetry dispatcher with concurrent multi-pipeline routing.
@@ -283,6 +330,66 @@ class TelemetryDispatcher:
             self.stats["last_error"] = "HEC dispatch failed"
         return outcome
 
+    def _send_hec_pooled(self, payload, url, token, ctx):
+        u = urllib.parse.urlsplit(url)
+        key = (u.scheme, u.netloc)
+        ent = _pool.conns.get(key)
+        if ent is not None and ent[2]:
+            return None
+        now = time.monotonic()
+        reused = ent is not None and now - ent[1] <= _KEEPALIVE_IDLE_S
+        if ent is not None and not reused:
+            ent[0].close()
+            ent = None
+        if ent is None:
+            if u.scheme not in ("http", "https") or not u.hostname:
+                return None
+            if _proxied(url):
+                _pool.conns[key] = (None, now, True)
+                return None
+            conn = (http.client.HTTPSConnection(u.hostname, u.port, timeout=2.0, context=ctx) if u.scheme == "https"
+                    else http.client.HTTPConnection(u.hostname, u.port, timeout=2.0))
+            try:
+                conn.connect()
+            except ssl.SSLCertVerificationError:
+                conn.close()
+                return HecOutcome(False, "HEC TLS verification failed", HEC_FAILED, None, "tls_verification")
+            except (OSError, http.client.HTTPException) as e:
+                conn.close()
+                if "CERTIFICATE_VERIFY_FAILED" in str(e) or "certificate verify failed" in str(e):
+                    return HecOutcome(False, "HEC TLS verification failed", HEC_FAILED, None, "tls_verification")
+                return None        # nothing was sent
+        else:
+            conn = ent[0]
+        self.stats["hec_dispatching"] += 1
+        try:
+            conn.request("POST", (u.path or "/") + ("?" + u.query if u.query else ""), body=payload,
+                         headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"})
+            resp = conn.getresponse()
+            status, text = resp.status, resp.read().decode("utf-8", errors="replace")
+            will_close = resp.will_close
+        except Exception:
+            conn.close()
+            _pool.conns.pop(key, None)
+            return HecOutcome(False, "HEC response unavailable", HEC_UNKNOWN, None, "no_answer_after_send")
+        finally:
+            self.stats["hec_dispatching"] -= 1
+        if will_close:
+            conn.close()
+            _pool.conns.pop(key, None)
+        else:
+            _pool.conns[key] = (conn, time.monotonic(), False)
+        message = _http_summary("HEC", status)
+        if status >= 300:
+            if status < 500:
+                return HecOutcome(False, message, HEC_FAILED, status, "auth_rejected" if status in (401, 403) else "request_rejected")
+            if status == 503 and _hec_body_code(text) == 9:
+                return HecOutcome(False, message, HEC_FAILED, status, "collector_busy")
+            return HecOutcome(False, message, HEC_UNKNOWN, status, "collector_error_uncertain")
+        if status < 300 and _hec_body_code(text) == 0:
+            return HecOutcome(True, message, HEC_ACCEPTED, status, None)
+        return HecOutcome(True, message, HEC_UNKNOWN, status, "unexpected_response")
+
     def _send_hec(self, event, hec_url, token, ssl_verify, allow_insecure_tls) -> HecOutcome:
         # Alternative endpoints are tried only while nothing has reached a collector. Once a request may have
         # been delivered (no answer, or an answer that cannot be read), it is never re-sent: UNKNOWN.
@@ -302,10 +409,12 @@ class TelemetryDispatcher:
             payload = json.dumps(event).encode("utf-8")
         except (TypeError, ValueError) as e:
             return HecOutcome(False, "HEC invalid payload", HEC_FAILED, None, "invalid_payload")
-        ctx = ssl.create_default_context()
-        if allow_insecure_tls or not ssl_verify:
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
+        ctx = _hec_ssl_context(bool(allow_insecure_tls or not ssl_verify))
+
+        if getattr(_pool, "on", False):
+            pooled = self._send_hec_pooled(payload, hec_url, token, ctx)
+            if pooled is not None:
+                return pooled      # None = could not connect: the normal path below tries the alternative endpoints
 
         last_error, error_class = "HEC endpoint unreachable", "unreachable"
         for cand_url in candidates:

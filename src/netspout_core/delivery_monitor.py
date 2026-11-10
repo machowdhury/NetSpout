@@ -153,7 +153,9 @@ class DeliveryRun:
                     wait = nxt - time.monotonic()
                     if wait > 0 and self._cancel.wait(wait):
                         break
-                    nxt = max(nxt, time.monotonic()) + gap
+                    nxt += gap     # keep the schedule: lateness from a slow send or timer overshoot is made up, so the average equals the requested rate (never above it)
+                    if time.monotonic() - nxt > 1.0:
+                        nxt = time.monotonic()      # after a pause or a long stall, resume at the requested rate instead of bursting to catch up
                 try:
                     state, err = it.send()
                 except Exception as exc:   # a sender fault is a rejected event with a visible reason, never a silent loss
@@ -242,6 +244,11 @@ class ContinuousRun(DeliveryRun):
         self.unbounded = not max_events and not duration_s
         self.counts["generated"] = 0
         self._fails = 0
+
+    def _work(self):
+        from netspout_core.telemetry_dispatcher import hec_keepalive
+        with hec_keepalive():      # one connection per destination for the life of the stream (see hec_keepalive)
+            super()._work()
 
     def _source(self):
         while not self._cancel.is_set():

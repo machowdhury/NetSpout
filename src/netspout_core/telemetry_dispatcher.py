@@ -332,7 +332,7 @@ class TelemetryDispatcher:
 
     def _send_hec_pooled(self, payload, url, token, ctx):
         u = urllib.parse.urlsplit(url)
-        key = (u.scheme, u.netloc)
+        key = (u.scheme, u.netloc, ctx is _HEC_CTX.get(True), token)     # a connection is never shared across destinations, TLS verification modes or tokens
         ent = _pool.conns.get(key)
         if ent is not None and ent[2]:
             return None

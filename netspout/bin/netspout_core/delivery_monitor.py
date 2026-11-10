@@ -73,6 +73,9 @@ class StreamAbort(RuntimeError):
     """A stream ended deliberately with a user-facing reason."""
 
 
+_MAX_CATCHUP_S = 0.1   # at most 100 ms of lateness is recovered (20 events at 200/s), so no 1-second window exceeds the request by more than that
+
+
 class DeliveryRun:
     """A monitored, finite batch delivered one event at a time with exact accounting; supports pause, resume and stop."""
 
@@ -153,9 +156,9 @@ class DeliveryRun:
                     wait = nxt - time.monotonic()
                     if wait > 0 and self._cancel.wait(wait):
                         break
-                    nxt += gap     # keep the schedule: lateness from a slow send or timer overshoot is made up, so the average equals the requested rate (never above it)
-                    if time.monotonic() - nxt > 1.0:
-                        nxt = time.monotonic()      # after a pause or a long stall, resume at the requested rate instead of bursting to catch up
+                    nxt += gap     # keep the schedule: small lateness (timer overshoot, a slow send) is made up so the average equals the requested rate
+                    if time.monotonic() - nxt > _MAX_CATCHUP_S:
+                        nxt = time.monotonic()      # after a longer stall, resume at the requested rate: no catch-up burst beyond _MAX_CATCHUP_S worth of events
                 try:
                     state, err = it.send()
                 except Exception as exc:   # a sender fault is a rejected event with a visible reason, never a silent loss

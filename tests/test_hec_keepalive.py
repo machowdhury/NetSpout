@@ -125,3 +125,50 @@ def test_unreachable_destination_is_failed_unreachable(d):
 def test_tls_context_is_built_once_per_mode():
     assert td._hec_ssl_context(True) is td._hec_ssl_context(True) and td._hec_ssl_context(False) is td._hec_ssl_context(False)
     assert td._hec_ssl_context(True).verify_mode.name == "CERT_NONE" and td._hec_ssl_context(False).verify_mode.name == "CERT_REQUIRED"
+
+
+def test_connections_are_not_shared_across_tokens_or_tls_modes(d):
+    h = Hec()
+    try:
+        with td.hec_keepalive():
+            d._send_hec(EV, h.url, "tokA", True, False)
+            d._send_hec(EV, h.url, "tokA", True, False)
+            assert len(h.conns) == 1                       # same destination, token and mode: reused
+            d._send_hec(EV, h.url, "tokB", True, False)    # another credential gets its own connection
+            d._send_hec(EV, h.url, "tokA", False, True)    # another TLS verification mode gets its own connection
+            assert len(h.conns) == 3
+    finally:
+        h.stop()
+
+
+def test_connections_are_not_shared_across_destinations(d):
+    a, b = Hec(), Hec()
+    try:
+        with td.hec_keepalive():
+            d._send_hec(EV, a.url, "tok", True, False)
+            d._send_hec(EV, b.url, "tok", True, False)
+            d._send_hec(EV, a.url, "tok", True, False)
+        assert (a.posts, b.posts, len(a.conns), len(b.conns)) == (2, 1, 1, 1)
+    finally:
+        a.stop(); b.stop()
+
+
+@pytest.mark.parametrize("kw", [dict(drop_after_read=True), dict(body=b'{"text":"x","code":5}'), dict(status=500, body=b"{}")])
+def test_ambiguous_delivery_in_a_real_stream_is_never_counted_as_accepted(d, kw):
+    """End to end: pooled sends through the stream's own outcome mapping (backend/app/main._hec_item). UNKNOWN stays UNKNOWN: not accepted, not re-sent."""
+    from app import main
+    from netspout_core.delivery_monitor import ContinuousRun, Item
+    h = Hec(**kw)
+    try:
+        def produce(n):
+            def disp():
+                o = d._send_hec(EV, h.url, "tok", True, False)
+                return {"hec": {"state": o.state, "success": o[0], "message": o[1], "error_class": o.error_class}}
+            return [main._hec_item(disp, "t", None) for _ in range(n)]
+        r = ContinuousRun("sourcetype", "x:y", "x:y", "dest", "idx", [], produce=produce, max_events=6, eps_limit=1000).start()
+        r.wait(30)
+        c = r.snapshot()["counters"]
+        assert c["accepted"] == 0 and c["unknown"] == c["attempts"] == 6, c
+        assert h.posts == 6                       # exactly one POST per event: nothing was silently re-sent
+    finally:
+        h.stop()

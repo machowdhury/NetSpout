@@ -42,15 +42,32 @@ interval = 0
 """
 
 
+LOCK_FILE = ROOT / "scripts" / "single_package_lock.json"   # every wheel (transitive dependencies included) pinned by file name and sha256
+
+
 def download(variant, cache):
+    """Fetch exactly the locked wheels for the variant: --no-deps --require-hashes, from an empty directory, and fail if the result is not the locked set.
+    Nothing is resolved at build time, so the package cannot change because a dependency released a new version."""
+    lock = json.loads(LOCK_FILE.read_text()).get(variant)
+    if not lock:
+        return False, ["no pinned lock for variant %s (add it to %s deliberately)" % (variant, LOCK_FILE.name)]
     py, _, arch = variant.split("-", 2)
     dest = cache / variant
-    dest.mkdir(parents=True, exist_ok=True)
-    cmd = [sys.executable, "-m", "pip", "download", "-q", "-d", str(dest), "--python-version", py[2:], "--only-binary=:all:"]
+    shutil.rmtree(dest, ignore_errors=True)
+    dest.mkdir(parents=True)
+    req = cache / (variant + ".requirements.txt")
+    req.write_text("".join("%s==%s --hash=sha256:%s\n" % (w["file"].split("-")[0], w["file"].split("-")[1], w["sha256"]) for w in lock))
+    cmd = [sys.executable, "-m", "pip", "download", "-q", "-d", str(dest), "--python-version", py[2:], "--only-binary=:all:", "--no-deps", "--require-hashes"]
     for p in PLAT[arch]:
         cmd += ["--platform", p]
-    r = subprocess.run(cmd + REQ, capture_output=True, text=True)
-    return r.returncode == 0, (r.stderr or "").strip().splitlines()[-1:] or [""]
+    r = subprocess.run(cmd + ["-r", str(req)], capture_output=True, text=True)
+    if r.returncode != 0:
+        return False, (r.stderr or "").strip().splitlines()[-1:] or [""]
+    got = {w.name: hashlib.sha256(w.read_bytes()).hexdigest() for w in dest.glob("*.whl")}
+    want = {w["file"]: w["sha256"] for w in lock}
+    if got != want:
+        return False, ["downloaded wheels differ from the lock: %s" % sorted(set(got) ^ set(want) or {n for n in got if got[n] != want.get(n)})]
+    return True, [""]
 
 
 def third_party_imports(engine_dir, bin_dir):
@@ -75,7 +92,7 @@ def build(variants):
     app = stage / "netspout"
     shutil.copytree(ROOT / "netspout", app, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store", "local"))
     shutil.copytree(ROOT / "backend" / "app", app / "bin" / "engine" / "app", ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
-    manifest = {"variants": {}, "requirements": REQ}
+    manifest = {"variants": {}, "requirements": REQ, "lock_file": LOCK_FILE.name, "lock_sha256": hashlib.sha256(LOCK_FILE.read_bytes()).hexdigest()}
     for v in variants:
         ok, note = download(v, cache)
         if not ok:

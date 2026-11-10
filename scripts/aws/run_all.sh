@@ -25,7 +25,7 @@ stage() {
 }
 bootstrap() { ssm_bg bootstrap "set -e; mkdir -p $W/harness; tar -xzf $W/harness.tar.gz -C $W/harness scripts/aws/remote_bootstrap.sh && bash $W/harness/scripts/aws/remote_bootstrap.sh $P17_DEADMAN_MIN $P17_IMG_PRIMARY"; ssm_wait bootstrap || { ssm_tail bootstrap 60; exit 1; }; }
 build() { ssm_bg build "bash $W/harness/scripts/aws/remote_build.sh $P17_APPROVED_COMMIT $P17_EXPECTED_GZ $P17_EXPECTED_TAR"; ssm_wait build || true; ssm_tail build 40; }
-primary() { ssm_bg run_primary "bash $W/harness/scripts/aws/remote_run_version.sh $LBL_PRIMARY $P17_IMG_PRIMARY $P17_SUSTAIN_PRIMARY"; ssm_wait run_primary || true; ssm_run "tail -n 60 $W/harness/docs/verification/evidence/phase17/aws-native-x86_64/$LBL_PRIMARY/steps.log" 60; collect; }
+primary() { ssm_bg run_primary "bash $W/harness/scripts/aws/remote_run_version.sh $LBL_PRIMARY $P17_IMG_PRIMARY $P17_SUSTAIN_PRIMARY"; ssm_wait run_primary || true; ssm_run "tail -n 60 $W/harness/docs/verification/evidence/phase17/aws-native-x86_64/run2-1d60daa/$LBL_PRIMARY/steps.log" 60; collect; }
 checks() { ssm_bg checks "bash $W/harness/scripts/aws/remote_appinspect.sh && bash $W/harness/scripts/aws/remote_regression.sh"; ssm_wait checks || true; ssm_tail checks 30; collect; }
 collect() { bash "$HERE/05_collect.sh"; }
 "${1:?stage|bootstrap|build|checks|primary|collect}"

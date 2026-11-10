@@ -1,0 +1,379 @@
+{
+ "results": [
+  {
+   "name": "sustained_200_eps",
+   "host": "local arm64 Mac, emulated amd64 Splunk (screening: cand-1d60daa)",
+   "native": false,
+   "run_id": "run-8c9eb9c2c8a6",
+   "requested_duration_s": 180,
+   "requested_eps": 200,
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 35975,
+    "attempts": 35975,
+    "accepted": 35975,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "elapsed_s": 180.1,
+   "mean_attempts_per_s": 199.8,
+   "engine_verification": "VERIFIED",
+   "independent_indexed_delta": 35975,
+   "dropped_events_accepted_minus_indexed": 0,
+   "indexed_eps_per_full_minute": {
+    "min": 199.7,
+    "mean": 199.8,
+    "max": 200.0,
+    "minutes": 2
+   },
+   "indexed_events_per_second": {
+    "max_per_s": "204",
+    "p99_per_s": "202",
+    "p50_per_s": "200",
+    "seconds_with_events": "182"
+   },
+   "attempted_events": 35975,
+   "indexing_lag_vs_event_time_s": {
+    "count": "35975",
+    "p50": "-0.4982119",
+    "p95": "-0.0485955",
+    "p99": "-0.0088559",
+    "max": "0.0517437"
+   },
+   "lag_note": "_indextime minus the event's own timestamp; negative values mean the engine stamps events slightly ahead of when they are sent, so read p95/max as an upper bound only",
+   "seconds_from_last_event_sent_to_all_indexed": 0.2,
+   "splunk_internal_warnings_in_window": [],
+   "blocked_queues_in_window": [],
+   "idle_before": {
+    "engine": [
+     235304,
+     2.8,
+     null
+    ],
+    "launcher": [
+     44076,
+     0.3,
+     null
+    ],
+    "splunkd": [
+     477008,
+     14.0,
+     null
+    ]
+   },
+   "engine_rss_kb": {
+    "min": 235372,
+    "max": 235612,
+    "first_quarter_mean": 235475,
+    "last_quarter_mean": 235596
+   },
+   "engine_cpu_pct": {
+    "mean": 13.8,
+    "max": 19.5
+   },
+   "splunkd_cpu_pct": {
+    "mean": 24.1,
+    "max": 29.5
+   },
+   "splunkd_rss_kb_max": 494508,
+   "disk_before": {
+    "index_bytes": 51578,
+    "all_indexes_bytes": 16685248
+   },
+   "disk_after": {
+    "index_bytes": 12417568,
+    "all_indexes_bytes": 30641932
+   },
+   "search_latency_s": [
+    0.03,
+    0.32,
+    0.05,
+    0.11
+   ],
+   "samples": [
+    {
+     "t": 0,
+     "state": "RUNNING",
+     "attempts": 2,
+     "accepted": 2,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 0.0,
+     "recent_errors": 0,
+     "search_latency_s": 0.03,
+     "engine_rss_kb": 235372,
+     "engine_cpu_pct": 2.8,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.3,
+     "splunkd_rss_kb": 477116,
+     "splunkd_cpu_pct": 14.1,
+     "index_bytes": 54983,
+     "all_indexes_bytes": 16689196
+    },
+    {
+     "t": 15,
+     "state": "RUNNING",
+     "attempts": 3048,
+     "accepted": 3048,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.02,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235524,
+     "engine_cpu_pct": 6.2,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 486528,
+     "splunkd_cpu_pct": 17.1
+    },
+    {
+     "t": 30,
+     "state": "RUNNING",
+     "attempts": 6070,
+     "accepted": 6070,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.98,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235528,
+     "engine_cpu_pct": 8.7,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 484592,
+     "splunkd_cpu_pct": 19.4
+    },
+    {
+     "t": 46,
+     "state": "RUNNING",
+     "attempts": 9070,
+     "accepted": 9070,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 193.94,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235544,
+     "engine_cpu_pct": 10.9,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 483884,
+     "splunkd_cpu_pct": 21.3
+    },
+    {
+     "t": 61,
+     "state": "RUNNING",
+     "attempts": 12093,
+     "accepted": 12093,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": 0.32,
+     "engine_rss_kb": 235544,
+     "engine_cpu_pct": 12.5,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 483364,
+     "splunkd_cpu_pct": 22.6
+    },
+    {
+     "t": 76,
+     "state": "RUNNING",
+     "attempts": 15178,
+     "accepted": 15178,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.98,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235556,
+     "engine_cpu_pct": 14.0,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 482172,
+     "splunkd_cpu_pct": 24.2
+    },
+    {
+     "t": 91,
+     "state": "RUNNING",
+     "attempts": 18200,
+     "accepted": 18200,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.03,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235556,
+     "engine_cpu_pct": 15.2,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 485396,
+     "splunkd_cpu_pct": 25.5
+    },
+    {
+     "t": 106,
+     "state": "RUNNING",
+     "attempts": 21201,
+     "accepted": 21201,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.96,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235556,
+     "engine_cpu_pct": 16.2,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 483372,
+     "splunkd_cpu_pct": 26.4
+    },
+    {
+     "t": 121,
+     "state": "RUNNING",
+     "attempts": 24226,
+     "accepted": 24226,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.83,
+     "recent_errors": 0,
+     "search_latency_s": 0.05,
+     "engine_rss_kb": 235560,
+     "engine_cpu_pct": 17.2,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 482988,
+     "splunkd_cpu_pct": 27.4,
+     "index_bytes": 8252145,
+     "all_indexes_bytes": 26367659
+    },
+    {
+     "t": 137,
+     "state": "RUNNING",
+     "attempts": 27283,
+     "accepted": 27283,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235564,
+     "engine_cpu_pct": 17.9,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 493836,
+     "splunkd_cpu_pct": 28.0
+    },
+    {
+     "t": 152,
+     "state": "RUNNING",
+     "attempts": 30305,
+     "accepted": 30305,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235572,
+     "engine_cpu_pct": 18.5,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 494432,
+     "splunkd_cpu_pct": 28.7
+    },
+    {
+     "t": 167,
+     "state": "RUNNING",
+     "attempts": 33328,
+     "accepted": 33328,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 235604,
+     "engine_cpu_pct": 19.2,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 494344,
+     "splunkd_cpu_pct": 29.3
+    },
+    {
+     "t": 182,
+     "state": "COMPLETED",
+     "attempts": 35975,
+     "accepted": 35975,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 0.0,
+     "recent_errors": 0,
+     "search_latency_s": 0.11,
+     "engine_rss_kb": 235612,
+     "engine_cpu_pct": 19.5,
+     "launcher_rss_kb": 44076,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 494508,
+     "splunkd_cpu_pct": 29.5
+    }
+   ],
+   "indexed_per_minute": [
+    {
+     "m": "1794351780",
+     "count": "9978"
+    },
+    {
+     "m": "1794351840",
+     "count": "11979"
+    },
+    {
+     "m": "1794351900",
+     "count": "12000"
+    },
+    {
+     "m": "1794351960",
+     "count": "2018"
+    }
+   ],
+   "ok": true,
+   "note": "cpu_pct is ps's lifetime average under emulation: relative only",
+   "reached_ceiling": true,
+   "criteria": {
+    "avg_indexed_eps_at_least_190": {
+     "value": 199.8,
+     "pass": true
+    },
+    "zero_rejected_or_dropped": {
+     "rejected": 0,
+     "unknown": 0,
+     "dropped": 0,
+     "pass": true
+    },
+    "no_catchup_bursts": {
+     "max_events_in_any_second": "204",
+     "rule": "<= 230 (request 200 + 100 ms of recovery + bin-edge rounding)",
+     "pass": true
+    },
+    "no_unresolved_indexing_backlog": {
+     "seconds_to_all_indexed": 0.2,
+     "blocked_queues": [],
+     "pass": true
+    },
+    "no_uncontrolled_worker_restarts": {
+     "restarts_before": 0,
+     "restarts_after": 0,
+     "pass": true
+    },
+    "no_significant_resource_instability": {
+     "engine_rss_growth_last_vs_second_quarter": 0.0,
+     "splunkd_rss_growth": 0.023,
+     "rule": "growth <= 15% (engine) and <= 25% (splunkd), no process restarts",
+     "pass": true
+    }
+   },
+   "criteria_all_pass": true
+  }
+ ]
+}

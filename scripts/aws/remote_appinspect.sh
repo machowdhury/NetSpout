@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs ON the instance: AppInspect 4.4.0 (precert and cloud tags) on the released v2.0.1 package and on the package built here; writes full reports and a disposition summary.
 set -u
-W=/opt/p17; OUT=$W/harness/docs/verification/evidence/phase17/aws-native-x86_64/appinspect; mkdir -p $OUT
+W=/opt/p17; OUT=$W/harness/docs/verification/evidence/phase17/aws-native-x86_64/run2-1d60daa/appinspect; mkdir -p $OUT
 cp $W/baseline_netspout.spl $OUT/baseline_netspout.spl; cp $W/build/netspout.spl $OUT/single_netspout.spl
 cat > $OUT/run.sh <<'IN'
 set -e

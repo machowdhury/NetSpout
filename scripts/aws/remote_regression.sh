@@ -2,7 +2,7 @@
 # Runs ON the instance: (1) the documented regression selection (39 files from Phase 16 + the files added or touched by Phase 17), (2) the whole tests/ tree except tests/lab.
 # Known v2.0.1 failures are listed so any NEW failure stands out.
 set -u
-W=/opt/p17; H=$W/harness; OUT=$H/docs/verification/evidence/phase17/aws-native-x86_64/regression; mkdir -p $OUT
+W=/opt/p17; H=$W/harness; OUT=$H/docs/verification/evidence/phase17/aws-native-x86_64/run2-1d60daa/regression; mkdir -p $OUT
 python3 -m venv $W/venv-test && $W/venv-test/bin/pip install -q -r $H/backend/requirements.txt pytest pytest-timeout pyyaml
 cd $H
 SEL="$(sed 's#^#tests/#' docs/verification/evidence/phase16/python_selection_files.txt | tr '\n' ' ') tests/test_phase17_secrets.py tests/test_phase17_limits.py tests/test_gateway_capabilities.py tests/test_gateway_key.py tests/test_no_secret_in_get_responses.py tests/test_engine_launcher.py tests/test_phase101_gateway_engine.py tests/test_phase4f_splunk_app_surface.py tests/test_phase13_release_candidate.py"

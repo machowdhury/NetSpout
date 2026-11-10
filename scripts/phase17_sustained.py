@@ -111,6 +111,7 @@ t_end = server_now()
 indexed_delta = a.count('index=%s sourcetype="%s"' % (a.IDX, ST[0])) - before
 window = "_index_earliest=%d _index_latest=%d earliest=0" % (t_start, t_end)
 per_minute = a.search('index=%s sourcetype="%s" %s | eval m=floor(_indextime/60)*60 | stats count by m | sort m' % (a.IDX, ST[0], window), "0")
+persec = a.search('index=%s sourcetype="%s" %s | bin _time span=1s | stats count by _time | stats max(count) as max_per_s perc99(count) as p99_per_s perc50(count) as p50_per_s count as seconds_with_events' % (a.IDX, ST[0], window), "0")   # events per wall-clock second (by event time): a catch-up burst would show as a peak above the request
 latency = a.search('index=%s sourcetype="%s" %s | eval lag=_indextime-_time | stats count perc50(lag) as p50 perc95(lag) as p95 perc99(lag) as p99 max(lag) as max' % (a.IDX, ST[0], window), "0")
 warn = a.search('index=_internal source=*splunkd.log* earliest=%d latest=%d (log_level=WARN OR log_level=ERROR) (component=HttpInputDataHandler OR component=HttpListener OR component=TcpInputProc) | stats count by component, log_level' % (t_start, t_end), "0")
 blocked = a.search('index=_internal source=*metrics.log* group=queue blocked=true earliest=%d latest=%d | stats count by name' % (t_start, t_end), "0")
@@ -124,7 +125,7 @@ res = {"name": "sustained_200_eps", "host": host, "native": NATIVE, "run_id": ri
        "elapsed_s": final.get("elapsed_s"), "mean_attempts_per_s": round(c["attempts"] / max(1, final.get("elapsed_s") or samples[-1]["t"]), 1),
        "engine_verification": v.get("status"), "independent_indexed_delta": indexed_delta, "dropped_events_accepted_minus_indexed": c["accepted"] - indexed_delta,
        "indexed_eps_per_full_minute": {"min": round(min(eps_min), 1) if eps_min else None, "mean": round(statistics.mean(eps_min), 1) if eps_min else None, "max": round(max(eps_min), 1) if eps_min else None, "minutes": len(eps_min)},
-       "indexing_lag_vs_event_time_s": latency[0] if latency else None, "lag_note": "_indextime minus the event's own timestamp; negative values mean the engine stamps events slightly ahead of when they are sent, so read p95/max as an upper bound only",
+       "indexed_events_per_second": persec[0] if persec else None, "attempted_events": c["attempts"], "indexing_lag_vs_event_time_s": latency[0] if latency else None, "lag_note": "_indextime minus the event's own timestamp; negative values mean the engine stamps events slightly ahead of when they are sent, so read p95/max as an upper bound only",
        "seconds_from_last_event_sent_to_all_indexed": settle, "splunk_internal_warnings_in_window": warn, "blocked_queues_in_window": blocked,
        "idle_before": idle_baseline, "engine_rss_kb": {"min": min(rss), "max": max(rss), "first_quarter_mean": round(statistics.mean(rss[:q])), "last_quarter_mean": round(statistics.mean(rss[-q:]))},
        "engine_cpu_pct": stat("engine"), "splunkd_cpu_pct": stat("splunkd"), "splunkd_rss_kb_max": max(x["splunkd_rss_kb"] for x in samples if x.get("splunkd_rss_kb")),
@@ -143,6 +144,7 @@ total_eps = indexed_delta / max(1, final.get("elapsed_s") or samples[-1]["t"])
 res["criteria"] = {   # declared before the run (AWS_NATIVE_VALIDATION_PLAN.md)
     "avg_indexed_eps_at_least_190": {"value": round(total_eps, 1), "pass": total_eps >= 190},
     "zero_rejected_or_dropped": {"rejected": c["rejected"], "unknown": c["unknown"], "dropped": c["accepted"] - indexed_delta, "pass": c["rejected"] == 0 and c["unknown"] == 0 and c["accepted"] == indexed_delta},
+    "no_catchup_bursts": {"max_events_in_any_second": (persec[0] or {}).get("max_per_s") if persec else None, "rule": "<= 230 (request 200 + 100 ms of recovery + bin-edge rounding)", "pass": bool(persec) and float(persec[0].get("max_per_s") or 1e9) <= 230},
     "no_unresolved_indexing_backlog": {"seconds_to_all_indexed": settle, "blocked_queues": blocked, "pass": settle is not None and settle <= 60 and not blocked},
     "no_uncontrolled_worker_restarts": {"restarts_before": eng_before.get("restarts"), "restarts_after": eng_after.get("restarts"), "pass": eng_after.get("restarts") == eng_before.get("restarts") and eng_after.get("state") == "healthy"},
     "no_significant_resource_instability": {"engine_rss_growth_last_vs_second_quarter": None if rss_growth is None else round(rss_growth, 3), "splunkd_rss_growth": None if sd_growth is None else round(sd_growth, 3),

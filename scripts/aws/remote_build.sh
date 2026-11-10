@@ -4,7 +4,7 @@
 # The uncompressed-tar hash is reported too: gzip bytes can differ between zlib builds while the content is identical. Whatever is built here is the artifact tested on this host.
 set -eu
 COMMIT=$1; EXP_GZ=$2; EXP_TAR=$3
-W=/opt/p17; PY=$W/venv/bin/python; SRC=$W/approved-src; OUT=$W/harness/docs/verification/evidence/phase17/aws-native-x86_64/build; mkdir -p $OUT
+W=/opt/p17; PY=$W/venv/bin/python; SRC=$W/approved-src; OUT=$W/harness/docs/verification/evidence/phase17/aws-native-x86_64/run2-1d60daa/build; mkdir -p $OUT
 rm -rf $SRC && mkdir -p $SRC && gzip -dc $W/approved-src.tar.gz | tar -x -C $SRC
 GOT=$(gzip -dc $W/approved-src.tar.gz | git get-tar-commit-id)
 [ "$GOT" = "$COMMIT" ] || { echo "approved source archive is commit $GOT, expected $COMMIT"; exit 2; }

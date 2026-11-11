@@ -6,7 +6,7 @@ Note on the region: the authorization text named `ca-central-2` in places. That 
 
 ## Outcome of the launch attempt (2026-11-09): BLOCKED, nothing was run
 
-`ec2:RunInstances` in ca-central-1 was refused with an **explicit deny in an AWS Organizations service control policy** (`p-6a2kjycb`, organization `o-i9m79xugh0`) for IAM user `mchowdhury`. No instance, volume or Splunk test was started. The bucket, role, instance profile and security group created just before the call were deleted and the deletion verified (0 instances, 0 volumes, 0 tagged security groups, no `p17-` role or bucket remain). No other region or workaround was tried. Charges: none material. Resuming needs the organization administrator to permit this action (or an approved different account/region); then re-run from `01_create.sh`.
+`ec2:RunInstances` in ca-central-1 was refused with an **explicit deny in an AWS Organizations service control policy** (policy and organization identifiers redacted) for the operator's IAM user. No instance, volume or Splunk test was started. The bucket, role, instance profile and security group created just before the call were deleted and the deletion verified (0 instances, 0 volumes, 0 tagged security groups, no `p17-` role or bucket remain). No other region or workaround was tried. Charges: none material. Resuming needs the organization administrator to permit this action (or an approved different account/region); then re-run from `01_create.sh`.
 
 ## Preflight (read-only, done before provisioning)
 

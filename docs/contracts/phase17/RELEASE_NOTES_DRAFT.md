@@ -8,4 +8,4 @@
 
 **Not supported.** Splunk Cloud, distributed Splunk, non-x86_64 or non-Linux hosts, native-hardware performance claims.
 
-**Known issues.** 9 AppInspect failures (not Splunkbase-submittable); credential saving needs the admin role; uninstall leaves `var/lib/netspout`; sustained streaming measured 124.5 events/s on native x86_64 (3,600 s, no loss), below the 200 events/s cap.
+**Known issues.** 9 AppInspect failures (not Splunkbase-submittable); credential saving needs the admin role; uninstall leaves `var/lib/netspout`; sustained streaming measured 200.0 events/s for 3,600 s on native x86_64 Splunk 10.6.1.1 (720,025 of 720,025 indexed, none lost); the supported scope is Linux x86_64 on 10.6.1.1, and 10.2.7 was tested on an earlier candidate under emulation only.

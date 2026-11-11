@@ -1,0 +1,1 @@
+{"state": "healthy", "pid": 7261, "restarts": 1, "last_error": "engine exited with code -9", "transport": "uds", "socket": "/opt/splunk/var/lib/netspout/engine.sock", "secrets": "loaded"}

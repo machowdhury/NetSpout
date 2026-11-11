@@ -66,7 +66,7 @@ def search(spl, earliest="-24h", user="admin", password=None):
         for line in r.read().decode().splitlines():
             if line.strip():
                 d = json.loads(line)
-                if d.get("result"):
+                if d.get("result") and not d.get("preview"):
                     rows.append(d["result"])
     return rows
 

@@ -1,0 +1,429 @@
+...............................................F................................................................................................ [  3%]
+...........................................F..........ssF..... [  5%]
+............................................................... [  6%]
+.................................................F...................... [  8%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 27%]
+........................................................................ [ 29%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 46%]
+........................................................................ [ 48%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+........................................................................ [ 69%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+.s...................................................................... [ 81%]
+........................................................................ [ 83%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 92%]
+......s.......s......................................................... [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+...................................................s.................... [ 99%]
+...............................s.                                        [100%]
+=================================== FAILURES ===================================
+__________________ TestGate6Integrity.test_07_successful_hec ___________________
+
+self = <test_gate6_integrity.TestGate6Integrity testMethod=test_07_successful_hec>
+
+    def test_07_successful_hec(self):
+        """Verify live or reachable HEC returns REACHABLE with latency measurement."""
+        token = os.environ.get("NETSPOUT_HEC_TOKEN")
+        if not token:
+            self.skipTest("NETSPOUT_HEC_TOKEN is required for live HEC validation")
+        res = self.dispatcher.test_connection(
+            endpoint=os.environ.get(
+                "NETSPOUT_HEC_URL",
+                "https://127.0.0.1:8088/services/collector",
+            ).removesuffix("/event"),
+            token=token,
+            index='idx_network_ops',
+            allow_insecure_tls=True
+        )
+>       self.assertIn(res['status'], ['REACHABLE', 'VERIFIED'])
+E       AssertionError: 'ERROR' not found in ['REACHABLE', 'VERIFIED']
+
+tests/test_gate6_integrity.py:187: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub1_ot_proxy_host_hunt') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub1_ot_proxy_host_hunt', 'code': 'SEC-UB1-01', 'name': 'OT Tamper to Container Host Hunt (Universe Batch-1)', 'display_name': 'OT Tamper to Container Host Hunt (Universe Batch-1)', 'category': 'SECURITY', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Converged OT/IT hunt: Nozomi Networks OT IDS alerts (PLC program change), Symantec/Broadcom ProxySG denied exfil attempts, Wazuh manager rootcheck alerts and Docker engine container lifecycle events - authentic vendor-native RAW with correlation on HEC fields only.', 'attack_vector': 'PLC program modification (OT), T1048 exfiltration over web proxy, T1564 hidden files and directories.', 'defense_mechanism': 'OT threat detection (Nozomi), web proxy verdicts (ProxySG), rootcheck host IDS (Wazuh), container runtime audit (Docker).', 'generation_mode': 'SCENARIO_DERIVED', 'sourcetypes': ['nozomi:universal_alert', 'bluecoat:proxysg:access:file', 'wazuh:alerts', 'docker_events'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['nozomi_networks', 'broadcom_symantec', 'wazuh', 'docker'], 'telemetry_requirements': ['hec_event'], 'generation_modes': ['SCENARIO_DERIVED'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['Nozomi OT IDS SIGN:PROGRAM:CHANGE alert', 'ProxySG OBSERVED baseline category hit', 'ProxySG TCP_DENIED exfil attempt (DENIED)', 'Wazuh rootcheck hidden process + hidden file alerts', 'Docker container/network lifecycle events'], 'expected_phases': ['baseline', 'fault', 'propagate', 'validate'], 'use_case': {'objective': 'universe batch-1 multi-vendor hunt across OT IDS, web proxy, host IDS and container runtime RAW', 'required_telemetry': ['nozomi:universal_alert', 'bluecoat:proxysg:access:file']}, 'phases': [{'phase': 'BASELINE', 'name': 'Nominal operations', 'duration_ticks': 2, 'description': 'Container lifecycle + observed proxy transaction.', 'expected_observations': ['docker_events create', 'proxysg OBSERVED']}, {'phase': 'FAULT', 'name': 'OT program tamper', 'duration_ticks': 1, 'description': 'Nozomi SIGN:PROGRAM:CHANGE alert on PLC edit.', 'expected_observations': ['nozomi:universal_alert SIGN:PROGRAM:CHANGE']}, {'phase': 'PROPAGATE', 'name': 'Exfil attempt + container churn', 'duration_ticks': 2, 'description': 'Denied ProxySG exfil attempt and container network attach.', 'expected_observations': ['bluecoat:proxysg:access:file TCP_DENIED']}, {'phase': 'VALIDATE', 'name': 'Host response + recovery', 'duration_ticks': 2, 'description': 'Wazuh rootcheck alerts and host investigation.', 'expected_observations': ['wazuh:alerts rule 521/510']}], 'vendor_tech_details': [{'vendor': 'nozomi_networks', 'sourcetype': 'nozomi:universal_alert'}, {'vendor': 'broadcom_symantec', 'sourcetype': 'bluecoat:proxysg:access:file'}, {'vendor': 'wazuh', 'sourcetype': 'wazuh:alerts'}, {'vendor': 'docker', 'sourcetype': 'docker_events'}], 'raw_evidence': 'catalog/raw_reference/universe_batch1/ + provenance.json (universe:batch1 entries)', 'registry_reference': 'catalog/universe_batch1.json'} : Missing telemetry_model in ub1_ot_proxy_host_hunt
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub2_cloud_identity_mail_hunt') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub2_cloud_identity_mail_hunt', 'code': 'SEC-UB2-01', 'name': 'Ub2 Cloud Identity Mail Hunt', 'display_name': 'Ub2 Cloud Identity Mail Hunt', 'category': 'SECURITY', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['hashicorp_vault_audit_log', 'Confluence:audit log', 'proofpoint_tap_siem'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['hashicorp', 'atlassian', 'proofpoint'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['Vault audit: audit_request, audit_response', 'Confluence Cloud audit: space_created, group_membership_added', 'Targeted Attack Protection SIEM: malware_message_blocked, phishing_message_blocked'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch2.json'} : Missing telemetry_model in ub2_cloud_identity_mail_hunt
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub2_ot_edge_routing_observation') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub2_ot_edge_routing_observation', 'code': 'SEC-UB2-02', 'name': 'Ub2 Ot Edge Routing Observation', 'display_name': 'Ub2 Ot Edge Routing Observation', 'category': 'INFRASTRUCTURE', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['traefik:access:json', 'claroty:cef', 'nginx:access', 'mikrotik:routeros'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['traefik', 'claroty', 'nginx_f5', 'mikrotik'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['Traefik Proxy access: http_access', 'CTD CEF: new_asset, asset_information_change, health', 'NGINX combined access log: http_access', 'RouterOS console log: administrator_login, ospf_hello_sent'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch2.json'} : Missing telemetry_model in ub2_ot_edge_routing_observation
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub2_database_backup_integrity') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub2_database_backup_integrity', 'code': 'SEC-UB2-03', 'name': 'Ub2 Database Backup Integrity', 'display_name': 'Ub2 Database Backup Integrity', 'category': 'INFRASTRUCTURE', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['mongodb:log', 'veeam_vbr_syslog'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['mongodb', 'veeam'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['MongoDB structured server log: server_start, index_build', 'Backup & Replication: backup_job_started, backup_job_completed, malware_detected'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch2.json'} : Missing telemetry_model in ub2_database_backup_integrity
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub3_identity_runtime_audit') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub3_identity_runtime_audit', 'code': 'SEC-UB3-01', 'name': 'Ub3 Identity Runtime Audit', 'display_name': 'Ub3 Identity Runtime Audit', 'category': 'INFRASTRUCTURE', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['SysdigSecureEvents', 'sailpoint_identitynow', 'ccx:beyondinsight:passwordsafe', 'tenable:io:audit_logs'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['sysdig', 'sailpoint', 'beyondtrust', 'tenable'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['Sysdig Secure runtime and Kubernetes audit: runtime_activity, kubernetes_audit', 'Identity Security Cloud audit: password_update, machine_identity_created', 'Password Safe audit: secret_folder_added', 'Vulnerability Management audit: password_authentication_failure, session_created, session_deleted'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch3.json'} : Missing telemetry_model in ub3_identity_runtime_audit
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub3_multivendor_edge_observation') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub3_multivendor_edge_observation', 'code': 'SEC-UB3-02', 'name': 'Ub3 Multivendor Edge Observation', 'display_name': 'Ub3 Multivendor Edge Observation', 'category': 'INFRASTRUCTURE', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['pfsense:filterlog', 'imperva:securesphere:cef', 'barracuda:waf:web_firewall', 'darktrace'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['pfsense_netgate', 'imperva', 'barracuda', 'darktrace'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['pfSense filterlog: ipv4_tcp_block, ipv4_udp_pass, ipv6_udp_block', 'SecureSphere CEF: administrator_login, database_audit', 'Web Application Firewall: parameter_profile_violation, url_profile_violation', 'Model breach alerts: uncommon_outbound_model, antigena_internal_transfer'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch3.json'} : Missing telemetry_model in ub3_multivendor_edge_observation
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ TestGate95TelemetrySemantics.test_01_all_scenarios_have_telemetry_semantics_metadata (scenario='ub3_database_message_audit') _
+
+self = <test_gate9_5_telemetry_semantics.TestGate95TelemetrySemantics testMethod=test_01_all_scenarios_have_telemetry_semantics_metadata>
+
+    def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        scenarios = self.catalog.list_scenarios()
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
+    
+        for sc in scenarios:
+            sc_id = sc.get("id")
+            with self.subTest(scenario=sc_id):
+>               self.assertIn("telemetry_model", sc, f"Missing telemetry_model in {sc_id}")
+E               AssertionError: 'telemetry_model' not found in {'id': 'ub3_database_message_audit', 'code': 'SEC-UB3-03', 'name': 'Ub3 Database Message Audit', 'display_name': 'Ub3 Database Message Audit', 'category': 'INFRASTRUCTURE', 'ecosystem': 'mixed_vendor', 'maturity': 'CONTRACTED', 'description': 'Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.', 'generation_mode': 'SCENARIO_DERIVED', 'generation_modes': ['SCENARIO_DERIVED'], 'sourcetypes': ['oracle:audit:text', 'ibm:mq:errorlog'], 'default_topology_id': 'mixed_sase', 'topology_id': 'mixed_sase', 'difficulty': 'ADVANCED', 'estimated_duration_sec': 40, 'vendor_scope': ['oracle', 'ibm_mq'], 'telemetry_requirements': ['hec_event'], 'affected_entities': ['mixed_sase'], 'expected_observations': ['Database native audit: sql_select_audit', 'IBM MQ native error log: queue_manager_created, control_command_issued'], 'expected_phases': ['baseline', 'observe', 'validate'], 'phases': [{'phase': 'BASELINE', 'name': 'Baseline', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'OBSERVE', 'name': 'Observe', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}, {'phase': 'VALIDATE', 'name': 'Validate', 'duration_ticks': 1, 'description': 'Fixture-backed native source observation'}], 'registry_reference': 'catalog/universe_batch3.json'} : Missing telemetry_model in ub3_database_message_audit
+
+tests/test_gate9_5_telemetry_semantics.py:61: AssertionError
+_ Phase12SecurityPackTests.test_dashboard_recipe_families_integrate_without_regression _
+
+self = <test_phase12_agentic_supply_chain.Phase12SecurityPackTests testMethod=test_dashboard_recipe_families_integrate_without_regression>
+
+    def test_dashboard_recipe_families_integrate_without_regression(self):
+        catalog = NetSpoutCatalog()
+        dashboard = catalog.get_dashboard_catalog()
+        recipe_ids = {item["recipe_id"] for item in dashboard["recipes"]}
+>       self.assertEqual(len(dashboard["recipes"]), 30)
+E       AssertionError: 34 != 30
+
+tests/test_phase12_agentic_supply_chain.py:152: AssertionError
+__________ test_release_packages_are_not_tracked_and_are_git_ignored ___________
+
+    def test_release_packages_are_not_tracked_and_are_git_ignored():
+        """Policy A (Phase 13): generated packages and manifests are build outputs; the builders keep writing them to the repository root, where Git ignores them."""
+        names = ["netspout.spl", "netspout_cloud.spl", "netspout.spl.manifest.json", "netspout_cloud.spl.manifest.json", "pulseforge-engine.tar.gz", "SHA256SUMS", "BUILD_MANIFEST.json"]
+        tracked = subprocess.run(["git", "ls-files"] + names, cwd=ROOT, capture_output=True, text=True).stdout.split()
+        assert not tracked, tracked
+        ignored = subprocess.run(["git", "check-ignore"] + names, cwd=ROOT, capture_output=True, text=True).stdout.split()
+>       assert sorted(ignored) == sorted(names)
+E       AssertionError: assert [] == ['BUILD_MANIF...st.json', ...]
+E         
+E         Right contains 7 more items, first extra item: 'BUILD_MANIFEST.json'
+E         Use -v to get more diff
+
+tests/test_phase12_release_consistency.py:67: AssertionError
+_ TestPhase8BArtifactIsolation.test_guarded_run_preserves_accepted_artifacts_and_writes_manifest _
+
+self = <test_phase8b_artifact_isolation.TestPhase8BArtifactIsolation testMethod=test_guarded_run_preserves_accepted_artifacts_and_writes_manifest>
+
+    def test_guarded_run_preserves_accepted_artifacts_and_writes_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_root = Path(directory) / "current-run"
+>           exit_code, manifest = run_guarded(
+                [sys.executable, "-c", "print('isolated')"],
+                repo_root=self.root,
+                current_run_root=run_root,
+            )
+
+tests/test_phase8b_artifact_isolation.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/run_isolated_tests.py:54: in run_guarded
+    status_before = _git_status(root, protected)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/run_isolated_tests.py:101: in _git_status
+    completed = subprocess.run(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = None, check = True
+popenargs = (['git', 'status', '--porcelain=v1', '--', 'catalog', 'backend/app/catalog_data', ...],)
+kwargs = {'cwd': PosixPath('/opt/p17/harness'), 'text': True, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout is given, and the process takes too long, a TimeoutExpired
+        exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', 'status', '--porcelain=v1', '--', 'catalog', 'backend/app/catalog_data', 'netspout/catalog', 'netspout/bin/catalog_data', 'netspout/bin/netspout_core/catalog_data', 'netspout/appserver/static/vendor_catalog.json', 'docs/acceptance', 'docs/implementation/images']' returned non-zero exit status 128.
+
+/usr/lib/python3.12/subprocess.py:571: CalledProcessError
+=============================== warnings summary ===============================
+../venv-test/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /opt/p17/venv-test/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_cisco_asa_ta_contract.py: 414 warnings
+tests/test_delivery_monitor.py: 10 warnings
+tests/test_gate10_scenario_promotion_wave2.py: 258 warnings
+tests/test_gate6_integrity.py: 56 warnings
+tests/test_gate9_5_telemetry_semantics.py: 59 warnings
+tests/test_gate9_scenario_promotion.py: 320 warnings
+tests/test_phase101_multi_source.py: 86 warnings
+tests/test_phase6_capability.py: 79 warnings
+tests/test_phase8_real_formats.py: 247 warnings
+tests/test_scenario_contracts.py: 9359 warnings
+tests/test_scenario_dashboards.py: 887 warnings
+tests/test_scenario_quality.py: 3225 warnings
+tests/test_snmp_metric_typed_generation.py: 1 warning
+tests/test_gateway_key.py: 163 warnings
+  /opt/p17/harness/src/netspout_core/log_engine.py:32: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + " UTC"
+
+tests/test_cisco_asa_ta_contract.py: 414 warnings
+tests/test_delivery_monitor.py: 10 warnings
+tests/test_gate10_scenario_promotion_wave2.py: 198 warnings
+tests/test_gate6_integrity.py: 42 warnings
+tests/test_gate9_5_telemetry_semantics.py: 33 warnings
+tests/test_gate9_scenario_promotion.py: 157 warnings
+tests/test_phase101_multi_source.py: 38 warnings
+tests/test_phase6_capability.py: 21 warnings
+tests/test_scenario_contracts.py: 6990 warnings
+tests/test_scenario_dashboards.py: 642 warnings
+tests/test_scenario_quality.py: 2431 warnings
+tests/test_gateway_key.py: 1 warning
+  /opt/p17/harness/src/netspout_core/log_engine.py:36: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_gate9_5_telemetry_semantics.py: 2 warnings
+tests/test_phase6_capability.py: 16 warnings
+tests/test_scenario_contracts.py: 410 warnings
+tests/test_scenario_dashboards.py: 41 warnings
+tests/test_scenario_quality.py: 123 warnings
+  /opt/p17/harness/src/netspout_core/log_engine.py:132: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    f"1,{datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')},001801000000,TRAFFIC,{pan_action},2304,"
+
+tests/test_gate9_5_telemetry_semantics.py: 4 warnings
+tests/test_scenario_contracts.py: 140 warnings
+tests/test_scenario_dashboards.py: 14 warnings
+tests/test_scenario_quality.py: 42 warnings
+  /opt/p17/harness/src/netspout_core/log_engine.py:842: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now_utc = datetime.utcnow()
+
+tests/test_gate9_5_telemetry_semantics.py: 4 warnings
+tests/test_gate9_scenario_promotion.py: 14 warnings
+tests/test_scenario_contracts.py: 80 warnings
+tests/test_scenario_dashboards.py: 8 warnings
+tests/test_scenario_quality.py: 24 warnings
+  /opt/p17/harness/src/netspout_core/log_engine.py:796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    f"1,{datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')},001801000000,THREAT,vulnerability,2304,"
+
+tests/test_gate9_5_telemetry_semantics.py: 3 warnings
+tests/test_gate9_scenario_promotion.py: 21 warnings
+tests/test_scenario_contracts.py: 250 warnings
+tests/test_scenario_dashboards.py: 25 warnings
+tests/test_scenario_quality.py: 75 warnings
+  /opt/p17/harness/src/netspout_core/log_engine.py:171: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    nginx_time = datetime.utcnow().strftime("%d/%b/%Y:%H:%M:%S +0000")
+
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_09_negative_validation_mixed_sase
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_09_negative_validation_mixed_sase
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_09_negative_validation_mixed_sase
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_09_negative_validation_mixed_sase
+  /opt/p17/harness/tests/test_gate9_scenario_promotion.py:256: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    LogEntry(**{**l.dict(), "status": "normal"}) if l.status == "degraded" else l
+
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_12_negative_validation_sql_injection
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_12_negative_validation_sql_injection
+  /opt/p17/harness/tests/test_gate9_scenario_promotion.py:310: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    LogEntry(**{**l.dict(), "action": "allowed"}) if l.action == "blocked" else l
+
+tests/test_gate9_scenario_promotion.py::TestGate9ScenarioPromotion::test_13_negative_validation_ddos_attack
+  /opt/p17/harness/tests/test_gate9_scenario_promotion.py:338: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    LogEntry(**{**l.dict(), "action": "allowed"}) if l.action == "blocked" else l
+
+tests/test_no_secret_in_get_responses.py::test_get_routes_never_return_configured_secrets
+  /opt/p17/harness/backend/app/main.py:1558: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    return cfg.dict() if hasattr(cfg, "dict") else cfg
+
+tests/test_no_secret_in_get_responses.py::test_get_routes_never_return_configured_secrets
+  /opt/p17/harness/backend/app/main.py:1578: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    "health": health.dict() if hasattr(health, "dict") else health,
+
+tests/test_no_secret_in_get_responses.py::test_get_routes_never_return_configured_secrets
+  /opt/p17/harness/backend/app/main.py:1551: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    return detailed.dict() if hasattr(detailed, "dict") else detailed
+
+tests/test_no_secret_in_get_responses.py::test_get_routes_never_return_configured_secrets
+  /opt/p17/harness/backend/app/main.py:1271: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    return {"active": True, "manifest": active.dict() if hasattr(active, "dict") else active}
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_gate6_integrity.py::TestGate6Integrity::test_07_successful_hec
+SUBFAILED(scenario='ub1_ot_proxy_host_hunt') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub2_cloud_identity_mail_hunt') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub2_ot_edge_routing_observation') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub2_database_backup_integrity') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub3_identity_runtime_audit') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub3_multivendor_edge_observation') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+SUBFAILED(scenario='ub3_database_message_audit') tests/test_gate9_5_telemetry_semantics.py::TestGate95TelemetrySemantics::test_01_all_scenarios_have_telemetry_semantics_metadata
+FAILED tests/test_phase12_agentic_supply_chain.py::Phase12SecurityPackTests::test_dashboard_recipe_families_integrate_without_regression
+FAILED tests/test_phase12_release_consistency.py::test_release_packages_are_not_tracked_and_are_git_ignored
+FAILED tests/test_phase8b_artifact_isolation.py::TestPhase8BArtifactIsolation::test_guarded_run_preserves_accepted_artifacts_and_writes_manifest
+11 failed, 4107 passed, 7 skipped, 27449 warnings, 84 subtests passed in 198.09s (0:03:18)

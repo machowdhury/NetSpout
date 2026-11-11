@@ -1,0 +1,13 @@
+{
+ "host_label": "AWS EC2 m6i.2xlarge x86_64 native, Docker 29.1.3",
+ "image": "splunk/splunk:10.6.1@sha256:2a7cf9d2e8a2226773a9fac95b5e0e2cc8752496abfb134a21bdf8f67c9ee44d",
+ "uname": "Linux 7.0.0-1014-aws x86_64",
+ "cpu_model": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+ "vcpus": 8,
+ "mem_gb": 30.8,
+ "docker": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2",
+ "kernel_page_size": "4096",
+ "splunk_version": "Splunk 10.6.1.1 (build b2ae2962645c)",
+ "splunk_python": "Python 3.13.11",
+ "root_fs": "/dev/root       145G   15G  130G  10% /"
+}

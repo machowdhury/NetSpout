@@ -1,0 +1,52 @@
+{
+ "results": [
+  {
+   "name": "single_package_install_census",
+   "artifact_sha256": "4bf1d21469f5e699069797d654f7ccc57e00fbcade9b9304dcccdab2bd33be40",
+   "host": "arm64 Mac, linux/amd64 under emulation",
+   "install_method": "Splunk Web > Apps > Manage Apps > Install app from file (Playwright upload), then Splunk restart",
+   "installed_apps_with_engine_or_pulse_in_name": [],
+   "netspout_app_present": true,
+   "launcher_and_engine_processes": [
+    "5490    5144 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_launcher.py",
+    "   5507    5490 splunk    /opt/splunk/etc/apps/netspout/bin/pulseforge_engine_main.py --uds /opt/splunk/var/lib/netspout/engine.sock"
+   ],
+   "engine_state_dir_listing": [
+    "total 12",
+    "drwx--x--- 3 splunk splunk 4096 Nov  9 20:41 config",
+    "-rw------- 1 splunk splunk  167 Nov  9 20:41 engine.json",
+    "-rw------- 1 splunk splunk   43 Nov  9 20:41 engine.key",
+    "srw------- 1 splunk splunk    0 Nov  9 20:41 engine.sock",
+    "-rw------- 1 splunk splunk    0 Nov  9 20:41 launcher.lock"
+   ],
+   "listening_tcp_ports_below_32000_before_install": [
+    5432,
+    5433,
+    5434,
+    5435,
+    6432,
+    8000,
+    8065,
+    8088,
+    8089,
+    8194,
+    9997
+   ],
+   "listening_tcp_ports_below_32000_after_install": [
+    5432,
+    5433,
+    5434,
+    5435,
+    6432,
+    8000,
+    8065,
+    8088,
+    8089,
+    8194,
+    9997
+   ],
+   "note": "the Docker host also runs an unrelated evaluation container with its own engine on host port 8081; this package never uses a TCP engine URL (MANAGED_ENGINE marker)",
+   "ok": true
+  }
+ ]
+}

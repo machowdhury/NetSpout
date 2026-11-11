@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { engineStatus, insideSplunk, saveEngine, type EngineStatus } from '../../lib/engineApi';
+import { engineStatus, insideSplunk, restartEngine, saveEngine, type EngineStatus } from '../../lib/engineApi';
 
 // Where the PulseForge Engine runs. The Splunk app talks to exactly this address; nothing is guessed when it is empty.
 export function EngineConnection() {
@@ -14,6 +14,17 @@ export function EngineConnection() {
     setBusy(true); setError('');
     try { const s = await saveEngine(url.trim()); setStatus(s); setUrl(s.url); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); }
   };
+  if (status?.managed) return (
+    <section className="sx-box" data-testid="engine-connection" aria-label="PulseForge Engine">
+      <span className="sx-step">PulseForge Engine</span>
+      <p data-testid="engine-status" data-state={status.connected ? 'connected' : 'not-connected'} className={status.connected ? 'sx-ok' : 'sx-bad'}>
+        {status.message}{status.restarts ? ` Restarts: ${status.restarts}.` : ''}{status.last_error ? ` Last error: ${status.last_error}.` : ''}
+      </p>
+      {!status.connected && <button type="button" data-testid="restart-engine" disabled={busy} onClick={() => { setBusy(true); setError(''); restartEngine().then((m) => setError(m), (e) => setError(e instanceof Error ? e.message : String(e))).finally(() => setBusy(false)); }}>Restart engine</button>}
+      {error && <p className="sx-muted" role="status" data-testid="engine-error">{error}</p>}
+      <p className="sx-muted" data-testid="engine-managed-note">Splunk starts and supervises the engine; there is nothing to install or configure. It listens on a private socket, not a network port.</p>
+    </section>
+  );
   return (
     <section className="sx-box" data-testid="engine-connection" aria-label="PulseForge Engine">
       <span className="sx-step">PulseForge Engine</span>

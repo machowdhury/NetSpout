@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiUrl } from './api';
 
-export interface EngineStatus { configured: boolean; connected: boolean; url: string; message: string; version?: string | null }
+export interface EngineStatus { configured: boolean; connected: boolean; url: string; message: string; version?: string | null; managed?: boolean; state?: string; restarts?: number; last_error?: string | null }
 
 // The engine setting exists only where the app runs inside Splunk (the gateway owns it); in a plain browser the page talks to the engine directly.
 export const insideSplunk = () => typeof window !== 'undefined' && /^\/[a-zA-Z]{2}-[a-zA-Z]{2}\/static\/app\/netspout\//.test(window.location.pathname);
@@ -27,4 +27,12 @@ export function useEngineStatus(): EngineStatus | null {
     return () => { alive = false; window.clearInterval(t); };
   }, []);
   return s;
+}
+
+/** Managed install only: ask Splunk to stop and start the engine input again (admin). */
+export async function restartEngine(): Promise<string> {
+  const r = await fetch(apiUrl('/engine/restart'), { method: 'POST', headers: { Accept: 'application/json' } });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof j?.detail === 'string' ? j.detail : `HTTP ${r.status}`);
+  return String(j.detail ?? 'Restart requested');
 }

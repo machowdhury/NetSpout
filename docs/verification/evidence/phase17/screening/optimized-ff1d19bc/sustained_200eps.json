@@ -1,0 +1,515 @@
+{
+ "results": [
+  {
+   "name": "sustained_200_eps",
+   "host": "local arm64 Mac, emulated amd64 Splunk (screening: optimized-ff1d19bc)",
+   "native": false,
+   "run_id": "run-2fe9dc28e1e0",
+   "requested_duration_s": 300,
+   "requested_eps": 200,
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 60025,
+    "attempts": 60025,
+    "accepted": 60025,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "elapsed_s": 300.1,
+   "mean_attempts_per_s": 200.0,
+   "engine_verification": "VERIFIED",
+   "independent_indexed_delta": 60025,
+   "dropped_events_accepted_minus_indexed": 0,
+   "indexed_eps_per_full_minute": {
+    "min": 200.0,
+    "mean": 200.0,
+    "max": 200.0,
+    "minutes": 4
+   },
+   "indexing_lag_vs_event_time_s": {
+    "count": "60025",
+    "p50": "-0.4980154",
+    "p95": "-0.0483487",
+    "p99": "-0.0085018",
+    "max": "0.0028710"
+   },
+   "lag_note": "_indextime minus the event's own timestamp; negative values mean the engine stamps events slightly ahead of when they are sent, so read p95/max as an upper bound only",
+   "seconds_from_last_event_sent_to_all_indexed": 0.4,
+   "splunk_internal_warnings_in_window": [],
+   "blocked_queues_in_window": [],
+   "idle_before": {
+    "engine": [
+     229116,
+     2.7,
+     null
+    ],
+    "launcher": [
+     44072,
+     0.3,
+     null
+    ],
+    "splunkd": [
+     481400,
+     12.2,
+     null
+    ]
+   },
+   "engine_rss_kb": {
+    "min": 229324,
+    "max": 229640,
+    "first_quarter_mean": 229410,
+    "last_quarter_mean": 229602
+   },
+   "engine_cpu_pct": {
+    "mean": 16.6,
+    "max": 22.4
+   },
+   "splunkd_cpu_pct": {
+    "mean": 26.1,
+    "max": 32.0
+   },
+   "splunkd_rss_kb_max": 522440,
+   "disk_before": {
+    "index_bytes": 51466,
+    "all_indexes_bytes": 16139912
+   },
+   "disk_after": {
+    "index_bytes": 20138832,
+    "all_indexes_bytes": 38756191
+   },
+   "search_latency_s": [
+    0.04,
+    0.29,
+    0.29,
+    0.31,
+    0.06,
+    0.31
+   ],
+   "samples": [
+    {
+     "t": 0,
+     "state": "RUNNING",
+     "attempts": 2,
+     "accepted": 2,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 0.0,
+     "recent_errors": 0,
+     "search_latency_s": 0.04,
+     "engine_rss_kb": 229324,
+     "engine_cpu_pct": 2.7,
+     "launcher_rss_kb": 44072,
+     "launcher_cpu_pct": 0.3,
+     "splunkd_rss_kb": 481416,
+     "splunkd_cpu_pct": 12.3,
+     "index_bytes": 55037,
+     "all_indexes_bytes": 16144123
+    },
+    {
+     "t": 15,
+     "state": "RUNNING",
+     "attempts": 3053,
+     "accepted": 3053,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.98,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229496,
+     "engine_cpu_pct": 6.0,
+     "launcher_rss_kb": 44072,
+     "launcher_cpu_pct": 0.3,
+     "splunkd_rss_kb": 492736,
+     "splunkd_cpu_pct": 15.3
+    },
+    {
+     "t": 30,
+     "state": "RUNNING",
+     "attempts": 6075,
+     "accepted": 6075,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.99,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229404,
+     "engine_cpu_pct": 8.6,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 494828,
+     "splunkd_cpu_pct": 18.3
+    },
+    {
+     "t": 46,
+     "state": "RUNNING",
+     "attempts": 9098,
+     "accepted": 9098,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.03,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229412,
+     "engine_cpu_pct": 10.6,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 493288,
+     "splunkd_cpu_pct": 20.1
+    },
+    {
+     "t": 61,
+     "state": "RUNNING",
+     "attempts": 12122,
+     "accepted": 12122,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.02,
+     "recent_errors": 0,
+     "search_latency_s": 0.29,
+     "engine_rss_kb": 229416,
+     "engine_cpu_pct": 12.4,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 492760,
+     "splunkd_cpu_pct": 21.8
+    },
+    {
+     "t": 76,
+     "state": "RUNNING",
+     "attempts": 15200,
+     "accepted": 15200,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.93,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229428,
+     "engine_cpu_pct": 13.8,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 489252,
+     "splunkd_cpu_pct": 23.3
+    },
+    {
+     "t": 91,
+     "state": "RUNNING",
+     "attempts": 18219,
+     "accepted": 18219,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229428,
+     "engine_cpu_pct": 15.0,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.2,
+     "splunkd_rss_kb": 491800,
+     "splunkd_cpu_pct": 24.5
+    },
+    {
+     "t": 106,
+     "state": "RUNNING",
+     "attempts": 21241,
+     "accepted": 21241,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.71,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229428,
+     "engine_cpu_pct": 16.0,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 490664,
+     "splunkd_cpu_pct": 25.3
+    },
+    {
+     "t": 121,
+     "state": "RUNNING",
+     "attempts": 24267,
+     "accepted": 24267,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": 0.29,
+     "engine_rss_kb": 229428,
+     "engine_cpu_pct": 16.8,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 489664,
+     "splunkd_cpu_pct": 26.2,
+     "index_bytes": 8557417,
+     "all_indexes_bytes": 26784404
+    },
+    {
+     "t": 137,
+     "state": "RUNNING",
+     "attempts": 27370,
+     "accepted": 27370,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.97,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229432,
+     "engine_cpu_pct": 17.8,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 502752,
+     "splunkd_cpu_pct": 27.2
+    },
+    {
+     "t": 152,
+     "state": "RUNNING",
+     "attempts": 30391,
+     "accepted": 30391,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 199.98,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229432,
+     "engine_cpu_pct": 18.5,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 503320,
+     "splunkd_cpu_pct": 28.0
+    },
+    {
+     "t": 167,
+     "state": "RUNNING",
+     "attempts": 33410,
+     "accepted": 33410,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.04,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229452,
+     "engine_cpu_pct": 19.3,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 502560,
+     "splunkd_cpu_pct": 28.7
+    },
+    {
+     "t": 182,
+     "state": "RUNNING",
+     "attempts": 36433,
+     "accepted": 36433,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": 0.31,
+     "engine_rss_kb": 229444,
+     "engine_cpu_pct": 19.7,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 500488,
+     "splunkd_cpu_pct": 29.2
+    },
+    {
+     "t": 198,
+     "state": "RUNNING",
+     "attempts": 39515,
+     "accepted": 39515,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.03,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229468,
+     "engine_cpu_pct": 20.2,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 502156,
+     "splunkd_cpu_pct": 29.6
+    },
+    {
+     "t": 213,
+     "state": "RUNNING",
+     "attempts": 42537,
+     "accepted": 42537,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229504,
+     "engine_cpu_pct": 20.6,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 501528,
+     "splunkd_cpu_pct": 30.1
+    },
+    {
+     "t": 228,
+     "state": "RUNNING",
+     "attempts": 45555,
+     "accepted": 45555,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.28,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229516,
+     "engine_cpu_pct": 20.9,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 499736,
+     "splunkd_cpu_pct": 30.4
+    },
+    {
+     "t": 243,
+     "state": "RUNNING",
+     "attempts": 48583,
+     "accepted": 48583,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 186.04,
+     "recent_errors": 0,
+     "search_latency_s": 0.06,
+     "engine_rss_kb": 229552,
+     "engine_cpu_pct": 21.5,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 500860,
+     "splunkd_cpu_pct": 31.0,
+     "index_bytes": 16574339,
+     "all_indexes_bytes": 34956515
+    },
+    {
+     "t": 258,
+     "state": "RUNNING",
+     "attempts": 51648,
+     "accepted": 51648,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.01,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229576,
+     "engine_cpu_pct": 21.8,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 504776,
+     "splunkd_cpu_pct": 31.3
+    },
+    {
+     "t": 273,
+     "state": "RUNNING",
+     "attempts": 54671,
+     "accepted": 54671,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.02,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229608,
+     "engine_cpu_pct": 22.1,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 513404,
+     "splunkd_cpu_pct": 31.7
+    },
+    {
+     "t": 289,
+     "state": "RUNNING",
+     "attempts": 57690,
+     "accepted": 57690,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 200.02,
+     "recent_errors": 0,
+     "search_latency_s": null,
+     "engine_rss_kb": 229636,
+     "engine_cpu_pct": 22.4,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 512380,
+     "splunkd_cpu_pct": 32.0
+    },
+    {
+     "t": 304,
+     "state": "COMPLETED",
+     "attempts": 60025,
+     "accepted": 60025,
+     "rejected": 0,
+     "unknown": 0,
+     "current_eps": 0.0,
+     "recent_errors": 0,
+     "search_latency_s": 0.31,
+     "engine_rss_kb": 229640,
+     "engine_cpu_pct": 22.4,
+     "launcher_rss_kb": 44056,
+     "launcher_cpu_pct": 0.1,
+     "splunkd_rss_kb": 522440,
+     "splunkd_cpu_pct": 32.0
+    }
+   ],
+   "indexed_per_minute": [
+    {
+     "m": "1794323940",
+     "count": "4150"
+    },
+    {
+     "m": "1794324000",
+     "count": "12000"
+    },
+    {
+     "m": "1794324060",
+     "count": "11999"
+    },
+    {
+     "m": "1794324120",
+     "count": "12000"
+    },
+    {
+     "m": "1794324180",
+     "count": "12000"
+    },
+    {
+     "m": "1794324240",
+     "count": "7876"
+    }
+   ],
+   "ok": true,
+   "note": "cpu_pct is ps's lifetime average under emulation: relative only",
+   "reached_ceiling": true,
+   "criteria": {
+    "avg_indexed_eps_at_least_190": {
+     "value": 200.0,
+     "pass": true
+    },
+    "zero_rejected_or_dropped": {
+     "rejected": 0,
+     "unknown": 0,
+     "dropped": 0,
+     "pass": true
+    },
+    "no_unresolved_indexing_backlog": {
+     "seconds_to_all_indexed": 0.4,
+     "blocked_queues": [],
+     "pass": true
+    },
+    "no_uncontrolled_worker_restarts": {
+     "restarts_before": 0,
+     "restarts_after": 0,
+     "pass": true
+    },
+    "no_significant_resource_instability": {
+     "engine_rss_growth_last_vs_second_quarter": 0.001,
+     "splunkd_rss_growth": 0.036,
+     "rule": "growth <= 15% (engine) and <= 25% (splunkd), no process restarts",
+     "pass": true
+    }
+   },
+   "criteria_all_pass": true
+  }
+ ]
+}

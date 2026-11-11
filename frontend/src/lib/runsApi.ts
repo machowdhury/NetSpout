@@ -1,3 +1,4 @@
+import { destinationConfirmed } from './authorize';
 import { apiUrl } from './api';
 
 export interface SourceVerification { kind: 'event' | 'metric'; index: string; accepted: number; rejected: number; unknown: number; expected: number; indexed: number | null; hosts: string[]; status: 'VERIFIED' | 'INCOMPLETE' | 'NOT_SENT' | 'UNKNOWN' | 'UNMATCHED' }
@@ -50,7 +51,7 @@ async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, tim
   return response.json() as Promise<T>;
 }
 
-export const startRun = (body: Record<string, unknown>) => call<RunSnapshot>('POST', '/api/runs', body);
+export const startRun = (body: Record<string, unknown>) => call<RunSnapshot>('POST', '/api/runs', destinationConfirmed() ? { ...body, confirm_destination: true } : body);
 // Status polls answer in milliseconds (measured p50 4 ms, max 28 ms). A poll lost at the gateway connection never answers, so it is abandoned after 5 s and the next one goes out instead of the monitor waiting out the 25 s default.
 export const getRun = (id: string) => call<RunSnapshot>('GET', `/api/runs/${encodeURIComponent(id)}`, undefined, 5_000);
 const WANT: Record<'pause' | 'resume' | 'stop', string[]> = { pause: ['PAUSED'], resume: ['RUNNING'], stop: ['STOPPING', 'STOPPED', 'COMPLETED'] };

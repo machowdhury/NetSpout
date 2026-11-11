@@ -73,6 +73,9 @@ class StreamAbort(RuntimeError):
     """A stream ended deliberately with a user-facing reason."""
 
 
+_MAX_CATCHUP_S = 0.1   # at most 100 ms of lateness is recovered (20 events at 200/s), so no 1-second window exceeds the request by more than that
+
+
 class DeliveryRun:
     """A monitored, finite batch delivered one event at a time with exact accounting; supports pause, resume and stop."""
 
@@ -153,7 +156,9 @@ class DeliveryRun:
                     wait = nxt - time.monotonic()
                     if wait > 0 and self._cancel.wait(wait):
                         break
-                    nxt = max(nxt, time.monotonic()) + gap
+                    nxt += gap     # keep the schedule: small lateness (timer overshoot, a slow send) is made up so the average equals the requested rate
+                    if time.monotonic() - nxt > _MAX_CATCHUP_S:
+                        nxt = time.monotonic()      # after a longer stall, resume at the requested rate: no catch-up burst beyond _MAX_CATCHUP_S worth of events
                 try:
                     state, err = it.send()
                 except Exception as exc:   # a sender fault is a rejected event with a visible reason, never a silent loss
@@ -242,6 +247,11 @@ class ContinuousRun(DeliveryRun):
         self.unbounded = not max_events and not duration_s
         self.counts["generated"] = 0
         self._fails = 0
+
+    def _work(self):
+        from netspout_core.telemetry_dispatcher import hec_keepalive
+        with hec_keepalive():      # one connection per destination for the life of the stream (see hec_keepalive)
+            super()._work()
 
     def _source(self):
         while not self._cancel.is_set():
@@ -432,6 +442,13 @@ class RunMonitorService:
                 tmp = self._state.with_suffix(".tmp")
                 tmp.write_text(json.dumps(data))
                 tmp.replace(self._state)
+
+    def stop_all(self, timeout=5):
+        """Graceful shutdown: stop every active run so in-flight deliveries finish and the final counters are persisted."""
+        for r in list(self._runs.values()):
+            if r.state in ACTIVE:
+                r.stop(timeout)
+        self._save()
 
     def start(self, run: DeliveryRun, max_active=4) -> DeliveryRun:
         if sum(1 for r in self._runs.values() if r.state in ACTIVE) >= max_active:

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { compatApi, type ScenarioCompat, type ScenarioPreview } from '../../lib/compatApi';
 import { explorerApi } from '../../lib/explorerApi';
 import { startRun } from '../../lib/runsApi';
+import { AuthorizeDestination, useDestinationAuthorization } from '../../lib/authorize';
 import { LiveDeliveryMonitor } from '../monitor/LiveDeliveryMonitor';
 import { Outcome } from './Outcome';
 import { EngineNotice } from './EngineNotice';
@@ -23,6 +24,7 @@ export function ScenariosView() {
   const [id, setId] = useState('');
   const [configured, setConfigured] = useState<boolean | null>(null);
   const [index, setIndex] = useState('');
+  const auth = useDestinationAuthorization();
   const [runId, setRunId] = useState<string | null>(null);
   const [startErr, setStartErr] = useState('');
   const engine = useEngineStatus();
@@ -114,7 +116,7 @@ export function ScenariosView() {
 
       <section className="sx-box">
         <span className="sx-step">3 · Run</span>
-        <div className="sx-row">{index && <span className="sx-muted" data-testid="scenario-index">Sends to index <code>{index}</code></span>}<button type="button" className="sx-primary" data-testid="run-scenario" disabled={!sc || !!reason} onClick={() => void run()}>Run scenario</button>{configured === false && <a href="#/system/connections">Set up Connections</a>}</div>
+        <div className="sx-row">{index && <span className="sx-muted" data-testid="scenario-index">Sends to index <code>{index}</code></span>}<AuthorizeDestination auth={auth} index={index} /><button type="button" className="sx-primary" data-testid="run-scenario" disabled={auth.blocked || !sc || !!reason} onClick={() => void run()}>Run scenario</button>{configured === false && <a href="#/system/connections">Set up Connections</a>}</div>
         {reason && <p className="sx-bad" data-testid="cannot-run">{reason}</p>}
         {startErr && <p className="sx-bad" role="alert" data-testid="start-error">{startErr}</p>}
       </section>

@@ -1,0 +1,12 @@
+{
+ "results": [
+  {
+   "name": "no_events_indexed_in_any_index",
+   "window_start": 1794353646,
+   "window_end": 1794353767,
+   "window_min": 2,
+   "events_indexed_in_window_by_index_sourcetype_source": [],
+   "ok": true
+  }
+ ]
+}

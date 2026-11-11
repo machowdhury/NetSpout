@@ -13,7 +13,7 @@ import netspout_gateway as g  # noqa: E402
 
 @pytest.fixture
 def gw(monkeypatch):
-    monkeypatch.setattr(g, "_roles", lambda _k: {"admin"})
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_admin", "netspout_view"})
     return g.NetSpoutGateway()
 
 
@@ -81,9 +81,9 @@ def test_engine_url_validation(gw, monkeypatch, bad):
 def test_saving_requires_a_write_role_and_stores_normalized_url(gw, monkeypatch):
     conf(monkeypatch, "")
     conf.saved = None
-    monkeypatch.setattr(g, "_roles", lambda _k: {"user"})
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_view"})
     assert call(gw, "POST", "/engine", {"url": "http://h:8081"})[0] == 403 and conf.saved is None
-    monkeypatch.setattr(g, "_roles", lambda _k: {"admin"})
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_admin", "netspout_view"})
     s, body = call(gw, "POST", "/engine", {"url": " http://h:8081/ "})
     assert s == 200 and conf.saved == "http://h:8081"
 
@@ -100,7 +100,7 @@ def test_a_changed_engine_url_applies_to_the_very_next_request(gw, monkeypatch):
 
 def test_run_authorization_is_enforced_by_the_gateway_not_the_page(gw, monkeypatch):
     conf(monkeypatch, "http://engine:8081")
-    monkeypatch.setattr(g, "_roles", lambda _k: {"user"})            # a read-only Splunk user
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_view"})            # a read-only Splunk user
     calls = []
     monkeypatch.setattr(g.urllib.request, "urlopen", lambda *a, **k: calls.append(a) or (_ for _ in ()).throw(AssertionError("must not reach the engine")))
     for method, path in (("POST", "/api/runs"), ("POST", "/api/runs/run-1/stop"), ("POST", "/engine")):

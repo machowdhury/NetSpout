@@ -1,0 +1,56 @@
+{
+ "results": [
+  {
+   "name": "engine_process_killed",
+   "observed": "launcher restarted the engine (restarts=1, last_error 'engine exited with code -9'); credentials reloaded from storage/passwords (engine.json secrets=loaded); six event sourcetypes generated and verified afterwards (events_after_engine_kill.json)",
+   "ok": true,
+   "artifact": "repeated on the final artifact 3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b (events_after_*.json, idle_3min_after_launcher_kill_and_restart.json)"
+  },
+  {
+   "name": "launcher_killed",
+   "observed": "engine exited by itself within 8 s: 0 pulseforge processes (no orphan); gateway /engine reported stopped with an instruction; POST /engine/restart (netspout_admin) toggled the launcher input and the engine returned healthy within 30 s",
+   "ok": true,
+   "artifact": "repeated on the final artifact 3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b (events_after_*.json, idle_3min_after_launcher_kill_and_restart.json)"
+  },
+  {
+   "name": "splunk_restart",
+   "observed": "engine back to healthy with restarts=0 and secrets=loaded; events and IOS XR metrics generated and verified afterwards (events_after_splunk_restart.json)",
+   "ok": true,
+   "artifact": "repeated on the final artifact 3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b (events_after_*.json, idle_3min_after_launcher_kill_and_restart.json)"
+  },
+  {
+   "name": "splunk_stop",
+   "observed": "`splunk stop`: 0 launcher/engine processes afterwards, socket removed (checked on the earlier build of the same launcher code on a separate disposable Splunk 10.2.7); the same launcher code, earlier build",
+   "ok": true,
+   "note": "not repeated on the final fresh container",
+   "artifact": "observed on build 16cd8b42d4dfe45db4679bf4ff88a7faec9b3d4d9b7df23b99d601c46a31fbd2, which differs from the final artifact (3ea5aface7db...) only in the app.manifest version string; not repeated on the final artifact"
+  },
+  {
+   "name": "upgrade_in_place",
+   "observed": "same package re-installed with update=true then Splunk restart: local/macros.conf customer stanza and local/passwords.conf kept, /api/setup identical (configured, SPLUNK_ENTERPRISE, both indexes, both credentials configured), engine healthy, six event sourcetypes verified afterwards (events_after_upgrade.json)",
+   "ok": true,
+   "limit": "upgrade from 2.0.1 (two-component) to this package was not tested: the package id is the same, and the Engine URL setting from 2.0.1 is ignored by this build",
+   "artifact": "repeated on the final artifact 3ea5aface7db9e9ccc05b9c80ca825d04f1376001500926f940eaade4eb3189b (events_after_*.json, idle_3min_after_launcher_kill_and_restart.json)"
+  },
+  {
+   "name": "uninstall",
+   "observed": "DELETE /services/apps/local/netspout: app directory gone, 0 processes, indexed data kept; var/lib/netspout (config, engine.key, engine.json, launcher.lock) is left behind",
+   "ok": true,
+   "limit": "state directory and its per-install key are not removed on uninstall",
+   "artifact": "observed on build 16cd8b42d4dfe45db4679bf4ff88a7faec9b3d4d9b7df23b99d601c46a31fbd2, which differs from the final artifact (3ea5aface7db...) only in the app.manifest version string; not repeated on the final artifact"
+  },
+  {
+   "name": "resource_use",
+   "observed": "engine RSS 166 MB, launcher RSS 41 MB while idle after several runs; splunkd RSS 447 MB; CPU not measured; no memory limit is enforced (nice 5 only)",
+   "ok": true,
+   "limit": "memory and CPU under sustained streaming at the 200 eps cap were not measured",
+   "artifact": "observed on build 16cd8b42d4dfe45db4679bf4ff88a7faec9b3d4d9b7df23b99d601c46a31fbd2, which differs from the final artifact (3ea5aface7db...) only in the app.manifest version string; not repeated on the final artifact"
+  },
+  {
+   "name": "secrets_at_rest",
+   "observed": "HEC token and Splunk admin password found in 0 files under var/lib/netspout and etc/apps/netspout (passwords.conf holds only $7$ encrypted values); the HEC token appears once in Splunk's own audit.log, written when the container created the token before the app was installed",
+   "ok": true,
+   "artifact": "observed on build 16cd8b42d4dfe45db4679bf4ff88a7faec9b3d4d9b7df23b99d601c46a31fbd2, which differs from the final artifact (3ea5aface7db...) only in the app.manifest version string; not repeated on the final artifact"
+  }
+ ]
+}

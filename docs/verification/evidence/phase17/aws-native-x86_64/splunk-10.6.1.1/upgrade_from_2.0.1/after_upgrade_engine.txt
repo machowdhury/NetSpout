@@ -1,0 +1,2 @@
+version now: 2.1.0
+{"configured": true, "managed": true, "connected": true, "url": "", "state": "healthy", "restarts": 0, "last_error": null, "message": "PulseForge engine is managed by Splunk (healthy)."}

@@ -1,0 +1,112 @@
+{
+ "results": [
+  {
+   "name": "cisco:asa",
+   "http": 200,
+   "run_id": "run-e309baf2e8d7",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  },
+  {
+   "name": "cisco:ios",
+   "http": 200,
+   "run_id": "run-243004bbdfac",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  },
+  {
+   "name": "fortigate_traffic",
+   "http": 200,
+   "run_id": "run-3a8ddfb333b0",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  },
+  {
+   "name": "pan:traffic",
+   "http": 200,
+   "run_id": "run-da0bfbf971b9",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  },
+  {
+   "name": "pan:threat",
+   "http": 200,
+   "run_id": "run-90eb58715db4",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  },
+  {
+   "name": "pan:system",
+   "http": 200,
+   "run_id": "run-abc50eb9feb1",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "engine_verification": "VERIFIED",
+   "independent_search_delta": 25,
+   "ok": true
+  }
+ ]
+}

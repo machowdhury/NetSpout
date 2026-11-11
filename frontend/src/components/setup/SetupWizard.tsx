@@ -1,4 +1,5 @@
 import { EngineConnection } from './EngineConnection';
+import { useEngineStatus } from '../../lib/engineApi';
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { CheckCircle2, CircleAlert, ShieldCheck } from 'lucide-react';
@@ -110,6 +111,8 @@ export function SetupWizard() {
   };
 
   const useDockerDefaults = form.deployment_mode === 'DOCKER_LAB';
+  const managed = !!useEngineStatus()?.managed;   // single-package install: the engine is started by Splunk and credentials live in Splunk's encrypted credential store
+  useEffect(() => { if (managed && !configuration?.configured) setForm((f) => (f.deployment_mode === 'DOCKER_LAB' ? { ...f, deployment_mode: 'SPLUNK_ENTERPRISE', splunk_deployment_type: 'SPLUNK_ENTERPRISE' } : f)); }, [managed, configuration?.configured]);
   const failedChecks = validation?.checks.filter((c) => c.status !== 'PASS') ?? [];
   const hecFailed = failedChecks.find((c) => /hec/i.test(c.id));
   const otherFailed = failedChecks.find((c) => !/hec/i.test(c.id));
@@ -130,7 +133,9 @@ export function SetupWizard() {
 
       <EngineConnection />
 
-      <div className="setup-security-note"><ShieldCheck /><div><strong>Secrets stay server-side and in memory.</strong><span>They are never returned by this API, persisted to the browser, written to the metadata file, or placed in a URL. Use environment-backed secret injection for durable deployments.</span></div></div>
+      <div className="setup-security-note"><ShieldCheck />{managed
+        ? <div><strong>Credentials are kept in Splunk&apos;s encrypted credential store.</strong><span>Saving them needs the edit_storage_passwords capability (the admin role). They are never returned by this API, kept in the browser, written to the metadata file, or placed in a URL. The engine receives them only as its own private environment.</span></div>
+        : <div><strong>Secrets stay server-side and in memory.</strong><span>They are never returned by this API, persisted to the browser, written to the metadata file, or placed in a URL. Use environment-backed secret injection for durable deployments.</span></div>}</div>
       {error && <div className="sx-box sx-blocked" role="alert"><CircleAlert /> {error}</div>}
 
       <form className="sx-box setup-form" onSubmit={save} data-loaded={loaded ? 'true' : 'false'}>
@@ -145,7 +150,7 @@ export function SetupWizard() {
           {form.auth_method === 'HEC_TOKEN_AND_BASIC_SEARCH' && <label>Search username<input autoComplete="username" value={form.search_username} onChange={(event) => setForm({ ...form, search_username: event.target.value })} /></label>}
           <label>HEC token<input type="password" autoComplete="off" required={!configuration?.secret_state.hec_token_configured} value={form.hec_token} onChange={(event) => setForm({ ...form, hec_token: event.target.value })} placeholder={configuration?.secret_state.hec_token_configured ? 'Configured — leave blank to retain' : 'Required'} /></label>
           <label>Search credential<input type="password" autoComplete="off" required={!configuration?.secret_state.search_secret_configured} value={form.search_secret} onChange={(event) => setForm({ ...form, search_secret: event.target.value })} placeholder={configuration?.secret_state.search_secret_configured ? 'Configured — leave blank to retain' : 'Required'} /></label>
-          <label className="setup-checkbox"><input type="checkbox" disabled={!useDockerDefaults} checked={form.allow_insecure_tls} onChange={(event) => setForm({ ...form, allow_insecure_tls: event.target.checked })} /> Allow the documented loopback-only lab certificate exception</label>
+          <label className="setup-checkbox"><input type="checkbox" disabled={!useDockerDefaults && !managed} checked={form.allow_insecure_tls} onChange={(event) => setForm({ ...form, allow_insecure_tls: event.target.checked })} /> Allow the documented loopback-only lab certificate exception</label>
         </fieldset>
         <fieldset><legend>2. Where the data goes</legend>
           <label>Event index<input required data-testid="event-index" value={form.event_index} onChange={(event) => setForm({ ...form, event_index: event.target.value })} /><small>Logs and events go here. NetSpout will not create indexes silently.</small></label>

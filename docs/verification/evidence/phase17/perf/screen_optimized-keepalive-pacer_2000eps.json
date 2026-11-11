@@ -1,0 +1,28 @@
+{
+ "label": "optimized-keepalive-pacer",
+ "requested_eps": 2000.0,
+ "seconds": 30.0,
+ "attempts": 60000,
+ "accepted": 60000,
+ "rejected": 0,
+ "unknown": 0,
+ "achieved_eps": 2000.0,
+ "cpu_pct_of_one_core": 28.9,
+ "cpu_ms_per_event": 0.144,
+ "peak_rss_mb": 183.0,
+ "final_state": "COMPLETED",
+ "received": {
+  "events": 60000,
+  "distinct_raw_events": 60000,
+  "distinct_ratio": 1.0,
+  "all_have_sourcetype_index_host": true,
+  "run_id_on_every_event": true,
+  "send_to_receive_lag_s": {
+   "min": 0.0002,
+   "p50": 0.0002,
+   "p99": 0.0006,
+   "max": 0.02
+  },
+  "event_time_monotonic_non_decreasing": true
+ }
+}

@@ -8,10 +8,17 @@ for anything that is not a GET. Standard library only, so it adds no import risk
 """
 
 import json
+import os
 import ssl
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+
+BIN_DIR = os.path.dirname(os.path.abspath(__file__))
+if BIN_DIR not in sys.path:  # splunkd loads this file by path without adding bin/ to sys.path
+    sys.path.insert(0, BIN_DIR)
+import pulseforge_ipc as ipc  # noqa: E402  Unix-socket channel to the Splunk-managed engine
 
 try:
     from splunk.persistconn.application import PersistentServerConnectionApplication
@@ -19,7 +26,11 @@ except ImportError:  # unit tests / non-Splunk import
     class PersistentServerConnectionApplication:
         pass
 
-WRITE_ROLES = {"admin", "sc_admin", "power"}
+MANAGED_PACKAGE = os.path.exists(os.path.join(BIN_DIR, "MANAGED_ENGINE"))  # written only by the single-package build
+ADMIN_CAPABILITY = "netspout_admin"  # POST: run, stop, configure (admin, sc_admin and power in authorize.conf)
+VIEW_CAPABILITY = "netspout_view"    # GET: read-only use (the `user` role, inherited by power and admin)
+CAPS_TTL = 30
+_caps_cache = {}
 FORWARD_HEADERS = ("content-type", "accept")
 MAX_BODY = 8 * 1024 * 1024
 # The management port is this splunkd on loopback; its self-signed certificate cannot be verified by name.
@@ -75,6 +86,16 @@ NOT_CONNECTED = {"detail": "Engine not connected.", "code": "ENGINE_NOT_CONNECTE
 
 
 def engine_status(session_key):
+    if MANAGED_PACKAGE:
+        info = ipc.engine_info() or {}
+        try:  # the status file can be stale (a killed launcher cannot update it), so ask the engine itself
+            status, _ = ipc.request("GET", "/api/health", timeout=3)
+            alive = status == 200
+        except Exception:
+            alive = False
+        state = info.get("state", "not started") if alive else ("stopped (launcher not running; use Restart engine or restart Splunk)" if info else "not started")
+        return {"configured": True, "managed": True, "connected": alive, "url": "", "state": state, "restarts": info.get("restarts", 0), "last_error": info.get("last_error"),
+                "message": "PulseForge engine is managed by Splunk (%s)." % state}
     url = configured_engine(session_key)
     if not url:
         return {"configured": False, "connected": False, "url": "", "message": "Engine not configured."}
@@ -91,12 +112,84 @@ def _reply(status, body):
             "payload": body if isinstance(body, str) else json.dumps(body)}
 
 
-def _roles(session_key):
+def _capabilities(session_key):
+    """Capabilities of the authenticated Splunk user, asked of splunkd; cached briefly under a hash, never the raw token."""
+    import hashlib
+    import time
+    k = hashlib.sha256(session_key.encode()).hexdigest()
+    hit = _caps_cache.get(k)
+    if hit and time.monotonic() - hit[0] < CAPS_TTL:
+        return hit[1]
     req = urllib.request.Request(
         "https://127.0.0.1:8089/services/authentication/current-context?output_mode=json",
         headers={"Authorization": "Splunk " + session_key})
     with urllib.request.urlopen(req, timeout=5, context=_LOOPBACK_CTX) as r:
-        return set(json.loads(r.read().decode())["entry"][0]["content"].get("roles", []))
+        caps = set(json.loads(r.read().decode())["entry"][0]["content"].get("capabilities", []))
+    if len(_caps_cache) > 256:
+        _caps_cache.clear()
+    _caps_cache[k] = (time.monotonic(), caps)
+    return caps
+
+
+def _authorized(session_key, method):
+    """Fail closed: any error or a missing capability is a refusal."""
+    try:
+        return (ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY) in _capabilities(session_key)
+    except Exception:
+        return False
+
+
+LAUNCHER_INPUT = "https://127.0.0.1:8089/servicesNS/nobody/netspout/data/inputs/pulseforge_engine_launcher/default/"
+
+
+def restart_managed_engine(session_key):
+    """Disable then enable the launcher input: splunkd stops the launcher (and with it the engine) and starts a fresh one. Needs the caller to be allowed to edit inputs."""
+    if not MANAGED_PACKAGE:
+        return 409, {"detail": "This install has no Splunk-managed engine"}
+    try:
+        _splunk(LAUNCHER_INPUT + "disable", session_key, {})
+        import time
+        time.sleep(3)
+        _splunk(LAUNCHER_INPUT + "enable", session_key, {})
+    except urllib.error.HTTPError as e:
+        return 403, {"detail": "Splunk refused to restart the engine input (HTTP %s); an administrator can enable it in Settings > Data inputs > PulseForge engine" % e.code}
+    return 202, {"detail": "Engine restart requested; check Connections in about 30 seconds"}
+
+
+PASSWORDS = "https://127.0.0.1:8089/servicesNS/nobody/netspout/storage/passwords"
+
+
+def store_secret(session_key, name, value):
+    """Create or replace one secret in Splunk's encrypted storage/passwords (realm netspout). The value is never logged."""
+    ident = urllib.parse.quote("netspout:%s:" % name, safe="")
+    for url, data in ((PASSWORDS + "/" + ident, {"password": value}), (PASSWORDS, {"name": name, "realm": "netspout", "password": value})):
+        body = urllib.parse.urlencode(data).encode()
+        req = urllib.request.Request(url + "?output_mode=json", data=body, headers={"Authorization": "Splunk " + session_key})
+        try:
+            urllib.request.urlopen(req, timeout=10, context=_LOOPBACK_CTX).read()
+            return
+        except urllib.error.HTTPError as e:
+            if e.code != 404:
+                raise
+
+
+def _persist_secrets(session_key, raw):
+    """Save a submitted HEC token / search secret so they survive an engine or Splunk restart. Returns an error string or None."""
+    try:
+        payload = json.loads(raw or "{}")
+    except ValueError:
+        return None  # the engine rejects malformed bodies itself
+    try:
+        for field in ("hec_token", "search_secret"):
+            if isinstance(payload, dict) and payload.get(field):
+                store_secret(session_key, field, payload[field])
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            return "Saving credentials needs the Splunk capability edit_storage_passwords (the admin role); nothing was saved"
+        return "Splunk could not store the credential (HTTP %s); nothing was saved" % e.code
+    except Exception as e:
+        return "Splunk could not store the credential (%s); nothing was saved" % type(e).__name__
+    return None
 
 
 class NetSpoutGateway(PersistentServerConnectionApplication):
@@ -108,20 +201,20 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             request = json.loads(in_string)
             method = request.get("method", "GET").upper()
             sub = "/" + (request.get("path_info") or "").lstrip("/")
-            if method not in ("GET", "POST") or not (sub.startswith("/api/") or sub in ("/health", "/engine")) or ".." in sub:
+            if method not in ("GET", "POST") or not (sub.startswith("/api/") or sub in ("/health", "/engine", "/engine/restart")) or ".." in sub:
                 return _reply(404, {"detail": "Not a gateway route"})
             session_key = request.get("session", {}).get("authtoken", "")
             if not session_key:
                 return _reply(401, {"detail": "Splunk session required"})
             if sub == "/engine" and method == "GET":
                 return _reply(200, engine_status(session_key))
-            if method == "POST":
-                try:
-                    allowed = bool(_roles(session_key) & WRITE_ROLES)
-                except Exception:
-                    allowed = False  # fail closed: unknown role is not a write role
-                if not allowed:
-                    return _reply(403, {"detail": "A Splunk admin or power role is required to change NetSpout state"})
+            if not _authorized(session_key, method):
+                return _reply(403, {"detail": "The Splunk capability %s is required%s (admin or power role required to change NetSpout state)" % (
+                    ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY, " to change PulseForge state" if method == "POST" else " to use PulseForge")})
+            if sub == "/engine/restart":
+                return _reply(*restart_managed_engine(session_key))
+            if sub == "/engine" and MANAGED_PACKAGE:
+                return _reply(409, {"detail": "The engine is managed by Splunk in this package; there is no engine URL to set"})
             if sub == "/engine":
                 try:
                     url = normalize_engine_url(json.loads(request.get("payload") or "{}").get("url", ""))
@@ -129,9 +222,14 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
                     return _reply(422, {"detail": str(exc)})
                 save_engine(session_key, url)
                 return _reply(200, engine_status(session_key))
-            engine = configured_engine(session_key)
-            if not engine:
-                return _reply(503, NOT_CONFIGURED)
+            if MANAGED_PACKAGE:
+                if not ipc.engine_info():
+                    return _reply(503, {"detail": "PulseForge engine is not running yet; Splunk starts it (Settings > Data inputs > PulseForge engine, or restart Splunk)", "code": "ENGINE_NOT_STARTED"})
+                engine = ""
+            else:
+                engine = configured_engine(session_key)
+                if not engine:
+                    return _reply(503, NOT_CONFIGURED)
             query = request.get("query") or []
             pairs = query.items() if isinstance(query, dict) else query
             qs = urllib.parse.urlencode([(k, v) for k, v in pairs])
@@ -141,6 +239,18 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
                 return _reply(413, {"detail": "Request body too large"})
             hdrs = request.get("headers") or []  # persistconn sends a list of [name, value] pairs
             headers = {k: v for k, v in (hdrs.items() if isinstance(hdrs, dict) else hdrs) if k.lower() in FORWARD_HEADERS}
+            if MANAGED_PACKAGE:  # Unix socket plus the per-install key: no TCP port
+                if method == "POST" and sub == "/api/setup":
+                    err = _persist_secrets(session_key, raw)
+                    if err:
+                        return _reply(403, {"detail": err})
+                try:
+                    status, data = ipc.request(method, sub + ("?" + qs if qs else ""), body=raw.encode() if method == "POST" else None, headers=headers, timeout=120)
+                    return _reply(status, data.decode())
+                except OSError as e:
+                    return _reply(502, {"detail": "PulseForge engine is not running (managed engine socket: " + type(e).__name__ + ")", "code": "ENGINE_NOT_CONNECTED"})
+            if os.environ.get("PULSEFORGE_GATEWAY_KEY"):  # external engine configured with the same shared secret
+                headers["X-PulseForge-Gateway-Key"] = os.environ["PULSEFORGE_GATEWAY_KEY"]
             req = urllib.request.Request(url, data=raw.encode() if method == "POST" else None, headers=headers, method=method)
             try:
                 with urllib.request.urlopen(req, timeout=120) as r:

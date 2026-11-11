@@ -1,0 +1,399 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.2.0, pluggy-1.7.0 -- /opt/p17/venv-test/bin/python
+rootdir: /opt/p17/harness
+plugins: anyio-4.16.0, timeout-2.4.0
+timeout: 60.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 5492 items
+
+tests/test_cisco_asa_ta_contract.py::test_fixture_examples_match_templates PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_every_generated_event_matches_a_documented_template PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_no_yaml_metadata_or_unrendered_tokens PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_teardown_follows_its_build_and_direction_is_consistent PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_deterministic_for_same_seed_and_time PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_preview_equals_dispatched_output PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_prepare_entries_uses_native_generator PASSED [  0%]
+tests/test_cisco_asa_ta_contract.py::test_non_ta_sourcetype_is_refused PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_approved_fixture_loader_resolves_tokens_without_altering_sourcetypes PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_asa_fixture_lifecycle_and_source_backed_mismatch_repairs PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_campus_containment_routes_only_to_coa_with_run_correlation PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_deny_and_udp_connection_identifiers PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_deterministic_bounded_tokens_and_rejection PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_generated_log_engine_mirrors PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_ise_baseline_and_failure_samples_are_complete PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_ise_success_failure_headers_and_balanced_response PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_legacy_passed_is_equivalent_to_success PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_loader_fails_instead_of_returning_partial_approved_fixture PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_separate_coa_success_is_not_authentication_or_enforcement_proof PASSED [  0%]
+tests/test_cisco_raw_events.py::CiscoRawEventTests::test_tcp_build_teardown_native_identity_and_mapping PASSED [  0%]
+tests/test_cloud_package.py::test_cloud_edition_contains_only_dashboards_navigation_and_metadata FAILED [  0%]
+tests/test_cloud_package.py::test_cloud_edition_appinspect_evidence_is_clean PASSED [  0%]
+tests/test_companion_manifest.py::TestCompanionManifest::test_build_manifest_and_spl PASSED [  0%]
+tests/test_companion_manifest.py::TestCompanionManifest::test_hec_event_formatting PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_all_37_dashboard_discovery_and_research_links PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_containment_is_not_enforcement PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_executable_correlated_lifecycle_and_kpis 
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_executable_correlated_lifecycle_and_kpis PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_maintenance_variants_discriminate_incident_impact PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_previous_31_outputs_preserved FAILED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_six_distinct_descriptors_and_proposals 
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_six_distinct_descriptors_and_proposals PASSED [  0%]
+tests/test_correlated_continuation.py::CorrelatedContinuationTests::test_stale_sessions_recover_after_authentication PASSED [  0%]
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_all_31_discovery_and_dashboard_relationships PASSED [  0%]
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_industry_and_product_scope PASSED [  0%]
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_lifecycle_correlation_business_kpis_and_bounds 
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_lifecycle_correlation_business_kpis_and_bounds PASSED [  0%]
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_original_25_outputs_unchanged FAILED [  0%]
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_six_registered_executable_descriptors 
+tests/test_correlated_incidents.py::CorrelatedIncidentTests::test_six_registered_executable_descriptors PASSED [  0%]
+tests/test_customer_docs.py::test_generated_catalogs_are_current PASSED  [  0%]
+tests/test_customer_docs.py::test_readme_numbers_match_the_data PASSED   [  0%]
+tests/test_customer_docs.py::test_every_listed_dashboard_exists PASSED   [  0%]
+tests/test_customer_docs.py::test_links_and_paths_resolve PASSED         [  0%]
+tests/test_customer_docs.py::test_customer_docs_do_not_ship_credentials_or_the_engine_port PASSED [  0%]
+tests/test_customer_docs.py::test_activation_audit_accounts_for_every_non_runnable_scenario PASSED [  0%]
+tests/test_customer_docs.py::test_scenarios_doc_describes_every_scenario_without_placeholder_text PASSED [  0%]
+tests/test_customer_docs.py::test_dashboard_accounting_matches_the_views PASSED [  0%]
+tests/test_customer_docs.py::test_every_runnable_scenario_is_registered_with_its_run_path PASSED [  0%]
+tests/test_customer_docs.py::test_validation_claims_in_the_docs_match_the_evidence_files PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StreamerRefusal::test_missing_file_refused PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StreamerRefusal::test_native_only_config_refused PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StreamerRefusal::test_no_builtin_events PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StopBoundaries::test_sigkill_eperm_is_error PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StopBoundaries::test_sigkill_esrch_is_success PASSED [  0%]
+tests/test_d2_datablaster_no_fallback.py::StopBoundaries::test_sigterm_esrch_is_success PASSED [  0%]
+tests/test_delivery_monitor.py::test_counters_are_exact_and_accepted_is_never_indexed PASSED [  0%]
+tests/test_delivery_monitor.py::test_pause_resume_stop_keep_counters_and_never_invent_completion PASSED [  0%]
+tests/test_delivery_monitor.py::test_eps_limit_and_rate_fields_are_measured PASSED [  1%]
+tests/test_delivery_monitor.py::test_sender_exception_becomes_a_visible_rejection PASSED [  1%]
+tests/test_delivery_monitor.py::test_persistence_marks_active_runs_interrupted_and_keeps_counters PASSED [  1%]
+tests/test_delivery_monitor.py::test_scenario_pack_run_reports_per_sourcetype_and_per_phase_progress PASSED [  1%]
+tests/test_delivery_monitor.py::test_incident_pack_uses_the_metric_index_and_is_verified_independently PASSED [  1%]
+tests/test_delivery_monitor.py::test_single_sourcetype_run_and_grounding_refusal PASSED [  1%]
+tests/test_delivery_monitor.py::test_replay_pack_run_uses_the_same_schema_with_finite_and_continuous_modes PASSED [  1%]
+tests/test_delivery_monitor.py::test_destination_authorization_and_honest_refusals[body0-403] PASSED [  1%]
+tests/test_delivery_monitor.py::test_destination_authorization_and_honest_refusals[body1-422] PASSED [  1%]
+tests/test_delivery_monitor.py::test_destination_authorization_and_honest_refusals[body2-422] PASSED [  1%]
+tests/test_delivery_monitor.py::test_destination_authorization_and_honest_refusals[body3-422] PASSED [  1%]
+tests/test_delivery_monitor.py::test_unknown_run_and_actions PASSED      [  1%]
+tests/test_delivery_monitor.py::test_observed_run_counts_only_what_crosses_the_delivery_boundary PASSED [  1%]
+tests/test_delivery_monitor.py::test_scenario_runner_run_is_monitored_through_the_real_dispatcher PASSED [  1%]
+tests/test_delivery_monitor.py::test_continuous_run_streams_until_stopped_and_pauses PASSED [  1%]
+tests/test_delivery_monitor.py::test_continuous_run_limits_and_failing_destination PASSED [  1%]
+tests/test_delivery_monitor.py::test_readiness_states_are_evidence_based PASSED [  1%]
+tests/test_delivery_monitor.py::test_readiness_requires_the_runs_own_sourcetypes_and_phases PASSED [  1%]
+tests/test_delivery_monitor.py::test_preview_states_phases_volume_and_blockers PASSED [  1%]
+tests/test_delivery_monitor.py::test_a_stream_to_a_destination_that_never_accepted_fails_fast_but_a_mid_stream_outage_is_ridden_out PASSED [  1%]
+tests/test_engine_launcher.py::test_key_is_created_once_private_and_stable PASSED [  1%]
+tests/test_engine_launcher.py::test_bootstrap_refuses_a_public_bind_and_a_missing_key PASSED [  1%]
+tests/test_engine_launcher.py::test_vendored_dependencies_are_selected_by_interpreter_and_platform PASSED [  1%]
+tests/test_engine_launcher.py::test_supervisor_lifecycle_private_socket_restart_and_graceful_stop PASSED [  1%]
+tests/test_engine_launcher.py::test_second_launcher_on_the_same_state_directory_is_refused PASSED [  1%]
+tests/test_engine_launcher.py::test_scheme_is_a_single_instance_modular_input PASSED [  1%]
+tests/test_engine_launcher.py::test_shutdown_stops_active_runs_and_a_restart_never_resumes_them PASSED [  1%]
+tests/test_engine_launcher.py::test_gateway_reaches_the_managed_engine_over_the_socket_and_reports_it_down PASSED [  1%]
+tests/test_engine_launcher.py::test_engine_interpreter_prefers_splunks_python313_and_refuses_old_pythons PASSED [  1%]
+tests/test_engine_launcher.py::test_gateway_loads_the_way_splunkd_loads_it_without_bin_on_sys_path PASSED [  1%]
+tests/test_engine_launcher.py::test_launcher_stops_when_the_splunkd_pid_file_disappears_or_changes PASSED [  1%]
+tests/test_engine_launcher.py::test_a_restarting_launcher_waits_for_the_previous_one_to_release_the_lock PASSED [  1%]
+tests/test_engine_launcher.py::test_engine_exits_by_itself_when_its_launcher_is_killed PASSED [  1%]
+tests/test_exporter_session.py::TestExporterSession::test_sequence_number_progression PASSED [  1%]
+tests/test_exporter_session.py::TestExporterSession::test_session_initialization PASSED [  1%]
+tests/test_exporter_session.py::TestExporterSession::test_template_refresh_triggers PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal 
+tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_exact_topology_and_telemetry_routing 
+tests/test_fallback_guard.py::TestFallbackGuard::test_exact_topology_and_telemetry_routing PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_generic_modes_and_legacy_simulation PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_refusal_precedes_run_creation 
+tests/test_fallback_guard.py::TestFallbackGuard::test_refusal_precedes_run_creation PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_scenario_aliases_resolve_before_guard PASSED [  1%]
+tests/test_fallback_guard.py::TestFallbackGuard::test_supported_generators 
+tests/test_fallback_guard.py::TestFallbackGuard::test_supported_generators PASSED [  1%]
+tests/test_field_ownership.py::test_verified_sourcetypes_carry_no_bare_netspout_fields PASSED [  1%]
+tests/test_field_ownership.py::test_other_sourcetypes_keep_bare_fields_and_gain_namespaced_copies PASSED [  1%]
+tests/test_field_ownership.py::test_raw_event_and_sourcetype_are_never_modified PASSED [  1%]
+tests/test_field_ownership.py::test_metric_payload_is_untouched_by_the_policy PASSED [  1%]
+tests/test_field_ownership.py::test_ta_parsed_sourcetypes_equal_the_live_evidence PASSED [  1%]
+tests/test_field_ownership.py::test_phase_story_panels_read_namespaced_fields_with_fallback PASSED [  1%]
+tests/test_flow_performance.py::TestFlowPerformance::test_performance_characterization PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_candidates_are_not_parser_verified_and_legacy_ids_stable PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_checkpoint_cef_header_extensions_and_timestamp_units PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_fortios_detection_semantics_and_unsafe_unestablished_escaping PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_fortios_native_subset_unique_fields_and_metadata_separation PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_generated_core_and_catalogs_match PASSED [  1%]
+tests/test_fortinet_checkpoint_fidelity.py::MultivendorRawTests::test_pan_raw_and_samples_unchanged PASSED [  1%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_01_total_scenarios_and_unique_canonical_ids PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_02_scenario_titles_uniqueness PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_03_exact_maturity_distribution PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_04_golden_path_identifiers PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_05_e2e_and_format_validated_identifiers PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_06_hallucinated_scenario_names_not_in_catalog PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_07_contracted_tier_scenarios PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_08_golden_path_evidence_ledger_completeness PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_09_alias_resolution_api PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_10_runner_stamps_canonical_scenario_id PASSED [  2%]
+tests/test_gate10_6_namespace_reconciliation.py::TestGate10_6NamespaceReconciliation::test_11_catalog_mirrors_synchronized PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_01_catalog_maturity_distribution_wave2 PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_02_wave2_promoted_scenarios_maturity PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_03_golden_paths_invariance PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_04_wave2_topological_resolution PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_05_wave2_contract_phases_and_rules PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_06_wave2_telemetry_semantics PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_07_zero_generic_fallback_wave2 PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_08_positive_contract_validation_wave2 PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_09_causal_ground_truth_records_wave2 PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_10_negative_validation_adversarial_tampering PASSED [  2%]
+tests/test_gate10_scenario_promotion_wave2.py::TestGate10ScenarioPromotionWave2::test_11_determinism_and_seed_consistency PASSED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_01_collector_configuration_and_health SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_02_netflow_v9_e2e_pipeline SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_03_ipfix_e2e_pipeline SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_04_dual_run_correlation_isolation SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_05_protocol_non_pollution SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_06_controlled_failure_splunk_unavailable SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_07_controlled_failure_wrong_flow_rejection SKIPPED [  2%]
+tests/test_gate11c_native_e2e.py::TestGate11cNativeE2E::test_08_hec_independence SKIPPED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_01_canonical_configuration_model PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_02_secrets_not_persisted_in_config PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_03_canonical_health_model_8_states PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_04_container_security_posture PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_05_template_lifecycle_and_refresh_strategy PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_06_restart_recovery_collector_and_forwarder PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_07_concurrency_and_run_isolation_10_runs PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_08_controlled_failure_matrix_truthful_states PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_09_prometheus_metrics_scraping PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_10_companion_manifest_copyable_spl_and_badging PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_11_preflight_audit_engine PASSED [  2%]
+tests/test_gate11d_native_productization.py::TestGate11dNativeProductization::test_12_native_flow_backend_api_operational PASSED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_01_mixed_backbone_optical_golden_path_promotion PASSED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_02_golden_path_evidence_ledger_13_certified PASSED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_03_p2_manage_collector_preflight_without_pythonpath FAILED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_04_p2_macos_docker_binary_discovery PASSED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_05_p3_canonical_goflow2_snake_case_fields PASSED [  2%]
+tests/test_gate11f_governance_closure.py::TestGate11FGovernanceClosure::test_06_security_regression_invariants PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_exception_tags_no_such_object_instance_end_of_mib PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_integer_signed_twos_complement PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_ipaddress_counter32_gauge32_timeticks_counter64 PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_octet_string_and_null PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_oid_base128_vlq_encoding PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_recursion_depth_limit PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_rejects_indefinite_length PASSED [  2%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_short_and_long_definite_length PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_ber_truncated_and_malformed_packets_rejected PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_golden_fixture_1_linkdown_trap PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_golden_fixture_2_linkup_trap PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_golden_fixture_3_bgp_backward_transition_inform PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_golden_fixture_4_get_request PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_golden_fixture_5_get_response PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_inform_loopback_ack_response PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_inform_rejects_mismatched_request_id PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_inform_retry_on_dropped_ack PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_inform_timeout_when_receiver_down PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_service_provider_cisco_native_snmp_progression PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_snmp_max_udp_payload_1472_enforced PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_snmp_rate_limiter_and_packet_cap PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_snmp_rejects_public_ip_multicast_and_broadcast PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_trap_loopback_receive_and_decode PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_trap_sent_is_not_receiver_observed_when_receiver_down PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_trap_v2_mandatory_varbind_ordering PASSED [  3%]
+tests/test_gate12b_native_snmp.py::TestGate12BNativeSnmp::test_tshark_dissects_snmp_trap_and_inform_zero_malformed FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_01_oid_numeric_comparison PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_02_oid_tree_ordering PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_03_snmpv2_mib_objects PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_04_if_mib_objects PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_05_bgp4_mib_objects PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_06_get_exact_match PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_07_get_unknown_oid PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_08_multi_varbind_get PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_09_getnext_exact PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_10_getnext_between_objects PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_11_getnext_end_of_tree PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_12_getbulk_non_repeaters PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_13_getbulk_max_repetitions PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_14_getbulk_response_bound PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_15_getbulk_oversized_request PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_16_end_of_mib_view_behavior PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_17_no_such_object_and_no_such_instance_behavior PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_18_read_only_set_rejection PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_19_malformed_ber_rejection PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_20_malformed_request_handling PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_21_request_rate_limiting PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_22_loopback_bind_safety PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_23_clean_shutdown PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_24_deterministic_state PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_25_scenario_phase_state_transition PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_26_interface_state_coherence PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_27_bgp_state_coherence PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_28_trap_poll_coherence PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_29_inform_poll_coherence PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_30_external_snmpget_verification FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_31_external_snmpgetnext_verification FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_32_external_snmpwalk_verification FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_33_external_snmpbulkwalk_verification FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_34_tshark_request_response_verification FAILED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_35_gate12b_fixture_regression PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_36_gate12b_trap_regression PASSED [  3%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_37_gate12b_inform_regression PASSED [  4%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_38_netflow_v9_regression PASSED [  4%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_39_ipfix_regression PASSED [  4%]
+tests/test_gate12c_snmp_polling.py::TestGate12CSnmpPolling::test_40_golden_path_regression PASSED [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_01_external_receiver_snmpv2c_trap_0xa7 ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_02_external_receiver_inform_request_0xa6_and_ack_0xa2 ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_03_external_poller_get_0xa0 ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_04_external_poller_getnext_0xa1 ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_05_external_poller_getbulk_0xa5 ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_06_external_poller_full_oid_walk ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_07_collector_normalization_traps_and_informs ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_08_poller_normalization_polled_oids ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_09_out_of_band_run_correlation_no_wire_pollution ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_10_splunk_hec_ingestion_trap_inform_events ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_11_splunk_hec_ingestion_polling_events ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_12_fresh_splunk_spl_observation_trap_inform ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_13_fresh_splunk_spl_observation_polling ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_14_phase_progression_reconstruction_in_splunk ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_15_trap_poll_state_coherence_verification ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_16_scenario_validation_pass_on_complete_splunk_evidence ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_17_controlled_failure_a_receiver_down ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_18_controlled_failure_b_receiver_up_splunk_down ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_19_controlled_failure_c_agent_down ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_20_controlled_failure_d_missing_phase ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_21_controlled_failure_e_duplicate_retried_inform ERROR [  4%]
+tests/test_gate12d_snmp_splunk_e2e.py::TestGate12DSnmpSplunkE2E::test_22_cross_run_isolation_and_manifest_integration ERROR [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_00_splunk_bridge_accepts_standard_environment_names PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_01_f12e01_customer_workflow_native_snmp_execution FAILED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_02_f12e01_http_api_forwards_native_snmp_parameters FAILED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_03_f12e02_catalog_sourcetypes_and_scenario_contract PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_04_f12e02_use_cases_api_exposes_native_snmp_metadata PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_05_f12e03_evidence_stage_provenance_preserved PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_06_f12e04_device_identity_aligned_and_no_redundant_udp_1162_send FAILED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_07_f12e05_legacy_mode_a_sc4snmp_disambiguation PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_08_native_snmp_preflight_api_and_checks FAILED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_09_controlled_failure_no_silent_downgrade_to_mode_a PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_10_controlled_failures_a_through_e_and_g FAILED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_11_frontend_workflow_components_expose_native_snmp_controls_and_scorecard PASSED [  4%]
+tests/test_gate12f_snmp_productization.py::TestGate12FSnmpProductization::test_12_honesty_guardrails_native_transport_modeled_device_state PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_01_capabilities_all_four_vendors PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_02_get_datatypes_prefix_and_wildcards PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_03_encodings_json_ietf_json_and_proto PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_04_subscribe_once_all_vendors PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_05_subscribe_poll_across_phases PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_06_subscribe_stream_sample_cadence PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_07_subscribe_stream_on_change_phase_transitions PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_08_multi_vendor_openconfig_and_native_richness PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_09_prefix_compression_and_suppress_redundant PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_10_cross_transport_coherence_gnmi_snmp_syslog_netflow PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_11_security_modes_tls_mtls_and_redaction PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_12_external_clients_pygnmi_and_gnmic_plus_concurrency PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_01_set_rpc_rejected_unimplemented PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_02_malformed_path_rejected_invalid_argument PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_03_unsupported_path_and_unknown_target_not_found PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_04_foreign_vendor_origin_rejected PASSED [  4%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_05_sample_interval_below_floor PASSED [  5%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_06_auth_failure_unauthenticated PASSED [  5%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_07_excessive_paths_and_excessive_streams PASSED [  5%]
+tests/test_gate13b_gnmi_core.py::TestGate13BGnmiCore::test_t13b_neg_08_unsupported_encoding_non_loopback_and_slow_consumer PASSED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_01_provenance_registry_zero_fabricated_paths PASSED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_02_external_collector_subscribe_once_all_vendors_openconfig_and_native FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_03_external_collector_subscribe_stream_sample FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_04_external_collector_subscribe_stream_on_change FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_05_external_collector_subscribe_poll_across_phases FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_06_normalization_datatype_and_path_preservation FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_07_correlation_enrichment_and_wire_payload_purity PASSED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_08_cross_transport_state_coherence FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_09_multi_vendor_coherence_heterogeneous_telemetry FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_10_reconnect_and_duplication_semantics FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_11_controlled_failures_collector_and_server_unavailable PASSED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_12_controlled_failures_auth_and_tls FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_13_controlled_failures_unsupported_path_encoding_and_guardrails FAILED [  5%]
+tests/test_gate13c_gnmi_collector.py::TestGate13CGnmiCollectorPipeline::test_t13c_14_collector_performance_and_simultaneous_subscriptions FAILED [  5%]
+tests/test_gate13d_gnmi_splunk_e2e.py::TestGate13DGnmiSplunkE2E::test_01_native_gnmi_server_to_collector_to_splunk_e2e +++++++++++++++++++++++++++++++++++ Timeout ++++++++++++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~ Stack of MainThread (128255767015552) ~~~~~~~~~~~~~~~~~~~~~
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pytest/__main__.py", line 9, in <module>
+    raise SystemExit(_console_main())
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/config/__init__.py", line 286, in _console_main
+    code = _main(prog=_get_prog_name(sys.argv))
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/config/__init__.py", line 262, in _main
+    ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/main.py", line 380, in pytest_cmdline_main
+    return wrap_session(config, _main)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/main.py", line 333, in wrap_session
+    session.exitstatus = doit(config, session) or 0
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/main.py", line 387, in _main
+    config.hook.pytest_runtestloop(session=session)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/main.py", line 411, in pytest_runtestloop
+    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 118, in pytest_runtest_protocol
+    runtestprotocol(item, nextitem=nextitem)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 132, in runtestprotocol
+    rep = call_and_report(item, "setup", log)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 249, in call_and_report
+    call = CallInfo.from_call(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 361, in from_call
+    result: TResult | None = func()
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 250, in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 170, in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/runner.py", line 536, in setup
+    col.setup()
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/unittest.py", line 246, in setup
+    super().setup()
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/python.py", line 1801, in setup
+    self._request._fillfixtures()
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 877, in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 701, in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 797, in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 1301, in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_caller.py", line 197, in __call__
+    return self._hookexec(
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/pluggy/_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 1407, in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/fixtures.py", line 1067, in call_fixture_func
+    fixture_result = next(generator)
+  File "/opt/p17/venv-test/lib/python3.12/site-packages/_pytest/unittest.py", line 157, in unittest_setup_class_fixture
+    setup()
+  File "/opt/p17/harness/tests/test_gate13d_gnmi_splunk_e2e.py", line 71, in setUpClass
+    cls.spc_scorecard, cls.spc_artifacts = cls.orchestrator.run_scenario_e2e(
+  File "/opt/p17/harness/src/netspout_core/gnmi/splunk_e2e.py", line 1713, in run_scenario_e2e
+    dispatch_res = self.splunk_bridge.dispatch_records(combined_records)
+  File "/opt/p17/harness/src/netspout_core/gnmi/splunk_e2e.py", line 817, in dispatch_records
+    readiness = self.wait_for_hec_ready()
+  File "/opt/p17/harness/src/netspout_core/gnmi/splunk_e2e.py", line 771, in wait_for_hec_ready
+    time.sleep(min(delay, remaining))
++++++++++++++++++++++++++++++++++++ Timeout ++++++++++++++++++++++++++++++++++++
+full tree exit code: 1

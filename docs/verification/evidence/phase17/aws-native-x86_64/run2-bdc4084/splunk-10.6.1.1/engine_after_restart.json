@@ -1,0 +1,1 @@
+{"state": "healthy", "pid": 11686, "restarts": 0, "last_error": null, "transport": "uds", "socket": "/opt/splunk/var/lib/netspout/engine.sock", "secrets": "loaded"}

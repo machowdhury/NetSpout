@@ -120,7 +120,8 @@ class TelemetryGeneratorService:
         for sm in self.catalog._samples:
             if sm.get("sourcetype") == sourcetype:
                 # sample_path is relative to the directory that contains the `netspout` app: the repo root in development, <splunk>/etc/apps when installed
-                roots = [self._repo_root, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))]
+                roots = [self._repo_root, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")),
+                         os.path.join(os.environ.get("SPLUNK_HOME", "/opt/splunk"), "etc", "apps")]   # last: the engine bundled in the app runs from bin/engine/app, one level deeper than bin/netspout_core
                 cand_path = next((c for c in (os.path.join(r, sm.get("sample_path", "")) for r in roots) if os.path.isfile(c)), "")
                 if cand_path and os.path.isfile(cand_path):
                     try:

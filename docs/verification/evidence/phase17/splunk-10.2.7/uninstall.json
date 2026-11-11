@@ -1,0 +1,18 @@
+{
+ "results": [
+  {
+   "name": "uninstall",
+   "procs_after": 0,
+   "app_dir_present": 0,
+   "state_dir_left": [
+    "config",
+    "engine.json",
+    "engine.key",
+    "launcher.lock"
+   ],
+   "indexed_events_before": "{\"count\": \"18546\"}",
+   "indexed_events_after": "{\"count\": \"18546\"}",
+   "ok": true
+  }
+ ]
+}

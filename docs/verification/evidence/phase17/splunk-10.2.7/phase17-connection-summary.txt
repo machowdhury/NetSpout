@@ -1,0 +1,1 @@
+Working: Splunk HEC accepted the test event and a search found it.

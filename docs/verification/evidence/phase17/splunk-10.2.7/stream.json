@@ -1,0 +1,70 @@
+{
+ "results": [
+  {
+   "name": "continuous_start_stop",
+   "http": 200,
+   "limits_at_start": {
+    "max_events": null,
+    "duration_s": 3600.0
+   },
+   "run_id": "run-c007338f8fdd",
+   "attempts_over_time": [
+    20,
+    40,
+    60,
+    80
+   ],
+   "final_state": "STOPPED",
+   "no_growth_after_stop": true,
+   "active_runs_after": 0,
+   "engine_verification": "VERIFIED",
+   "independent_indexed": 80,
+   "ok": true
+  },
+  {
+   "name": "duration_bounded",
+   "http": 200,
+   "run_id": "run-e4c68372818b",
+   "final_state": "COMPLETED",
+   "wall_s": 8.1,
+   "limits": {
+    "max_events": null,
+    "duration_s": 6.0
+   },
+   "ok": true
+  },
+  {
+   "name": "open_ended_gets_the_install_duration_cap",
+   "http": 200,
+   "limits": {
+    "max_events": null,
+    "duration_s": 3600.0
+   },
+   "ok": true
+  },
+  {
+   "name": "eps_over_cap_refused",
+   "http": 422,
+   "detail": {
+    "detail": "eps must be between 0.1 and 2000"
+   },
+   "ok": true
+  },
+  {
+   "name": "duration_over_cap_refused",
+   "http": 422,
+   "detail": {
+    "detail": "duration_s must be at most 3600 on this install"
+   },
+   "ok": true
+  },
+  {
+   "name": "no_confirmation_no_generation",
+   "http": 403,
+   "detail": {
+    "detail": "Replay outside a lab destination requires a dev_ index and confirm_destination=true"
+   },
+   "ok": true
+  }
+ ]
+}

@@ -1,0 +1,2 @@
+v2.0.1 version: 2.0.1
+{"configured": true, "connected": false, "url": "http://engine.example.invalid:8081", "message": "Engine not connected."}

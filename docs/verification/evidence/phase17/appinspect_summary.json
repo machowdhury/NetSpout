@@ -1,0 +1,87 @@
+{
+ "baseline_precert": {
+  "summary": {
+   "error": 0,
+   "failure": 8,
+   "future_failure": 0,
+   "skipped": 0,
+   "not_applicable": 94,
+   "warning": 12,
+   "success": 140
+  },
+  "failing_checks": {
+   "check_inputs_conf_spec_stanzas_has_python_version_property": 2,
+   "check_modular_inputs_python_required": 4,
+   "check_reload_trigger_for_all_custom_confs": 1,
+   "check_that_setup_has_not_been_performed": 1,
+   "check_indexes_conf_properties": 7,
+   "check_rest_handler_python_executable_exists": 2,
+   "check_script_restmap_conf_python_required": 2,
+   "check_for_python_udp_network_communications": 25
+  }
+ },
+ "single_precert": {
+  "summary": {
+   "error": 0,
+   "failure": 9,
+   "future_failure": 0,
+   "skipped": 0,
+   "not_applicable": 94,
+   "warning": 12,
+   "success": 139
+  },
+  "failing_checks": {
+   "check_aarch64_compatibility": 3,
+   "check_inputs_conf_spec_stanzas_has_python_version_property": 2,
+   "check_modular_inputs_python_required": 4,
+   "check_reload_trigger_for_all_custom_confs": 1,
+   "check_that_setup_has_not_been_performed": 1,
+   "check_indexes_conf_properties": 7,
+   "check_rest_handler_python_executable_exists": 2,
+   "check_script_restmap_conf_python_required": 2,
+   "check_for_python_udp_network_communications": 25
+  }
+ },
+ "baseline_cloud": {
+  "summary": {
+   "error": 0,
+   "failure": 8,
+   "future_failure": 0,
+   "skipped": 0,
+   "not_applicable": 92,
+   "warning": 11,
+   "success": 137
+  },
+  "failing_checks": {
+   "check_inputs_conf_spec_stanzas_has_python_version_property": 2,
+   "check_modular_inputs_python_required": 4,
+   "check_reload_trigger_for_all_custom_confs": 1,
+   "check_that_setup_has_not_been_performed": 1,
+   "check_indexes_conf_properties": 7,
+   "check_rest_handler_python_executable_exists": 2,
+   "check_script_restmap_conf_python_required": 2,
+   "check_for_python_udp_network_communications": 25
+  }
+ },
+ "single_cloud": {
+  "summary": {
+   "error": 0,
+   "failure": 8,
+   "future_failure": 0,
+   "skipped": 0,
+   "not_applicable": 92,
+   "warning": 11,
+   "success": 137
+  },
+  "failing_checks": {
+   "check_inputs_conf_spec_stanzas_has_python_version_property": 2,
+   "check_modular_inputs_python_required": 4,
+   "check_reload_trigger_for_all_custom_confs": 1,
+   "check_that_setup_has_not_been_performed": 1,
+   "check_indexes_conf_properties": 7,
+   "check_rest_handler_python_executable_exists": 2,
+   "check_script_restmap_conf_python_required": 2,
+   "check_for_python_udp_network_communications": 25
+  }
+ }
+}

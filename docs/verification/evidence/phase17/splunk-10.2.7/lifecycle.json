@@ -1,0 +1,41 @@
+{
+ "results": [
+  {
+   "name": "engine_process_killed",
+   "observed": "engine restarted by the launcher (restarts=1), credentials reloaded; six sourcetypes verified",
+   "evidence": "events_after_engine_kill.json",
+   "ok": true
+  },
+  {
+   "name": "launcher_killed",
+   "observed": "0 processes after the kill; Restart engine recovered; six sourcetypes verified",
+   "evidence": "events_after_launcher_recovery.json",
+   "ok": true
+  },
+  {
+   "name": "splunk_stop_then_start",
+   "observed": "0 processes after `splunk stop`; six sourcetypes verified after start",
+   "evidence": "events_after_stop_start.json",
+   "ok": true
+  },
+  {
+   "name": "splunk_restart",
+   "observed": "six sourcetypes verified after restart",
+   "evidence": "events_after_restart.json",
+   "ok": true
+  },
+  {
+   "name": "uninstall",
+   "observed": "0 processes, app directory gone, indexed events unchanged, var/lib/netspout left behind",
+   "evidence": "uninstall.json",
+   "ok": true
+  },
+  {
+   "name": "upgrade_from_released_v2.0.1",
+   "observed": "same procedure as on 10.6.1: local/ byte-identical, managed engine healthy, 0 events in a 3-minute idle window, UI first run and events/metrics/scenario passed",
+   "evidence": "upgrade_from_2.0.1/",
+   "ok": true,
+   "note": "amd64 image emulated on an arm64 Mac; the Docker host was also running an unrelated Splunk evaluation container"
+  }
+ ]
+}

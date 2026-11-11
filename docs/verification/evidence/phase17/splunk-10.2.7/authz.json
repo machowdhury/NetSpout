@@ -1,0 +1,55 @@
+{
+ "results": [
+  {
+   "name": "unauthenticated_get_refused",
+   "http": 401,
+   "ok": true
+  },
+  {
+   "name": "unauthenticated_post_refused",
+   "http": 401,
+   "ok": true
+  },
+  {
+   "name": "no_capability_get_403",
+   "http": 403,
+   "ok": true
+  },
+  {
+   "name": "viewer_can_read",
+   "http": 200,
+   "ok": true
+  },
+  {
+   "name": "viewer_cannot_run",
+   "http": 403,
+   "ok": true
+  },
+  {
+   "name": "viewer_cannot_save_setup",
+   "http": 403,
+   "ok": true
+  },
+  {
+   "name": "admin_can_run",
+   "http": 200,
+   "ok": true
+  },
+  {
+   "name": "setup_response_never_contains_secrets",
+   "ok": true
+  },
+  {
+   "name": "engine_has_no_direct_route",
+   "ok": true
+  },
+  {
+   "name": "power_role_cannot_store_credentials_and_nothing_is_saved",
+   "http": 403,
+   "detail": {
+    "detail": "Saving credentials needs the Splunk capability edit_storage_passwords (the admin role); nothing was saved"
+   },
+   "ok": true
+  }
+ ]
+}
